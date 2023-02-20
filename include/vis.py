@@ -24,3 +24,5 @@ def visual_prediction(x,y,xexact,yexact,xvague,yvague,ypred,show=False,save=Fals
         plt.show()
     if save == True:
         plt.savefig('prediction.png',bbox_inches='tight')
+
+# def plot_distribution():

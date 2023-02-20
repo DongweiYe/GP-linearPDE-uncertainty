@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import gpytorch
 import torch
 import GPy
+import bayespy as bp
 from include.func import *	
 from include.vis import *
 from include.GP import *
@@ -15,6 +16,7 @@ dim = 1                         # Define the dimension of the problem (not encod
 num_exact = 14                  # number of exact training data
 num_vague = 5                   # number of vague training datas
 xscale = 8*np.pi                # Scale of input space (array if dim!=1)
+prior_var = 0.3
 
 ### Create groundtruth data for visualization
 X = np.arange(0,xscale,xscale/100)
@@ -28,9 +30,11 @@ yexact = func.run(Xexact)
 Xvague_gt = np.random.rand(num_vague)*xscale
 yvague_gt = func.run(Xvague_gt)
 
-
 ### Create the prior of the vague data
-
+Xvague_prior_mean = Xvague_gt+np.random.rand(num_vague)
+Xvague_prior_var = np.diag(np.ones(num_vague)*(1/prior_var))# May result in error when num_vague!=1
+Xvague_prior = bp.nodes.Gaussian(Xvague_prior_mean,Xvague_prior_var)
+print(Xvague_prior)
 
 ### Visualization of the problem
 visual_preprocess(X,y,Xexact,yexact,Xvague_gt,yvague_gt,show=True,save=False)
