@@ -14,7 +14,7 @@ np.random.seed(10)
 func = FuncClass('ampsin')         # Define test function
 dim = 1                         # Define the dimension of the problem (not encoded))
 num_exact = 14                  # number of exact training data
-num_vague = 5                   # number of vague training datas
+num_vague = 1                   # number of vague training datas
 xscale = 8*np.pi                # Scale of input space (array if dim!=1)
 prior_var = 0.3
 
@@ -45,6 +45,40 @@ preGP.train(np.expand_dims(Xexact,axis=1),np.expand_dims(yexact,axis=1))
 y_pred,y_var = preGP.predict(np.expand_dims(X,axis=1))
 
 visual_prediction(X,y,Xexact,yexact,Xvague_gt,yvague_gt,y_pred,show=True,save=False)
+
+### This is a piece of code for MCMC which later should be merge into func.py as a independent function
+### Currently only for univariate
+### Choose initial point x=0.
+xvague_sample_current = np.zeros(num_vague).reshape(1,-1)
+assumption_variance = 10
+xvague_sample_list = np.empty((0,num_vague))
+xvague_sample_list = np.vstack((xvague_sample_list,xvague_sample_current))
+
+timestep = 1
+for t in range(timestep):
+
+      ### Important! The workflow below this is now univaraite!!!
+      x_new = np.random.normal(np.squeeze(xvague_sample_current),assumption_variance,1)
+      
+      ### Component to compute multivariate Gaussian function for prior
+      prior_function_upper = 1/np.sqrt((2*np.pi)*assumption_variance)*np.exp(-0.5*(x_new-np.squeeze(Xvague_prior_mean))**2/np.squeeze(Xvague_prior_var))
+      prior_function_lower = 1/np.sqrt((2*np.pi)*assumption_variance)*np.exp(-0.5*(xvague_sample_current-np.squeeze(Xvague_prior_mean))**2/np.squeeze(Xvague_prior_var))
+
+      ### Component to compute multivariate Gaussian function for likelihood
+      
+      
+#       upper_alpha = 1/np.sqrt()
+#       lower_alpha = 
+#       accept_ratio = upper_alpha/lower_alpha 
+#       check_sample = np.squeeze(np.random.uniform(0,1,1))
+#       if check_sample <= accept_ratio:
+#             xvague_sample_current = x_new
+#       else:
+#             pass
+#       print(check_sample)
+
+
+### Suppose we havea normal distribution g(x|y), here Gaussian distribution.
 
 # ### Assume a prior on the vague point (random mean and some variance)
 # random_bias = np.random.rand(num_vague)
