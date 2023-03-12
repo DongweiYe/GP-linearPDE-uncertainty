@@ -44,23 +44,20 @@ y_pred,y_var = preGP.predict(np.expand_dims(X,axis=1))
 
 visual_prediction(X,y,Xexact,yexact,Xvague_gt,yvague_gt,y_pred,show=True,save=False)
 
-
-print()
-
 ### This is a piece of code for MCMC which later should be merge into func.py as a independent function
 ### Currently only for univariate
 ### Choose initial point x=0.
-xvague_sample_current = 20*np.ones(num_vague).reshape(1,-1)
-assumption_variance = 1
+xvague_sample_current = 0*np.ones(num_vague).reshape(1,-1)
+assumption_variance = 5 ### Assumption variance can not be too small as this will define the searching area
 xvague_sample_list = np.empty((0,num_vague))
 xvague_sample_list = np.vstack((xvague_sample_list,xvague_sample_current))
 
-timestep = 100000
+timestep = 1000
 for t in range(timestep):
 
       ### Important! The workflow below this is now univaraite!!!
-      x_new = np.random.normal(np.squeeze(xvague_sample_current),assumption_variance,1)
-
+      x_new = np.abs(np.random.normal(np.squeeze(xvague_sample_current),assumption_variance,1))
+      
       ### Component to compute multivariate Gaussian function for prior
       prior_function_upper = 1/np.sqrt((2*np.pi)*Xvague_prior_var)*\
                               np.exp(-0.5*(x_new-np.squeeze(Xvague_prior_mean))**2/np.squeeze(Xvague_prior_var))
@@ -87,19 +84,22 @@ for t in range(timestep):
 
       upper_alpha = prior_function_upper*likelihood_upper
       lower_alpha = prior_function_lower*likelihood_lower
+      print(likelihood_lower)
 
       accept_ratio = upper_alpha/lower_alpha 
-      # print('Accept ratio: ',accept_ratio)
+      
       check_sample = np.squeeze(np.random.uniform(0,1,1))
 
       if check_sample <= accept_ratio:
             xvague_sample_current = x_new
             # print('Test sample accepted',x_new)
             xvague_sample_list = np.vstack((xvague_sample_list,xvague_sample_current))
+            print('Accept ratio: ',accept_ratio,'; Xnew: ',x_new,'; Accept')
       else:
-            pass
-            # print('Test sample rejected',x_new)
-print(np.mean(xvague_sample_list[1000:,:]))
+            print('Accept ratio: ',accept_ratio,'; Xnew: ',x_new,'; Reject')
+
+
+print(np.mean(xvague_sample_list[10:,:]),np.var(xvague_sample_list[10:,:]))
 print(Xvague_gt)
 print(Xvague_prior_mean,Xvague_prior_var)
 
