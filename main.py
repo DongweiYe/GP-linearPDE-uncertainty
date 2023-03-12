@@ -7,6 +7,8 @@ import bayespy as bp
 from include.func import *	
 from include.vis import *
 from include.GP import *
+from include.mcmc import *
+
 ### fix seed
 np.random.seed(10)
 
@@ -44,69 +46,26 @@ y_pred,y_var = preGP.predict(np.expand_dims(X,axis=1))
 
 visual_prediction(X,y,Xexact,yexact,Xvague_gt,yvague_gt,y_pred,show=True,save=False)
 
-### This is a piece of code for MCMC which later should be merge into func.py as a independent function
-### Currently only for univariate
-### Choose initial point x=0.
-xvague_sample_current = 0*np.ones(num_vague).reshape(1,-1)
-assumption_variance = 5 ### Assumption variance can not be too small as this will define the searching area
-xvague_sample_list = np.empty((0,num_vague))
-xvague_sample_list = np.vstack((xvague_sample_list,xvague_sample_current))
+### Posterior distribution of input point distributions with MCMC
+### With MCMC, samples of posterior distribution wil be genenrated
+### As we know the posterior is Gaussian, we derive mean and variance
+### (Currently only for univariate)
 
-timestep = 1000
-for t in range(timestep):
+### Settings for MCMC
+xvague_sample_current = 25*np.ones(num_vague).reshape(1,-1)             ### Initial samples for each datapoints
+assumption_variance = 5                                                ### Assumption variance for jump distribution can not be too small as this will define the searching area
+timestep = 5000                                                        ### Artificial timestep
 
-      ### Important! The workflow below this is now univaraite!!!
-      x_new = np.abs(np.random.normal(np.squeeze(xvague_sample_current),assumption_variance,1))
-      
-      ### Component to compute multivariate Gaussian function for prior
-      prior_function_upper = 1/np.sqrt((2*np.pi)*Xvague_prior_var)*\
-                              np.exp(-0.5*(x_new-np.squeeze(Xvague_prior_mean))**2/np.squeeze(Xvague_prior_var))
-      prior_function_lower = 1/np.sqrt((2*np.pi)*Xvague_prior_var)*\
-                              np.exp(-0.5*(xvague_sample_current-np.squeeze(Xvague_prior_mean))**2/np.squeeze(Xvague_prior_var))
+### Bind data for MH computing
+databinding = bind_data(Xvague_prior_mean,Xvague_prior_var,Xexact,yexact,yvague_gt,preGP.kernel)
 
-      ### Component to compute multivariate Gaussian function for likelihood, note here it is also noice free
-      x_upper = np.append(Xexact,x_new)
-      x_lower = np.append(Xexact,xvague_sample_current)
-      
-      y_vector = np.append(yexact,yvague_gt)
-
-      covariance_upper = preGP.kernel.K(np.expand_dims(x_upper,axis=1))
-      covariance_lower = preGP.kernel.K(np.expand_dims(x_lower,axis=1))
-
-      determinant_upper = np.linalg.det(covariance_upper)
-      determinant_lower = np.linalg.det(covariance_lower)
-
-      likelihood_upper = 1/np.sqrt((2*np.pi)**(num_exact+num_vague)*determinant_upper)*\
-                              np.exp(-0.5*np.expand_dims(y_vector,axis=0)@np.linalg.inv(covariance_upper)@np.expand_dims(y_vector,axis=1))
-      likelihood_lower = 1/np.sqrt((2*np.pi)**(num_exact+num_vague)*determinant_lower)*\
-                              np.exp(-0.5*np.expand_dims(y_vector,axis=0)@np.linalg.inv(covariance_lower)@np.expand_dims(y_vector,axis=1))
-      
-
-      upper_alpha = prior_function_upper*likelihood_upper
-      lower_alpha = prior_function_lower*likelihood_lower
-      print(likelihood_lower)
-
-      accept_ratio = upper_alpha/lower_alpha 
-      
-      check_sample = np.squeeze(np.random.uniform(0,1,1))
-
-      if check_sample <= accept_ratio:
-            xvague_sample_current = x_new
-            # print('Test sample accepted',x_new)
-            xvague_sample_list = np.vstack((xvague_sample_list,xvague_sample_current))
-            print('Accept ratio: ',accept_ratio,'; Xnew: ',x_new,'; Accept')
-      else:
-            print('Accept ratio: ',accept_ratio,'; Xnew: ',x_new,'; Reject')
-
-
-print(np.mean(xvague_sample_list[10:,:]),np.var(xvague_sample_list[10:,:]))
+### Perform MCMC with MH algorithm
+xvague_posterior_samplelist = Metropolis_Hasting(timestep,xvague_sample_current,assumption_variance,databinding)
+print(np.mean(xvague_posterior_samplelist),np.var(xvague_posterior_samplelist))
 print(Xvague_gt)
 print(Xvague_prior_mean,Xvague_prior_var)
 
-### Suppose we havea normal distribution g(x|y), here Gaussian distribution.
 
-# ### Assume a prior on the vague point (random mean and some variance)
-# random_bias = np.random.rand(num_vague)
-# std = 0.5
-# vague_X_distribution = 1/np.sqrt(2*np.pi)*std*np.exp(-0.5*((X-Xvague_gt-random_bias)/std)**2)
-# print(vague_X_distribution)
+
+
+
