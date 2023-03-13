@@ -10,7 +10,7 @@ from include.GP import *
 from include.mcmc import *
 
 ### fix seed
-np.random.seed(10)
+np.random.seed(7)
 
 ### Data parameters for the experiment
 func = FuncClass('ampsin')      # Define test function
@@ -54,18 +54,18 @@ visual_prediction(X,y,Xexact,yexact,Xvague_gt,yvague_gt,y_pred,show=True,save=Fa
 ### Let the initial guess to be mean of of the prior to each vague data points
 # xvague_sample_current = 10*np.ones(num_vague).reshape(1,-1)            ### Initial samples for each datapoints
 xvague_sample_current = np.multiply(Xvague_prior_mean,np.ones(num_vague)).reshape(1,-1)            ### Initial samples for each datapoints
-assumption_variance = 8                                                ### Assumption variance for jump distribution can not be too small as this will define the searching area
-timestep = 20000                                                        ### Artificial timestep
-print(xvague_sample_current)
+assumption_variance = 3                                                 ### Assumption variance for jump distribution can not be too small as this will define the searching area
+timestep = 100000                                                        ### Artificial timestep
 
 ### Bind data for MH computing
 databinding = bind_data(Xvague_prior_mean,Xvague_prior_var,Xexact,yexact,yvague_gt,preGP.kernel)
 
 ### Perform MCMC with MH algorithm
 xvague_posterior_samplelist = Metropolis_Hasting(timestep,xvague_sample_current,assumption_variance,databinding)
-print(np.mean(xvague_posterior_samplelist,axis=0),np.var(xvague_posterior_samplelist,axis=0))
-print(Xvague_gt)
-print(Xvague_prior_mean,Xvague_prior_var)
+print('Posterioir mean and variance (Gaussian): ',np.mean(xvague_posterior_samplelist,axis=0),np.var(xvague_posterior_samplelist,axis=0))
+print('Prior mean and variance (Gaussian):      ',Xvague_prior_mean,Xvague_prior_var)
+print('Groundtruth:                             ',Xvague_gt)
+
 
 
 
