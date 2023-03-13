@@ -13,7 +13,7 @@ from include.mcmc import *
 np.random.seed(10)
 
 ### Data parameters for the experiment
-func = FuncClass('ampsin')         # Define test function
+func = FuncClass('ampsin')      # Define test function
 dim = 1                         # Define the dimension of the problem (not encoded))
 num_exact = 14                  # number of exact training data
 num_vague = 1                   # number of vague training datas
@@ -49,19 +49,21 @@ visual_prediction(X,y,Xexact,yexact,Xvague_gt,yvague_gt,y_pred,show=True,save=Fa
 ### Posterior distribution of input point distributions with MCMC
 ### With MCMC, samples of posterior distribution wil be genenrated
 ### As we know the posterior is Gaussian, we derive mean and variance
-### (Currently only for univariate)
 
 ### Settings for MCMC
-xvague_sample_current = 25*np.ones(num_vague).reshape(1,-1)             ### Initial samples for each datapoints
-assumption_variance = 5                                                ### Assumption variance for jump distribution can not be too small as this will define the searching area
-timestep = 5000                                                        ### Artificial timestep
+### Let the initial guess to be mean of of the prior to each vague data points
+# xvague_sample_current = 10*np.ones(num_vague).reshape(1,-1)            ### Initial samples for each datapoints
+xvague_sample_current = np.multiply(Xvague_prior_mean,np.ones(num_vague)).reshape(1,-1)            ### Initial samples for each datapoints
+assumption_variance = 8                                                ### Assumption variance for jump distribution can not be too small as this will define the searching area
+timestep = 20000                                                        ### Artificial timestep
+print(xvague_sample_current)
 
 ### Bind data for MH computing
 databinding = bind_data(Xvague_prior_mean,Xvague_prior_var,Xexact,yexact,yvague_gt,preGP.kernel)
 
 ### Perform MCMC with MH algorithm
 xvague_posterior_samplelist = Metropolis_Hasting(timestep,xvague_sample_current,assumption_variance,databinding)
-print(np.mean(xvague_posterior_samplelist),np.var(xvague_posterior_samplelist))
+print(np.mean(xvague_posterior_samplelist,axis=0),np.var(xvague_posterior_samplelist,axis=0))
 print(Xvague_gt)
 print(Xvague_prior_mean,Xvague_prior_var)
 
