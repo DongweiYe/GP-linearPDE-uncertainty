@@ -1,24 +1,26 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import gpytorch
-import torch
 import GPy
-import bayespy as bp
+
+import bayespy as bp ### Mainly for visualization
+import bayespy.plot as bpplt
+from scipy.stats import norm
+
 from include.func import *	
 from include.vis import *
 from include.GP import *
 from include.mcmc import *
 
 ### fix seed
-np.random.seed(7)
+np.random.seed(9)
 
 ### Data parameters for the experiment
 func = FuncClass('ampsin')      # Define test function
 dim = 1                         # Define the dimension of the problem (not encoded))
 num_exact = 14                  # number of exact training data
-num_vague = 1                   # number of vague training datas
+num_vague = 2                   # number of vague training datas
 xscale = 8*np.pi                # Scale of input space (array if dim!=1)
-prior_var = 0.3
+prior_var = 1
 
 ### Create groundtruth data for visualization
 X = np.arange(0,xscale,xscale/100)
@@ -55,7 +57,7 @@ visual_prediction(X,y,Xexact,yexact,Xvague_gt,yvague_gt,y_pred,show=True,save=Fa
 # xvague_sample_current = 10*np.ones(num_vague).reshape(1,-1)            ### Initial samples for each datapoints
 xvague_sample_current = np.multiply(Xvague_prior_mean,np.ones(num_vague)).reshape(1,-1)            ### Initial samples for each datapoints
 assumption_variance = 3                                                 ### Assumption variance for jump distribution can not be too small as this will define the searching area
-timestep = 100000                                                        ### Artificial timestep
+timestep = 10000                                                        ### Artificial timestep
 
 ### Bind data for MH computing
 databinding = bind_data(Xvague_prior_mean,Xvague_prior_var,Xexact,yexact,yvague_gt,preGP.kernel)
@@ -66,7 +68,8 @@ print('Posterioir mean and variance (Gaussian): ',np.mean(xvague_posterior_sampl
 print('Prior mean and variance (Gaussian):      ',Xvague_prior_mean,Xvague_prior_var)
 print('Groundtruth:                             ',Xvague_gt)
 
-
+### Visualization of prior, posterior(samples) and groundtruth
+plot_distribution(Xvague_prior_mean,Xvague_prior_var,xvague_posterior_samplelist,Xvague_gt)
 
 
 
