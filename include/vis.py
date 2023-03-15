@@ -41,22 +41,23 @@ def plot_distribution(prior_mean,prior_var,posterior_samples,groundtruth):
         plt.plot(groundtruth, 0,"r*",markersize=10,label='Groundtruth')
         # plt.xlim([np.min(prior_range),np.max(prior_range)])
     elif groundtruth.shape[0] == 2:
-        ### Plot prior
+        ### Processing prior data
         sample_size = 10000
         prior_samples = np.random.multivariate_normal(prior_mean,np.diag(prior_var),sample_size)
+        
+        ### Plot prior
         sns.kdeplot(x=prior_samples[:,0], y=prior_samples[:,1], color='tab:blue') 
 
         ### Plot posterior
-        plt.plot(posterior_samples[:,0],posterior_samples[:,1],'.',color='tab:red',label='posterior samples',alpha=0.3)
+        plt.plot(posterior_samples[:,0],posterior_samples[:,1],'.',color='tab:red',label='posterior samples',alpha=0.1)
         sns.kdeplot(x=posterior_samples[:,0], y=posterior_samples[:,1], color='tab:green')
-        
-        ### Another type of plot
-        # sns.jointplot(x=posterior_samples[:,0],y=posterior_samples[:,1],kind='kde')
 
         ### Plot groundtruth
         plt.axvline(groundtruth[0], linestyle='--',color='black',label='groundtruth')
         plt.axhline(groundtruth[1], linestyle='--',color='black')
-        plt.legend()
+    
+        ### 
+    
     else:
         pass
     plt.legend()

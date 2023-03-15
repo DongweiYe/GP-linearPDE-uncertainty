@@ -12,7 +12,7 @@ from include.GP import *
 from include.mcmc import *
 
 ### fix seed
-np.random.seed(9)
+np.random.seed(10)
 
 ### Data parameters for the experiment
 func = FuncClass('ampsin')      # Define test function

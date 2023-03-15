@@ -3,7 +3,7 @@
 ### TODO
 
 #### Minor
-1. Variational inference for input 
+1. Using other MCMC to accelerate the posterior estimation
 
 #### Major
-1. Extend tto multi dimensional problem
+1. Extend the example problem to multi-dimensional problem
