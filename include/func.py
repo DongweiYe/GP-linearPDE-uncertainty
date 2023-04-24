@@ -9,4 +9,12 @@ class FuncClass():
             return np.sin(input)*input/2
         elif self.function_name=='ampcos':
             return np.cos(input)*input/2
+        elif self.function_name=='exp-sin':
+            return np.exp(-0.2*input)*np.sin(input)
+        elif self.function_name=='tan-sin':
+            return np.tan(0.15*input)*np.sin(input)
+        elif self.function_name=='tanh-cos':
+            return 0.2*np.square(input)*np.tanh(np.cos(input)) 
+        elif self.function_name=='log-sin':
+            return 0.5*np.log(np.square(input)*(np.sin(2*input)+2)+1)
 

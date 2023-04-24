@@ -15,7 +15,7 @@ from include.mcmc import *
 np.random.seed(10)
 
 ### Data parameters for the experiment
-func = FuncClass('ampsin')      # Define test function
+func = FuncClass('log-sin')      # Define test function
 dim = 1                         # Define the dimension of the problem (not encoded))
 num_exact = 13                 # number of exact training data
 num_vague = 2                  # number of vague training datas
