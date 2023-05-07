@@ -6,8 +6,8 @@ def bind_data(prior_mean,prior_variance,xexact,yexact,yvague,kernel):
     return binded_data
 
 
-
 ### Multivariate prior
+### The setting is incorrect (mixed up the multivariate GP with independent prior of each points)
 def prior_function_mul(input_vector,mean_vector,covariance_matrix):
     num_vague = input_vector.shape[1]
     return 1/np.sqrt((2*np.pi)**(num_vague)*np.linalg.det(covariance_matrix))* \
@@ -15,15 +15,21 @@ def prior_function_mul(input_vector,mean_vector,covariance_matrix):
                         np.linalg.inv(covariance_matrix)@\
                         (input_vector-np.expand_dims(mean_vector,axis=0)).T)
 
-### Univariate prior
+### Univariate prior, default setting for examples (1D input)
+### But always suitable for multiple uncertain points. Joint prior distribution = p(x_1)*p(x_2)...*p(x_{numvague})
+
 def prior_function_uni(input_vector,mean_vector,variance_vector):
-    return 1/np.sqrt((2*np.pi)*variance_vector)* \
+    prior_array = 1/np.sqrt((2*np.pi)*variance_vector)* \
             np.exp(-0.5*(input_vector-np.squeeze(mean_vector))**2/np.squeeze(variance_vector))
+    return np.prod(prior_array)
+
+
 
 ### databinding includes : 1. Prior information -> mean and variance
 ###                        2. Exact information -> xexact, yexact, yvague (belong to vague points but reflect the functions)
 ###                        3. GP information -> kernel
-def Metropolis_Hasting(timestep,initial_sample,assumption_variance,databinding):
+### Currently based on Metroplis method assuming the distribution is symmetric
+def Metropolis_Hasting(timestep,initial_sample,assumption_variance,databinding,noise_output):
 
     ### Release databinding
     Xvague_prior_mean = databinding[0]
@@ -42,32 +48,41 @@ def Metropolis_Hasting(timestep,initial_sample,assumption_variance,databinding):
 
     ### MCMC sampling
     for t in range(timestep):
-
-        ### Important! The workflow below this is now univaraite!!!
+        # print('Timestep:',t, end='\r')
+        ### Important! The workflow below this is now univaraite!!! output [sample_size->1,num_vague]
         if num_vague == 1:
-            x_new = np.abs(np.random.normal(np.squeeze(xvague_sample_current),assumption_variance,1))
+            x_new = np.random.normal(np.squeeze(xvague_sample_current),assumption_variance,1)
         else:
-            x_new = np.abs(np.random.multivariate_normal(np.squeeze(xvague_sample_current),\
-                                                    np.identity(num_vague)*assumption_variance,1))
+            x_new = np.random.multivariate_normal(np.squeeze(xvague_sample_current),\
+                                                    np.identity(num_vague)*assumption_variance,1)
+        x_new[x_new<0] = 0
+        
+        prior_function_upper = prior_function_uni(x_new,Xvague_prior_mean,Xvague_prior_var)
+        prior_function_lower = prior_function_uni(xvague_sample_current,Xvague_prior_mean,Xvague_prior_var)
 
         ### Component to compute multivariate Gaussian function for prior
-        if num_vague == 1:
-            prior_function_upper = prior_function_uni(x_new,Xvague_prior_mean,Xvague_prior_var)
-            prior_function_lower = prior_function_uni(xvague_sample_current,Xvague_prior_mean,Xvague_prior_var)
-        else:
-            ### Define an independent for prior covariance matrix
-            Xvague_prior_cov = np.diag(Xvague_prior_var)
-            prior_function_upper = prior_function_mul(x_new,Xvague_prior_mean,Xvague_prior_cov)
-            prior_function_lower = prior_function_mul(xvague_sample_current,Xvague_prior_mean,Xvague_prior_cov)
+        # if num_vague == 1:
+        #     prior_function_upper = prior_function_uni(x_new,Xvague_prior_mean,Xvague_prior_var)
+        #     prior_function_lower = prior_function_uni(xvague_sample_current,Xvague_prior_mean,Xvague_prior_var)
+        # else:
+        #     ### Define an independent for prior covariance matrix
+        #     Xvague_prior_cov = np.diag(Xvague_prior_var)
+        #     prior_function_upper = prior_function_mul(x_new,Xvague_prior_mean,Xvague_prior_cov)
+        #     prior_function_lower = prior_function_mul(xvague_sample_current,Xvague_prior_mean,Xvague_prior_cov)
         
-        ### Component to compute multivariate Gaussian function for likelihood, note here it is also noice free
+        ### Component to compute multivariate Gaussian function for likelihood (currently noice-free)
         x_upper = np.append(Xexact,x_new)
         x_lower = np.append(Xexact,xvague_sample_current)
-
         y_vector = np.append(yexact,yvague)
 
-        covariance_upper = kernel.K(np.expand_dims(x_upper,axis=1))
-        covariance_lower = kernel.K(np.expand_dims(x_lower,axis=1))
+        if noise_output == False:
+            print(kernel)
+            covariance_upper = kernel.K(np.expand_dims(x_upper,axis=1))
+            covariance_lower = kernel.K(np.expand_dims(x_lower,axis=1))
+            print(covariance_upper.shape,covariance_lower.shape)
+        else:
+            covariance_upper = kernel.K(np.expand_dims(x_upper,axis=1)) 
+            covariance_lower = kernel.K(np.expand_dims(x_lower,axis=1)) 
 
         determinant_upper = np.linalg.det(covariance_upper)
         determinant_lower = np.linalg.det(covariance_lower)
@@ -90,7 +105,6 @@ def Metropolis_Hasting(timestep,initial_sample,assumption_variance,databinding):
         else:
             pass
             # print('Accept ratio: ',accept_ratio,'; Xnew: ',x_new,'; Reject')
-    
     
     
     # ### Truncate 1/4 of burning-in period sample
