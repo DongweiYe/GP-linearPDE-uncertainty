@@ -29,7 +29,7 @@ def prior_function_uni(input_vector,mean_vector,variance_vector):
 ###                        2. Exact information -> xexact, yexact, yvague (belong to vague points but reflect the functions)
 ###                        3. GP information -> kernel
 ### Currently based on Metroplis method assuming the distribution is symmetric
-def Metropolis_Hasting(timestep,initial_sample,assumption_variance,databinding,noise_output):
+def Metropolis_Hasting(timestep,initial_sample,assumption_variance,databinding,noise_output,estimated_noise):
 
     ### Release databinding
     Xvague_prior_mean = databinding[0]
@@ -75,14 +75,16 @@ def Metropolis_Hasting(timestep,initial_sample,assumption_variance,databinding,n
         x_lower = np.append(Xexact,xvague_sample_current)
         y_vector = np.append(yexact,yvague)
 
-        if noise_output == False:
-            print(kernel)
-            covariance_upper = kernel.K(np.expand_dims(x_upper,axis=1))
-            covariance_lower = kernel.K(np.expand_dims(x_lower,axis=1))
-            print(covariance_upper.shape,covariance_lower.shape)
-        else:
-            covariance_upper = kernel.K(np.expand_dims(x_upper,axis=1)) 
-            covariance_lower = kernel.K(np.expand_dims(x_lower,axis=1)) 
+        covariance_upper = kernel.K(np.expand_dims(x_upper,axis=1)) + np.identity(x_upper.shape[0])*estimated_noise
+        covariance_lower = kernel.K(np.expand_dims(x_lower,axis=1)) + np.identity(x_upper.shape[0])*estimated_noise
+        
+        # if noise_output == False:
+        #     covariance_upper = kernel.K(np.expand_dims(x_upper,axis=1)) + np.identity(covariance_lower.shape[0])*estimated_noise
+        #     covariance_lower = kernel.K(np.expand_dims(x_lower,axis=1)) + np.identity(covariance_lower.shape[0])*estimated_noise
+        #     # print(covariance_upper.shape,covariance_lower.shape)
+        # else:
+        #     covariance_upper = kernel.K(np.expand_dims(x_upper,axis=1)) 
+        #     covariance_lower = kernel.K(np.expand_dims(x_lower,axis=1)) 
 
         determinant_upper = np.linalg.det(covariance_upper)
         determinant_lower = np.linalg.det(covariance_lower)

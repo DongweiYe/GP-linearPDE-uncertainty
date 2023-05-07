@@ -19,7 +19,7 @@ output_noise_variance = False
 func = FuncClass('ampsin')      # Define test function
 
 dim = 1                         # Define the dimension of the problem (not encoded))
-num_exact = 20                 # number of exact training data
+num_exact = 120                 # number of exact training data
 num_vague = 2                 # number of vague training datas
 xscale = 8*np.pi                # Scale of input space (array if dim!=1)
 prior_var = 1
@@ -50,7 +50,7 @@ preGP.train(np.expand_dims(Xexact,axis=1),np.expand_dims(yexact,axis=1))
 y_pred,y_var = preGP.predict(np.expand_dims(X,axis=1))
 
 estimated_noise = preGP.get_noise()
-print(estimated_noise)
+print('Estimated noise: ', estimated_noise)
 visual_prediction(X,y,Xexact,yexact,Xvague_gt,yvague_gt,y_pred,show=True,save=False)
 
 ### Posterior distribution of input point distributions with MCMC
@@ -61,13 +61,13 @@ visual_prediction(X,y,Xexact,yexact,Xvague_gt,yvague_gt,y_pred,show=True,save=Fa
 ### Initial samples for each datapoints
 xvague_sample_current = np.multiply(Xvague_prior_mean,np.ones(num_vague)).reshape(1,-1)
 assumption_variance = 0.3            ### Assumption variance for jump distribution can not be too small as this will define the searching area
-timestep = 1                   ### Artificial timestep
+timestep = 1000                   ### Artificial timestep
 
 ### Bind data for MH computing
 databinding = bind_data(Xvague_prior_mean,Xvague_prior_var,Xexact,yexact,yvague_gt,preGP.kernel)
 
 ### Perform MCMC with MH algorithm
-Xvague_posterior_samplelist = Metropolis_Hasting(timestep,xvague_sample_current,assumption_variance,databinding,output_noise_variance)
+Xvague_posterior_samplelist = Metropolis_Hasting(timestep,xvague_sample_current,assumption_variance,databinding,output_noise_variance,estimated_noise)
 Xvague_posterior_mean = np.mean(Xvague_posterior_samplelist,axis=0)
 Xvague_posterior_variance = np.var(Xvague_posterior_samplelist,axis=0)
 

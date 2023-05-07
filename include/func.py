@@ -19,7 +19,7 @@ class FuncClass():
             result = 0.5*np.log(np.square(input)*(np.sin(2*input)+2)+1)
         
         if noise_variance != False:
-            print(result.shape)
+
             result = result + np.random.normal(0,noise_variance,result.shape[0])
 
         return result
