@@ -12,16 +12,16 @@ from include.GP import *
 from include.mcmc import *
 
 ### fix seed
-np.random.seed(4)
+np.random.seed(5)
 
 ### Data parameters for the experiment
 output_noise_variance = False
-func = FuncClass('ampsin')      # Define test function
+func = FuncClass('exp-sin')      # Define test function
 
-dim = 1                         # Define the dimension of the problem (not encoded))
-num_exact = 120                 # number of exact training data
-num_vague = 2                 # number of vague training datas
-xscale = 8*np.pi                # Scale of input space (array if dim!=1)
+dim = 1                        # Define the dimension of the problem (not encoded))
+num_exact = 10                 # number of exact training data
+num_vague = 10                 # number of vague training datas
+xscale = 8*np.pi               # Scale of input space (array if dim!=1)
 prior_var = 1
 num_pred = 3
 
@@ -46,7 +46,7 @@ Xvague_prior_var = np.ones(num_vague)*prior_var# May result in error when num_va
 
 ### Train a GP to find the hyperparameters for the kernel in ELBO
 preGP = GP('rbf',output_noise=output_noise_variance,gp_lengthscale=1,gp_variance=10,message=False,restart_num=2)
-preGP.train(np.expand_dims(Xexact,axis=1),np.expand_dims(yexact,axis=1))
+preGP.train(np.expand_dims(np.append(Xexact,Xvague_prior_mean),axis=1),np.expand_dims(np.append(yexact,yvague_gt),axis=1))
 y_pred,y_var = preGP.predict(np.expand_dims(X,axis=1))
 
 estimated_noise = preGP.get_noise()
@@ -61,7 +61,7 @@ visual_prediction(X,y,Xexact,yexact,Xvague_gt,yvague_gt,y_pred,show=True,save=Fa
 ### Initial samples for each datapoints
 xvague_sample_current = np.multiply(Xvague_prior_mean,np.ones(num_vague)).reshape(1,-1)
 assumption_variance = 0.3            ### Assumption variance for jump distribution can not be too small as this will define the searching area
-timestep = 1000                   ### Artificial timestep
+timestep = 1                   ### Artificial timestep
 
 ### Bind data for MH computing
 databinding = bind_data(Xvague_prior_mean,Xvague_prior_var,Xexact,yexact,yvague_gt,preGP.kernel)
@@ -78,28 +78,28 @@ print('Groundtruth:                             ',Xvague_gt)
 ### Visualization of prior, posterior(samples) and groundtruth
 plot_distribution(Xvague_prior_mean,Xvague_prior_var,Xvague_posterior_samplelist,Xvague_gt)
 
-# ### Derive marginalized the posterior distribution over posterior 
-# ### Two way to implmement from this (the posterior of the input locations)
-# ###   1) Directly use the samples from MCMC (currently using this!!!!)
-# ###   2) Computer Gaussian distribution and sample from it
+### Derive marginalized the posterior distribution over posterior 
+### Two way to implmement from this (the posterior of the input locations)
+###   1) Directly use the samples from MCMC (currently using this!!!!)
+###   2) Computer Gaussian distribution and sample from it
 
-# GPvariance,GPlengthscale = preGP.get_parameter()
-# # ### Generate saving lists for prediction
-# y_final_mean_list = np.empty((0,X.shape[0]))
-# y_final_var_list = np.empty((0,X.shape[0]))
+GPvariance,GPlengthscale = preGP.get_parameter()
+# ### Generate saving lists for prediction
+y_final_mean_list = np.empty((0,X.shape[0]))
+y_final_var_list = np.empty((0,X.shape[0]))
 
-# # ### Now retrain the GP with new position
-# for i in range(1):
-# # for i in range(Xvague_posterior_samplelist.shape[0]):
-#       local_xtrain = np.append(Xexact,Xvague_posterior_samplelist[i,:])
-#       local_ytrain = np.append(yexact,yvague_gt)
+# ### Now retrain the GP with new position
+# for i in range(100):
+for i in range(Xvague_posterior_samplelist.shape[0]):
+      local_xtrain = np.append(Xexact,Xvague_posterior_samplelist[i,:])
+      local_ytrain = np.append(yexact,yvague_gt)
 
-#       postGP = GP('rbf',noise=1e-4,gp_lengthscale=GPlengthscale,gp_variance=GPvariance,message=False,restart_num=5)
-#       postGP.train(np.expand_dims(local_xtrain,axis=1),np.expand_dims(local_ytrain,axis=1))
-#       y_final_mean,y_final_var = postGP.predict(np.expand_dims(X,axis=1))
+      postGP = GP('rbf',output_noise_variance,gp_lengthscale=GPlengthscale,gp_variance=GPvariance,message=False,restart_num=5)
+      postGP.train(np.expand_dims(local_xtrain,axis=1),np.expand_dims(local_ytrain,axis=1))
+      y_final_mean,y_final_var = postGP.predict(np.expand_dims(X,axis=1))
       
-#       y_final_mean_list = np.vstack((y_final_mean_list,y_final_mean.T))
-#       y_final_var_list = np.vstack((y_final_var_list,y_final_var.T))
+      y_final_mean_list = np.vstack((y_final_mean_list,y_final_mean.T))
+      y_final_var_list = np.vstack((y_final_var_list,y_final_var.T))
 
-# visual_uncertainty(X,y,Xvague_gt,yvague_gt,y_pred,y_var,np.mean(y_final_mean_list,axis=0),np.mean(y_final_var_list,axis=0),show=True,save=False)
+visual_uncertainty(X,y,Xvague_gt,yvague_gt,y_pred,y_var,y_final_mean_list,y_final_var_list,show=True,save=False)
 

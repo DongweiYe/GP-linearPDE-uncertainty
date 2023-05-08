@@ -27,4 +27,6 @@ class GP():
 
     def get_noise(self):
         return self.GP['Gaussian_noise.variance'][0]
-
+    
+    def get_parameter(self):
+        return self.kernel[0],self.kernel[1]

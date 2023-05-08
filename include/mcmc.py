@@ -20,7 +20,7 @@ def prior_function_mul(input_vector,mean_vector,covariance_matrix):
 
 def prior_function_uni(input_vector,mean_vector,variance_vector):
     prior_array = 1/np.sqrt((2*np.pi)*variance_vector)* \
-            np.exp(-0.5*(input_vector-np.squeeze(mean_vector))**2/np.squeeze(variance_vector))
+            np.exp(-0.5*(input_vector-mean_vector)**2/(variance_vector))
     return np.prod(prior_array)
 
 
@@ -77,7 +77,7 @@ def Metropolis_Hasting(timestep,initial_sample,assumption_variance,databinding,n
 
         covariance_upper = kernel.K(np.expand_dims(x_upper,axis=1)) + np.identity(x_upper.shape[0])*estimated_noise
         covariance_lower = kernel.K(np.expand_dims(x_lower,axis=1)) + np.identity(x_upper.shape[0])*estimated_noise
-        
+      
         # if noise_output == False:
         #     covariance_upper = kernel.K(np.expand_dims(x_upper,axis=1)) + np.identity(covariance_lower.shape[0])*estimated_noise
         #     covariance_lower = kernel.K(np.expand_dims(x_lower,axis=1)) + np.identity(covariance_lower.shape[0])*estimated_noise

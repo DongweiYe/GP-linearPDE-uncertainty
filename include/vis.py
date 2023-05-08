@@ -27,16 +27,25 @@ def visual_prediction(x,y,xexact,yexact,xvague,yvague,ypred,show=False,save=Fals
     if save == True:
         plt.savefig('prediction.png',bbox_inches='tight')
 
-def visual_uncertainty(x,y,xvague,yvague,preypred,preyvar,postypred,postyvar,show=False,save=False):
+def visual_uncertainty(x,y,xvague,yvague,preypred,preyvar,post_ypred_list,post_yvar_list,show=False,save=False):
+    
+    postymean_mean = np.mean(post_ypred_list,axis=0)
+    postymean_std = np.std(post_ypred_list,axis=0)
+    postyvar_mean = np.mean(post_yvar_list,axis=0)
+    postyvar_std = np.std(post_yvar_list,axis=0)
+
+    post_lower_bound = np.squeeze(postymean_mean-postymean_std-postyvar_mean)
+    post_upper_bound = np.squeeze(postymean_mean+postymean_std+postyvar_mean)
     
     plt.plot(x,y,'k-',linewidth=3,label='groundtruth')
     
     plt.plot(x,preypred,'r--',linewidth=3,label='GP wo vague')
     plt.fill_between(x,np.squeeze(preypred-np.sqrt(preyvar)),np.squeeze(preypred+np.sqrt(preyvar)),color='red',alpha=0.3)
 
-    plt.plot(x,postypred,'b--',linewidth=3,label='GP w vague inference')
-    plt.fill_between(x,np.squeeze(postypred-np.sqrt(postyvar)),np.squeeze(postypred+np.sqrt(postyvar)),color='blue',alpha=0.3)
+    plt.plot(x,postymean_mean,'b--',linewidth=3,label='GP w vague inference')
+    plt.fill_between(x,post_lower_bound,post_upper_bound,color='blue',alpha=0.3)
     plt.plot(xvague,yvague,'b*',markersize=10,label='vague data ground truth')
+    
     # plt.plot(X,10*vague_X_distribution+yvague_gt,'g-',label='vague distribution')
     # plt.plot(x,ypred,linewidth=3,color='tab:purple',label='GP prediction (exact)')
     plt.legend()
