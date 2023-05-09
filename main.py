@@ -15,12 +15,12 @@ from include.mcmc import *
 np.random.seed(5)
 
 ### Data parameters for the experiment
-output_noise_variance = False
+output_noise_variance = 0.05
 func = FuncClass('exp-sin')      # Define test function
 
 dim = 1                        # Define the dimension of the problem (not encoded))
-num_exact = 10                 # number of exact training data
-num_vague = 10                 # number of vague training datas
+num_exact = 20                 # number of exact training data
+num_vague = 20                 # number of vague training datas
 xscale = 8*np.pi               # Scale of input space (array if dim!=1)
 prior_var = 1
 num_pred = 3
@@ -60,7 +60,7 @@ visual_prediction(X,y,Xexact,yexact,Xvague_gt,yvague_gt,y_pred,show=True,save=Fa
 ### Let the initial guess to be mean of of the prior to each vague data points
 ### Initial samples for each datapoints
 xvague_sample_current = np.multiply(Xvague_prior_mean,np.ones(num_vague)).reshape(1,-1)
-assumption_variance = 0.1            ### Assumption variance for jump distribution can not be too small as this will define the searching area
+assumption_variance = 0.3            ### Assumption variance for jump distribution can not be too small as this will define the searching area
 timestep = 5000                   ### Artificial timestep
 
 ### Bind data for MH computing
