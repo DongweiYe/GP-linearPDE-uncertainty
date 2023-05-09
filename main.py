@@ -15,8 +15,8 @@ from include.mcmc import *
 np.random.seed(5)
 
 ### Data parameters for the experiment
-output_noise_variance = 0.05
-func = FuncClass('exp-sin')      # Define test function
+output_noise_variance = 0.08
+func = FuncClass('log-sin')      # Define test function
 
 dim = 1                        # Define the dimension of the problem (not encoded))
 num_exact = 20                 # number of exact training data
@@ -51,7 +51,7 @@ y_pred,y_var = preGP.predict(np.expand_dims(X,axis=1))
 
 estimated_noise = preGP.get_noise()
 print('Estimated noise: ', estimated_noise)
-visual_prediction(X,y,Xexact,yexact,Xvague_gt,yvague_gt,y_pred,show=True,save=False)
+# visual_GP(X,y,Xexact,yexact,Xvague_gt,yvague_gt,y_pred,show=True,save=False)
 
 ### Posterior distribution of input point distributions with MCMC
 ### With MCMC, samples of posterior distribution wil be genenrated
@@ -76,19 +76,21 @@ print('Prior mean and variance (Gaussian):      ',Xvague_prior_mean)
 print('Groundtruth:                             ',Xvague_gt)
 
 ### Visualization of prior, posterior(samples) and groundtruth
-plot_distribution(Xvague_prior_mean,Xvague_prior_var,Xvague_posterior_samplelist,Xvague_gt)
+# plot_distribution(Xvague_prior_mean,Xvague_prior_var,Xvague_posterior_samplelist,Xvague_gt)
 
-### Derive marginalized the posterior distribution over posterior 
-### Two way to implmement from this (the posterior of the input locations)
-###   1) Directly use the samples from MCMC (currently using this!!!!)
-###   2) Computer Gaussian distribution and sample from it
 
+### Derive marginalized the predictive distribution over uncertain input posterior 
+### Derive marginalized the predictive distribution over uncertain input prior (comparison) 
+
+
+### Fetch old hyperparameters
 GPvariance,GPlengthscale = preGP.get_parameter()
-# ### Generate saving lists for prediction
+
+### Generate saving lists for prediction
 y_final_mean_list = np.empty((0,X.shape[0]))
 y_final_var_list = np.empty((0,X.shape[0]))
 
-# ### Now retrain the GP with new position
+## Now retrain the GP with uncertain input posterior
 # for i in range(100):
 for i in range(Xvague_posterior_samplelist.shape[0]):
       local_xtrain = np.append(Xexact,Xvague_posterior_samplelist[i,:])
@@ -101,5 +103,28 @@ for i in range(Xvague_posterior_samplelist.shape[0]):
       y_final_mean_list = np.vstack((y_final_mean_list,y_final_mean.T))
       y_final_var_list = np.vstack((y_final_var_list,y_final_var.T))
 
-visual_uncertainty(X,y,Xvague_gt,yvague_gt,y_pred,y_var,y_final_mean_list,y_final_var_list,show=True,save=False)
 
+y_final_mean_list_prior = np.empty((0,X.shape[0]))
+y_final_var_list_prior = np.empty((0,X.shape[0]))
+
+### Retrain GP with uncertian input prior
+Xvague_prior_samplelist  = np.random.multivariate_normal(Xvague_prior_mean,np.identity(num_vague)*prior_var,\
+                                                             Xvague_posterior_samplelist.shape[0])
+# print(Xvague_posterior_samplelist.shape)
+for i in range(Xvague_posterior_samplelist.shape[0]):
+      
+      ### Sample from prior
+      local_xtrain = np.append(Xexact,Xvague_prior_samplelist[i,:])
+      local_ytrain = np.append(yexact,yvague_gt)
+
+      postGP = GP('rbf',output_noise_variance,gp_lengthscale=GPlengthscale,gp_variance=GPvariance,message=False,restart_num=5)
+      postGP.train(np.expand_dims(local_xtrain,axis=1),np.expand_dims(local_ytrain,axis=1))
+      y_final_mean,y_final_var = postGP.predict(np.expand_dims(X,axis=1))
+      
+      y_final_mean_list_prior = np.vstack((y_final_mean_list_prior,y_final_mean.T))
+      y_final_var_list_prior = np.vstack((y_final_var_list_prior,y_final_var.T))
+
+
+# vis_uncertain_input(X,y,Xvague_gt,Xvague_prior_mean,Xvague_posterior_mean,yvague_gt,show=True,save=False)
+# visual_uncertainty(X,y,Xexact,yexact,Xvague_gt,Xvague_prior_mean,Xvague_posterior_mean,yvague_gt,y_pred,y_var,y_final_mean_list,y_final_var_list,show=True,save=False)
+vis_prediction(X,y,y_final_mean_list_prior,y_final_var_list_prior,y_final_mean_list,y_final_var_list,show=True,save=False)
