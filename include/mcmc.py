@@ -112,5 +112,6 @@ def Metropolis_Hasting(timestep,initial_sample,assumption_variance,databinding,n
     # ### Truncate 1/4 of burning-in period sample
     truncate_num = int(xvague_sample_list.shape[0]/4)
     print('Number of posterior samples: ',xvague_sample_list[truncate_num:,:].shape[0])
+    print('The acceptance rate is: %', xvague_sample_list[truncate_num:,:].shape[0]/timestep*100)
     return xvague_sample_list[truncate_num:,:]
       

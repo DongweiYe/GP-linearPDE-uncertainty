@@ -60,8 +60,8 @@ visual_prediction(X,y,Xexact,yexact,Xvague_gt,yvague_gt,y_pred,show=True,save=Fa
 ### Let the initial guess to be mean of of the prior to each vague data points
 ### Initial samples for each datapoints
 xvague_sample_current = np.multiply(Xvague_prior_mean,np.ones(num_vague)).reshape(1,-1)
-assumption_variance = 0.3            ### Assumption variance for jump distribution can not be too small as this will define the searching area
-timestep = 1                   ### Artificial timestep
+assumption_variance = 0.1            ### Assumption variance for jump distribution can not be too small as this will define the searching area
+timestep = 5000                   ### Artificial timestep
 
 ### Bind data for MH computing
 databinding = bind_data(Xvague_prior_mean,Xvague_prior_var,Xexact,yexact,yvague_gt,preGP.kernel)
@@ -71,8 +71,8 @@ Xvague_posterior_samplelist = Metropolis_Hasting(timestep,xvague_sample_current,
 Xvague_posterior_mean = np.mean(Xvague_posterior_samplelist,axis=0)
 Xvague_posterior_variance = np.var(Xvague_posterior_samplelist,axis=0)
 
-print('Posterioir mean and variance (Gaussian): ',Xvague_posterior_mean,Xvague_posterior_variance)
-print('Prior mean and variance (Gaussian):      ',Xvague_prior_mean,Xvague_prior_var)
+print('Posterioir mean and variance (Gaussian): ',Xvague_posterior_mean)
+print('Prior mean and variance (Gaussian):      ',Xvague_prior_mean)
 print('Groundtruth:                             ',Xvague_gt)
 
 ### Visualization of prior, posterior(samples) and groundtruth
