@@ -3,29 +3,41 @@ import matplotlib.pyplot as plt
 from scipy.stats import norm
 import seaborn as sns
 
-def visual_preprocess(x,y,xexact,yexact,xvague,yvague,show=False,save=False):
+def visual_data(x,y,xexact,yexact,xvague,xvague_prior_mean,yvague,show=False,save=False):
+    plt.figure(figsize=(15, 3))
     plt.plot(x,y,'k-',linewidth=3,label='groundtruth')
-    plt.plot(xexact,yexact,'r*',markersize=10,label='exact data')
-    plt.plot(xvague,yvague,'b*',markersize=10,label='vague data ground truth')
+    plt.plot(xexact,yexact,'ro',markersize=10,label='fixed data')
+    plt.plot(xvague,yvague,'bo',markersize=10,label='uncertain data ground truth')
+    plt.plot(xvague_prior_mean,yvague,'go',markersize=10,label='uncertain data prior mean')
     # plt.plot(X,10*vague_X_distribution+yvague_gt,'g-',label='vague distribution')
-    plt.legend()
+    
+    for i in range(xvague.shape[0]):
+        plt.arrow(xvague[i],yvague[i],xvague_prior_mean[i]-xvague[i],0,color='grey')
+    
+    # plt.legend()
     if show == True:
         plt.show()
     if save == True:
         plt.savefig('preprocess.png',bbox_inches='tight')
 
 
-def visual_GP(x,y,xexact,yexact,xvague,yvague,ypred,show=False,save=False):
+def visual_GP(x,y,xexact,yexact,xvague,xvague_prior_mean,yvague,ypred,yvar,show=False,save=False):
+    plt.figure(figsize=(15, 3))
+
     plt.plot(x,y,'k-',linewidth=3,label='groundtruth')
-    plt.plot(xexact,yexact,'r*',markersize=10,label='exact data')
-    plt.plot(xvague,yvague,'b*',markersize=10,label='vague data ground truth')
-    # plt.plot(X,10*vague_X_distribution+yvague_gt,'g-',label='vague distribution')
-    plt.plot(x,ypred,linewidth=3,color='tab:purple',label='GP prediction (exact)')
-    plt.legend()
+    plt.plot(xexact,yexact,'ro',markersize=10,label='fixed data')
+    plt.plot(xvague,yvague,'bo',markersize=10,label='uncertain data ground truth')
+    plt.plot(xvague_prior_mean,yvague,'go',markersize=10,label='uncertain data prior mean')
+    
+    plt.plot(x,ypred,linewidth=3,color='tab:purple',label='GP prediction direct')
+    plt.fill_between(x,np.squeeze(ypred-np.sqrt(yvar)),np.squeeze(ypred+np.sqrt(yvar)),color='tab:purple',alpha=0.3)
+    for i in range(xvague.shape[0]):
+        plt.arrow(xvague[i],yvague[i],xvague_prior_mean[i]-xvague[i],0,color='grey')
+    # plt.legend()
     if show == True:
         plt.show()
     if save == True:
-        plt.savefig('prediction.png',bbox_inches='tight')
+        plt.savefig('GPprediction.png',bbox_inches='tight')
 
 
 def vis_uncertain_input(x,y,xvague,xvague_prior_mean,xvague_post_mean,yvague,show=False,save=False):
@@ -47,28 +59,31 @@ def vis_prediction(x,y,\
                    prior_ypred_list,prior_yvar_list,\
                     post_ypred_list,post_yvar_list,show=False,save=False):
     postymean_mean = np.mean(post_ypred_list,axis=0)
-    postymean_std = np.std(post_ypred_list,axis=0)
+    postymean_var = np.var(post_ypred_list,axis=0)
     postyvar_mean = np.mean(post_yvar_list,axis=0)
     # postyvar_std = np.std(post_yvar_list,axis=0)
 
-    post_lower_bound = np.squeeze(postymean_mean-postymean_std-postyvar_mean)
-    post_upper_bound = np.squeeze(postymean_mean+postymean_std+postyvar_mean)
+    post_lower_bound = np.squeeze(postymean_mean-np.sqrt(postymean_var+postyvar_mean))
+    post_upper_bound = np.squeeze(postymean_mean+np.sqrt(postymean_var+postyvar_mean))
     
     priorymean_mean = np.mean(prior_ypred_list,axis=0)
-    priorymean_std = np.std(prior_ypred_list,axis=0)
+    priorymean_var = np.var(prior_ypred_list,axis=0)
     prioryvar_mean = np.mean(prior_yvar_list,axis=0)
     # prioryvar_std = np.std(prior_yvar_list,axis=0)
 
-    prior_lower_bound = np.squeeze(priorymean_mean-priorymean_std-prioryvar_mean)
-    prior_upper_bound = np.squeeze(priorymean_mean+priorymean_std+prioryvar_mean)
+    prior_lower_bound = np.squeeze(priorymean_mean-np.sqrt(priorymean_var+prioryvar_mean))
+    prior_upper_bound = np.squeeze(priorymean_mean+np.sqrt(priorymean_var+prioryvar_mean))
 
+    plt.figure(figsize=(15, 3))
     plt.plot(x,y,'k-',linewidth=3,label='groundtruth')
 
-    plt.plot(x,postymean_mean,'b--',linewidth=3,label='with prior')
-    plt.fill_between(x,post_lower_bound,post_upper_bound,color='blue',alpha=0.3)
+    plt.plot(x,priorymean_mean,'--',color='tab:blue',linewidth=3,label='with prior')
+    plt.fill_between(x,prior_lower_bound,prior_upper_bound,color='tab:blue',alpha=0.3)
 
-    plt.plot(x,priorymean_mean,'r--',linewidth=3,label='with posterior')
-    plt.fill_between(x,prior_lower_bound,prior_upper_bound,color='red',alpha=0.3)
+    plt.plot(x,postymean_mean,'--',color='tab:red',linewidth=3,label='with posterior')
+    plt.fill_between(x,post_lower_bound,post_upper_bound,color='tab:red',alpha=0.3)
+
+    
 
     plt.legend()
     if show == True:

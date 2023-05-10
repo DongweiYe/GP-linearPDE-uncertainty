@@ -10,7 +10,7 @@ class FuncClass():
         elif self.function_name=='ampcos':
             result = np.cos(input)*input/2
         elif self.function_name=='exp-sin':
-            result = np.exp(-0.2*input)*np.sin(input)
+            result = np.exp(-0.2*input)*(np.sin(input)+input)
         elif self.function_name=='tan-sin':
             result = np.tan(0.15*input)*np.sin(input)
         elif self.function_name=='tanh-cos':
