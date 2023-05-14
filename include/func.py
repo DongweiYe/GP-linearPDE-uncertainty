@@ -5,7 +5,9 @@ class FuncClass():
         self.function_name = function_name
 
     def run(self,input,noise_variance):
-        if self.function_name=='ampsin':
+        if self.function_name=='test':
+            result = -input * np.sin(input/3)
+        elif self.function_name=='ampsin':
             result = np.sin(input)*input/2
         elif self.function_name=='ampcos':
             result = np.cos(input)*input/2

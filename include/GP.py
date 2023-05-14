@@ -18,8 +18,8 @@ class GP():
     
     def train(self,x,y,noise_constraint):
         self.GP = GPy.models.GPRegression(x,y,self.kernel)
-        # if self.noise_contrain != False: # Noise free case, add constract of noise
-            # self.GP.Gaussian_noise.fix(self.noise_contrain)
+        if self.noise_contrain != False: # Noise free case, add constract of noise
+            self.GP.Gaussian_noise.fix(self.noise_contrain)
         if noise_constraint != False:
             self.GP.Gaussian_noise.fix(noise_constraint)
         self.GP.optimize(messages=self.message, max_f_eval=1, max_iters=1e7)
