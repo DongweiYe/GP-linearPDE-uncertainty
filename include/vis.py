@@ -57,6 +57,7 @@ def vis_uncertain_input(x,y,xvague,xvague_prior_mean,xvague_post_mean,yvague,sho
 
 def vis_prediction(x,y,\
                    xexact,yexact,\
+                   xvague_prior,\
                    xvague_post,yvague,\
                    prior_ypred_list,prior_yvar_list,\
                     post_ypred_list,post_yvar_list,show=False,save=False):
@@ -92,15 +93,16 @@ def vis_prediction(x,y,\
         }
     plt.rcParams.update(params)
     
-    plt.fill_between(x,prior_lower_bound,prior_upper_bound,color='mediumseagreen',alpha=0.5)
-    plt.fill_between(x,post_lower_bound,post_upper_bound,color='lightsteelblue',alpha=0.5)
+    plt.fill_between(x,prior_lower_bound,prior_upper_bound,color='tab:orange',alpha=0.3)
+    plt.fill_between(x,post_lower_bound,post_upper_bound,color='tab:purple',alpha=0.3)
 
     plt.plot(x,y,'k--',linewidth=6,label='latent function')
-    plt.plot(x,priorymean_mean,'-',color='darkgreen',linewidth=6,label='with prior')
-    plt.plot(x,postymean_mean,'-',color='darkslateblue',linewidth=6,label='with posterior')
+    plt.plot(x,priorymean_mean,'-',color='tab:orange',linewidth=6,label='with prior')
+    plt.plot(x,postymean_mean,'-',color='tab:purple',linewidth=6,label='with posterior')
     
 
     plt.plot(xexact,yexact,'rX',markersize=17,label='fixed data')
+    plt.plot(xvague_prior,yvague,'gX',markersize=17,label='uncertain data groundtruth')
     plt.plot(xvague_post,yvague,'bX',markersize=17,label='posterior mean of uncertain data')
     
 
@@ -216,8 +218,8 @@ def figure1_standardGP(x,y,xexact,yexact,xvague,xvague_prior_mean,yvague,ypred,y
     plt.plot(x,ypred,'-',linewidth=6,color='tab:purple',label='conventional GP')
 
     plt.plot(xexact,yexact,'rX',markersize=20,label='fixed data')
-    plt.plot(xvague,yvague,'bX',markersize=20,label='uncertain data ground truth')
-    plt.plot(xvague_prior_mean,yvague,'gX',markersize=20,label='prior mean of uncertain data')
+    plt.plot(xvague,yvague,'gX',markersize=20,label='uncertain data ground truth')
+    plt.plot(xvague_prior_mean,yvague,'bX',markersize=20,label='prior mean of uncertain data')
     
     
     
@@ -253,7 +255,7 @@ def figure1_posterior(prior_mean,prior_var,posterior_samples,groundtruth):
 
         ### Plot prior
         prior_range = np.arange(prior_mean[i]-6*np.sqrt(prior_var[i]), prior_mean[i]+6*np.sqrt(prior_var[i]), 8*np.sqrt(prior_var[i])/1000)
-        plt.plot(prior_range, norm.pdf(prior_range, prior_mean[i], prior_var[i]),'-',color='forestgreen',linewidth=6,label='prior')
+        plt.plot(prior_range, norm.pdf(prior_range, prior_mean[i], prior_var[i]),'-',color='royalblue',linewidth=6,label='prior')
         # plt.axvline(x=prior_mean[i],color='tab:green',linestyle='--',linewidth=3)
 
         ### Plot groundtruth
@@ -261,12 +263,73 @@ def figure1_posterior(prior_mean,prior_var,posterior_samples,groundtruth):
         plt.xlim([np.min(prior_range),np.max(prior_range)])
 
         ### Plot posterior
-        s1 = sns.kdeplot(posterior_samples[:,i],color='slateblue',bw_adjust=3,linewidth=6,label='posterior')
-        plt.axvline(x=np.mean(posterior_samples[:,i]),color='slateblue',linestyle='--',linewidth=6,label='posterior mean')
+        s1 = sns.kdeplot(posterior_samples[:,i],color='seagreen',bw_adjust=3,linewidth=6,label='posterior')
+        plt.axvline(x=np.mean(posterior_samples[:,i]),color='seagreen',linestyle='--',linewidth=6,label='posterior mean')
         s1.set(ylabel='')
         plt.xlabel('x')
         if i == 0:
             plt.legend(loc='upper left',bbox_to_anchor=(0.0, -0.5),ncols=4,frameon=False)
         plt.savefig('Figure1_Post_'+str(i)+'.png',bbox_inches='tight')
 
+
+def figure2(x,y,\
+            xexact,yexact,\
+            xvague_prior,\
+            xvague_post,yvague,\
+            prior_ypred_list,prior_yvar_list,\
+            post_ypred_list,post_yvar_list,show=False,save=False):
     
+    postymean_mean = np.mean(post_ypred_list,axis=0)
+    postymean_var = np.var(post_ypred_list,axis=0)
+    postyvar_mean = np.mean(post_yvar_list,axis=0)
+    # postyvar_std = np.std(post_yvar_list,axis=0)
+
+    post_lower_bound = np.squeeze(postymean_mean-2*np.sqrt(postymean_var+postyvar_mean))
+    post_upper_bound = np.squeeze(postymean_mean+2*np.sqrt(postymean_var+postyvar_mean))
+    
+    priorymean_mean = np.mean(prior_ypred_list,axis=0)
+    priorymean_var = np.var(prior_ypred_list,axis=0)
+    prioryvar_mean = np.mean(prior_yvar_list,axis=0)
+    # prioryvar_std = np.std(prior_yvar_list,axis=0)
+
+    prior_lower_bound = np.squeeze(priorymean_mean-2*np.sqrt(priorymean_var+prioryvar_mean))
+    prior_upper_bound = np.squeeze(priorymean_mean+2*np.sqrt(priorymean_var+prioryvar_mean))
+
+    plt.figure(figsize=(17, 8.5))
+    params = {
+            'axes.labelsize': 25,
+            'font.size': 25,
+            'legend.fontsize': 25,
+            'xtick.labelsize': 25,
+            'ytick.labelsize': 25,
+            'text.usetex': False,
+            'axes.linewidth': 3,
+            'xtick.major.width': 3,
+            'ytick.major.width': 3,
+            'xtick.major.size': 5,
+            'ytick.major.size': 5,
+        }
+    plt.rcParams.update(params)
+    
+    plt.fill_between(x,prior_lower_bound,prior_upper_bound,color='tab:orange',alpha=0.3)
+    plt.fill_between(x,post_lower_bound,post_upper_bound,color='tab:purple',alpha=0.3)
+
+    plt.plot(x,y,'k--',linewidth=6,label='latent function')
+    plt.plot(x,priorymean_mean,'-',color='tab:orange',linewidth=6,label='with prior',alpha=0.9)
+    plt.plot(x,postymean_mean,'-',color='tab:purple',linewidth=6,label='with posterior',alpha=0.9)
+
+    # plt.plot(xexact,yexact,'rX',markersize=17,label='fixed data')
+    # plt.plot(xvague_prior,yvague,'gX',markersize=17,label='uncertain data groundtruth')
+    # plt.plot(xvague_post,yvague,'bX',markersize=17,label='posterior mean of uncertain data')
+    
+
+    plt.xlabel('x')
+    plt.ylabel('y')
+    plt.xlim([0,25])
+    # plt.ylim([-35,25])
+
+    plt.legend(loc='upper left',bbox_to_anchor=(0.0, -0.5),ncols=3,frameon=False)
+    if show == True:
+        plt.show()
+    if save == True:
+        plt.savefig('prediction.png',bbox_inches='tight')
