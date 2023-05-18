@@ -19,6 +19,8 @@ class FuncClass():
             result = 0.2*np.square(input)*np.tanh(np.cos(input)) 
         elif self.function_name=='log-sin':
             result = 0.5*np.log(np.square(input)*(np.sin(2*input)+2)+1)
+        elif self.function_name=='sin-sin':
+            result = -7*np.sin(input/3)+2*np.sin(input*10/9)
         
         if noise_variance != False:
 

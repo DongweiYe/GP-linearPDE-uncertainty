@@ -96,13 +96,13 @@ def vis_prediction(x,y,\
     plt.fill_between(x,prior_lower_bound,prior_upper_bound,color='tab:orange',alpha=0.3)
     plt.fill_between(x,post_lower_bound,post_upper_bound,color='tab:purple',alpha=0.3)
 
-    plt.plot(x,y,'k--',linewidth=6,label='latent function')
+    plt.plot(x,y,'k--',linewidth=6,label='ground truth')
     plt.plot(x,priorymean_mean,'-',color='tab:orange',linewidth=6,label='with prior')
     plt.plot(x,postymean_mean,'-',color='tab:purple',linewidth=6,label='with posterior')
     
 
     plt.plot(xexact,yexact,'rX',markersize=17,label='fixed data')
-    plt.plot(xvague_prior,yvague,'gX',markersize=17,label='uncertain data groundtruth')
+    plt.plot(xvague_prior,yvague,'gX',markersize=17,label='uncertain data ground truth')
     plt.plot(xvague_post,yvague,'bX',markersize=17,label='posterior mean of uncertain data')
     
 
@@ -214,7 +214,7 @@ def figure1_standardGP(x,y,xexact,yexact,xvague,xvague_prior_mean,yvague,ypred,y
 
     plt.fill_between(x,np.squeeze(ypred-2*np.sqrt(yvar)),np.squeeze(ypred+2*np.sqrt(yvar)),color='tab:purple',alpha=0.3)
 
-    plt.plot(x,y,'k--',linewidth=6,label='latent function')
+    plt.plot(x,y,'k--',linewidth=6,label='ground truth')
     plt.plot(x,ypred,'-',linewidth=6,color='tab:purple',label='conventional GP')
 
     plt.plot(xexact,yexact,'rX',markersize=20,label='fixed data')

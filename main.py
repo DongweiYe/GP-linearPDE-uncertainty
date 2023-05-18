@@ -15,22 +15,22 @@ from include.mcmc import *
 np.random.seed(5)
 
 ### Data parameters for the experiment
-output_noise_variance = 0.2
-func = FuncClass('log-sin')      # Define test function
+output_noise_variance = False
+func = FuncClass('test')      # Define test function
 
 dim = 1                        # Define the dimension of the problem (not encoded))
-num_exact = 30                 # number of exact training data
-num_vague = 30                 # number of vague training datas
+num_exact = 4                 # number of exact training data
+num_vague = 4                 # number of vague training datas
 xscale = 8*np.pi               # Scale of input space (array if dim!=1)
-prior_var = 1
-prior_bias_mean = 0.5
+prior_var = 4
+prior_bias_mean = 2
 
 ### Create groundtruth data for visualization
 X = np.arange(0,xscale,xscale/100)
 y = func.run(X,False)
 
 ### Create synthetic data (sobol); 2^M
-qMCsampler = qmc.Sobol(d=dim,seed=1)
+qMCsampler = qmc.Sobol(d=dim,seed=0)
 qMCsample = qMCsampler.random_base2(m=6)*xscale
 
 ### fetch fixed data
@@ -50,14 +50,14 @@ Xvague_prior_var = np.ones(num_vague)*prior_var# May result in error when num_va
 
 ### Train a GP to find the hyperparameters for the kernel in ELBO
 preGP = GP('rbf',output_noise=output_noise_variance,gp_lengthscale=1,gp_variance=10,message=False,restart_num=2)
-preGP.train(np.expand_dims(np.append(Xexact,Xvague_prior_mean),axis=1),np.expand_dims(np.append(yexact,yvague_gt),axis=1),1e-2)
+preGP.train(np.expand_dims(np.append(Xexact,Xvague_prior_mean),axis=1),np.expand_dims(np.append(yexact,yvague_gt),axis=1),False)
 y_pred,y_var = preGP.predict(np.expand_dims(X,axis=1))
 
 estimated_noise = preGP.get_noise()
 print('Estimated noise: ', estimated_noise)
 
 # visual_GP(X,y,Xexact,yexact,Xvague_gt,Xvague_prior_mean,yvague_gt,y_pred,y_var,show=True,save=False)
-# figure1_standardGP(X,y,Xexact,yexact,Xvague_gt,Xvague_prior_mean,yvague_gt,y_pred,y_var,show=False,save=True)
+figure1_standardGP(X,y,Xexact,yexact,Xvague_gt,Xvague_prior_mean,yvague_gt,y_pred,y_var,show=False,save=True)
 
 
 
@@ -111,7 +111,7 @@ for i in range(Xvague_posterior_samplelist.shape[0]):
       local_ytrain = np.append(yexact,yvague_gt)
 
       postGP = GP('rbf',output_noise_variance,gp_lengthscale=GPlengthscale,gp_variance=GPvariance,message=False,restart_num=5)
-      postGP.train(np.expand_dims(local_xtrain,axis=1),np.expand_dims(local_ytrain,axis=1),1e-2)
+      postGP.train(np.expand_dims(local_xtrain,axis=1),np.expand_dims(local_ytrain,axis=1),False)
       y_final_mean,y_final_var = postGP.predict(np.expand_dims(X,axis=1))
       
       y_final_mean_list = np.vstack((y_final_mean_list,y_final_mean.T))
@@ -133,12 +133,15 @@ for i in range(Xvague_posterior_samplelist.shape[0]):
       local_ytrain = np.append(yexact,yvague_gt)
 
       postGP = GP('rbf',output_noise_variance,gp_lengthscale=GPlengthscale,gp_variance=GPvariance,message=False,restart_num=5)
-      postGP.train(np.expand_dims(local_xtrain,axis=1),np.expand_dims(local_ytrain,axis=1),1e-2)
+      postGP.train(np.expand_dims(local_xtrain,axis=1),np.expand_dims(local_ytrain,axis=1),False)
       y_final_mean,y_final_var = postGP.predict(np.expand_dims(X,axis=1))
       
       y_final_mean_list_prior = np.vstack((y_final_mean_list_prior,y_final_mean.T))
       y_final_var_list_prior = np.vstack((y_final_var_list_prior,y_final_var.T))
 
 # visual_uncertainty(X,y,Xexact,yexact,Xvague_gt,Xvague_prior_mean,Xvague_posterior_mean,yvague_gt,y_pred,y_var,y_final_mean_list,y_final_var_list,show=True,save=False)
-# vis_prediction(X,y,Xexact,yexact,Xvague_gt,np.mean(Xvague_posterior_samplelist,axis=0),yvague_gt,y_final_mean_list_prior,y_final_var_list_prior,y_final_mean_list,y_final_var_list,show=False,save=True)
-figure2(X,y,Xexact,yexact,Xvague_gt,np.mean(Xvague_posterior_samplelist,axis=0),yvague_gt,y_final_mean_list_prior,y_final_var_list_prior,y_final_mean_list,y_final_var_list,show=False,save=True)
+vis_prediction(X,y,Xexact,yexact,Xvague_gt,np.mean(Xvague_posterior_samplelist,axis=0),yvague_gt,y_final_mean_list_prior,y_final_var_list_prior,y_final_mean_list,y_final_var_list,show=False,save=True)
+# figure2(X,y,Xexact,yexact,Xvague_gt,np.mean(Xvague_posterior_samplelist,axis=0),yvague_gt,y_final_mean_list_prior,y_final_var_list_prior,y_final_mean_list,y_final_var_list,show=False,save=True)
+
+print('MSE of predictive mean of posterior: ', np.sum(np.square(y-np.mean(y_final_mean_list,axis=0)))/100)
+print('MSE of predictive mean of prior: ', np.sum(np.square(y-np.mean(y_final_mean_list_prior,axis=0)))/100)
