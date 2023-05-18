@@ -91,64 +91,64 @@ print(Xvague_posterior_variance)
 # figure1_posterior(Xvague_prior_mean,Xvague_prior_var,Xvague_posterior_samplelist,Xvague_gt)
 
 
-# ### Derive marginalized the predictive distribution over uncertain input posterior 
-# ### Derive marginalized the predictive distribution over uncertain input prior (comparison) 
+### Derive marginalized the predictive distribution over uncertain input posterior 
+### Derive marginalized the predictive distribution over uncertain input prior (comparison) 
 
 
-# ### Fetch old hyperparameters
-# GPvariance,GPlengthscale = preGP.get_parameter()
+### Fetch old hyperparameters
+GPvariance,GPlengthscale = preGP.get_parameter()
 
-# ### Generate saving lists for prediction
-# y_final_mean_list = np.empty((0,X.shape[0]))
-# y_final_var_list = np.empty((0,X.shape[0]))
+### Generate saving lists for prediction
+y_final_mean_list = np.empty((0,X.shape[0]))
+y_final_var_list = np.empty((0,X.shape[0]))
 
-# ## Now retrain the GP with uncertain input posterior
-# # for i in range(100):
-# # if Xvague_posterior_samplelist.shape[0] >= 1500:
-# #       Xvague_posterior_samplelist = Xvague_posterior_samplelist[:1000,:]
-# for i in range(Xvague_posterior_samplelist.shape[0]):
-#       local_xtrain = np.append(Xexact,Xvague_posterior_samplelist[i,:])
-#       local_ytrain = np.append(yexact,yvague_gt)
+## Now retrain the GP with uncertain input posterior
+# for i in range(100):
+# if Xvague_posterior_samplelist.shape[0] >= 1500:
+#       Xvague_posterior_samplelist = Xvague_posterior_samplelist[:1000,:]
+for i in range(Xvague_posterior_samplelist.shape[0]):
+      local_xtrain = np.append(Xexact,Xvague_posterior_samplelist[i,:])
+      local_ytrain = np.append(yexact,yvague_gt)
 
-#       postGP = GP('rbf',output_noise_variance,gp_lengthscale=GPlengthscale,gp_variance=GPvariance,message=False,restart_num=5)
-#       postGP.train(np.expand_dims(local_xtrain,axis=1),np.expand_dims(local_ytrain,axis=1),False)
-#       y_final_mean,y_final_var = postGP.predict(np.expand_dims(X,axis=1))
+      postGP = GP('rbf',output_noise_variance,gp_lengthscale=GPlengthscale,gp_variance=GPvariance,message=False,restart_num=5)
+      postGP.train(np.expand_dims(local_xtrain,axis=1),np.expand_dims(local_ytrain,axis=1),False)
+      y_final_mean,y_final_var = postGP.predict(np.expand_dims(X,axis=1))
       
-#       y_final_mean_list = np.vstack((y_final_mean_list,y_final_mean.T))
-#       y_final_var_list = np.vstack((y_final_var_list,y_final_var.T))
+      y_final_mean_list = np.vstack((y_final_mean_list,y_final_mean.T))
+      y_final_var_list = np.vstack((y_final_var_list,y_final_var.T))
 
 
-# y_final_mean_list_prior = np.empty((0,X.shape[0]))
-# y_final_var_list_prior = np.empty((0,X.shape[0]))
+y_final_mean_list_prior = np.empty((0,X.shape[0]))
+y_final_var_list_prior = np.empty((0,X.shape[0]))
 
-# ### Retrain GP with uncertian input prior
-# Xvague_prior_samplelist  = np.random.multivariate_normal(Xvague_prior_mean,np.identity(num_vague)*prior_var,\
-#                                                              Xvague_posterior_samplelist.shape[0])
+### Retrain GP with uncertian input prior
+Xvague_prior_samplelist  = np.random.multivariate_normal(Xvague_prior_mean,np.identity(num_vague)*prior_var,\
+                                                             Xvague_posterior_samplelist.shape[0])
 
-# for i in range(Xvague_posterior_samplelist.shape[0]):
+for i in range(Xvague_posterior_samplelist.shape[0]):
       
-#       ### Sample from prior
-#       local_xtrain = np.append(Xexact,Xvague_prior_samplelist[i,:])
-#       local_ytrain = np.append(yexact,yvague_gt)
+      ### Sample from prior
+      local_xtrain = np.append(Xexact,Xvague_prior_samplelist[i,:])
+      local_ytrain = np.append(yexact,yvague_gt)
 
-#       postGP = GP('rbf',output_noise_variance,gp_lengthscale=GPlengthscale,gp_variance=GPvariance,message=False,restart_num=5)
-#       postGP.train(np.expand_dims(local_xtrain,axis=1),np.expand_dims(local_ytrain,axis=1),False)
-#       y_final_mean,y_final_var = postGP.predict(np.expand_dims(X,axis=1))
+      postGP = GP('rbf',output_noise_variance,gp_lengthscale=GPlengthscale,gp_variance=GPvariance,message=False,restart_num=5)
+      postGP.train(np.expand_dims(local_xtrain,axis=1),np.expand_dims(local_ytrain,axis=1),False)
+      y_final_mean,y_final_var = postGP.predict(np.expand_dims(X,axis=1))
       
-#       y_final_mean_list_prior = np.vstack((y_final_mean_list_prior,y_final_mean.T))
-#       y_final_var_list_prior = np.vstack((y_final_var_list_prior,y_final_var.T))
+      y_final_mean_list_prior = np.vstack((y_final_mean_list_prior,y_final_mean.T))
+      y_final_var_list_prior = np.vstack((y_final_var_list_prior,y_final_var.T))
 
-# # visual_uncertainty(X,y,Xexact,yexact,Xvague_gt,Xvague_prior_mean,Xvague_posterior_mean,yvague_gt,y_pred,y_var,y_final_mean_list,y_final_var_list,show=True,save=False)
-# # vis_prediction(X,y,Xexact,yexact,Xvague_gt,np.mean(Xvague_posterior_samplelist,axis=0),yvague_gt,y_final_mean_list_prior,y_final_var_list_prior,y_final_mean_list,y_final_var_list,show=False,save=True)
-# figure2(X,y,Xexact,yexact,Xvague_gt,Xvague_prior_mean,np.mean(Xvague_posterior_samplelist,axis=0),yvague_gt,y_final_mean_list_prior,y_final_var_list_prior,y_final_mean_list,y_final_var_list,show=False,save=True)
+# visual_uncertainty(X,y,Xexact,yexact,Xvague_gt,Xvague_prior_mean,Xvague_posterior_mean,yvague_gt,y_pred,y_var,y_final_mean_list,y_final_var_list,show=True,save=False)
+# vis_prediction(X,y,Xexact,yexact,Xvague_gt,np.mean(Xvague_posterior_samplelist,axis=0),yvague_gt,y_final_mean_list_prior,y_final_var_list_prior,y_final_mean_list,y_final_var_list,show=False,save=True)
+figure2(X,y,Xexact,yexact,Xvague_gt,Xvague_prior_mean,np.mean(Xvague_posterior_samplelist,axis=0),yvague_gt,y_final_mean_list_prior,y_final_var_list_prior,y_final_mean_list,y_final_var_list,show=False,save=True)
 
-# prior_prediction_variance = prediction_variance(y_final_mean_list_prior,y_final_var_list_prior)
-# posterior_predition_variance = prediction_variance(y_final_mean_list,y_final_var_list)
+prior_prediction_variance = prediction_variance(y_final_mean_list_prior,y_final_var_list_prior)
+posterior_predition_variance = prediction_variance(y_final_mean_list,y_final_var_list)
 
 
 print('MSPE position prior: ', (prior_var*num_vague+np.square(np.linalg.norm(Xvague_gt-Xvague_prior_mean)))/num_vague)
 print('MSPE position posterior: ',(np.sum(Xvague_posterior_variance)+np.square(np.linalg.norm(Xvague_gt-Xvague_posterior_mean)))/num_vague)
 
-# print('MSPE prediction prior:', (np.sum(prior_prediction_variance)+np.square(np.linalg.norm(y-np.mean(y_final_mean_list_prior,axis=0))))/100)
-# print('MSPE prediction posterior:',(np.sum(posterior_predition_variance)+np.square(np.linalg.norm(y-np.mean(y_final_mean_list,axis=0))))/100 )
+print('MSPE prediction prior:', (np.sum(prior_prediction_variance)+np.square(np.linalg.norm(y-np.mean(y_final_mean_list_prior,axis=0))))/100)
+print('MSPE prediction posterior:',(np.sum(posterior_predition_variance)+np.square(np.linalg.norm(y-np.mean(y_final_mean_list,axis=0))))/100 )
 
