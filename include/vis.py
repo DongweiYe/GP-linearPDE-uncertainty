@@ -107,6 +107,7 @@ def vis_prediction(x,y,\
     
 
 
+
     plt.xlabel('x')
     plt.ylabel('y')
     plt.xlim([0,25])
@@ -274,6 +275,7 @@ def figure1_posterior(prior_mean,prior_var,posterior_samples,groundtruth):
 
 def figure2(x,y,\
             xexact,yexact,\
+            xvague_gt,\
             xvague_prior,\
             xvague_post,yvague,\
             prior_ypred_list,prior_yvar_list,\
@@ -311,25 +313,35 @@ def figure2(x,y,\
         }
     plt.rcParams.update(params)
     
+    # plt.plot(xexact,yexact,'rX',markersize=17,label='fixed data')
+    
     plt.fill_between(x,prior_lower_bound,prior_upper_bound,color='tab:orange',alpha=0.3)
     plt.fill_between(x,post_lower_bound,post_upper_bound,color='tab:purple',alpha=0.3)
 
-    plt.plot(x,y,'k--',linewidth=6,label='latent function')
-    plt.plot(x,priorymean_mean,'-',color='tab:orange',linewidth=6,label='with prior',alpha=0.9)
-    plt.plot(x,postymean_mean,'-',color='tab:purple',linewidth=6,label='with posterior',alpha=0.9)
+    plt.plot(x,y,'k--',linewidth=7,label='ground truth')
+    plt.plot(x,priorymean_mean,'-',color='tab:orange',linewidth=7,label='with prior',alpha=0.9)
+    plt.plot(x,postymean_mean,'-',color='tab:purple',linewidth=7,label='with posterior',alpha=0.9)
 
-    # plt.plot(xexact,yexact,'rX',markersize=17,label='fixed data')
-    # plt.plot(xvague_prior,yvague,'gX',markersize=17,label='uncertain data groundtruth')
-    # plt.plot(xvague_post,yvague,'bX',markersize=17,label='posterior mean of uncertain data')
     
+    # plt.plot(xvague_gt,-15*np.ones(xvague_post.shape[0]),'gX',markersize=17,label='uncertain data ground truth')
+    # plt.plot(xvague_post,-16.5*np.ones(xvague_post.shape[0]),'bX',markersize=17,label='posterior mean of uncertain data')
+    # plt.plot(xvague_prior,-18*np.ones(xvague_post.shape[0]),'X',color='brown',markersize=17,label='prior mean of uncertain data')
 
     plt.xlabel('x')
     plt.ylabel('y')
     plt.xlim([0,25])
-    # plt.ylim([-35,25])
+    # plt.ylim([-21,17])
 
     plt.legend(loc='upper left',bbox_to_anchor=(0.0, -0.5),ncols=3,frameon=False)
     if show == True:
         plt.show()
     if save == True:
         plt.savefig('prediction.png',bbox_inches='tight')
+
+
+def prediction_variance(ypred_list,yvar_list):
+    ymean_var = np.var(ypred_list,axis=0)
+    yvar_mean =  np.mean(yvar_list,axis=0)
+
+    return ymean_var+yvar_mean
+    

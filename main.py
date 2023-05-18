@@ -5,6 +5,7 @@ import GPy
 # import bayespy as bp ### Mainly for visualization
 # import bayespy.plot as bpplt
 from scipy.stats import qmc
+from scipy.special import kl_div
 
 from include.func import *	
 from include.vis import *
@@ -57,7 +58,7 @@ estimated_noise = preGP.get_noise()
 print('Estimated noise: ', estimated_noise)
 
 # visual_GP(X,y,Xexact,yexact,Xvague_gt,Xvague_prior_mean,yvague_gt,y_pred,y_var,show=True,save=False)
-figure1_standardGP(X,y,Xexact,yexact,Xvague_gt,Xvague_prior_mean,yvague_gt,y_pred,y_var,show=False,save=True)
+# figure1_standardGP(X,y,Xexact,yexact,Xvague_gt,Xvague_prior_mean,yvague_gt,y_pred,y_var,show=False,save=True)
 
 
 
@@ -68,7 +69,7 @@ figure1_standardGP(X,y,Xexact,yexact,Xvague_gt,Xvague_prior_mean,yvague_gt,y_pre
 ### Let the initial guess to be mean of of the prior to each vague data points
 ### Initial samples for each datapoints
 xvague_sample_current = np.multiply(Xvague_prior_mean,np.ones(num_vague)).reshape(1,-1)
-assumption_variance = 0.05            ### Assumption variance for jump distribution can not be too small as this will define the searching area
+assumption_variance = 0.05           ### Assumption variance for jump distribution can not be too small as this will define the searching area
 timestep = 5000                   ### Artificial timestep
 
 ### Bind data for MH computing
@@ -105,7 +106,7 @@ y_final_var_list = np.empty((0,X.shape[0]))
 ## Now retrain the GP with uncertain input posterior
 # for i in range(100):
 # if Xvague_posterior_samplelist.shape[0] >= 1500:
-#       Xvague_posterior_samplelist = Xvague_posterior_samplelist[:200,:]
+#       Xvague_posterior_samplelist = Xvague_posterior_samplelist[:1000,:]
 for i in range(Xvague_posterior_samplelist.shape[0]):
       local_xtrain = np.append(Xexact,Xvague_posterior_samplelist[i,:])
       local_ytrain = np.append(yexact,yvague_gt)
@@ -124,8 +125,7 @@ y_final_var_list_prior = np.empty((0,X.shape[0]))
 ### Retrain GP with uncertian input prior
 Xvague_prior_samplelist  = np.random.multivariate_normal(Xvague_prior_mean,np.identity(num_vague)*prior_var,\
                                                              Xvague_posterior_samplelist.shape[0])
-# print(Xvague_posterior_samplelist.shape)
-# for i in range(100):
+
 for i in range(Xvague_posterior_samplelist.shape[0]):
       
       ### Sample from prior
@@ -140,8 +140,16 @@ for i in range(Xvague_posterior_samplelist.shape[0]):
       y_final_var_list_prior = np.vstack((y_final_var_list_prior,y_final_var.T))
 
 # visual_uncertainty(X,y,Xexact,yexact,Xvague_gt,Xvague_prior_mean,Xvague_posterior_mean,yvague_gt,y_pred,y_var,y_final_mean_list,y_final_var_list,show=True,save=False)
-vis_prediction(X,y,Xexact,yexact,Xvague_gt,np.mean(Xvague_posterior_samplelist,axis=0),yvague_gt,y_final_mean_list_prior,y_final_var_list_prior,y_final_mean_list,y_final_var_list,show=False,save=True)
-# figure2(X,y,Xexact,yexact,Xvague_gt,np.mean(Xvague_posterior_samplelist,axis=0),yvague_gt,y_final_mean_list_prior,y_final_var_list_prior,y_final_mean_list,y_final_var_list,show=False,save=True)
+# vis_prediction(X,y,Xexact,yexact,Xvague_gt,np.mean(Xvague_posterior_samplelist,axis=0),yvague_gt,y_final_mean_list_prior,y_final_var_list_prior,y_final_mean_list,y_final_var_list,show=False,save=True)
+figure2(X,y,Xexact,yexact,Xvague_gt,Xvague_prior_mean,np.mean(Xvague_posterior_samplelist,axis=0),yvague_gt,y_final_mean_list_prior,y_final_var_list_prior,y_final_mean_list,y_final_var_list,show=False,save=True)
 
-print('MSE of predictive mean of posterior: ', np.sum(np.square(y-np.mean(y_final_mean_list,axis=0)))/100)
-print('MSE of predictive mean of prior: ', np.sum(np.square(y-np.mean(y_final_mean_list_prior,axis=0)))/100)
+prior_prediction_variance = prediction_variance(y_final_mean_list_prior,y_final_var_list_prior)
+posterior_predition_variance = prediction_variance(y_final_mean_list,y_final_var_list)
+
+
+print('MSPE position prior: ', (prior_var*100+np.square(np.linalg.norm(Xvague_gt-Xvague_prior_mean)))/100)
+print('MSPE position posterior: ',(np.sum(Xvague_posterior_variance)+np.square(np.linalg.norm(Xvague_gt-Xvague_posterior_mean)))/100)
+
+print('MSPE prediction prior:', (np.sum(prior_prediction_variance)+np.square(np.linalg.norm(y-np.mean(y_final_mean_list_prior,axis=0))))/100)
+print('MSPE prediction posterior:',(np.sum(posterior_predition_variance)+np.square(np.linalg.norm(y-np.mean(y_final_mean_list,axis=0))))/100 )
+
