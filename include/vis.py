@@ -93,12 +93,12 @@ def vis_prediction(x,y,\
         }
     plt.rcParams.update(params)
     
-    plt.fill_between(x,prior_lower_bound,prior_upper_bound,color='tab:orange',alpha=0.3)
-    plt.fill_between(x,post_lower_bound,post_upper_bound,color='tab:purple',alpha=0.3)
+    plt.fill_between(np.sort(np.append(x,xexact)),prior_lower_bound,prior_upper_bound,color='tab:orange',alpha=0.3)
+    plt.fill_between(np.sort(np.append(x,xexact)),post_lower_bound,post_upper_bound,color='tab:purple',alpha=0.3)
 
     plt.plot(x,y,'k--',linewidth=6,label='ground truth')
-    plt.plot(x,priorymean_mean,'-',color='tab:orange',linewidth=6,label='with prior')
-    plt.plot(x,postymean_mean,'-',color='tab:purple',linewidth=6,label='with posterior')
+    plt.plot(np.sort(np.append(x,xexact)),priorymean_mean,'-',color='tab:orange',linewidth=6,label='with prior')
+    plt.plot(np.sort(np.append(x,xexact)),postymean_mean,'-',color='tab:purple',linewidth=6,label='with posterior')
     
 
     plt.plot(xexact,yexact,'rX',markersize=17,label='fixed data')
