@@ -1,0 +1,108 @@
+ctit091
+Collecting package metadata (current_repodata.json): ...working... done
+Solving environment: ...working... done
+
+## Package Plan ##
+
+  environment location: /deepstore/software/anaconda3/2022.05
+
+  added / updated specs:
+    - conda
+
+
+The following packages will be UPDATED:
+
+  pyjwt                                2.1.0-py39h06a4308_0 --> 2.4.0-py39h06a4308_0
+
+
+Proceed ([y]/n)? 
+Preparing transaction: ...working... done
+Verifying transaction: ...working... failed
+Collecting package metadata (current_repodata.json): ...working... done
+Solving environment: ...working... done
+
+# All requested packages already installed.
+
+Collecting package metadata (current_repodata.json): ...working... done
+Solving environment: ...working... done
+
+## Package Plan ##
+
+  environment location: /home/yanw/.conda/envs/noise
+
+  added / updated specs:
+    - pynvml
+
+
+The following packages will be downloaded:
+
+    package                    |            build
+    ---------------------------|-----------------
+    pynvml-11.5.0              |     pyhd8ed1ab_0          46 KB  conda-forge
+    ------------------------------------------------------------
+                                           Total:          46 KB
+
+The following NEW packages will be INSTALLED:
+
+  pynvml             conda-forge/noarch::pynvml-11.5.0-pyhd8ed1ab_0
+
+
+Proceed ([y]/n)? 
+
+Downloading and Extracting Packages
+pynvml-11.5.0        | 46 KB     |            |   0% pynvml-11.5.0        | 46 KB     | ###4       |  35% pynvml-11.5.0        | 46 KB     | ########## | 100% pynvml-11.5.0        | 46 KB     | ########## | 100% 
+Preparing transaction: ...working... done
+Verifying transaction: ...working... done
+Executing transaction: ...working... done
+Looking in indexes: https://__token__:****@gitlab.utsp.utwente.nl/api/v4/groups/271/-/packages/pypi/simple
+Looking in links: https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
+Requirement already satisfied: jax[cuda12_local] in /home/yanw/.conda/envs/noise/lib/python3.10/site-packages (0.4.14)
+Requirement already satisfied: ml-dtypes>=0.2.0 in /home/yanw/.conda/envs/noise/lib/python3.10/site-packages (from jax[cuda12_local]) (0.2.0)
+Requirement already satisfied: numpy>=1.22 in /home/yanw/.conda/envs/noise/lib/python3.10/site-packages (from jax[cuda12_local]) (1.25.2)
+Requirement already satisfied: opt-einsum in /home/yanw/.local/lib/python3.10/site-packages (from jax[cuda12_local]) (3.3.0)
+Requirement already satisfied: scipy>=1.7 in /home/yanw/.conda/envs/noise/lib/python3.10/site-packages (from jax[cuda12_local]) (1.11.2)
+Requirement already satisfied: jaxlib==0.4.14+cuda12.cudnn89 in /home/yanw/.conda/envs/noise/lib/python3.10/site-packages (from jax[cuda12_local]) (0.4.14+cuda12.cudnn89)
+Wed Aug 30 16:37:12 2023       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 515.86.01    Driver Version: 515.86.01    CUDA Version: 11.7     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                               |                      |               MIG M. |
+|===============================+======================+======================|
+|   0  NVIDIA A40          On   | 00000000:3B:00.0 Off |                    0 |
+|  0%   43C    P8    36W / 300W |      0MiB / 46068MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+|   1  NVIDIA A40          On   | 00000000:5E:00.0 Off |                    0 |
+|  0%   45C    P8    38W / 300W |      2MiB / 46068MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+|   2  NVIDIA A40          On   | 00000000:B1:00.0 Off |                    0 |
+|  0%   46C    P8    39W / 300W |      0MiB / 46068MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+|   3  NVIDIA A40          On   | 00000000:D9:00.0 Off |                    0 |
+|  0%   45C    P8    39W / 300W |      0MiB / 46068MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                                  |
+|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+|        ID   ID                                                   Usage      |
+|=============================================================================|
+|  No running processes found                                                 |
++-----------------------------------------------------------------------------+
+Date              = Wed Aug 30 16:37:13 CEST 2023
+Hostname          = ctit091
+Working Directory = /local/232478
+Number of nodes used        : 1
+Number of MPI tasks         : 1
+Number of threads           : 16
+Number of MPI tasks per node: 1
+Number of threads per core  : 
+Name of nodes used          : ctit091
+Gpu devices                 : 0
+Starting worker: 
+Script finished in 1 minutes and 17 seconds.

@@ -1,0 +1,96 @@
+Traceback (most recent call last):
+  File "main.py", line 67, in <module>
+    param_iter, optimizer_text, lr_text, epoch_text = train_heat_equation_model_2d(init, Xu_noise, Xu_fixed,
+  File "/local/232573/include/train.py", line 25, in train_heat_equation_model_2d
+    init_loss = loss_fn(param_iter)
+  File "/local/232573/include/heat2d.py", line 114, in heat_equation_nlml_loss_2d
+    zz_uu = heat_equation_kuu_noise(Xuz, Xuz, params)
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/traceback_util.py", line 166, in reraise_with_filtered_traceback
+    return fun(*args, **kwargs)
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/pjit.py", line 250, in cache_miss
+    outs, out_flat, out_tree, args_flat, jaxpr = _python_pjit_helper(
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/pjit.py", line 158, in _python_pjit_helper
+    args_flat, _, params, in_tree, out_tree, _ = infer_params_fn(
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/api.py", line 306, in infer_params
+    return pjit.common_infer_params(pjit_info_args, *args, **kwargs)
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/pjit.py", line 505, in common_infer_params
+    jaxpr, consts, canonicalized_out_shardings_flat = _pjit_jaxpr(
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/pjit.py", line 971, in _pjit_jaxpr
+    jaxpr, final_consts, out_type = _create_pjit_jaxpr(
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/linear_util.py", line 345, in memoized_fun
+    ans = call(fun, *args)
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/pjit.py", line 924, in _create_pjit_jaxpr
+    jaxpr, global_out_avals, consts = pe.trace_to_jaxpr_dynamic(
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/profiler.py", line 314, in wrapper
+    return func(*args, **kwargs)
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/interpreters/partial_eval.py", line 2155, in trace_to_jaxpr_dynamic
+    jaxpr, out_avals, consts = trace_to_subjaxpr_dynamic(
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/interpreters/partial_eval.py", line 2177, in trace_to_subjaxpr_dynamic
+    ans = fun.call_wrapped(*in_tracers_)
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/linear_util.py", line 188, in call_wrapped
+    ans = self.f(*args, **dict(self.params, **kwargs))
+  File "/local/232573/include/heat2d.py", line 80, in heat_equation_kuu_noise
+    kzz = rbf_kernel(x1, x2, params)
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/traceback_util.py", line 166, in reraise_with_filtered_traceback
+    return fun(*args, **kwargs)
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/pjit.py", line 250, in cache_miss
+    outs, out_flat, out_tree, args_flat, jaxpr = _python_pjit_helper(
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/pjit.py", line 158, in _python_pjit_helper
+    args_flat, _, params, in_tree, out_tree, _ = infer_params_fn(
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/api.py", line 306, in infer_params
+    return pjit.common_infer_params(pjit_info_args, *args, **kwargs)
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/pjit.py", line 505, in common_infer_params
+    jaxpr, consts, canonicalized_out_shardings_flat = _pjit_jaxpr(
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/pjit.py", line 971, in _pjit_jaxpr
+    jaxpr, final_consts, out_type = _create_pjit_jaxpr(
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/linear_util.py", line 345, in memoized_fun
+    ans = call(fun, *args)
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/pjit.py", line 924, in _create_pjit_jaxpr
+    jaxpr, global_out_avals, consts = pe.trace_to_jaxpr_dynamic(
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/profiler.py", line 314, in wrapper
+    return func(*args, **kwargs)
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/interpreters/partial_eval.py", line 2155, in trace_to_jaxpr_dynamic
+    jaxpr, out_avals, consts = trace_to_subjaxpr_dynamic(
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/interpreters/partial_eval.py", line 2177, in trace_to_subjaxpr_dynamic
+    ans = fun.call_wrapped(*in_tracers_)
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/linear_util.py", line 188, in call_wrapped
+    ans = self.f(*args, **dict(self.params, **kwargs))
+  File "/local/232573/include/kernels.py", line 22, in rbf_kernel
+    square_distances = jnp.sum((x1[:, jnp.newaxis, :] - x2[jnp.newaxis, :, :]) ** 2 / initial_theta['lengthscale'] ** 2,
+jax._src.traceback_util.UnfilteredStackTrace: TypeError: tuple indices must be integers or slices, not str
+
+The stack trace below excludes JAX-internal frames.
+The preceding is the original exception that occurred, unmodified.
+
+--------------------
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "main.py", line 67, in <module>
+    param_iter, optimizer_text, lr_text, epoch_text = train_heat_equation_model_2d(init, Xu_noise, Xu_fixed,
+  File "/local/232573/include/train.py", line 25, in train_heat_equation_model_2d
+    init_loss = loss_fn(param_iter)
+  File "/local/232573/include/heat2d.py", line 114, in heat_equation_nlml_loss_2d
+    zz_uu = heat_equation_kuu_noise(Xuz, Xuz, params)
+  File "/local/232573/include/heat2d.py", line 80, in heat_equation_kuu_noise
+    kzz = rbf_kernel(x1, x2, params)
+  File "/local/232573/include/kernels.py", line 22, in rbf_kernel
+    square_distances = jnp.sum((x1[:, jnp.newaxis, :] - x2[jnp.newaxis, :, :]) ** 2 / initial_theta['lengthscale'] ** 2,
+TypeError: tuple indices must be integers or slices, not str
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[40974,1],0]
+  Exit code:    1
+--------------------------------------------------------------------------
+cp: cannot stat '*.pdf': No such file or directory
+cp: missing destination file operand after '*.png/home/yanw/uncertain/results/figures/0831'
+Try 'cp --help' for more information.
+cp: missing destination file operand after '/home/yanw/uncertain'
+Try 'cp --help' for more information.

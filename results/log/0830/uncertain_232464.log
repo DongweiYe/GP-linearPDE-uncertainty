@@ -1,0 +1,157 @@
+ctit090
+Collecting package metadata (current_repodata.json): ...working... done
+Solving environment: ...working... failed with initial frozen solve. Retrying with flexible solve.
+Solving environment: ...working... failed with repodata from current_repodata.json, will retry with next repodata source.
+Collecting package metadata (repodata.json): ...working... done
+Solving environment: ...working... done
+
+## Package Plan ##
+
+  environment location: /deepstore/software/anaconda3/2022.05
+
+  added / updated specs:
+    - jaxlib
+
+
+The following packages will be downloaded:
+
+    package                    |            build
+    ---------------------------|-----------------
+    conda-4.12.0               |   py39hf3d152e_0        1014 KB  conda-forge
+    jaxlib-0.1.69              |   py39hf3d152e_1        39.6 MB  conda-forge
+    python-flatbuffers-23.5.26 |     pyhd8ed1ab_0          33 KB  conda-forge
+    python_abi-3.9             |           2_cp39           4 KB  conda-forge
+    ------------------------------------------------------------
+                                           Total:        40.6 MB
+
+The following NEW packages will be INSTALLED:
+
+  absl-py            conda-forge/noarch::absl-py-1.4.0-pyhd8ed1ab_0
+  jaxlib             conda-forge/linux-64::jaxlib-0.1.69-py39hf3d152e_1
+  python-flatbuffers conda-forge/noarch::python-flatbuffers-23.5.26-pyhd8ed1ab_0
+  python_abi         conda-forge/linux-64::python_abi-3.9-2_cp39
+
+The following packages will be SUPERSEDED by a higher-priority channel:
+
+  conda              pkgs/main::conda-4.12.0-py39h06a4308_0 --> conda-forge::conda-4.12.0-py39hf3d152e_0
+
+
+Proceed ([y]/n)? 
+
+Downloading and Extracting Packages
+conda-4.12.0         | 1014 KB   |            |   0% conda-4.12.0         | 1014 KB   | 1          |   2% conda-4.12.0         | 1014 KB   | ########## | 100% conda-4.12.0         | 1014 KB   | ########## | 100% 
+python-flatbuffers-2 | 33 KB     |            |   0% python-flatbuffers-2 | 33 KB     | ########## | 100% python-flatbuffers-2 | 33 KB     | ########## | 100% 
+python_abi-3.9       | 4 KB      |            |   0% python_abi-3.9       | 4 KB      | ########## | 100% 
+jaxlib-0.1.69        | 39.6 MB   |            |   0% jaxlib-0.1.69        | 39.6 MB   |            |   0% jaxlib-0.1.69        | 39.6 MB   | ##4        |  24% jaxlib-0.1.69        | 39.6 MB   | #####1     |  52% jaxlib-0.1.69        | 39.6 MB   | ########4  |  85% jaxlib-0.1.69        | 39.6 MB   | ########## | 100% 
+Preparing transaction: ...working... done
+Verifying transaction: ...working... failed
+Collecting package metadata (current_repodata.json): ...working... done
+Solving environment: ...working... failed with initial frozen solve. Retrying with flexible solve.
+Solving environment: ...working... failed with repodata from current_repodata.json, will retry with next repodata source.
+Collecting package metadata (repodata.json): ...working... done
+Solving environment: ...working... done
+
+## Package Plan ##
+
+  environment location: /deepstore/software/anaconda3/2022.05
+
+  added / updated specs:
+    - optax
+
+
+The following packages will be downloaded:
+
+    package                    |            build
+    ---------------------------|-----------------
+    chex-0.1.5                 |     pyhd8ed1ab_0          66 KB  conda-forge
+    dm-tree-0.1.5              |   py39hde0f152_2         112 KB  conda-forge
+    etils-1.4.1                |     pyhd8ed1ab_0         745 KB  conda-forge
+    jax-0.3.14                 |     pyhd8ed1ab_0         826 KB  conda-forge
+    ------------------------------------------------------------
+                                           Total:         1.7 MB
+
+The following NEW packages will be INSTALLED:
+
+  absl-py            conda-forge/noarch::absl-py-1.4.0-pyhd8ed1ab_0
+  chex               conda-forge/noarch::chex-0.1.5-pyhd8ed1ab_0
+  dm-tree            conda-forge/linux-64::dm-tree-0.1.5-py39hde0f152_2
+  etils              conda-forge/noarch::etils-1.4.1-pyhd8ed1ab_0
+  importlib_resourc~ conda-forge/noarch::importlib_resources-6.0.1-pyhd8ed1ab_0
+  jax                conda-forge/noarch::jax-0.3.14-pyhd8ed1ab_0
+  jaxlib             conda-forge/linux-64::jaxlib-0.1.69-py39hf3d152e_1
+  opt_einsum         conda-forge/noarch::opt_einsum-3.3.0-pyhd8ed1ab_1
+  optax              conda-forge/noarch::optax-0.1.7-pyhd8ed1ab_0
+  python-flatbuffers conda-forge/noarch::python-flatbuffers-23.5.26-pyhd8ed1ab_0
+  python_abi         conda-forge/linux-64::python_abi-3.9-2_cp39
+
+The following packages will be SUPERSEDED by a higher-priority channel:
+
+  conda              pkgs/main::conda-4.12.0-py39h06a4308_0 --> conda-forge::conda-4.12.0-py39hf3d152e_0
+
+
+Proceed ([y]/n)? 
+
+Downloading and Extracting Packages
+chex-0.1.5           | 66 KB     |            |   0% chex-0.1.5           | 66 KB     | ##4        |  24% chex-0.1.5           | 66 KB     | ########## | 100% 
+etils-1.4.1          | 745 KB    |            |   0% etils-1.4.1          | 745 KB    | 2          |   2% etils-1.4.1          | 745 KB    | ###        |  30% etils-1.4.1          | 745 KB    | ######     |  60% etils-1.4.1          | 745 KB    | ########## | 100% etils-1.4.1          | 745 KB    | ########## | 100% 
+dm-tree-0.1.5        | 112 KB    |            |   0% dm-tree-0.1.5        | 112 KB    | ########## | 100% dm-tree-0.1.5        | 112 KB    | ########## | 100% 
+jax-0.3.14           | 826 KB    |            |   0% jax-0.3.14           | 826 KB    | 1          |   2% jax-0.3.14           | 826 KB    | ########## | 100% jax-0.3.14           | 826 KB    | ########## | 100% 
+Preparing transaction: ...working... done
+Verifying transaction: ...working... failed
+Defaulting to user installation because normal site-packages is not writeable
+Looking in indexes: https://__token__:****@gitlab.utsp.utwente.nl/api/v4/groups/271/-/packages/pypi/simple
+Looking in links: https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
+Requirement already satisfied: jax[cuda12_local] in /home/yanw/.local/lib/python3.9/site-packages (0.4.14)
+Requirement already satisfied: opt-einsum in /home/yanw/.local/lib/python3.9/site-packages (from jax[cuda12_local]) (3.3.0)
+Requirement already satisfied: scipy>=1.7 in /deepstore/software/anaconda3/2022.05/lib/python3.9/site-packages (from jax[cuda12_local]) (1.7.3)
+Requirement already satisfied: numpy>=1.22 in /home/yanw/.local/lib/python3.9/site-packages (from jax[cuda12_local]) (1.22.4)
+Requirement already satisfied: ml-dtypes>=0.2.0 in /home/yanw/.local/lib/python3.9/site-packages (from jax[cuda12_local]) (0.2.0)
+Requirement already satisfied: importlib-metadata>=4.6 in /deepstore/software/anaconda3/2022.05/lib/python3.9/site-packages (from jax[cuda12_local]) (4.11.3)
+Requirement already satisfied: jaxlib==0.4.14+cuda12.cudnn89 in /home/yanw/.local/lib/python3.9/site-packages (from jax[cuda12_local]) (0.4.14+cuda12.cudnn89)
+Requirement already satisfied: zipp>=0.5 in /deepstore/software/anaconda3/2022.05/lib/python3.9/site-packages (from importlib-metadata>=4.6->jax[cuda12_local]) (3.7.0)
+Wed Aug 30 15:51:08 2023       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 515.86.01    Driver Version: 515.86.01    CUDA Version: 11.7     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                               |                      |               MIG M. |
+|===============================+======================+======================|
+|   0  NVIDIA A40          On   | 00000000:3B:00.0 Off |                    0 |
+|  0%   31C    P8    34W / 300W |      0MiB / 46068MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+|   1  NVIDIA A40          On   | 00000000:5E:00.0 Off |                    0 |
+|  0%   61C    P0   219W / 300W |  26241MiB / 46068MiB |     89%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+|   2  NVIDIA A40          On   | 00000000:B1:00.0 Off |                    0 |
+|  0%   61C    P0   143W / 300W |  26249MiB / 46068MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+|   3  NVIDIA A40          On   | 00000000:D9:00.0 Off |                    0 |
+|  0%   62C    P0   180W / 300W |  24211MiB / 46068MiB |     60%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                                  |
+|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+|        ID   ID                                                   Usage      |
+|=============================================================================|
+|    1   N/A  N/A   1629252      C   python                          26239MiB |
+|    2   N/A  N/A   1629438      C   python                          26247MiB |
+|    3   N/A  N/A   1646759      C   python                          24209MiB |
++-----------------------------------------------------------------------------+
+Date              = Wed Aug 30 15:51:09 CEST 2023
+Hostname          = ctit090
+Working Directory = /local/232464
+Number of nodes used        : 1
+Number of MPI tasks         : 1
+Number of threads           : 16
+Number of MPI tasks per node: 1
+Number of threads per core  : 
+Name of nodes used          : ctit090
+Gpu devices                 : 0
+Starting worker: 
+Script finished in 36 minutes and 13 seconds.

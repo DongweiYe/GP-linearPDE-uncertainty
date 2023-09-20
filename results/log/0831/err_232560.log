@@ -1,0 +1,80 @@
+Traceback (most recent call last):
+  File "main.py", line 41, in <module>
+    model_initializer = ModelInitializer_2d(number_u=number_u, number_f=number_f, sample_num=sample_num,
+  File "/local/232560/include/init.py", line 36, in __init__
+    self.X = jnp.concatenate((self.Xu_noise, self.Xu_fixed, self.Xf))
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/numpy/lax_numpy.py", line 1837, in concatenate
+    arrays_out = [lax.concatenate(arrays_out[i:i+k], axis)
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/numpy/lax_numpy.py", line 1837, in <listcomp>
+    arrays_out = [lax.concatenate(arrays_out[i:i+k], axis)
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/lax/lax.py", line 613, in concatenate
+    return concatenate_p.bind(*operands, dimension=dimension)
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/core.py", line 380, in bind
+    return self.bind_with_trace(find_top_trace(args), args, params)
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/core.py", line 383, in bind_with_trace
+    out = trace.process_primitive(self, map(trace.full_raise, args), params)
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/core.py", line 815, in process_primitive
+    return primitive.impl(*tracers, **params)
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/dispatch.py", line 132, in apply_primitive
+    compiled_fun = xla_primitive_callable(
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/util.py", line 284, in wrapper
+    return cached(config._trace_context(), *args, **kwargs)
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/util.py", line 277, in cached
+    return f(*args, **kwargs)
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/dispatch.py", line 223, in xla_primitive_callable
+    compiled = _xla_callable_uncached(
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/dispatch.py", line 250, in _xla_callable_uncached
+    computation = sharded_lowering(
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/dispatch.py", line 242, in sharded_lowering
+    return pxla.lower_sharding_computation(
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/profiler.py", line 314, in wrapper
+    return func(*args, **kwargs)
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/interpreters/pxla.py", line 2016, in lower_sharding_computation
+    kept_var_idx, name_stack) = _trace_to_jaxpr_and_dce(
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/interpreters/pxla.py", line 1812, in wrapped
+    return _wrapped_with_lu_cache(f, *args, **kwargs)
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/linear_util.py", line 345, in memoized_fun
+    ans = call(fun, *args)
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/interpreters/pxla.py", line 1827, in _trace_to_jaxpr_and_dce
+    jaxpr, global_out_avals, consts = pe.trace_to_jaxpr_final(
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/profiler.py", line 314, in wrapper
+    return func(*args, **kwargs)
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/interpreters/partial_eval.py", line 2233, in trace_to_jaxpr_final
+    jaxpr, out_avals, consts = trace_to_subjaxpr_dynamic(
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/interpreters/partial_eval.py", line 2177, in trace_to_subjaxpr_dynamic
+    ans = fun.call_wrapped(*in_tracers_)
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/linear_util.py", line 188, in call_wrapped
+    ans = self.f(*args, **dict(self.params, **kwargs))
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/dispatch.py", line 217, in prim_fun
+    out = prim.bind(*args, **params)
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/core.py", line 380, in bind
+    return self.bind_with_trace(find_top_trace(args), args, params)
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/core.py", line 383, in bind_with_trace
+    out = trace.process_primitive(self, map(trace.full_raise, args), params)
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/interpreters/partial_eval.py", line 1855, in process_primitive
+    return self.default_process_primitive(primitive, tracers, params)
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/interpreters/partial_eval.py", line 1859, in default_process_primitive
+    out_avals, effects = primitive.abstract_eval(*avals, **params)
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/core.py", line 416, in abstract_eval_
+    return abstract_eval(*args, **kwargs), no_effects
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/lax/utils.py", line 63, in standard_abstract_eval
+    return core.ShapedArray(shape_rule(*avals, **kwargs),
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/lax/lax.py", line 3054, in _concatenate_shape_rule
+    raise TypeError(msg.format(", ".join(str(o.shape) for o in operands)))
+TypeError: Cannot concatenate arrays with different numbers of dimensions: got (5, 1, 2), (15, 2), (5, 2).
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[36425,1],0]
+  Exit code:    1
+--------------------------------------------------------------------------
+cp: cannot stat '*.pdf': No such file or directory
+cp: missing destination file operand after '*.png/home/yanw/uncertain/results/figures/0831'
+Try 'cp --help' for more information.
+cp: missing destination file operand after '/home/yanw/uncertain'
+Try 'cp --help' for more information.

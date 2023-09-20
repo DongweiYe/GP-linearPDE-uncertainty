@@ -1,0 +1,26 @@
+	Adding nVidia Cuda Toolkit 11.8
+	Adding nVidia cuDNN 8.6 (.0.163)
+WARNING (pytensor.tensor.blas): Using NumPy C-API based implementation for BLAS functions.
+Traceback (most recent call last):
+  File "main.py", line 75, in <module>
+    trace = posterior_inference_mcmc(Xu_noise, jnp.identity(xu_noise.shape[0])*prior_var, param_iter, Xu_fixed, Xf, Y)
+  File "/local/233934/include/mcmc_posterior.py", line 28, in posterior_inference_mcmc
+    z_uncertain = pm.MvNormal('z_uncertain',mean=prior_mean,cov=prior_cov)
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/pymc/distributions/distribution.py", line 308, in __new__
+    rv_out = cls.dist(*args, **kwargs)
+TypeError: dist() missing 1 required positional argument: 'mu'
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[60971,1],0]
+  Exit code:    1
+--------------------------------------------------------------------------
+cp: missing destination file operand after '*.png/home/yanw/uncertain/results/figures/0906'
+Try 'cp --help' for more information.
+cp: missing destination file operand after '/home/yanw/uncertain'
+Try 'cp --help' for more information.

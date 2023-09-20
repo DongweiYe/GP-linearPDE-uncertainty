@@ -1,0 +1,46 @@
+python: can't open file 'main.py': [Errno 2] No such file or directory
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[47977,1],0]
+  Exit code:    2
+--------------------------------------------------------------------------
+/tmp/slurmd/job229453/slurm_script: line 76: /home/yanw/uncertain/results/log/0802/229453_version.log: No such file or directory
+/tmp/slurmd/job229453/slurm_script: line 77: /home/yanw/uncertain/results/log/0802/229453_version.log: No such file or directory
+ERROR: Pipe to stdout was broken
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
+BrokenPipeError: [Errno 32] Broken pipe
+/tmp/slurmd/job229453/slurm_script: line 76: /home/yanw/uncertain/results/log/0802/229453_version.log: No such file or directory
+/tmp/slurmd/job229453/slurm_script: line 77: /home/yanw/uncertain/results/log/0802/229453_version.log: No such file or directory
+ERROR: Pipe to stdout was broken
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
+BrokenPipeError: [Errno 32] Broken pipe
+/tmp/slurmd/job229453/slurm_script: line 76: /home/yanw/uncertain/results/log/0802/229453_version.log: No such file or directory
+/tmp/slurmd/job229453/slurm_script: line 77: /home/yanw/uncertain/results/log/0802/229453_version.log: No such file or directory
+ERROR: Pipe to stdout was broken
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
+BrokenPipeError: [Errno 32] Broken pipe
+/tmp/slurmd/job229453/slurm_script: line 76: /home/yanw/uncertain/results/log/0802/229453_version.log: No such file or directory
+/tmp/slurmd/job229453/slurm_script: line 77: /home/yanw/uncertain/results/log/0802/229453_version.log: No such file or directory
+ERROR: Pipe to stdout was broken
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
+BrokenPipeError: [Errno 32] Broken pipe
+/tmp/slurmd/job229453/slurm_script: line 76: /home/yanw/uncertain/results/log/0802/229453_version.log: No such file or directory
+/tmp/slurmd/job229453/slurm_script: line 77: /home/yanw/uncertain/results/log/0802/229453_version.log: No such file or directory
+ERROR: Pipe to stdout was broken
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
+BrokenPipeError: [Errno 32] Broken pipe
+/tmp/slurmd/job229453/slurm_script: line 76: /home/yanw/uncertain/results/log/0802/229453_version.log: No such file or directory
+/tmp/slurmd/job229453/slurm_script: line 77: /home/yanw/uncertain/results/log/0802/229453_version.log: No such file or directory
+ERROR: Pipe to stdout was broken
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
+BrokenPipeError: [Errno 32] Broken pipe
+/tmp/slurmd/job229453/slurm_script: line 86: /home/yanw/uncertain/results/log/0802/229453_version.log: No such file or directory
+cp: cannot stat '*.pdf': No such file or directory
+cp: missing destination file operand after '/home/yanw/uncertain'
+Try 'cp --help' for more information.

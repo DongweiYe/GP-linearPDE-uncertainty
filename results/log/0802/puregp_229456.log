@@ -1,0 +1,91 @@
+ctit090
+Collecting package metadata (current_repodata.json): ...working... done
+Solving environment: ...working... done
+
+## Package Plan ##
+
+  environment location: /home/yanw/.conda/envs/uncertain
+
+  added / updated specs:
+    - gpy
+
+
+The following packages will be downloaded:
+
+    package                    |            build
+    ---------------------------|-----------------
+    decorator-5.1.1            |     pyhd8ed1ab_0          12 KB  conda-forge
+    gpy-1.10.0                 |   py38h71d37f0_3         1.6 MB  conda-forge
+    paramz-0.9.5               |             py_0          60 KB  conda-forge
+    ------------------------------------------------------------
+                                           Total:         1.6 MB
+
+The following NEW packages will be INSTALLED:
+
+  decorator          conda-forge/noarch::decorator-5.1.1-pyhd8ed1ab_0
+  gpy                conda-forge/linux-64::gpy-1.10.0-py38h71d37f0_3
+  paramz             conda-forge/noarch::paramz-0.9.5-py_0
+
+
+Proceed ([y]/n)? 
+
+Downloading and Extracting Packages
+paramz-0.9.5         | 60 KB     |            |   0% paramz-0.9.5         | 60 KB     | ##6        |  27% paramz-0.9.5         | 60 KB     | ########## | 100% paramz-0.9.5         | 60 KB     | ########## | 100% 
+gpy-1.10.0           | 1.6 MB    |            |   0% gpy-1.10.0           | 1.6 MB    |            |   1% gpy-1.10.0           | 1.6 MB    | #7         |  18% gpy-1.10.0           | 1.6 MB    | #####1     |  52% gpy-1.10.0           | 1.6 MB    | ########## | 100% gpy-1.10.0           | 1.6 MB    | ########## | 100% 
+decorator-5.1.1      | 12 KB     |            |   0% decorator-5.1.1      | 12 KB     | ########## | 100% 
+Preparing transaction: ...working... done
+Verifying transaction: ...working... done
+Executing transaction: ...working... done
+Wed Aug  2 12:30:56 2023       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 515.86.01    Driver Version: 515.86.01    CUDA Version: 11.7     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                               |                      |               MIG M. |
+|===============================+======================+======================|
+|   0  NVIDIA A40          On   | 00000000:3B:00.0 Off |                    0 |
+|  0%   42C    P8    37W / 300W |      0MiB / 46068MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+|   1  NVIDIA A40          On   | 00000000:5E:00.0 Off |                    0 |
+|  0%   42C    P8    36W / 300W |      0MiB / 46068MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+|   2  NVIDIA A40          On   | 00000000:B1:00.0 Off |                    0 |
+|  0%   47C    P8    39W / 300W |      0MiB / 46068MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+|   3  NVIDIA A40          On   | 00000000:D9:00.0 Off |                    0 |
+|  0%   44C    P8    37W / 300W |      0MiB / 46068MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                                  |
+|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+|        ID   ID                                                   Usage      |
+|=============================================================================|
+|  No running processes found                                                 |
++-----------------------------------------------------------------------------+
+Date              = Wed Aug  2 12:30:57 CEST 2023
+Hostname          = ctit090
+Working Directory = /local/229456
+Number of nodes used        : 1
+Number of MPI tasks         : 1
+Number of threads           : 16
+Number of MPI tasks per node: 1
+Number of threads per core  : 
+Name of nodes used          : ctit090
+Gpu devices                 : 0
+Starting worker: 
+Estimated noise:  0.0001
+Number of posterior samples:  2961
+The acceptance rate is: % 59.21999999999999
+Posterioir mean and variance (Gaussian):  [13.04421431  7.77817455  4.00907051 23.65383443]
+Prior mean and variance (Gaussian):       [11.6091789   9.77894143  3.79499553 24.40565761]
+Groundtruth:                              [12.72120621  8.29601221  4.9681189  22.73121397]
+[1.25590177 1.86095601 2.44784238 1.22725531]
+MSPE position prior:  5.903915943415059
+MSPE position posterior:  2.233861966217385
+Script finished in 44 minutes and 45 seconds.

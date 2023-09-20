@@ -1,0 +1,45 @@
+
+
+==> WARNING: A newer version of conda exists. <==
+  current version: 4.12.0
+  latest version: 23.7.3
+
+Please update conda by running
+
+    $ conda update -n base -c defaults conda
+
+
+
+EnvironmentNotWritableError: The current user does not have write permissions to the target environment.
+  environment location: /deepstore/software/anaconda3/2022.05
+  uid: 17701115
+  gid: 10384
+
+
+
+
+==> WARNING: A newer version of conda exists. <==
+  current version: 4.12.0
+  latest version: 23.7.3
+
+Please update conda by running
+
+    $ conda update -n base -c defaults conda
+
+
+
+EnvironmentNotWritableError: The current user does not have write permissions to the target environment.
+  environment location: /deepstore/software/anaconda3/2022.05
+  uid: 17701115
+  gid: 10384
+
+
+Traceback (most recent call last):
+  File "/local/232471/main.py", line 3, in <module>
+    import optax
+ModuleNotFoundError: No module named 'optax'
+cp: cannot stat '*.pdf': No such file or directory
+cp: missing destination file operand after '*.png/home/yanw/uncertain/results/figures/0830'
+Try 'cp --help' for more information.
+cp: missing destination file operand after '/home/yanw/uncertain'
+Try 'cp --help' for more information.

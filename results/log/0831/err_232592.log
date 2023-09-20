@@ -1,0 +1,50 @@
+Traceback (most recent call last):
+  File "main.py", line 67, in <module>
+    param_iter, optimizer_text, lr_text, epoch_text = train_heat_equation_model_2d(init, Xu_noise, Xu_fixed,
+  File "/local/232592/include/train.py", line 38, in train_heat_equation_model_2d
+    param_iter, opt_state = train_step(param_iter, opt_state)
+  File "/local/232592/include/train.py", line 17, in train_step
+    grad = grad_fn(heat_params)
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/traceback_util.py", line 166, in reraise_with_filtered_traceback
+    return fun(*args, **kwargs)
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/api.py", line 647, in grad_f
+    _, g = value_and_grad_f(*args, **kwargs)
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/traceback_util.py", line 166, in reraise_with_filtered_traceback
+    return fun(*args, **kwargs)
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/api.py", line 727, in value_and_grad_f
+    _check_scalar(ans)
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.8/site-packages/jax/_src/api.py", line 747, in _check_scalar
+    raise TypeError(msg(f"had shape: {aval.shape}"))
+jax._src.traceback_util.UnfilteredStackTrace: TypeError: Gradient only defined for scalar-output functions. Output had shape: (1, 1).
+
+The stack trace below excludes JAX-internal frames.
+The preceding is the original exception that occurred, unmodified.
+
+--------------------
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "main.py", line 67, in <module>
+    param_iter, optimizer_text, lr_text, epoch_text = train_heat_equation_model_2d(init, Xu_noise, Xu_fixed,
+  File "/local/232592/include/train.py", line 38, in train_heat_equation_model_2d
+    param_iter, opt_state = train_step(param_iter, opt_state)
+  File "/local/232592/include/train.py", line 17, in train_step
+    grad = grad_fn(heat_params)
+TypeError: Gradient only defined for scalar-output functions. Output had shape: (1, 1).
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[29237,1],0]
+  Exit code:    1
+--------------------------------------------------------------------------
+cp: cannot stat '*.pdf': No such file or directory
+cp: missing destination file operand after '*.png/home/yanw/uncertain/results/figures/0831'
+Try 'cp --help' for more information.
+cp: missing destination file operand after '/home/yanw/uncertain'
+Try 'cp --help' for more information.

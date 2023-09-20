@@ -1,0 +1,37 @@
+	Adding nVidia Cuda Toolkit 11.8
+	Adding nVidia cuDNN 8.6 (.0.163)
+/tmp/slurmd/job233916/slurm_script: line 54: /home/yanw/uncertain/results/log/0906/233916_version.log: No such file or directory
+/tmp/slurmd/job233916/slurm_script: line 55: /home/yanw/uncertain/results/log/0906/233916_version.log: No such file or directory
+ERROR: Pipe to stdout was broken
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
+BrokenPipeError: [Errno 32] Broken pipe
+/tmp/slurmd/job233916/slurm_script: line 54: /home/yanw/uncertain/results/log/0906/233916_version.log: No such file or directory
+/tmp/slurmd/job233916/slurm_script: line 55: /home/yanw/uncertain/results/log/0906/233916_version.log: No such file or directory
+ERROR: Pipe to stdout was broken
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
+BrokenPipeError: [Errno 32] Broken pipe
+/tmp/slurmd/job233916/slurm_script: line 54: /home/yanw/uncertain/results/log/0906/233916_version.log: No such file or directory
+/tmp/slurmd/job233916/slurm_script: line 55: /home/yanw/uncertain/results/log/0906/233916_version.log: No such file or directory
+ERROR: Pipe to stdout was broken
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
+BrokenPipeError: [Errno 32] Broken pipe
+/tmp/slurmd/job233916/slurm_script: line 54: /home/yanw/uncertain/results/log/0906/233916_version.log: No such file or directory
+/tmp/slurmd/job233916/slurm_script: line 55: /home/yanw/uncertain/results/log/0906/233916_version.log: No such file or directory
+ERROR: Pipe to stdout was broken
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
+BrokenPipeError: [Errno 32] Broken pipe
+/tmp/slurmd/job233916/slurm_script: line 54: /home/yanw/uncertain/results/log/0906/233916_version.log: No such file or directory
+/tmp/slurmd/job233916/slurm_script: line 55: /home/yanw/uncertain/results/log/0906/233916_version.log: No such file or directory
+ERROR: Pipe to stdout was broken
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
+BrokenPipeError: [Errno 32] Broken pipe
+/tmp/slurmd/job233916/slurm_script: line 54: /home/yanw/uncertain/results/log/0906/233916_version.log: No such file or directory
+/tmp/slurmd/job233916/slurm_script: line 55: /home/yanw/uncertain/results/log/0906/233916_version.log: No such file or directory
+ERROR: Pipe to stdout was broken
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
+BrokenPipeError: [Errno 32] Broken pipe
+/tmp/slurmd/job233916/slurm_script: line 64: /home/yanw/uncertain/results/log/0906/233916_version.log: No such file or directory
+cp: missing destination file operand after '*.png/home/yanw/uncertain/results/figures/0906'
+Try 'cp --help' for more information.
+cp: missing destination file operand after '/home/yanw/uncertain'
+Try 'cp --help' for more information.

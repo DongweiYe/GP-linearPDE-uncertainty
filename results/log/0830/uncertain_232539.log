@@ -1,0 +1,62 @@
+ctit091
+Looking in indexes: https://__token__:****@gitlab.utsp.utwente.nl/api/v4/groups/271/-/packages/pypi/simple
+Looking in links: https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
+Requirement already satisfied: jax[cuda11_cudnn86] in /home/yanw/.conda/envs/noise/lib/python3.10/site-packages (0.4.14)
+Collecting jax[cuda11_cudnn86]
+  Using cached jax-0.4.15.tar.gz (1.4 MB)
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Discarding https://files.pythonhosted.org/packages/a6/c4/c373ea5f69237651b72c5a351c9fca2444c9a05b7caddd700abfef23c4f7/jax-0.4.15.tar.gz (from https://pypi.org/simple/jax/) (requires-python:>=3.9): Requested jax from https://files.pythonhosted.org/packages/a6/c4/c373ea5f69237651b72c5a351c9fca2444c9a05b7caddd700abfef23c4f7/jax-0.4.15.tar.gz has inconsistent version: expected '0.4.15', but metadata has '0.4.15.dev20230830'
+Requirement already satisfied: ml-dtypes>=0.2.0 in /home/yanw/.conda/envs/noise/lib/python3.10/site-packages (from jax[cuda11_cudnn86]) (0.2.0)
+Requirement already satisfied: numpy>=1.22 in /home/yanw/.conda/envs/noise/lib/python3.10/site-packages (from jax[cuda11_cudnn86]) (1.25.2)
+Requirement already satisfied: opt-einsum in /home/yanw/.local/lib/python3.10/site-packages (from jax[cuda11_cudnn86]) (3.3.0)
+Requirement already satisfied: scipy>=1.7 in /home/yanw/.conda/envs/noise/lib/python3.10/site-packages (from jax[cuda11_cudnn86]) (1.11.2)
+Requirement already satisfied: jaxlib==0.4.14+cuda11.cudnn86 in /home/yanw/.conda/envs/noise/lib/python3.10/site-packages (from jax[cuda11_cudnn86]) (0.4.14+cuda11.cudnn86)
+Wed Aug 30 23:20:21 2023       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 515.86.01    Driver Version: 515.86.01    CUDA Version: 11.7     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                               |                      |               MIG M. |
+|===============================+======================+======================|
+|   0  NVIDIA A40          On   | 00000000:3B:00.0 Off |                    0 |
+|  0%   45C    P8    37W / 300W |      0MiB / 46068MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+|   1  NVIDIA A40          On   | 00000000:5E:00.0 Off |                    0 |
+|  0%   45C    P8    38W / 300W |      0MiB / 46068MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+|   2  NVIDIA A40          On   | 00000000:B1:00.0 Off |                    0 |
+|  0%   46C    P8    39W / 300W |      0MiB / 46068MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+|   3  NVIDIA A40          On   | 00000000:D9:00.0 Off |                    0 |
+|  0%   45C    P8    38W / 300W |      0MiB / 46068MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                                  |
+|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+|        ID   ID                                                   Usage      |
+|=============================================================================|
+|  No running processes found                                                 |
++-----------------------------------------------------------------------------+
+Date              = Wed Aug 30 23:20:22 CEST 2023
+Hostname          = ctit091
+Working Directory = /local/232539
+Number of nodes used        : 1
+Number of MPI tasks         : 1
+Number of threads           : 16
+Number of MPI tasks per node: 1
+Number of threads per core  : 
+Name of nodes used          : ctit091
+Gpu devices                 : 0
+Starting worker: 
+Script finished in 0 minutes and 14 seconds.

@@ -1,0 +1,12 @@
+numpy version:
+numpy              1.25.2
+jaxopt version:
+scipy version:
+scipy              1.11.2
+jax version:
+jax                0.4.14
+jaxlib             0.4.14+cuda12.cudnn89
+jaxlib version:
+jaxlib             0.4.14+cuda12.cudnn89
+jaxopt version:
+Script finished in 0 minutes and 41 seconds.

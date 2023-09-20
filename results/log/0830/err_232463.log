@@ -1,0 +1,12 @@
+ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+daal4py 2021.5.0 requires daal==2021.4.0, which is not installed.
+numba 0.55.1 requires numpy<1.22,>=1.18, but you have numpy 1.22.4 which is incompatible.
+Traceback (most recent call last):
+  File "/local/232463/main.py", line 3, in <module>
+    import optax
+ModuleNotFoundError: No module named 'optax'
+cp: cannot stat '*.pdf': No such file or directory
+cp: missing destination file operand after '*.png/home/yanw/uncertain/results/figures/0830'
+Try 'cp --help' for more information.
+cp: missing destination file operand after '/home/yanw/uncertain'
+Try 'cp --help' for more information.

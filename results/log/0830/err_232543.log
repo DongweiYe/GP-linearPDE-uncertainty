@@ -1,0 +1,26 @@
+Traceback (most recent call last):
+  File "main.py", line 6, in <module>
+    from include.init import ModelInitializer_2d
+  File "/local/232543/include/init.py", line 5, in <module>
+    from include.heat2d import get_u_training_data_2d, get_f_training_data_2d, heat_equation_kff, heat_equation_kuf
+  File "/local/232543/include/heat2d.py", line 8, in <module>
+    from include.derivatives import first_order_x1_1, first_order_x2_1, second_order_x1_0_x1_0, second_order_x2_0_x2_0, \
+  File "/local/232543/include/derivatives.py", line 4, in <module>
+    from kernels import rbf_kernel, matern_kernel_3_2, matern_kernel_5_2, rational_quadratic_kernel, spectral_mixture_kernel
+ModuleNotFoundError: No module named 'kernels'
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[61113,1],0]
+  Exit code:    1
+--------------------------------------------------------------------------
+cp: cannot stat '*.pdf': No such file or directory
+cp: missing destination file operand after '*.png/home/yanw/uncertain/results/figures/0830'
+Try 'cp --help' for more information.
+cp: missing destination file operand after '/home/yanw/uncertain'
+Try 'cp --help' for more information.

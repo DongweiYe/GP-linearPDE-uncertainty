@@ -1,0 +1,55 @@
+ctit091
+Thu Aug 31 00:40:07 2023       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 515.86.01    Driver Version: 515.86.01    CUDA Version: 11.7     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                               |                      |               MIG M. |
+|===============================+======================+======================|
+|   0  NVIDIA A40          On   | 00000000:3B:00.0 Off |                    0 |
+|  0%   45C    P8    37W / 300W |      0MiB / 46068MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+|   1  NVIDIA A40          On   | 00000000:5E:00.0 Off |                    0 |
+|  0%   45C    P8    39W / 300W |      0MiB / 46068MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+|   2  NVIDIA A40          On   | 00000000:B1:00.0 Off |                    0 |
+|  0%   45C    P8    38W / 300W |      0MiB / 46068MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+|   3  NVIDIA A40          On   | 00000000:D9:00.0 Off |                    0 |
+|  0%   44C    P8    38W / 300W |      0MiB / 46068MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                                  |
+|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+|        ID   ID                                                   Usage      |
+|=============================================================================|
+|  No running processes found                                                 |
++-----------------------------------------------------------------------------+
+Date              = Thu Aug 31 00:40:08 CEST 2023
+Hostname          = ctit091
+Working Directory = /local/232567
+Number of nodes used        : 1
+Number of MPI tasks         : 1
+Number of threads           : 16
+Number of MPI tasks per node: 1
+Number of threads per core  : 
+Name of nodes used          : ctit091
+Gpu devices                 : 0
+Starting worker: 
+GPU memory used: 35445.4375 MB
+GPU memory used: 34.61468505859375 GB
+sigma_init_yu: 0.416939731023939	sigma_init_yf: 12.285721128210179	sigma_init: 6.293898648627159
+new_sigma_init_yu: 0.416939731023939	new_sigma_init_yf: 0.7852597163018831	new_sigma_init: 0.8239096820852142
+nlml_loss: [[nan]]
+nlml_loss: Traced<ConcreteArray([[nan]], dtype=float64)>with<JVPTrace(level=2/0)> with
+  primal = Array([[nan]], dtype=float64)
+  tangent = Traced<ShapedArray(float64[1,1])>with<JaxprTrace(level=1/0)> with
+    pval = (ShapedArray(float64[1,1]), None)
+    recipe = JaxprEqnRecipe(eqn_id=<object object at 0x7efbbfee35c0>, in_tracers=(Traced<ShapedArray(float64[1,1]):JaxprTrace(level=1/0)>,), out_tracer_refs=[<weakref at 0x7efbbf497270; to 'JaxprTracer' at 0x7efbbf4970e0>], out_avals=[ShapedArray(float64[1,1])], primitive=pjit, params={'jaxpr': { lambda ; a:f64[1,1]. let  in (a,) }, 'in_shardings': (UnspecifiedValue,), 'out_shardings': (UnspecifiedValue,), 'resource_env': None, 'donated_invars': (False,), 'name': 'fn', 'keep_unused': False, 'inline': True}, effects=set(), source_info=SourceInfo(traceback=<jaxlib.xla_extension.Traceback object at 0x7efbbf4ddc30>, name_stack=NameStack(stack=(Transform(name='jvp'),))))
+Script finished in 0 minutes and 26 seconds.

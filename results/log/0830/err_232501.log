@@ -1,0 +1,53 @@
+WARNING: jax 0.4.14 does not provide the extra 'cuda11_cudnn82'
+
+
+==> WARNING: A newer version of conda exists. <==
+  current version: 4.12.0
+  latest version: 23.7.3
+
+Please update conda by running
+
+    $ conda update -n base -c defaults conda
+
+
+
+
+==> WARNING: A newer version of conda exists. <==
+  current version: 4.12.0
+  latest version: 23.7.3
+
+Please update conda by running
+
+    $ conda update -n base -c defaults conda
+
+
+Traceback (most recent call last):
+  File "/local/232501/main.py", line 2, in <module>
+    import jax
+  File "/home/yanw/.conda/envs/noise/lib/python3.10/site-packages/jax/__init__.py", line 35, in <module>
+    from jax import config as _config_module
+  File "/home/yanw/.conda/envs/noise/lib/python3.10/site-packages/jax/config.py", line 17, in <module>
+    from jax._src.config import config  # noqa: F401
+  File "/home/yanw/.conda/envs/noise/lib/python3.10/site-packages/jax/_src/config.py", line 27, in <module>
+    from jax._src import lib
+  File "/home/yanw/.conda/envs/noise/lib/python3.10/site-packages/jax/_src/lib/__init__.py", line 73, in <module>
+    version = check_jaxlib_version(
+  File "/home/yanw/.conda/envs/noise/lib/python3.10/site-packages/jax/_src/lib/__init__.py", line 62, in check_jaxlib_version
+    raise RuntimeError(msg)
+RuntimeError: jaxlib is version 0.4.7, but this version of jax requires version >= 0.4.11.
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[57814,1],0]
+  Exit code:    1
+--------------------------------------------------------------------------
+cp: cannot stat '*.pdf': No such file or directory
+cp: missing destination file operand after '*.png/home/yanw/uncertain/results/figures/0830'
+Try 'cp --help' for more information.
+cp: missing destination file operand after '/home/yanw/uncertain'
+Try 'cp --help' for more information.

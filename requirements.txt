@@ -1,0 +1,20 @@
+numpy
+GPy
+scipy
+jax
+jaxlib
+# 0.4.7+cuda11.cudnn86
+jaxopt
+matplotlib==3.7.1
+plotly==5.14.1
+optax
+scikit-learn
+seaborn
+psutil
+flake8
+tqdm~=4.65.0
+cmocean
+wandb
+pynvml
+pymc
+
