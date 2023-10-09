@@ -1,0 +1,22 @@
+	Adding nVidia Cuda Toolkit 11.8
+	Adding nVidia cuDNN 8.6 (.0.163)
+Traceback (most recent call last):
+  File "main.py", line 8, in <module>
+    from include.mcmc_posterior_1 import posterior_inference_mcmc
+ImportError: cannot import name 'posterior_inference_mcmc' from 'include.mcmc_posterior_1' (/local/236244/include/mcmc_posterior_1.py)
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[14829,1],0]
+  Exit code:    1
+--------------------------------------------------------------------------
+cp: cannot stat '*.pdf': No such file or directory
+cp: missing destination file operand after '*.png/home/yanw/uncertain/results/figures/0920'
+Try 'cp --help' for more information.
+cp: missing destination file operand after '/home/yanw/uncertain'
+Try 'cp --help' for more information.

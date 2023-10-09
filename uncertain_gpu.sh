@@ -9,7 +9,6 @@
 #SBATCH --time=10:03:00
 #SBATCH --output=uncertain_%j.log
 #SBATCH --error=err_%j.log
-#SBATCH --nodelist=ctit091     #sinfo -N --partition=mia
 
 hostname
 start_time=$(date +%s)
@@ -20,6 +19,10 @@ cp -r ${SLURM_SUBMIT_DIR}/* .
 export OMPI_MCA_mca_base_component_show_load_errors=0
 module load nvidia/cuda-11.8
 module load nvidia/cuda-11.x_cudnn-8.6
+conda install -c conda-forge pynvml
+#conda install -c conda-forge jaxlib
+#conda install -c conda-forge pynvml
+#conda install --file requirements.txt
 
 #pip install -U jax[cuda11_cudnn86] -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
 # -----------------Print node info--------------------------------

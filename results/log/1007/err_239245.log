@@ -1,0 +1,3 @@
+	Adding nVidia Cuda Toolkit 11.8
+	Adding nVidia cuDNN 8.6 (.0.163)
+slurmstepd-hpc-node05: error: *** JOB 239245 ON hpc-node05 CANCELLED AT 2023-10-07T19:32:52 ***

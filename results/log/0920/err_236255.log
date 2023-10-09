@@ -1,0 +1,12 @@
+	Adding nVidia Cuda Toolkit 11.8
+	Adding nVidia cuDNN 8.6 (.0.163)
+WARNING (pytensor.tensor.blas): Using NumPy C-API based implementation for BLAS functions.
+Auto-assigning NUTS sampler...
+Initializing NUTS using jitter+adapt_diag...
+Multiprocess sampling (4 chains in 4 jobs)
+NUTS: [x_uncertain0, t_uncertain0, x_uncertain1, t_uncertain1, x_uncertain2, t_uncertain2, x_uncertain3, t_uncertain3, x_uncertain4, t_uncertain4, x_uncertain5, t_uncertain5, x_uncertain6, t_uncertain6, x_uncertain7, t_uncertain7, x_uncertain8, t_uncertain8, x_uncertain9, t_uncertain9, x_uncertain10, t_uncertain10, x_uncertain11, t_uncertain11, x_uncertain12, t_uncertain12, x_uncertain13, t_uncertain13, x_uncertain14, t_uncertain14, x_uncertain15, t_uncertain15, x_uncertain16, t_uncertain16, x_uncertain17, t_uncertain17, x_uncertain18, t_uncertain18, x_uncertain19, t_uncertain19]
+Sampling 4 chains for 1_000 tune and 500 draw iterations (4_000 + 2_000 draws total) took 22 seconds.
+cp: missing destination file operand after '*.png/home/yanw/uncertain/results/figures/0920'
+Try 'cp --help' for more information.
+cp: missing destination file operand after '/home/yanw/uncertain'
+Try 'cp --help' for more information.

@@ -1,8 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="yanw@hpc-head2.ewi.utwente.nl:22 key" remoteFilesAllowedToDisappearOnAutoupload="false">
+  <component name="PublishConfigData" autoUpload="Always" serverName="yanw@hpc-head2.ewi.utwente.nl:22 key (3)" remoteFilesAllowedToDisappearOnAutoupload="false">
     <serverData>
       <paths name="yanw@hpc-head2.ewi.utwente.nl:22 key">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/uncertain" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="yanw@hpc-head2.ewi.utwente.nl:22 key (2)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/uncertain" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="yanw@hpc-head2.ewi.utwente.nl:22 key (3)">
         <serverdata>
           <mappings>
             <mapping deploy="/uncertain" local="$PROJECT_DIR$" web="/" />

@@ -31,10 +31,10 @@ class ModelInitializer_2d:
                                                               self.number_bound)
         self.xf, self.tf, self.Xf, self.yf = get_f_training_data_2d(key_x_f, self.number_f)
 
-        self.Y = jnp.concatenate((self.yu_noise, self.Yu_fixed, self.yf))
         self.X = jnp.concatenate((self.Xu_noise, self.Xu_fixed, self.Xf))
+        self.Y = jnp.concatenate((self.yu, self.Yu_fixed, self.yf))
+        self.Y_u = jnp.concatenate((self.yu, self.Yu_fixed))
 
-        self.Y_u = jnp.concatenate((self.yu_noise, self.Yu_fixed))
         # TODO: add mean(yu_noise) to projection
         sigma_init = jnp.std(self.Y)
         sigma_init_yu = jnp.std(self.Y_u)

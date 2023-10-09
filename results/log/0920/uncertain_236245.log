@@ -1,0 +1,157 @@
+ctit094
+Wed Sep 20 14:22:40 2023       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 515.86.01    Driver Version: 515.86.01    CUDA Version: 11.7     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                               |                      |               MIG M. |
+|===============================+======================+======================|
+|   0  NVIDIA A40          On   | 00000000:17:00.0 Off |                    0 |
+|  0%   55C    P0   132W / 300W |   6695MiB / 46068MiB |    100%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+|   1  NVIDIA A40          On   | 00000000:65:00.0 Off |                    0 |
+|  0%   32C    P0    57W / 300W |      0MiB / 46068MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+|   2  NVIDIA A40          On   | 00000000:CA:00.0 Off |                    0 |
+|  0%   68C    P0   209W / 300W |  29715MiB / 46068MiB |    100%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+|   3  NVIDIA A40          On   | 00000000:E3:00.0 Off |                    0 |
+|  0%   31C    P0    37W / 300W |      0MiB / 46068MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                                  |
+|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+|        ID   ID                                                   Usage      |
+|=============================================================================|
+|    0   N/A  N/A   3276382      C   python                           6693MiB |
+|    2   N/A  N/A   3260473      C   python3                         29713MiB |
++-----------------------------------------------------------------------------+
+Date              = Wed Sep 20 14:22:41 CEST 2023
+Hostname          = ctit094
+Working Directory = /local/236245
+Number of nodes used        : 1
+Number of MPI tasks         : 1
+Number of threads           : 16
+Number of MPI tasks per node: 1
+Number of threads per core  : 
+Name of nodes used          : ctit094
+Gpu devices                 : 1
+Starting worker: 
+GPU memory used: 7269.4375 MB
+GPU memory used: 7.09906005859375 GB
+sigma_init_yu: 0.4124124058070794	sigma_init_yf: 16.88708019124114	sigma_init: 8.26348917090675
+new_sigma_init_yu: 0.4124124058070794	new_sigma_init_yf: 0.8717052165589062	new_sigma_init: 0.6445101765174205
+Xu_noise: [[0.86041803 0.407946  ]
+ [0.47981698 0.37768862]
+ [0.31407172 0.29118561]
+ [0.89966496 0.84905457]
+ [0.27952723 0.09003273]
+ [0.83715097 0.70901247]
+ [0.61831648 0.46794143]
+ [0.2443358  0.75718614]
+ [0.91768526 0.77823912]
+ [0.73000551 0.18512075]
+ [0.93061297 0.40110551]
+ [0.1385972  0.43996769]
+ [0.44841027 0.20167252]
+ [0.45244136 0.81725298]
+ [0.31548548 0.66127418]
+ [0.49726064 0.45523565]
+ [0.14274667 0.24981709]
+ [0.97079493 0.26795404]
+ [0.12630104 0.84255312]
+ [0.02519675 0.86264226]]
+Xu_noise shape: (20, 2)
+adamw
+0.001000
+1000
+Initial loss: 2853.3947343709087
+Final loss: 69.43686995481623
+-------------------z_uncertian list:-------------------------- [[x_uncertain0]
+ [x_uncertain1]
+ [x_uncertain2]
+ [x_uncertain3]
+ [x_uncertain4]
+ [x_uncertain5]
+ [x_uncertain6]
+ [x_uncertain7]
+ [x_uncertain8]
+ [x_uncertain9]
+ [x_uncertain10]
+ [x_uncertain11]
+ [x_uncertain12]
+ [x_uncertain13]
+ [x_uncertain14]
+ [x_uncertain15]
+ [x_uncertain16]
+ [x_uncertain17]
+ [x_uncertain18]
+ [x_uncertain19]
+ [t_uncertain0]
+ [t_uncertain1]
+ [t_uncertain2]
+ [t_uncertain3]
+ [t_uncertain4]
+ [t_uncertain5]
+ [t_uncertain6]
+ [t_uncertain7]
+ [t_uncertain8]
+ [t_uncertain9]
+ [t_uncertain10]
+ [t_uncertain11]
+ [t_uncertain12]
+ [t_uncertain13]
+ [t_uncertain14]
+ [t_uncertain15]
+ [t_uncertain16]
+ [t_uncertain17]
+ [t_uncertain18]
+ [t_uncertain19]]
+-------------------1:-------------------------- [x_uncertain0]
+-------------------z_uncertian:-------------------------- [[x_uncertain0]
+ [x_uncertain1]
+ [x_uncertain2]
+ [x_uncertain3]
+ [x_uncertain4]
+ [x_uncertain5]
+ [x_uncertain6]
+ [x_uncertain7]
+ [x_uncertain8]
+ [x_uncertain9]
+ [x_uncertain10]
+ [x_uncertain11]
+ [x_uncertain12]
+ [x_uncertain13]
+ [x_uncertain14]
+ [x_uncertain15]
+ [x_uncertain16]
+ [x_uncertain17]
+ [x_uncertain18]
+ [x_uncertain19]
+ [t_uncertain0]
+ [t_uncertain1]
+ [t_uncertain2]
+ [t_uncertain3]
+ [t_uncertain4]
+ [t_uncertain5]
+ [t_uncertain6]
+ [t_uncertain7]
+ [t_uncertain8]
+ [t_uncertain9]
+ [t_uncertain10]
+ [t_uncertain11]
+ [t_uncertain12]
+ [t_uncertain13]
+ [t_uncertain14]
+ [t_uncertain15]
+ [t_uncertain16]
+ [t_uncertain17]
+ [t_uncertain18]
+ [t_uncertain19]]
+Script finished in 1 minutes and 30 seconds.

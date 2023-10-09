@@ -1,0 +1,46 @@
+ctit094
+Wed Sep 20 14:21:47 2023       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 515.86.01    Driver Version: 515.86.01    CUDA Version: 11.7     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                               |                      |               MIG M. |
+|===============================+======================+======================|
+|   0  NVIDIA A40          On   | 00000000:17:00.0 Off |                    0 |
+|  0%   58C    P0   222W / 300W |   6695MiB / 46068MiB |    100%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+|   1  NVIDIA A40          On   | 00000000:65:00.0 Off |                    0 |
+|  0%   31C    P8    33W / 300W |      0MiB / 46068MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+|   2  NVIDIA A40          On   | 00000000:CA:00.0 Off |                    0 |
+|  0%   68C    P0   208W / 300W |  29715MiB / 46068MiB |    100%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+|   3  NVIDIA A40          On   | 00000000:E3:00.0 Off |                    0 |
+|  0%   30C    P8    33W / 300W |      0MiB / 46068MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                                  |
+|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+|        ID   ID                                                   Usage      |
+|=============================================================================|
+|    0   N/A  N/A   3276382      C   python                           6693MiB |
+|    2   N/A  N/A   3260473      C   python3                         29713MiB |
++-----------------------------------------------------------------------------+
+Date              = Wed Sep 20 14:21:48 CEST 2023
+Hostname          = ctit094
+Working Directory = /local/236244
+Number of nodes used        : 1
+Number of MPI tasks         : 1
+Number of threads           : 16
+Number of MPI tasks per node: 1
+Number of threads per core  : 
+Name of nodes used          : ctit094
+Gpu devices                 : 1
+Starting worker: 
+Script finished in 0 minutes and 11 seconds.

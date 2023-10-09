@@ -341,7 +341,7 @@ def figure2(x,y,\
 
 def prediction_variance(ypred_list,yvar_list):
     ymean_var = np.var(ypred_list,axis=0)
-    yvar_mean =  np.mean(yvar_list,axis=0)
+    yvar_mean = np.mean(yvar_list,axis=0)
 
     return ymean_var+yvar_mean
     
