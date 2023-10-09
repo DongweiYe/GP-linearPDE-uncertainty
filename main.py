@@ -2,10 +2,9 @@ import os
 import jax
 import optax
 import pynvml
-
+from include.mcmc_posterior import Metropolis_Hasting
 from include.init import ModelInitializer_2d
 from include.train import train_heat_equation_model_2d
-from include.mcmc_posterior import posterior_inference_mcmc
 
 import jax.numpy as jnp
 
@@ -27,6 +26,9 @@ epochs = 1000
 learning_rate = 1e-3
 weight_decay = 1e-5
 DEEP_FLAG = False
+prior_std = 1e1
+max_samples = 500
+assumption_variance = 1e-1
 
 def check_gpu_memory_usage():
     pynvml.nvmlInit()
@@ -67,13 +69,20 @@ if __name__ == '__main__':
     init = model_initializer.heat_params_init
     print("Xu_noise:", Xu_noise)
     print("Xu_noise shape:", Xu_noise.shape)
-    param_iter, optimizer_text, lr_text, epoch_text = train_heat_equation_model_2d(init, Xu_noise, Xu_fixed,
-                                                                                                Xf, number_Y, Y, epochs,
-                                                                                                learning_rate,
-                                                                                                optimizer_in_use)
+    param_iter, optimizer_text, lr_text, epoch_text = train_heat_equation_model_2d(init,
+                                                                                   Xu_noise,
+                                                                                   Xu_fixed,
+                                                                                   Xf,
+                                                                                   number_Y,
+                                                                                   Y, epochs,
+                                                                                   learning_rate,
+                                                                                   optimizer_in_use
+                                                                                   )
 
-    prior_var = 1e2
-    trace = posterior_inference_mcmc(Xu_noise, jnp.eye(2)*prior_var, param_iter, Xu_fixed, Xf, Y)
-    posterior_samples = jnp.squeeze(trace.get_values('z_uncertain', combine=True))
-    print(posterior_samples.shape)
-    print(posterior_samples)
+
+
+    posterior_samples_list = Metropolis_Hasting(max_samples, assumption_variance, Xu_noise,
+                                                jnp.eye(2*number_u)*prior_std**2, param_iter, Xu_fixed, Xf, Y)
+
+    print(posterior_samples_list.shape)
+    print(posterior_samples_list)

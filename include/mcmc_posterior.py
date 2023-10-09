@@ -2,7 +2,8 @@
 
 import jax.numpy as jnp
 import numpy
-import pymc as pm
+import numpy as np
+# import pymc as pm
 from .heat2d import heat_equation_kuu_noise, heat_equation_kuf, heat_equation_kfu, heat_equation_kff
 
 
@@ -21,25 +22,49 @@ def compute_K(init, z_prior, Xfz, Xfg):
     K = jnp.block([[zz_uu, zz_uf, zg_uf], [zz_fu, zz_ff, zg_ff], [gz_fu, gz_ff, gg_ff]])
     return K
 
-def posterior_inference_mcmc(prior_mean,prior_cov, init_params, Xfz, Xfg, Y_data):
+def prior_function(x, prior_mean, covariance_matrix):
+    return (x - prior_mean).T @ np.linalg.inv(covariance_matrix) @ (x - prior_mean)
 
-    basic_model = pm.Model()
-    prior_mean = numpy.array(prior_mean)
-    prior_cov = numpy.array(prior_cov)
-
-
-    with basic_model:
-        z_uncertain_list = []
-        for num_sample in range(prior_mean.shape[0]):
-            z_uncertain_list.append(pm.MvNormal('z_uncertain'+str(num_sample),mu=prior_mean[num_sample,:],cov=prior_cov))
-        z_uncertain = numpy.array(z_uncertain_list)
-        print("-------------------z_uncertian shape:--------------------------", z_uncertain_list.shape)
-        K = compute_K(init_params, z_uncertain, Xfz, Xfg)
-        K = numpy.array(K)
-        k_shape = K.shape[0]
-        z_obs = pm.MvNormal('z_obs',mu=numpy.zeros(k_shape),cov=K,observed=numpy.array(Y_data))
-        trace = pm.sample(500,return_inferencedata=False)
-
-    return trace
+def likelihood(y, covariance_matrix):
+    # x.shape = (num_dim=40,)
+    print("y shape:", y.shape)
+    print("covariance_matrix shape:", covariance_matrix.shape)
+    return y.T@np.linalg.inv(covariance_matrix)@y
 
 
+def Metropolis_Hasting(max_samples, assumption_variance, Xvague_prior_mean, Xvague_prior_var, init, Xfz, Xfg, Y):
+    Xvague_prior_mean = np.vstack((Xvague_prior_mean[:, 0:1], Xvague_prior_mean[:, 1:2]))
+    ### Input: num_vague,xvauge_prior_mean, xvague_prior_var
+    num_vague = Xvague_prior_mean.shape[0]
+    xvague_sample_current = Xvague_prior_mean
+    num_samples = 1
+
+    xvague_sample_list = np.empty((num_vague, 0))  ### List of samples
+    xvague_sample_list = np.hstack((xvague_sample_list, xvague_sample_current))
+
+
+    while num_samples < max_samples:
+
+        x_new = np.random.multivariate_normal(np.squeeze(xvague_sample_current), jnp.eye(num_vague)*assumption_variance,
+                                              1).T
+        x_new[x_new < 0] = 0
+
+        prior_function_upper = prior_function(x_new, Xvague_prior_mean, Xvague_prior_var)
+        prior_function_lower = prior_function(xvague_sample_current, Xvague_prior_mean, Xvague_prior_var)
+
+        covariance_matrix_upper = compute_K(init, x_new, Xfz, Xfg) 
+        covariance_matrix_lower = compute_K(init, xvague_sample_current, Xfz, Xfg)
+
+        likelihood_upper = likelihood(Y, covariance_matrix_upper)
+        likelihood_lower = likelihood(Y, covariance_matrix_lower)
+
+        accept_ratio = np.exp(prior_function_upper+likelihood_upper-prior_function_lower-likelihood_lower)
+        check_sample = np.squeeze(np.random.uniform(0, 1, 1))
+
+        if check_sample <= accept_ratio:
+            xvague_sample_current = x_new
+            xvague_sample_list = np.hstack((xvague_sample_list, xvague_sample_current))
+            # print('Accept ratio: ',accept_ratio,'; Xnew: ',x_new,'; Accept')
+        else:
+            pass
+    return xvague_sample_list
