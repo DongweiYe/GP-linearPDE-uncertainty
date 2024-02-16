@@ -7,6 +7,8 @@ from include.init import ModelInitializer_2d
 from include.train import train_heat_equation_model_2d
 
 import jax.numpy as jnp
+import numpy as np
+import matplotlib.pyplot as plt
 
 os.environ["JAX_PLATFORM_NAME"] = "gpu"
 #
@@ -89,10 +91,18 @@ if __name__ == '__main__':
     prior_var = 1e2
     # trace = posterior_inference_mcmc(Xu_noise, jnp.eye(2)*prior_var, param_iter, Xu_fixed, Xf, Y)
     # trace = posterior_numpyro(Xu_noise, jnp.eye(2)*prior_var, param_iter, Xu_fixed, Xf, Y)
-    trace = run_mcmc(Xu_fixed, Xf, Y, Xu_noise, jnp.eye(2)*prior_var, param_iter)
-    posterior_samples = jnp.squeeze(trace.get_values('z_uncertain', combine=True))
-    print(posterior_samples.shape)
-    print(posterior_samples)
+    trace = run_mcmc(Xu_fixed, Xf, Y, Xu_noise, jnp.eye(2)*prior_var, param_iter, num_samples=500, num_warmup=1000)
+    # posterior_samples = jnp.squeeze(trace.get_values('z_uncertain', combine=True))
+    # print(posterior_samples.shape)
+    # print(posterior_samples)
 
-    # print(posterior_samples_list.shape)
-    # print(posterior_samples_list)
+    posterior_samples = trace.get_samples()
+    z_uncertain_mean = np.mean(posterior_samples['z_uncertain'], axis=0)
+    plt.hist(posterior_samples['z_uncertain'], bins=30, alpha=0.7, label='z_uncertain posterior')
+    plt.axvline(z_uncertain_mean, color='r', linestyle='--', label='Mean')
+    plt.xlabel('z_uncertain')
+    plt.ylabel('Density')
+    plt.legend()
+    plt.title('Posterior Distribution of z_uncertain')
+    plt.show()
+
