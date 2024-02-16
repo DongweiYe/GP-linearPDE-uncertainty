@@ -9,6 +9,7 @@ from include.train import train_heat_equation_model_2d
 import jax.numpy as jnp
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 os.environ["JAX_PLATFORM_NAME"] = "gpu"
 #
@@ -97,6 +98,7 @@ if __name__ == '__main__':
     # print(posterior_samples)
 
     posterior_samples = trace.get_samples()
+    print(posterior_samples)
     z_uncertain_mean = np.mean(posterior_samples['z_uncertain'], axis=0)
     plt.hist(posterior_samples['z_uncertain'], bins=30, alpha=0.7, label='z_uncertain posterior')
     plt.axvline(z_uncertain_mean, color='r', linestyle='--', label='Mean')
@@ -105,4 +107,12 @@ if __name__ == '__main__':
     plt.legend()
     plt.title('Posterior Distribution of z_uncertain')
     plt.show()
+    plt.savefig(f"posterior.pdf", format='pdf')
 
+    posterior_samples_list = posterior_samples['z_uncertain']
+    for vague_points in range(1):
+        fig = plt.figure()
+        plt.axvline(Xu[vague_points, 0], color='tab:red')
+        plt.axvline(Xu_noise[vague_points, 0], color='tab:green')
+        sns.kdeplot(posterior_samples_list[vague_points, :], color='tab:blue')
+        plt.savefig(f"kdeplot_1_{vague_points}.pdf", format='pdf')
