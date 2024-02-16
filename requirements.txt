@@ -17,4 +17,5 @@ cmocean
 wandb
 pynvml
 pymc
+numpyro
 

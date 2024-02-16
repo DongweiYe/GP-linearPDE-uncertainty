@@ -1,6 +1,4 @@
 # %%
-
-import jax.numpy as jnp
 import numpy
 import numpy as np
 import pymc as pm
@@ -9,6 +7,8 @@ from .heat2d import heat_equation_kuu_noise, heat_equation_kuf, heat_equation_kf
 import numpyro
 import numpyro.distributions as dist
 from numpyro.infer import MCMC, NUTS
+import jax.numpy as jnp
+from jax import random
 
 
 def compute_K(init, z_prior, Xfz, Xfg):
@@ -134,3 +134,29 @@ def posterior_numpyro(prior_mean,prior_cov, init_params, Xfz, Xfg, Y_data):
     # X_shard = jax.device_put(X, sharding.reshape(8, 1))
     # y_shard = jax.device_put(y, sharding.reshape(8))
     # mcmc.run(jax.random.PRNGKey(0), X_shard, y_shard)
+
+
+def model(Xfz, Xfg, Y_data, prior_mean, prior_cov, init_params):
+    prior_mean = jnp.array(prior_mean)
+    prior_cov = jnp.array(prior_cov)
+    z_uncertain_list = []
+
+    for num_sample in range(prior_mean.shape[0]):
+        z_uncertain = numpyro.sample('z_uncertain' + str(num_sample),
+                                     dist.MultivariateNormal(prior_mean[num_sample, :], covariance_matrix=prior_cov))
+        z_uncertain_list.append(z_uncertain)
+
+    z_uncertain = jnp.stack(z_uncertain_list)
+    K = compute_K(init_params, z_uncertain, Xfz, Xfg)
+    K = jnp.array(K)
+    numpyro.sample('z_obs', dist.MultivariateNormal(jnp.zeros(K.shape[0]), covariance_matrix=K), obs=jnp.array(Y_data))
+
+
+def run_mcmc(Xfz, Xfg, Y_data, prior_mean, prior_cov, init_params, num_samples=500, num_warmup=1000):
+    rng_key = random.PRNGKey(0)
+    kernel = NUTS(model)
+    mcmc = MCMC(kernel, num_warmup=num_warmup, num_samples=num_samples)
+    mcmc.run(rng_key, Xfz, Xfg, Y_data, prior_mean, prior_cov, init_params)
+    return mcmc.get_samples()
+
+# trace = run_mcmc(Xfz, Xfg, Y_data, prior_mean, prior_cov, init_params)

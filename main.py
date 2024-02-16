@@ -8,7 +8,7 @@ from include.train import train_heat_equation_model_2d
 
 import jax.numpy as jnp
 
-os.environ["JAX_PLATFORM_NAME"] = "cpu"
+os.environ["JAX_PLATFORM_NAME"] = "gpu"
 #
 # Enable 64-bit floating point precision
 jax.config.update("jax_enable_x64", True)
@@ -88,7 +88,8 @@ if __name__ == '__main__':
     print('start inference')
     prior_var = 1e2
     # trace = posterior_inference_mcmc(Xu_noise, jnp.eye(2)*prior_var, param_iter, Xu_fixed, Xf, Y)
-    trace = posterior_numpyro(Xu_noise, jnp.eye(2)*prior_var, param_iter, Xu_fixed, Xf, Y)
+    # trace = posterior_numpyro(Xu_noise, jnp.eye(2)*prior_var, param_iter, Xu_fixed, Xf, Y)
+    trace = run_mcmc(Xu_fixed, Xf, Y, Xu_noise, jnp.eye(2)*prior_var, param_iter)
     posterior_samples = jnp.squeeze(trace.get_values('z_uncertain', combine=True))
     print(posterior_samples.shape)
     print(posterior_samples)

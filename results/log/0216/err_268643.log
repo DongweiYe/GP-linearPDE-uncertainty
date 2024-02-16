@@ -1,0 +1,55 @@
+	Adding nVidia Cuda Toolkit 11.8
+	Adding nVidia cuDNN 8.6 (.0.163)
+WARNING (pytensor.tensor.blas): Using NumPy C-API based implementation for BLAS functions.
+Traceback (most recent call last):
+  File "main.py", line 6, in <module>
+    from include.mcmc_posterior import posterior_inference_mcmc, run_mcmc
+  File "/local/268643/include/mcmc_posterior.py", line 8, in <module>
+    import numpyro
+ModuleNotFoundError: No module named 'numpyro'
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[65052,1],0]
+  Exit code:    1
+--------------------------------------------------------------------------
+/tmp/slurmd/job268643/slurm_script: line 65: /home/yanw/uncertain/results/log/0216/268643_version.log: No such file or directory
+/tmp/slurmd/job268643/slurm_script: line 66: /home/yanw/uncertain/results/log/0216/268643_version.log: No such file or directory
+ERROR: Pipe to stdout was broken
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='iso8859-1'>
+BrokenPipeError: [Errno 32] Broken pipe
+/tmp/slurmd/job268643/slurm_script: line 65: /home/yanw/uncertain/results/log/0216/268643_version.log: No such file or directory
+/tmp/slurmd/job268643/slurm_script: line 66: /home/yanw/uncertain/results/log/0216/268643_version.log: No such file or directory
+ERROR: Pipe to stdout was broken
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='iso8859-1'>
+BrokenPipeError: [Errno 32] Broken pipe
+/tmp/slurmd/job268643/slurm_script: line 65: /home/yanw/uncertain/results/log/0216/268643_version.log: No such file or directory
+/tmp/slurmd/job268643/slurm_script: line 66: /home/yanw/uncertain/results/log/0216/268643_version.log: No such file or directory
+ERROR: Pipe to stdout was broken
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='iso8859-1'>
+BrokenPipeError: [Errno 32] Broken pipe
+/tmp/slurmd/job268643/slurm_script: line 65: /home/yanw/uncertain/results/log/0216/268643_version.log: No such file or directory
+/tmp/slurmd/job268643/slurm_script: line 66: /home/yanw/uncertain/results/log/0216/268643_version.log: No such file or directory
+ERROR: Pipe to stdout was broken
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='iso8859-1'>
+BrokenPipeError: [Errno 32] Broken pipe
+/tmp/slurmd/job268643/slurm_script: line 65: /home/yanw/uncertain/results/log/0216/268643_version.log: No such file or directory
+/tmp/slurmd/job268643/slurm_script: line 66: /home/yanw/uncertain/results/log/0216/268643_version.log: No such file or directory
+ERROR: Pipe to stdout was broken
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='iso8859-1'>
+BrokenPipeError: [Errno 32] Broken pipe
+/tmp/slurmd/job268643/slurm_script: line 65: /home/yanw/uncertain/results/log/0216/268643_version.log: No such file or directory
+/tmp/slurmd/job268643/slurm_script: line 66: /home/yanw/uncertain/results/log/0216/268643_version.log: No such file or directory
+ERROR: Pipe to stdout was broken
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='iso8859-1'>
+BrokenPipeError: [Errno 32] Broken pipe
+/tmp/slurmd/job268643/slurm_script: line 75: /home/yanw/uncertain/results/log/0216/268643_version.log: No such file or directory
+cp: missing destination file operand after '*.png/home/yanw/uncertain/results/figures/0216'
+Try 'cp --help' for more information.
+cp: missing destination file operand after '/home/yanw/uncertain'
+Try 'cp --help' for more information.
