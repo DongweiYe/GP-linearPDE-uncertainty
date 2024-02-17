@@ -92,16 +92,24 @@ if __name__ == '__main__':
     prior_var = 1e2
     # trace = posterior_inference_mcmc(Xu_noise, jnp.eye(2)*prior_var, param_iter, Xu_fixed, Xf, Y)
     # trace = posterior_numpyro(Xu_noise, jnp.eye(2)*prior_var, param_iter, Xu_fixed, Xf, Y)
-    trace = run_mcmc(Xu_fixed, Xf, Y, Xu_noise, jnp.eye(2)*prior_var, param_iter, num_samples=500, num_warmup=1000)
+
     # posterior_samples = jnp.squeeze(trace.get_values('z_uncertain', combine=True))
     # print(posterior_samples.shape)
     # print(posterior_samples)
-
-    posterior_samples = trace.get_samples()
+    trace = run_mcmc(Xu_fixed, Xf, Y, Xu_noise, jnp.eye(2) * prior_var, param_iter, num_samples=10, num_warmup=5)
+    posterior_samples = trace
     print(posterior_samples)
-    z_uncertain_mean = np.mean(posterior_samples['z_uncertain'], axis=0)
+    # z_uncertain_mean = np.mean(posterior_samples['z_uncertain'], axis=0)
+    num_samples = posterior_samples['z_uncertain'].shape[0]
+    z_uncertain_means = []
+
+    for i in range(num_samples):
+        param_name = f'z_uncertain{i}'
+        z_uncertain_mean = np.mean(posterior_samples[param_name], axis=0)
+        z_uncertain_means.append(z_uncertain_mean)
+
     plt.hist(posterior_samples['z_uncertain'], bins=30, alpha=0.7, label='z_uncertain posterior')
-    plt.axvline(z_uncertain_mean, color='r', linestyle='--', label='Mean')
+    plt.axvline(z_uncertain_means, color='r', linestyle='--', label='Mean')
     plt.xlabel('z_uncertain')
     plt.ylabel('Density')
     plt.legend()
@@ -109,10 +117,10 @@ if __name__ == '__main__':
     plt.show()
     plt.savefig(f"posterior.pdf", format='pdf')
 
-    posterior_samples_list = posterior_samples['z_uncertain']
-    for vague_points in range(1):
-        fig = plt.figure()
-        plt.axvline(Xu[vague_points, 0], color='tab:red')
-        plt.axvline(Xu_noise[vague_points, 0], color='tab:green')
-        sns.kdeplot(posterior_samples_list[vague_points, :], color='tab:blue')
-        plt.savefig(f"kdeplot_1_{vague_points}.pdf", format='pdf')
+    # posterior_samples_list = posterior_samples['z_uncertain']
+    # for vague_points in range(1):
+    #     fig = plt.figure()
+    #     plt.axvline(Xu[vague_points, 0], color='tab:red')
+    #     plt.axvline(Xu_noise[vague_points, 0], color='tab:green')
+    #     sns.kdeplot(posterior_samples_list[vague_points, :], color='tab:blue')
+    #     plt.savefig(f"kdeplot_1_{vague_points}.pdf", format='pdf')

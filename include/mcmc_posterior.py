@@ -6,7 +6,7 @@ from .heat2d import heat_equation_kuu_noise, heat_equation_kuf, heat_equation_kf
 
 import numpyro
 import numpyro.distributions as dist
-from numpyro.infer import MCMC, NUTS, HMC, MetropolisHastings
+from numpyro.infer import MCMC, NUTS, HMC
 import jax.numpy as jnp
 from jax import random
 
@@ -152,11 +152,10 @@ def model(Xfz, Xfg, Y_data, prior_mean, prior_cov, init_params):
     numpyro.sample('z_obs', dist.MultivariateNormal(jnp.zeros(K.shape[0]), covariance_matrix=K), obs=jnp.array(Y_data))
 
 
-def run_mcmc(Xfz, Xfg, Y_data, prior_mean, prior_cov, init_params, num_samples=500, num_warmup=1000):
+def run_mcmc(Xfz, Xfg, Y_data, prior_mean, prior_cov, init_params, num_samples=5, num_warmup=10):
     rng_key = random.PRNGKey(0)
     kernel = NUTS(model) # No U-Turn Sampler
     #kernel = HMC(model)
-    # kernel =  MetropolisHastings(model)
     mcmc = MCMC(kernel, num_warmup=num_warmup, num_samples=num_samples)
     mcmc.run(rng_key, Xfz, Xfg, Y_data, prior_mean, prior_cov, init_params)
     mcmc.print_summary()
