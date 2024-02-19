@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=uncertain
-#SBATCH -p mia
+#SBATCH -p am
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=16
