@@ -96,7 +96,7 @@ if __name__ == '__main__':
     # posterior_samples = jnp.squeeze(trace.get_values('z_uncertain', combine=True))
     # print(posterior_samples.shape)
     # print(posterior_samples)
-    trace = run_mcmc(Xu_fixed, Xf, Y, Xu_noise, jnp.eye(2) * prior_var, param_iter, num_samples=1000, num_warmup=500)
+    trace = run_mcmc(Xu_fixed, Xf, Y, Xu_noise, jnp.eye(2) * prior_var, param_iter, num_samples=2000, num_warmup=100)
     posterior_samples = trace
     print(posterior_samples)
     num_samples = Xu_fixed.shape[0]
@@ -109,27 +109,25 @@ if __name__ == '__main__':
         z_uncertain_means.append(z_uncertain_mean)
 
     for i in range(num_samples):
-        iter = 10
-        if (i + 1) % iter == 0:
-            param_name = f'z_uncertain{i}'
-            if param_name in posterior_samples:
-                data = posterior_samples[param_name]
-                plt.figure(figsize=(8, 5))
-                # plt.hist(data, bins=30, alpha=0.7, label=f'{param_name} posterior')
-                plt.xlabel(param_name)
-                plt.ylabel('Density')
-                plt.title(f'Posterior Distribution of {param_name}')
-                plt.axvline(Xu[i, 0], color='tab:red', label='Xu True Value')
-                plt.axvline(Xu_noise[i, 0], color='tab:green', label='Xu Noise Value')
-                sns.kdeplot(data[0], color='tab:blue', label=f'{param_name} Posterior')
-                # sns.kdeplot(posterior_samples['z_uncertain' + str(i)], color='tab:blue', label='Posterior KDE')
+        param_name = f'z_uncertain{i}'
+        if param_name in posterior_samples:
+            data = posterior_samples[param_name]
+            plt.figure(figsize=(8, 5))
+            # plt.hist(data, bins=30, alpha=0.7, label=f'{param_name} posterior')
+            plt.xlabel(param_name)
+            plt.ylabel('Density')
+            plt.title(f'Posterior Distribution of {param_name}')
+            plt.axvline(Xu[i, 0], color='tab:red', label='Xu True Value')
+            plt.axvline(Xu_noise[i, 0], color='tab:green', label='Xu Noise Value')
+            sns.kdeplot(data[0], color='tab:blue', label=f'{param_name} Posterior')
+            # sns.kdeplot(posterior_samples['z_uncertain' + str(i)], color='tab:blue', label='Posterior KDE')
 
-                plt.legend()
-                # plt.savefig(f"hist_posterior_{param_name}.pdf", format='pdf')
-                plt.savefig(f"kde_posterior_{param_name}_iter{iter}.pdf", format='pdf')
+            plt.legend()
+            # plt.savefig(f"hist_posterior_{param_name}.pdf", format='pdf')
+            plt.savefig(f"kde_posterior_{param_name}_2000_100.pdf", format='pdf')
 
-            else:
-                print(f'Key {param_name} not found in posterior_samples.')
+        else:
+            print(f'Key {param_name} not found in posterior_samples.')
 
 
     # posterior_samples_list = z_uncertain_means

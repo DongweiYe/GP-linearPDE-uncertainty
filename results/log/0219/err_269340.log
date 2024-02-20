@@ -1,0 +1,8 @@
+	Adding nVidia Cuda Toolkit 11.8
+	Adding nVidia cuDNN 8.6 (.0.163)
+WARNING (pytensor.tensor.blas): Using NumPy C-API based implementation for BLAS functions.
+  0%|          | 0/15 [00:00<?, ?it/s]warmup:   7%|6         | 1/15 [00:11<02:43, 11.67s/it, 1 steps of size 2.34e+00. acc. prob=0.00]sample:  87%|########6 | 13/15 [00:11<00:01,  1.54it/s, 1 steps of size 9.76e-03. acc. prob=0.00]sample: 100%|##########| 15/15 [00:11<00:00,  1.27it/s, 1 steps of size 9.76e-03. acc. prob=0.00]
+cp: missing destination file operand after '*.png/home/yanw/uncertain/results/figures/0219'
+Try 'cp --help' for more information.
+cp: missing destination file operand after '/home/yanw/uncertain'
+Try 'cp --help' for more information.
