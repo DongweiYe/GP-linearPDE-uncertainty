@@ -22,9 +22,12 @@ class ModelInitializer_2d:
         self.number_init = number_init
         self.number_bound = number_bound
 
+        ### Uncertainty points (Xuz) + Upper and lower boundary points + Initial condition points + Fixed points (Xfz+Xfg)
+        ### 5 + 4*2 + 5 + 10 = 43
         self.number_Y = number_u + number_bound * 2 +number_init + number_f
 
-        # Initialize data
+        ### Initialize data
+        
         self.Xu, self.yu, self.xu_noise, self.tu_noise, self.Xu_noise, self.yu_noise, self.xu_fixed, self.tu_fixed, \
         self.Xu_fixed, self.Yu_fixed = get_u_training_data_2d(key_x_u, key_x_u_init, key_t_u_low, key_t_u_high,
                                                               key_x_noise, key_t_noise, self.number_u, self.number_init,

@@ -27,19 +27,23 @@ def u_xt_noise(Xu_noise) -> jnp.ndarray:
     x = Xu_noise[:, :1]
     t = Xu_noise[:, -1:]
     u: jnp.ndarray = jnp.exp((-1) * t) * jnp.sin(2 * pi * x)
-    noise_std = 4e-2
-    u_noise = u + noise_std * jax.random.normal(jax.random.PRNGKey(0), shape=u.shape)
+    # noise_std = 4e-2
+    u_noise = u #+ noise_std * jax.random.normal(jax.random.PRNGKey(0), shape=u.shape)
     return u_noise
 
 
 def get_u_training_data_2d(key_x_u, key_x_u_init, key_t_u_low, key_t_u_high, key_x_noise, key_t_noise, sample_num,
                            init_num, bnum) -> (jnp.ndarray, jnp.ndarray, jnp.ndarray, jnp.ndarray, jnp.ndarray,
                                                jnp.ndarray, jnp.ndarray, jnp.ndarray, jnp.ndarray, jnp.ndarray):
+    
+    ### Correct Xu and yu
     Xu = jax.random.uniform(key_x_u, shape=(sample_num, 2), dtype=jnp.float64)
     yu = u_xt(Xu)
+    
+    ### Noised Xu and yu
     yu_noise = u_xt_noise(Xu)
     xu, tu = Xu[:, :1], Xu[:, -1:]
-    noise_std = 2e-2
+    noise_std = 0 ###2e-2
     xu_noise = xu + noise_std * jax.random.normal(key_x_noise, shape=xu.shape)
     tu_noise = tu + noise_std * jax.random.normal(key_t_noise, shape=tu.shape)
     Xu_noise = jnp.concatenate([xu_noise, tu_noise], axis=1)
@@ -75,11 +79,17 @@ def heat_equation_kuu(x1, x2, params) -> jnp.ndarray:
 
 @jit
 def heat_equation_kuu_noise(x1, x2, params) -> jnp.ndarray:
-    noise_variance = 4e-2
+    noise_variance = 1e-1
     kzz = rbf_kernel(x1, x2, params)
     noise_term = noise_variance * jnp.eye(x1.shape[0])
     return kzz + noise_term
 
+@jit
+def heat_equation_kuu_noise_minor(x1, x2, params) -> jnp.ndarray:
+    noise_variance = 1e-8
+    kzz = rbf_kernel(x1, x2, params)
+    noise_term = noise_variance * jnp.eye(x1.shape[0])
+    return kzz + noise_term
 
 @jit
 def heat_equation_kuf(x1, x2, params) -> jnp.ndarray:
@@ -96,6 +106,34 @@ def heat_equation_kff(x1, x2, params) -> jnp.ndarray:
     _3 = third_order_x2_1_x1_0_x1_0(x1, x2, params)
     _4 = fourth_order_x2_0_x2_0_x1_0_x1_0(x1, x2, params)
     return _1 - _2 - _3 + _4
+
+def heat_equation_kff_noise(x1, x2, params) -> jnp.ndarray:
+    noise_variance = 1e-8
+    _1 = second_order_x2_1_x1_1(x1, x2, params)
+    _2 = third_order_x2_0_x2_0_x1_1(x1, x2, params)
+    _3 = third_order_x2_1_x1_0_x1_0(x1, x2, params)
+    _4 = fourth_order_x2_0_x2_0_x1_0_x1_0(x1, x2, params)
+    return _1 - _2 - _3 + _4 + noise_variance * jnp.eye(x1.shape[0])
+
+# @jit
+# def heat_equation_kzz(x1, x2, params, noise=0) -> jnp.ndarray:
+#     return rbf_kernel(x1, x2, params) + noise*jnp.eye(x1.shape[0])
+
+# @jit
+# def heat_equation_kzg(x1, x2, params) -> jnp.ndarray:
+#     return first_order_x2_1(x1, x2, params) - second_order_x2_0_x2_0(x1, x2, params)
+
+# @jit
+# def heat_equation_kgz(x1, x2, params) -> jnp.ndarray:
+#     return first_order_x1_1(x1, x2, params) - second_order_x1_0_x1_0(x1, x2, params)
+
+# @jit
+# def heat_equation_kgg(x1, x2, params) -> jnp.ndarray:
+#     _1 = second_order_x2_1_x1_1(x1, x2, params)
+#     _2 = third_order_x2_0_x2_0_x1_1(x1, x2, params)
+#     _3 = third_order_x2_1_x1_0_x1_0(x1, x2, params)
+#     _4 = fourth_order_x2_0_x2_0_x1_0_x1_0(x1, x2, params)
+#     return _1 - _2 - _3 + _4
 
 
 def heat_equation_nlml_loss_2d(heat_params, Xuz, Xfz, Xfg, number_Y, Y) -> float:
