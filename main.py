@@ -1,37 +1,38 @@
 import os
 import jax
+import datetime
 import optax
-import pynvml
 from include.mcmc_posterior import *
 from include.init import ModelInitializer_2d
 from include.train import train_heat_equation_model_2d
 
 import jax.numpy as jnp
-import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
 os.environ["JAX_PLATFORM_NAME"] = "gpu"
-#TODO: bbox_inches='tight'
-# Enable 64-bit floating point precision
 jax.config.update("jax_enable_x64", True)
 
-optimizer_in_use = optax.adamw
+optimizer_in_use = optax.adam
 
-number_u = 5
-number_f = 20
-number_init = 5
-number_bound = 2
+number_u = 10
+number_f = 200
+number_init = 10
+number_bound = 10
 sample_num = 10
-added_text = f'{number_u}&{number_f}&{sample_num}'
+added_text = f'{number_u}&{number_f}&{number_init}&{number_bound}&{sample_num}'
 added_text_init = f'init_{number_u}&{number_f}&{sample_num}'
 epochs = 1000
-learning_rate = 1e-3
+learning_rate = 1e-2
 weight_decay = 1e-5
 DEEP_FLAG = False
-prior_std = 1e1
 max_samples = 500
 assumption_variance = 1e-1
+
+prior_std = 1e1
+prior_var = 1e2
+num_samples = 1000
+num_warmup = 50
 
 # def check_gpu_memory_usage():
 #     pynvml.nvmlInit()
@@ -43,27 +44,19 @@ assumption_variance = 1e-1
 
 
 if __name__ == '__main__':
-    # check_gpu_memory_usage()
     # TODO: only use the fixed points to train the model
     model_initializer = ModelInitializer_2d(number_u=number_u, number_f=number_f, sample_num=sample_num,
                                             number_init=number_init, number_bound=number_bound)
-    # Xu = model_initializer.Xu #without noise
     Xu_certain = model_initializer.Xu_certain
     Xu_noise = model_initializer.Xu_noise
     yu_certain = model_initializer.yu_certain
-    # xu_noise = model_initializer.xu_noise
-    # tu_noise = model_initializer.tu_noise
-    # yu_noise = model_initializer.yu_noise
-    # xu_fixed = model_initializer.xu_fixed
-    # tu_fixed = model_initializer.tu_fixed
+
     Xu_fixed = model_initializer.Xu_fixed
     Yu_fixed = model_initializer.Yu_fixed
 
     Xu = model_initializer.Xu
     Yu = model_initializer.Y_u
 
-    # xf = model_initializer.xf
-    # tf = model_initializer.tf
     Xf = model_initializer.Xf
     yf = model_initializer.yf
 
@@ -96,14 +89,15 @@ if __name__ == '__main__':
     
 
     print('start inference')
-    prior_var = 1e2
+
     # trace = posterior_inference_mcmc(Xu_noise, jnp.eye(2)*prior_var, param_iter, Xu_fixed, Xf, Y)
     # trace = posterior_numpyro(Xu_noise, jnp.eye(2)*prior_var, param_iter, Xu_fixed, Xf, Y)
 
     # posterior_samples = jnp.squeeze(trace.get_values('z_uncertain', combine=True))
     # print(posterior_samples.shape)
     # print(posterior_samples)
-    trace = run_mcmc(Xu_fixed, Xf, Y, Xu_noise, jnp.eye(2) * prior_var, param_iter, num_samples=1000, num_warmup=50)
+
+    trace = run_mcmc(Xu_fixed, Xf, Y, Xu_noise, jnp.eye(2) * prior_var, param_iter, num_samples=num_samples, num_warmup=num_warmup)
     posterior_samples = trace
     print(posterior_samples)
     num_samples = Xu_certain.shape[0]
@@ -123,14 +117,14 @@ if __name__ == '__main__':
             plt.xlabel(param_name)
             plt.ylabel('Density')
             plt.title(f'Posterior Distribution of {param_name}')
-            plt.axvline(Xu[i, 0], color='tab:red', label='Xu True Value')
+            plt.axvline(Xu_certain[i, 0], color='tab:red', label='Xu True Value')
             plt.axvline(Xu_noise[i, 0], color='tab:green', label='Xu Noise Value')
             sns.kdeplot(data[0], color='tab:blue', label=f'{param_name} Posterior')
             # sns.kdeplot(posterior_samples['z_uncertain' + str(i)], color='tab:blue', label='Posterior KDE')
-
+            current_time = datetime.datetime.now().strftime("%M%S")
             plt.legend()
             # plt.savefig(f"hist_posterior_{param_name}.pdf", format='pdf')
-            plt.savefig(f"kde_posterior_{param_name}_2000_100.pdf", format='pdf')
+            plt.savefig(f"{param_name}_lr{learning_rate}_{added_text}_priorvar{prior_var}_{current_time}.pdf", format='pdf', bbox_inches='tight')
 
         else:
             print(f'Key {param_name} not found in posterior_samples.')

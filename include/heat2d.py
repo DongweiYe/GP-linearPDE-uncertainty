@@ -39,7 +39,7 @@ def get_u_training_data_2d(key_x_u, key_x_u_init, key_t_u_low, key_t_u_high, key
     yu_certain = u_xt(Xu_certain)
     # yu_noise = u_xt_noise(Xu_certain)
     xu, tu = Xu_certain[:, :1], Xu_certain[:, -1:]
-    noise_std = 2e-2
+    noise_std = 1e-2
     xu_noise = xu + noise_std * jax.random.normal(key_x_noise, shape=xu.shape)
     tu_noise = tu + noise_std * jax.random.normal(key_t_noise, shape=tu.shape)
     Xu_noise = jnp.concatenate([xu_noise, tu_noise], axis=1)

@@ -1,0 +1,43 @@
+Traceback (most recent call last):
+  File "/local/292711/main.py", line 5, in <module>
+    from include.mcmc_posterior import *
+  File "/local/292711/include/mcmc_posterior.py", line 4, in <module>
+    import pymc as pm
+  File "/home/yanw/.local/lib/python3.9/site-packages/pymc/__init__.py", line 49, in <module>
+    from pymc import _version, gp, ode, sampling
+  File "/home/yanw/.local/lib/python3.9/site-packages/pymc/gp/__init__.py", line 15, in <module>
+    from pymc.gp import cov, mean, util
+  File "/home/yanw/.local/lib/python3.9/site-packages/pymc/gp/cov.py", line 51, in <module>
+    from pymc.pytensorf import constant_fold
+  File "/home/yanw/.local/lib/python3.9/site-packages/pymc/pytensorf.py", line 65, in <module>
+    from pymc.util import makeiter
+  File "/home/yanw/.local/lib/python3.9/site-packages/pymc/util.py", line 20, in <module>
+    import arviz
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.9/site-packages/arviz/__init__.py", line 34, in <module>
+    from .plots import *
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.9/site-packages/arviz/plots/__init__.py", line 2, in <module>
+    from .autocorrplot import plot_autocorr
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.9/site-packages/arviz/plots/autocorrplot.py", line 7, in <module>
+    from .plot_utils import default_grid, filter_plotters_list, get_plotting_function
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.9/site-packages/arviz/plots/plot_utils.py", line 15, in <module>
+    from ..stats.density_utils import kde
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.9/site-packages/arviz/stats/__init__.py", line 3, in <module>
+    from .density_utils import *
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.9/site-packages/arviz/stats/density_utils.py", line 8, in <module>
+    from scipy.signal import convolve, convolve2d, gaussian  # pylint: disable=no-name-in-module
+ImportError: cannot import name 'gaussian' from 'scipy.signal' (/home/yanw/.local/lib/python3.9/site-packages/scipy/signal/__init__.py)
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[25266,1],0]
+  Exit code:    1
+--------------------------------------------------------------------------
+cp: missing destination file operand after '*.png/home/yanw/uncertain/results/figures/0612'
+Try 'cp --help' for more information.
+cp: missing destination file operand after '/home/yanw/uncertain'
+Try 'cp --help' for more information.

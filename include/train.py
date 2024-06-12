@@ -42,7 +42,8 @@ def train_heat_equation_model_2d(heat_params_init, Xuz, Xfz, Xfg, number_Y, Y, n
         loss = loss_fn(param_iter)
         y_loss = loss
         # print(f"Epoch {epoch+1} Loss: {loss}")
-        ax.plot(epoch, y_loss, 'bo-', label='train')
+        losses.append(y_loss)
+        # ax.plot(epoch, y_loss, 'bo-', label='train')
 
     def print_optimizer_info(fig, learning_rate=learning_rate, optimizer_in_use_name=optimizer_in_use_name,
                              num_epochs=num_epochs):
@@ -52,16 +53,16 @@ def train_heat_equation_model_2d(heat_params_init, Xuz, Xfz, Xfg, number_Y, Y, n
         fig.text(0.02, 0.98, f"{optimizer_text}\n{lr_text}\n{epoch_text}", ha='left', va='top', fontsize=10)
         print(f"{optimizer_text}\n{lr_text}\n{epoch_text}")
 
-    plt.xlabel(f"loss = {loss}")
-    plt.ylim(-100, 100)
 
+    # plt.ylim(-100, 100)
+    ax.plot(losses, 'bo-', label='train')
+    plt.xlabel(f"loss = {loss}")
     print_optimizer_info(fig)
     lr_text = f"{learning_rate:.6f}"
     optimizer_text = f"{optimizer_in_use_name}"
     epoch_text = f"{num_epochs}"
     current_time = datetime.datetime.now().strftime("%m%d_%H%M%S")
     plt.savefig(f"train_{optimizer_text}_{lr_text}_{epoch_text}_{current_time}.pdf", format='pdf')
-    plt.show()
     print(f"Initial loss: {init_loss}")
     print(f"Final loss: {loss}")
     return param_iter, optimizer_text, lr_text, epoch_text
