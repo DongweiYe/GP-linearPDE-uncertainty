@@ -19,10 +19,8 @@ cp -r ${SLURM_SUBMIT_DIR}/* .
 export OMPI_MCA_mca_base_component_show_load_errors=0
 module load nvidia/cuda-11.8
 module load nvidia/cuda-11.x_cudnn-8.6
-conda install -c conda-forge pynvml
-#conda install -c conda-forge jaxlib
-#conda install -c conda-forge pynvml
-#conda install --file requirements.txt
+module load nvidia/nvhpc/23.3
+module load nvidia/nvtop
 
 #pip install -U jax[cuda11_cudnn86] -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
 # -----------------Print node info--------------------------------
@@ -45,7 +43,9 @@ echo "Starting worker: "
 
 # -----------------run python---------------------
 export JAX_PLATFORM_NAME=gpu
-mpirun python main.py
+export JAX_TRACEBACK_FILTERING=off
+export XLA_PYTHON_CLIENT_PREALLOCATE=false
+mpirun -np 1 python main.py
 # -----------------end--------------------------------
 
 

@@ -12,16 +12,16 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 os.environ["JAX_PLATFORM_NAME"] = "gpu"
-#
+#TODO: bbox_inches='tight'
 # Enable 64-bit floating point precision
 jax.config.update("jax_enable_x64", True)
 
 optimizer_in_use = optax.adamw
 
-number_u = 20
-number_f = 10
+number_u = 5
+number_f = 20
 number_init = 5
-number_bound = 4
+number_bound = 2
 sample_num = 10
 added_text = f'{number_u}&{number_f}&{sample_num}'
 added_text_init = f'init_{number_u}&{number_f}&{sample_num}'
@@ -33,35 +33,42 @@ prior_std = 1e1
 max_samples = 500
 assumption_variance = 1e-1
 
-def check_gpu_memory_usage():
-    pynvml.nvmlInit()
-    handle = pynvml.nvmlDeviceGetHandleByIndex(0)
-    info = pynvml.nvmlDeviceGetMemoryInfo(handle)
-    print(f"GPU memory used: {info.used / (1024 ** 2)} MB")
-    print(f"GPU memory used: {info.used / (1024 ** 3)} GB")
-    pynvml.nvmlShutdown()
+# def check_gpu_memory_usage():
+#     pynvml.nvmlInit()
+#     handle = pynvml.nvmlDeviceGetHandleByIndex(0)
+#     info = pynvml.nvmlDeviceGetMemoryInfo(handle)
+#     print(f"GPU memory used: {info.used / (1024 ** 2)} MB")
+#     print(f"GPU memory used: {info.used / (1024 ** 3)} GB")
+#     pynvml.nvmlShutdown()
 
 
 if __name__ == '__main__':
     # check_gpu_memory_usage()
-
+    # TODO: only use the fixed points to train the model
     model_initializer = ModelInitializer_2d(number_u=number_u, number_f=number_f, sample_num=sample_num,
                                             number_init=number_init, number_bound=number_bound)
-    Xu = model_initializer.Xu
-    yu = model_initializer.yu
-    xu_noise = model_initializer.xu_noise
-    tu_noise = model_initializer.tu_noise
+    # Xu = model_initializer.Xu #without noise
+    Xu_certain = model_initializer.Xu_certain
     Xu_noise = model_initializer.Xu_noise
-    yu_noise = model_initializer.yu_noise
-    xu_fixed = model_initializer.xu_fixed
-    tu_fixed = model_initializer.tu_fixed
+    yu_certain = model_initializer.yu_certain
+    # xu_noise = model_initializer.xu_noise
+    # tu_noise = model_initializer.tu_noise
+    # yu_noise = model_initializer.yu_noise
+    # xu_fixed = model_initializer.xu_fixed
+    # tu_fixed = model_initializer.tu_fixed
     Xu_fixed = model_initializer.Xu_fixed
     Yu_fixed = model_initializer.Yu_fixed
-    Y = model_initializer.Y
-    xf = model_initializer.xf
-    tf = model_initializer.tf
+
+    Xu = model_initializer.Xu
+    Yu = model_initializer.Y_u
+
+    # xf = model_initializer.xf
+    # tf = model_initializer.tf
     Xf = model_initializer.Xf
     yf = model_initializer.yf
+
+    Y = model_initializer.Y
+    X = model_initializer.X
 
     number_u = model_initializer.number_u
     number_f = model_initializer.number_f
@@ -96,17 +103,16 @@ if __name__ == '__main__':
     # posterior_samples = jnp.squeeze(trace.get_values('z_uncertain', combine=True))
     # print(posterior_samples.shape)
     # print(posterior_samples)
-    trace = run_mcmc(Xu_fixed, Xf, Y, Xu_noise, jnp.eye(2) * prior_var, param_iter, num_samples=2000, num_warmup=100)
+    trace = run_mcmc(Xu_fixed, Xf, Y, Xu_noise, jnp.eye(2) * prior_var, param_iter, num_samples=1000, num_warmup=50)
     posterior_samples = trace
     print(posterior_samples)
-    num_samples = Xu_fixed.shape[0]
-    z_uncertain_means = []
-
-    for i in range(num_samples):
-        param_name = f'z_uncertain{i}'
-        z_uncertain_mean = np.mean(posterior_samples[param_name], axis=0)
-        print(f"{i}:_z_uncertain_mean={z_uncertain_mean}")
-        z_uncertain_means.append(z_uncertain_mean)
+    num_samples = Xu_certain.shape[0]
+    # z_uncertain_means = []
+    # for i in range(num_samples):
+    #     param_name = f'z_uncertain{i}'
+    #     z_uncertain_mean = np.mean(posterior_samples[param_name], axis=0)
+    #     print(f"{i}:_z_uncertain_mean={z_uncertain_mean}")
+    #     z_uncertain_means.append(z_uncertain_mean)
 
     for i in range(num_samples):
         param_name = f'z_uncertain{i}'

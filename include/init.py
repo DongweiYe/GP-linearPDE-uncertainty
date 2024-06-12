@@ -22,18 +22,19 @@ class ModelInitializer_2d:
         self.number_init = number_init
         self.number_bound = number_bound
 
-        self.number_Y = number_u + number_bound * 2 +number_init + number_f
+        self.number_Y = number_u + number_bound * 2 + number_init + number_f
 
         # Initialize data
-        self.Xu, self.yu, self.xu_noise, self.tu_noise, self.Xu_noise, self.yu_noise, self.xu_fixed, self.tu_fixed, \
+        self.Xu_certain, self.yu_certain, self.xu_noise, self.tu_noise, self.Xu_noise, self.xu_fixed, self.tu_fixed, \
         self.Xu_fixed, self.Yu_fixed = get_u_training_data_2d(key_x_u, key_x_u_init, key_t_u_low, key_t_u_high,
                                                               key_x_noise, key_t_noise, self.number_u, self.number_init,
                                                               self.number_bound)
         self.xf, self.tf, self.Xf, self.yf = get_f_training_data_2d(key_x_f, self.number_f)
 
         self.X = jnp.concatenate((self.Xu_noise, self.Xu_fixed, self.Xf))
-        self.Y = jnp.concatenate((self.yu, self.Yu_fixed, self.yf))
-        self.Y_u = jnp.concatenate((self.yu, self.Yu_fixed))
+        self.Y = jnp.concatenate((self.yu_certain, self.Yu_fixed, self.yf))
+        self.Y_u = jnp.concatenate((self.yu_certain, self.Yu_fixed))
+        self.Xu = jnp.concatenate((self.Xu_noise, self.Xu_fixed))
 
         # TODO: add mean(yu_noise) to projection
         sigma_init = jnp.std(self.Y)
@@ -50,7 +51,7 @@ class ModelInitializer_2d:
         k_ff_inv = jnp.linalg.solve(heat_equation_kff(self.Xf, self.Xf, kernel_params_only_u),
                                     jnp.eye(heat_equation_kff(self.Xf, self.Xf, kernel_params_only_u).shape[0]))
         yf_u = heat_equation_kuf(self.Xf, self.Xf, kernel_params_only_u) @ k_ff_inv @ self.yf
-        new_Y = jnp.concatenate((self.yu, yf_u))
+        new_Y = jnp.concatenate((self.yu_certain, yf_u))
         new_sigma_init = jnp.std(new_Y)
         new_sigma_init_yf = jnp.std(yf_u)
         print(f"new_sigma_init_yu: {sigma_init_yu}", f"new_sigma_init_yf: {new_sigma_init_yf}",

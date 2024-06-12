@@ -35,10 +35,10 @@ def u_xt_noise(Xu_noise) -> jnp.ndarray:
 def get_u_training_data_2d(key_x_u, key_x_u_init, key_t_u_low, key_t_u_high, key_x_noise, key_t_noise, sample_num,
                            init_num, bnum) -> (jnp.ndarray, jnp.ndarray, jnp.ndarray, jnp.ndarray, jnp.ndarray,
                                                jnp.ndarray, jnp.ndarray, jnp.ndarray, jnp.ndarray, jnp.ndarray):
-    Xu = jax.random.uniform(key_x_u, shape=(sample_num, 2), dtype=jnp.float64)
-    yu = u_xt(Xu)
-    yu_noise = u_xt_noise(Xu)
-    xu, tu = Xu[:, :1], Xu[:, -1:]
+    Xu_certain = jax.random.uniform(key_x_u, shape=(sample_num, 2), dtype=jnp.float64)
+    yu_certain = u_xt(Xu_certain)
+    # yu_noise = u_xt_noise(Xu_certain)
+    xu, tu = Xu_certain[:, :1], Xu_certain[:, -1:]
     noise_std = 2e-2
     xu_noise = xu + noise_std * jax.random.normal(key_x_noise, shape=xu.shape)
     tu_noise = tu + noise_std * jax.random.normal(key_t_noise, shape=tu.shape)
@@ -47,6 +47,7 @@ def get_u_training_data_2d(key_x_u, key_x_u_init, key_t_u_low, key_t_u_high, key
     # init + boundary
     xu_init = jax.random.uniform(key_x_u_init, shape=(init_num, 1), dtype=jnp.float64)
     tu_init = jnp.zeros(shape=(init_num, 1))
+    # Xu_init = jnp.concatenate([xu_init, tu_init], axis=1)
 
     xu_bound_low = jnp.zeros(shape=(bnum, 1))
     xu_bound_high = jnp.ones(shape=(bnum, 1))
@@ -56,9 +57,10 @@ def get_u_training_data_2d(key_x_u, key_x_u_init, key_t_u_low, key_t_u_high, key
     xu_fixed = jnp.concatenate((xu_bound_low, xu_init, xu_bound_high))
     tu_fixed = jnp.concatenate((tu_bound_low, tu_init, tu_bound_high))
     Xu_fixed = jnp.concatenate([xu_fixed, tu_fixed], axis=1)
+    print("Xu_fixed: ", Xu_fixed)
     Yu_fixed = u_xt(Xu_fixed)
 
-    return Xu, yu, xu_noise, tu_noise, Xu_noise, yu_noise, xu_fixed, tu_fixed, Xu_fixed, Yu_fixed
+    return Xu_certain, yu_certain, xu_noise, tu_noise, Xu_noise, xu_fixed, tu_fixed, Xu_fixed, Yu_fixed
 
 
 def get_f_training_data_2d(key_x_f, sample_num) -> (jnp.ndarray, jnp.ndarray, jnp.ndarray, jnp.ndarray):
@@ -75,7 +77,15 @@ def heat_equation_kuu(x1, x2, params) -> jnp.ndarray:
 
 @jit
 def heat_equation_kuu_noise(x1, x2, params) -> jnp.ndarray:
-    noise_variance = 4e-2
+    noise_variance = 1e-2
+    kzz = rbf_kernel(x1, x2, params)
+    noise_term = noise_variance * jnp.eye(x1.shape[0])
+    return kzz + noise_term
+
+
+@jit
+def heat_equation_kuu_noise2(x1, x2, params) -> jnp.ndarray:
+    noise_variance = 1e-4
     kzz = rbf_kernel(x1, x2, params)
     noise_term = noise_variance * jnp.eye(x1.shape[0])
     return kzz + noise_term
@@ -97,20 +107,28 @@ def heat_equation_kff(x1, x2, params) -> jnp.ndarray:
     _4 = fourth_order_x2_0_x2_0_x1_0_x1_0(x1, x2, params)
     return _1 - _2 - _3 + _4
 
+@jit
+def heat_equation_kff_noise(x1, x2, params) -> jnp.ndarray:
+    noise_variance = 1e-4
+    kff = heat_equation_kff(x1, x2, params)
+    noise_term = noise_variance * jnp.eye(x1.shape[0])
+    return kff + noise_term
+
+
 
 def heat_equation_nlml_loss_2d(heat_params, Xuz, Xfz, Xfg, number_Y, Y) -> float:
     number_Y = number_Y
     init = heat_params
     Xuz, Xfz, Xfg = Xuz, Xfz, Xfg
     params = {'sigma': init[-1][0], 'lengthscale': init[-1][1]}
-    zz_uu = heat_equation_kuu_noise(Xuz, Xuz, params)
-    zz_uf = heat_equation_kuf(Xuz, Xfz, params)
-    zg_uf = heat_equation_kfu(Xuz, Xfg, params)
-    zz_fu = heat_equation_kfu(Xfz, Xuz, params)
-    zz_ff = heat_equation_kff(Xfz, Xfz, params)
-    zg_ff = heat_equation_kff(Xfz, Xfg, params)
+    zz_uu = heat_equation_kuu(Xuz, Xuz, params)
+    zz_uf = heat_equation_kuu(Xuz, Xfz, params)
+    zg_uf = heat_equation_kuf(Xuz, Xfg, params)
+    zz_fu = heat_equation_kuu(Xfz, Xuz, params)
+    zz_ff = heat_equation_kuu(Xfz, Xfz, params)
+    zg_ff = heat_equation_kuf(Xfz, Xfg, params)
     gz_fu = heat_equation_kfu(Xfg, Xuz, params)
-    gz_ff = heat_equation_kff(Xfg, Xfz, params)
+    gz_ff = heat_equation_kfu(Xfg, Xfz, params)
     gg_ff = heat_equation_kff(Xfg, Xfg, params)
     # print("zz_uu: ", zz_uu)
     # print("zz_uf: ", zz_uf)

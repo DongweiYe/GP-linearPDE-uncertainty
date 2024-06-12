@@ -2,7 +2,8 @@
 import numpy
 import numpy as np
 import pymc as pm
-from .heat2d import heat_equation_kuu_noise, heat_equation_kuf, heat_equation_kfu, heat_equation_kff
+from .heat2d import heat_equation_kuu_noise, heat_equation_kuf, heat_equation_kfu, heat_equation_kff, \
+    heat_equation_kff_noise, heat_equation_kuu, heat_equation_kuu_noise2
 
 import numpyro
 import numpyro.distributions as dist
@@ -15,14 +16,14 @@ def compute_K(init, z_prior, Xfz, Xfg):
     Xuz = z_prior
     params = {'sigma': init[-1][0], 'lengthscale': init[-1][1]}
     zz_uu = heat_equation_kuu_noise(Xuz, Xuz, params)
-    zz_uf = heat_equation_kuf(Xuz, Xfz, params)
-    zg_uf = heat_equation_kfu(Xuz, Xfg, params)
-    zz_fu = heat_equation_kfu(Xfz, Xuz, params)
-    zz_ff = heat_equation_kff(Xfz, Xfz, params)
-    zg_ff = heat_equation_kff(Xfz, Xfg, params)
+    zz_uf = heat_equation_kuu(Xuz, Xfz, params)
+    zg_uf = heat_equation_kuf(Xuz, Xfg, params)
+    zz_fu = heat_equation_kuu(Xfz, Xuz, params)
+    zz_ff = heat_equation_kuu_noise2(Xfz, Xfz, params)
+    zg_ff = heat_equation_kuf(Xfz, Xfg, params)
     gz_fu = heat_equation_kfu(Xfg, Xuz, params)
-    gz_ff = heat_equation_kff(Xfg, Xfz, params)
-    gg_ff = heat_equation_kff(Xfg, Xfg, params)
+    gz_ff = heat_equation_kfu(Xfg, Xfz, params)
+    gg_ff = heat_equation_kff_noise(Xfg, Xfg, params)
     K = jnp.block([[zz_uu, zz_uf, zg_uf], [zz_fu, zz_ff, zg_ff], [gz_fu, gz_ff, gg_ff]])
     return K
 
@@ -74,66 +75,66 @@ def Metropolis_Hasting(max_samples, assumption_variance, Xvague_prior_mean, Xvag
     return xvague_sample_list
 
 
-def posterior_inference_mcmc(prior_mean,prior_cov, init_params, Xfz, Xfg, Y_data):
+# def posterior_inference_mcmc(prior_mean,prior_cov, init_params, Xfz, Xfg, Y_data):
+#
+#     basic_model = pm.Model()
+#     prior_mean = numpy.array(prior_mean)
+#     prior_cov = numpy.array(prior_cov)
+#
+#
+#     with basic_model:
+#         z_uncertain_list = []
+#         for num_sample in range(prior_mean.shape[0]):
+#             z_uncertain_list.append(pm.MvNormal('z_uncertain'+str(num_sample),mu=prior_mean[num_sample,:],cov=prior_cov))
+#         z_uncertain = numpy.array(z_uncertain_list)
+#         print(z_uncertain)
+#         # print("-------------------z_uncertian shape:--------------------------", z_uncertain_list.shape)
+#
+#         K = compute_K(init_params, z_uncertain, Xfz, Xfg)
+#         K = numpy.array(K)
+#         k_shape = K.shape[0]
+#         z_obs = pm.MvNormal('z_obs',mu=numpy.zeros(k_shape),cov=K,observed=numpy.array(Y_data))
+#         step = pm.Metropolis()
+#         trace = pm.sample(500,step=step,return_inferencedata=False)
+#
+#     return trace
 
-    basic_model = pm.Model()
-    prior_mean = numpy.array(prior_mean)
-    prior_cov = numpy.array(prior_cov)
-
-
-    with basic_model:
-        z_uncertain_list = []
-        for num_sample in range(prior_mean.shape[0]):
-            z_uncertain_list.append(pm.MvNormal('z_uncertain'+str(num_sample),mu=prior_mean[num_sample,:],cov=prior_cov))
-        z_uncertain = numpy.array(z_uncertain_list)
-        print(z_uncertain)
-        # print("-------------------z_uncertian shape:--------------------------", z_uncertain_list.shape)
-        
-        K = compute_K(init_params, z_uncertain, Xfz, Xfg)
-        K = numpy.array(K)
-        k_shape = K.shape[0]
-        z_obs = pm.MvNormal('z_obs',mu=numpy.zeros(k_shape),cov=K,observed=numpy.array(Y_data))
-        step = pm.Metropolis()
-        trace = pm.sample(500,step=step,return_inferencedata=False)
-
-    return trace
-
-def posterior_numpyro(prior_mean,prior_cov, init_params, Xfz, Xfg, Y_data):
-    # basic_model = pm.Model()
-    prior_mean = numpy.array(prior_mean)
-    prior_cov = numpy.array(prior_cov)
-
-    print(Xfz.shape,Xfg.shape,Y_data.shape)
-
-    def basic_model(X,y):
-        z_uncertain_list = []
-        for num_sample in range(prior_mean.shape[0]):
-            z_uncertain_list.append(numpyro.sample('z_uncertain'+str(num_sample),dist.MultivariateNormal(prior_mean[num_sample,:],prior_cov)))
-            # z_uncertain_list.append(pm.MvNormal('z_uncertain'+str(num_sample),mu=prior_mean[num_sample,:],cov=prior_cov))
-        print(z_uncertain_list)
-        
-        z_uncertain = numpy.array(z_uncertain_list)
-        print(z_uncertain)
-        # print("-------------------z_uncertian shape:--------------------------", z_uncertain_list.shape)
-        K = compute_K(init_params, z_uncertain, Xfz, Xfg)
-        K = numpy.array(K)
-        k_shape = K.shape[0]
-        z_obs = numpyro.sample('obs',dist.MultivariateNormal(numpy.zeros(k_shape),K),obs=y)
-        # z_obs = pm.MvNormal('z_obs',mu=numpy.zeros(k_shape),cov=K,observed=numpy.array(Y_data))
-        # step = pm.Metropolis()
-        # trace = pm.sample(500,step=step,return_inferencedata=False)    
-
-    return 0
-    # def model(X, y):
-    #     beta = numpyro.sample("beta", dist.Normal(0, 1).expand([3]))
-    #     numpyro.sample("obs", dist.Normal(X @ beta, 1), obs=y)
-
-    # mcmc = MCMC(NUTS(model), num_warmup=10, num_samples=10)
-    # # See https://jax.readthedocs.io/en/latest/notebooks/Distributed_arrays_and_automatic_parallelization.html
-    # sharding = PositionalSharding(mesh_utils.create_device_mesh((8,)))
-    # X_shard = jax.device_put(X, sharding.reshape(8, 1))
-    # y_shard = jax.device_put(y, sharding.reshape(8))
-    # mcmc.run(jax.random.PRNGKey(0), X_shard, y_shard)
+# def posterior_numpyro(prior_mean,prior_cov, init_params, Xfz, Xfg, Y_data):
+#     # basic_model = pm.Model()
+#     prior_mean = numpy.array(prior_mean)
+#     prior_cov = numpy.array(prior_cov)
+#
+#     print(Xfz.shape,Xfg.shape,Y_data.shape)
+#
+#     def basic_model(X,y):
+#         z_uncertain_list = []
+#         for num_sample in range(prior_mean.shape[0]):
+#             z_uncertain_list.append(numpyro.sample('z_uncertain'+str(num_sample),dist.MultivariateNormal(prior_mean[num_sample,:],prior_cov)))
+#             # z_uncertain_list.append(pm.MvNormal('z_uncertain'+str(num_sample),mu=prior_mean[num_sample,:],cov=prior_cov))
+#         print(z_uncertain_list)
+#
+#         z_uncertain = numpy.array(z_uncertain_list)
+#         print(z_uncertain)
+#         # print("-------------------z_uncertian shape:--------------------------", z_uncertain_list.shape)
+#         K = compute_K(init_params, z_uncertain, Xfz, Xfg)
+#         K = numpy.array(K)
+#         k_shape = K.shape[0]
+#         z_obs = numpyro.sample('obs',dist.MultivariateNormal(numpy.zeros(k_shape),K),obs=y)
+#         # z_obs = pm.MvNormal('z_obs',mu=numpy.zeros(k_shape),cov=K,observed=numpy.array(Y_data))
+#         # step = pm.Metropolis()
+#         # trace = pm.sample(500,step=step,return_inferencedata=False)
+#
+#     return 0
+#     # def model(X, y):
+#     #     beta = numpyro.sample("beta", dist.Normal(0, 1).expand([3]))
+#     #     numpyro.sample("obs", dist.Normal(X @ beta, 1), obs=y)
+#
+#     # mcmc = MCMC(NUTS(model), num_warmup=10, num_samples=10)
+#     # # See https://jax.readthedocs.io/en/latest/notebooks/Distributed_arrays_and_automatic_parallelization.html
+#     # sharding = PositionalSharding(mesh_utils.create_device_mesh((8,)))
+#     # X_shard = jax.device_put(X, sharding.reshape(8, 1))
+#     # y_shard = jax.device_put(y, sharding.reshape(8))
+#     # mcmc.run(jax.random.PRNGKey(0), X_shard, y_shard)
 
 
 def model(Xfz, Xfg, Y_data, prior_mean, prior_cov, init_params):
@@ -147,13 +148,16 @@ def model(Xfz, Xfg, Y_data, prior_mean, prior_cov, init_params):
         z_uncertain_list.append(z_uncertain)
 
     z_uncertain = jnp.stack(z_uncertain_list)
+    print("#############################################")
+    print("z_uncertain_list shape", z_uncertain.shape)
+    print("#############################################")
     K = compute_K(init_params, z_uncertain, Xfz, Xfg)
     K = jnp.array(K)
     numpyro.sample('z_obs', dist.MultivariateNormal(jnp.zeros(K.shape[0]), covariance_matrix=K), obs=jnp.array(Y_data))
 
 
 def run_mcmc(Xfz, Xfg, Y_data, prior_mean, prior_cov, init_params, num_samples=5, num_warmup=10):
-    rng_key = random.PRNGKey(0)
+    rng_key = random.PRNGKey(52)
     kernel = NUTS(model) # No U-Turn Sampler
     #kernel = HMC(model)
     mcmc = MCMC(kernel, num_warmup=num_warmup, num_samples=num_samples)

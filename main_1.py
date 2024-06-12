@@ -10,7 +10,7 @@ from include.func import *
 from include.vis import *
 from include.GP import *
 from include.mcmc import *
-
+#TODO add validation for the hyperparameters
 ### fix seed
 np.random.seed(5)
 
