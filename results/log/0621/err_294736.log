@@ -1,0 +1,34 @@
+Traceback (most recent call last):
+  File "/local/294736/main.py", line 116, in <module>
+    mcmc = run_mcmc(Xu_fixed, Xf, Y, Xu_noise, prior_var*jnp.eye(2), param_iter, num_samples=num_mcmc,
+  File "/local/294736/include/mcmc_posterior.py", line 124, in run_mcmc
+    mcmc.run(rng_key, Xfz, Xfg, Y_data, prior_mean, prior_cov, init_params)
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.9/site-packages/numpyro/infer/mcmc.py", line 666, in run
+    states_flat, last_state = partial_map_fn(map_args)
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.9/site-packages/numpyro/infer/mcmc.py", line 462, in _single_chain_mcmc
+    collect_vals = fori_collect(
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.9/site-packages/numpyro/util.py", line 343, in fori_collect
+    collection = jnp.zeros(
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.9/site-packages/jax/_src/numpy/lax_numpy.py", line 2332, in zeros
+    shape = canonicalize_shape(shape)
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.9/site-packages/jax/_src/numpy/lax_numpy.py", line 86, in canonicalize_shape
+    return core.canonicalize_shape(shape, context)  # type: ignore
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.9/site-packages/jax/_src/core.py", line 2117, in canonicalize_shape
+    raise _invalid_shape_error(shape, context)
+TypeError: Shapes must be 1D sequences of concrete values of integer type, got (14000.0, 5).
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[57754,1],0]
+  Exit code:    1
+--------------------------------------------------------------------------
+cp: missing destination file operand after '*.png/home/yanw/uncertain/results/figures/0621'
+Try 'cp --help' for more information.
+cp: missing destination file operand after '/home/yanw/uncertain'
+Try 'cp --help' for more information.
+mv: cannot stat '*.log': No such file or directory

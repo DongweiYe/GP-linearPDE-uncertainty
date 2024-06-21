@@ -1,0 +1,50 @@
+Traceback (most recent call last):
+  File "/local/294696/main.py", line 128, in <module>
+    z_uncertain = pm.MvNormal('z_uncertain', mu=Xu_noise.flatten(),
+  File "/home/yanw/.local/lib/python3.9/site-packages/pymc/distributions/distribution.py", line 369, in __new__
+    rv_out = cls.dist(*args, **kwargs)
+  File "/home/yanw/.local/lib/python3.9/site-packages/pymc/distributions/multivariate.py", line 242, in dist
+    mu = pt.as_tensor_variable(mu)
+  File "/home/yanw/.local/lib/python3.9/site-packages/pytensor/tensor/__init__.py", line 50, in as_tensor_variable
+    return _as_tensor_variable(x, name, ndim, **kwargs)
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.9/functools.py", line 888, in wrapper
+    return dispatch(args[0].__class__)(*args, **kw)
+  File "/home/yanw/.local/lib/python3.9/site-packages/pytensor/tensor/__init__.py", line 57, in _as_tensor_variable
+    raise NotImplementedError(f"Cannot convert {x!r} to a tensor variable.")
+NotImplementedError: Cannot convert Array([0.13973494, 0.87051473, 0.67564161, 0.        ], dtype=float64) to a tensor variable.
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[24664,1],0]
+  Exit code:    1
+--------------------------------------------------------------------------
+/tmp/slurmd/job294696/slurm_script: line 57: /home/yanw/uncertain/results/log/0621/294696_version.log: No such file or directory
+/tmp/slurmd/job294696/slurm_script: line 58: /home/yanw/uncertain/results/log/0621/294696_version.log: No such file or directory
+ERROR: Pipe to stdout was broken
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
+BrokenPipeError: [Errno 32] Broken pipe
+/tmp/slurmd/job294696/slurm_script: line 57: /home/yanw/uncertain/results/log/0621/294696_version.log: No such file or directory
+/tmp/slurmd/job294696/slurm_script: line 58: /home/yanw/uncertain/results/log/0621/294696_version.log: No such file or directory
+ERROR: Pipe to stdout was broken
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
+BrokenPipeError: [Errno 32] Broken pipe
+/tmp/slurmd/job294696/slurm_script: line 57: /home/yanw/uncertain/results/log/0621/294696_version.log: No such file or directory
+/tmp/slurmd/job294696/slurm_script: line 58: /home/yanw/uncertain/results/log/0621/294696_version.log: No such file or directory
+ERROR: Pipe to stdout was broken
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
+BrokenPipeError: [Errno 32] Broken pipe
+/tmp/slurmd/job294696/slurm_script: line 57: /home/yanw/uncertain/results/log/0621/294696_version.log: No such file or directory
+/tmp/slurmd/job294696/slurm_script: line 58: /home/yanw/uncertain/results/log/0621/294696_version.log: No such file or directory
+ERROR: Pipe to stdout was broken
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
+BrokenPipeError: [Errno 32] Broken pipe
+cp: missing destination file operand after '*.png/home/yanw/uncertain/results/figures/0621'
+Try 'cp --help' for more information.
+cp: missing destination file operand after '/home/yanw/uncertain'
+Try 'cp --help' for more information.
+mv: cannot stat '*.log': No such file or directory

@@ -111,7 +111,6 @@ if __name__ == '__main__':
     # posterior_samples = trace
     # print(posterior_samples)
 
-# map 的 WEIZHI SHIBUSHI he dingjian de dian 是一致的, 如果mcmc不对的话,应该map更接近.
 # %%
     print('start inference')
     mcmc = run_mcmc(Xu_fixed, Xf, Y, Xu_noise, prior_var*jnp.eye(2), param_iter, num_samples=num_mcmc,
