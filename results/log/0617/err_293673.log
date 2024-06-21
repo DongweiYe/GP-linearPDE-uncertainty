@@ -1,0 +1,50 @@
+Traceback (most recent call last):
+  File "/local/293673/main.py", line 56, in <module>
+    python
+NameError: name 'python' is not defined
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[19743,1],0]
+  Exit code:    1
+--------------------------------------------------------------------------
+/tmp/slurmd/job293673/slurm_script: line 57: /home/yanw/uncertain/results/log/0617/293673_version.log: No such file or directory
+/tmp/slurmd/job293673/slurm_script: line 58: /home/yanw/uncertain/results/log/0617/293673_version.log: No such file or directory
+ERROR: Pipe to stdout was broken
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
+BrokenPipeError: [Errno 32] Broken pipe
+/tmp/slurmd/job293673/slurm_script: line 57: /home/yanw/uncertain/results/log/0617/293673_version.log: No such file or directory
+/tmp/slurmd/job293673/slurm_script: line 58: /home/yanw/uncertain/results/log/0617/293673_version.log: No such file or directory
+ERROR: Pipe to stdout was broken
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
+BrokenPipeError: [Errno 32] Broken pipe
+/tmp/slurmd/job293673/slurm_script: line 57: /home/yanw/uncertain/results/log/0617/293673_version.log: No such file or directory
+/tmp/slurmd/job293673/slurm_script: line 58: /home/yanw/uncertain/results/log/0617/293673_version.log: No such file or directory
+ERROR: Pipe to stdout was broken
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
+BrokenPipeError: [Errno 32] Broken pipe
+/tmp/slurmd/job293673/slurm_script: line 57: /home/yanw/uncertain/results/log/0617/293673_version.log: No such file or directory
+/tmp/slurmd/job293673/slurm_script: line 58: /home/yanw/uncertain/results/log/0617/293673_version.log: No such file or directory
+ERROR: Pipe to stdout was broken
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
+BrokenPipeError: [Errno 32] Broken pipe
+/tmp/slurmd/job293673/slurm_script: line 57: /home/yanw/uncertain/results/log/0617/293673_version.log: No such file or directory
+/tmp/slurmd/job293673/slurm_script: line 58: /home/yanw/uncertain/results/log/0617/293673_version.log: No such file or directory
+ERROR: Pipe to stdout was broken
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
+BrokenPipeError: [Errno 32] Broken pipe
+/tmp/slurmd/job293673/slurm_script: line 57: /home/yanw/uncertain/results/log/0617/293673_version.log: No such file or directory
+/tmp/slurmd/job293673/slurm_script: line 58: /home/yanw/uncertain/results/log/0617/293673_version.log: No such file or directory
+ERROR: Pipe to stdout was broken
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
+BrokenPipeError: [Errno 32] Broken pipe
+/tmp/slurmd/job293673/slurm_script: line 67: /home/yanw/uncertain/results/log/0617/293673_version.log: No such file or directory
+cp: missing destination file operand after '*.png/home/yanw/uncertain/results/figures/0617'
+Try 'cp --help' for more information.
+cp: missing destination file operand after '/home/yanw/uncertain'
+Try 'cp --help' for more information.

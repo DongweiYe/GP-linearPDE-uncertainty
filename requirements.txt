@@ -16,6 +16,7 @@ cmocean
 wandb
 pymc
 numpyro
+arviz
 #pip install jaxlib==0.4.25+cuda11.cudnn86 -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
 #pip install jax==0.4.25
 

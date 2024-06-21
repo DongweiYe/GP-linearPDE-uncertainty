@@ -1,0 +1,21 @@
+Traceback (most recent call last):
+  File "/local/293500/main.py", line 133, in <module>
+    mcmc = run_mcmc(Xu_fixed, Xf, Y, Xu_noise, jnp.eye(2) * prior_var, param_iter, num_samples=num_samples,
+  File "/local/293500/include/mcmc_posterior.py", line 97, in run_mcmc
+    rng_key = numpyro.random.PRNGKey(42)
+AttributeError: module 'numpyro' has no attribute 'random'
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[21292,1],0]
+  Exit code:    1
+--------------------------------------------------------------------------
+cp: missing destination file operand after '*.png/home/yanw/uncertain/results/figures/0615'
+Try 'cp --help' for more information.
+cp: missing destination file operand after '/home/yanw/uncertain'
+Try 'cp --help' for more information.

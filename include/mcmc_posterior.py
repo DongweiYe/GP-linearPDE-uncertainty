@@ -10,28 +10,28 @@ import numpyro.distributions as dist
 from numpyro.infer import MCMC, NUTS, HMC
 import jax.numpy as jnp
 from jax import random
-
+from collections import namedtuple
 
 def compute_K(init, z_prior, Xfz, Xfg):
     Xuz = z_prior
     params = {'sigma': init[-1][0], 'lengthscale': init[-1][1]}
-    zz_uu = heat_equation_kuu_noise(Xuz, Xuz, params)
+    zz_uu = heat_equation_kuu(Xuz, Xuz, params)
     zz_uf = heat_equation_kuu(Xuz, Xfz, params)
     zg_uf = heat_equation_kuf(Xuz, Xfg, params)
     zz_fu = heat_equation_kuu(Xfz, Xuz, params)
-    zz_ff = heat_equation_kuu_noise2(Xfz, Xfz, params)
+    zz_ff = heat_equation_kuu(Xfz, Xfz, params)
     zg_ff = heat_equation_kuf(Xfz, Xfg, params)
     gz_fu = heat_equation_kfu(Xfg, Xuz, params)
     gz_ff = heat_equation_kfu(Xfg, Xfz, params)
-    gg_ff = heat_equation_kff_noise(Xfg, Xfg, params)
+    gg_ff = heat_equation_kff(Xfg, Xfg, params)
     K = jnp.block([[zz_uu, zz_uf, zg_uf], [zz_fu, zz_ff, zg_ff], [gz_fu, gz_ff, gg_ff]])
     return K
-
+"""
 def model(Xfz, Xfg, Y_data, prior_mean, prior_cov, init_params):
     prior_mean = jnp.array(prior_mean)
     prior_cov = jnp.array(prior_cov)
     z_uncertain_list = []
-
+    print("prior_mean shape:", prior_mean.shape[0])
     for num_sample in range(prior_mean.shape[0]):
         z_uncertain = numpyro.sample('z_uncertain' + str(num_sample),
                                      dist.MultivariateNormal(prior_mean[num_sample, :], covariance_matrix=prior_cov))
@@ -40,21 +40,107 @@ def model(Xfz, Xfg, Y_data, prior_mean, prior_cov, init_params):
     z_uncertain = jnp.stack(z_uncertain_list)
     print("#############################################")
     print("z_uncertain_list shape", z_uncertain.shape)
+    print("z_uncertain_list", z_uncertain_list)
     print("#############################################")
     K = compute_K(init_params, z_uncertain, Xfz, Xfg)
+    print("#############################################")
+    print("#############################################")
+    print("K shape:", K.shape)
+    print("K:", K)
+    print("#############################################")
     K = jnp.array(K)
     numpyro.sample('z_obs', dist.MultivariateNormal(jnp.zeros(K.shape[0]), covariance_matrix=K), obs=jnp.array(Y_data))
 
+# MHState = namedtuple("MHState", ["u", "rng_key"])
+# class MetropolisHastings(numpyro.infer.mcmc.MCMCKernel):
+#     sample_field = "u"
+#
+#     def __init__(self, potential_fn, step_size=0.1):
+#         self.potential_fn = potential_fn
+#         self.step_size = step_size
+#
+#     def init(self, rng_key, num_warmup, init_params, model_args, model_kwargs):
+#         return MHState(init_params, rng_key)
+#
+#     def sample(self, state, model_args, model_kwargs):
+#         u, rng_key = state
+#         rng_key, key_proposal, key_accept = random.split(rng_key, 3)
+#         u_proposal = dist.Normal(u, self.step_size).sample(key_proposal)
+#         accept_prob = jnp.exp(self.potential_fn(u) - self.potential_fn(u_proposal))
+#         u_new = jnp.where(dist.Uniform().sample(key_accept) < accept_prob, u_proposal, u)
+#         return MHState(u_new, rng_key)
+
 
 def run_mcmc(Xfz, Xfg, Y_data, prior_mean, prior_cov, init_params, num_samples=5, num_warmup=10):
-    rng_key = random.PRNGKey(52)
-    kernel = NUTS(model) # No U-Turn Sampler
-    #kernel = HMC(model)
+    rng_key = random.PRNGKey(42)
+    # kernel = MetropolisHastings(model) # No U-Turn Sampler
+    kernel = NUTS(model)
     mcmc = MCMC(kernel, num_warmup=num_warmup, num_samples=num_samples)
     mcmc.run(rng_key, Xfz, Xfg, Y_data, prior_mean, prior_cov, init_params)
     mcmc.print_summary()
-    return mcmc.get_samples()
+    return mcmc
+"""
 
+
+# def model(Xfz, Xfg, Y_data, prior_mean, prior_cov,  init_params):
+#     # 先验分布
+#     z_uncertain = numpyro.sample('z_uncertain', dist.MultivariateNormal(prior_mean, covariance_matrix=prior_cov))
+#
+#     # 似然分布
+#     K = compute_K(init_params, z_uncertain, Xfz, Xfg)
+#     K = jnp.array(K)
+#     numpyro.sample('z_obs', dist.MultivariateNormal(jnp.zeros(K.shape[0]), covariance_matrix=K), obs=Y_data)
+
+
+# def model(Xfz, Xfg, Y_data, prior_mean, prior_cov, init_params):
+#     z_uncertain = []
+#     for j in range(prior_mean.shape[1]):  #
+#         z = numpyro.sample(f'z_uncertain_{j}', dist.MultivariateNormal(prior_mean[:, j], covariance_matrix=prior_cov[j]))
+#         z_uncertain.append(z)
+#     z_uncertain = jnp.stack(z_uncertain, axis=1)
+#
+#     #
+#     K = compute_K(init_params, z_uncertain, Xfz, Xfg)
+#     K = jnp.array(K)
+#     numpyro.sample('z_obs', dist.MultivariateNormal(jnp.zeros(K.shape[0]), covariance_matrix=K), obs=Y_data)
+
+
+def model(Xfz, Xfg, Y_data, prior_mean, prior_cov, init_params):
+    prior_mean_flat = jnp.ravel(prior_mean)
+    prior_cov_flat = jnp.kron(prior_cov, jnp.eye(prior_mean.shape[0]))
+
+    z_flat = numpyro.sample('z_uncertain_flat', dist.MultivariateNormal(prior_mean_flat, covariance_matrix=prior_cov_flat))
+    z_uncertain = z_flat.reshape(prior_mean.shape)
+
+    K = compute_K(init_params, z_uncertain, Xfz, Xfg)
+    K = jnp.array(K)
+    numpyro.sample('z_obs', dist.MultivariateNormal(jnp.zeros(K.shape[0]), covariance_matrix=K), obs=Y_data)
+
+
+def run_mcmc(Xfz, Xfg, Y_data, prior_mean, prior_cov, init_params, num_samples=5, num_warmup=10):
+    rng_key = random.PRNGKey(4)
+    kernel = NUTS(model)
+    mcmc = MCMC(kernel, num_warmup=num_warmup, num_samples=num_samples)
+    mcmc.run(rng_key, Xfz, Xfg, Y_data, prior_mean, prior_cov, init_params)
+    mcmc.print_summary()
+    return mcmc
+
+
+def neg_log_posterior(params_flat, Xfz, Xfg, Y_data, prior_mean, prior_cov, init_params):
+    prior_mean_flat = jnp.ravel(prior_mean)
+    prior_cov_flat = jnp.kron(prior_cov, jnp.eye(prior_mean.shape[0]))
+
+    # 计算负对数先验概率
+    neg_log_prior = -dist.MultivariateNormal(prior_mean_flat, prior_cov_flat).log_prob(params_flat)
+
+    # 恢复形状
+    z_uncertain = params_flat.reshape(prior_mean.shape)
+
+    # 计算负对数似然
+    K = compute_K(init_params, z_uncertain, Xfz, Xfg)
+    neg_log_likelihood = -dist.MultivariateNormal(jnp.zeros(K.shape[0]), K).log_prob(Y_data)
+
+    return neg_log_prior + neg_log_likelihood
 #
 # def prior_function(x, prior_mean, covariance_matrix):
 #     return (x - prior_mean).T @ np.linalg.inv(covariance_matrix) @ (x - prior_mean)

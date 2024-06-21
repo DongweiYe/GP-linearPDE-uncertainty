@@ -1,0 +1,19 @@
+Traceback (most recent call last):
+  File "/local/293691/main.py", line 183, in <module>
+    plt.fill_between(Xu_fixed[:,0].flatten(), y_pred - 1.96 * np.sqrt(np.diag(_)), y_pred + 1.96 * np.sqrt(np.diag(_)),
+NameError: name '_' is not defined
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[20930,1],0]
+  Exit code:    1
+--------------------------------------------------------------------------
+cp: missing destination file operand after '*.png/home/yanw/uncertain/results/figures/0617'
+Try 'cp --help' for more information.
+cp: missing destination file operand after '/home/yanw/uncertain'
+Try 'cp --help' for more information.

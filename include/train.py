@@ -13,11 +13,18 @@ def train_heat_equation_model_2d(heat_params_init, Xuz, Xfz, Xfg, number_Y, Y, n
     ax = fig.add_subplot(111, title="Training")
     plt.ylabel("nlml loss")
 
-    def train_step(heat_params, opt_state):
-        grad = grad_fn(heat_params)
-        updates, opt_state = opt.update(grad, opt_state, params=heat_params)
-        new_heat_params = optax.apply_updates(heat_params, updates)
-        return new_heat_params, opt_state
+    scheduler_exp_decay = optax.exponential_decay(
+        init_value=learning_rate,
+        transition_steps=num_epochs,
+        decay_rate=0.9
+    )
+    final_scheduler = scheduler_exp_decay
+
+    def train_step(inner_params, inner_opt_state):
+        grad = grad_fn(inner_params)
+        updates, inner_opt_state = opt.update(grad, inner_opt_state, params=inner_params)
+        new_params = optax.apply_updates(inner_params, updates)
+        return new_params, inner_opt_state
 
     param_iter = heat_params_init
     loss_fn = partial(heat_equation_nlml_loss_2d, Xuz=Xuz, Xfz=Xfz, Xfg=Xfg, number_Y=number_Y, Y=Y)
@@ -27,17 +34,19 @@ def train_heat_equation_model_2d(heat_params_init, Xuz, Xfz, Xfg, number_Y, Y, n
     optimizer_in_use_name = getattr(optimizer_in_use, '__name__')
     opt = optax.chain(
         optax.clip(1.0),
+        optax.scale_by_schedule(final_scheduler),
         optimizer_in_use(learning_rate=learning_rate)
     )
 
-    num_epochs = num_epochs
     opt_state = opt.init(param_iter)
-
     learning_rates = []
     losses = []
 
     # Train the model for the specified number of epochs
     for epoch in range(num_epochs):
+        current_learning_rate = final_scheduler(epoch)
+        # print(f"Step {epoch}: Learning rate = {current_learning_rate:.6f}")
+        learning_rates.append(current_learning_rate)
         param_iter, opt_state = train_step(param_iter, opt_state)
         loss = loss_fn(param_iter)
         y_loss = loss
@@ -62,8 +71,8 @@ def train_heat_equation_model_2d(heat_params_init, Xuz, Xfz, Xfg, number_Y, Y, n
     optimizer_text = f"{optimizer_in_use_name}"
     epoch_text = f"{num_epochs}"
     current_time = datetime.datetime.now().strftime("%m%d_%H%M%S")
-    plt.savefig(f"train_{optimizer_text}_{lr_text}_{epoch_text}_{current_time}.pdf", format='pdf')
-    print(f"Initial loss: {init_loss}")
-    print(f"Final loss: {loss}")
+    # plt.savefig(f"train_{optimizer_text}_{lr_text}_{epoch_text}_{current_time}.pdf", format='pdf')
+    # print(f"Initial loss: {init_loss}")
+    # print(f"Final loss: {loss}")
     return param_iter, optimizer_text, lr_text, epoch_text
 

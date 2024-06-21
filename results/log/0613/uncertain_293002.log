@@ -1,0 +1,2988 @@
+hpc-node02
+	Adding nVidia Cuda Toolkit 11.8
+	Adding nVidia cuDNN 8.6 (.0.163)
+	Adding nvtop
+Thu Jun 13 10:52:48 2024       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 550.54.15              Driver Version: 550.54.15      CUDA Version: 12.4     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA L40                     On  |   00000000:17:00.0 Off |                    0 |
+| N/A   45C    P0             87W /  300W |     692MiB /  46068MiB |     60%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA L40                     On  |   00000000:65:00.0 Off |                    0 |
+| N/A   42C    P0             87W /  300W |     698MiB /  46068MiB |     72%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   2  NVIDIA L40                     On  |   00000000:CA:00.0 Off |                    0 |
+| N/A   45C    P0             88W /  300W |     692MiB /  46068MiB |     44%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   3  NVIDIA L40                     On  |   00000000:E3:00.0 Off |                    0 |
+| N/A   37C    P8             36W /  300W |       0MiB /  46068MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|    0   N/A  N/A      2587      C   python                                        684MiB |
+|    1   N/A  N/A      6935      C   python                                        690MiB |
+|    2   N/A  N/A      5916      C   python                                        684MiB |
++-----------------------------------------------------------------------------------------+
+Date              = Thu Jun 13 10:52:49 CEST 2024
+Hostname          = hpc-node02
+Working Directory = /local/293002
+Number of nodes used        : 1
+Number of MPI tasks         : 1
+Number of threads           : 16
+Number of MPI tasks per node: 1
+Number of threads per core  : 
+Name of nodes used          : hpc-node02
+Gpu devices                 : 3
+Starting worker: 
+Xu_fixed:  [[0.         0.95006237]
+ [0.         0.94521492]
+ [0.         0.39422269]
+ [0.         0.34238744]
+ [0.         0.53206767]
+ [0.42300447 0.        ]
+ [0.37513696 0.        ]
+ [0.51259359 0.        ]
+ [0.54022212 0.        ]
+ [0.25327558 0.        ]
+ [1.         0.39326737]
+ [1.         0.69942523]
+ [1.         0.78878791]
+ [1.         0.39758325]
+ [1.         0.41364807]]
+sigma_init_yu: 0.4515695771308575	sigma_init_yf: 19.420544096576972	sigma_init: 13.270336779754674
+new_sigma_init_yu: 0.4515695771308575	new_sigma_init_yf: 0.43575435518544325	new_sigma_init: 0.45141991223423605
+Xu_noise: [[ 0.41059853  0.53123053]
+ [-0.07714169  0.97521269]
+ [ 0.90346349  0.80683261]
+ [ 0.31970219  0.54657053]
+ [ 0.48237457  0.05126292]
+ [ 0.58571716  0.589952  ]
+ [-0.12961402  1.05081477]
+ [ 0.44062684  0.63015459]
+ [ 0.81857461  0.65067082]
+ [ 0.63541413  0.23583939]
+ [ 0.18493638  0.47711967]
+ [ 0.36880802  0.46548061]
+ [ 0.65279985  0.72789925]
+ [ 0.5821081   0.64927169]
+ [ 0.8266391   0.58686551]
+ [ 0.71941619  0.17227247]
+ [ 0.18377239  0.37030906]
+ [ 0.78299299  0.5409041 ]
+ [ 0.82762364  0.47759044]
+ [ 0.51260749  0.76699543]
+ [ 0.53461124  0.80314504]
+ [ 0.1629076   0.29510002]
+ [ 0.09344132 -0.01332585]
+ [ 0.48098641  0.35031802]
+ [ 0.98275544  0.50685362]
+ [ 1.02237994  0.31870712]
+ [ 0.31299502  0.98719096]
+ [ 0.27071723  0.53392882]
+ [ 0.43845716  0.74141661]
+ [ 0.95805676  0.17845748]
+ [ 0.90267315  0.63422175]
+ [ 0.33092573  0.07190225]
+ [ 0.86126477  0.62041765]
+ [ 0.7729555   0.98323947]
+ [ 0.50810868  0.3358706 ]
+ [ 0.38163786  0.4494181 ]
+ [ 0.71086875  0.77092727]
+ [ 0.19043494  1.0723895 ]
+ [ 1.01580291  0.89111825]
+ [ 0.11566446  0.00876906]
+ [ 0.75328196  0.81523377]
+ [ 0.38143541  0.54037894]
+ [ 0.78034941  0.28903183]
+ [ 0.44023756  0.08965388]
+ [ 0.35476866  0.5717151 ]
+ [ 0.01660076  0.64341645]
+ [ 0.13338914  0.42012213]
+ [ 0.57003862  0.20161611]
+ [ 0.29289212  0.38030444]
+ [ 0.25849039  0.42203027]
+ [ 0.80774339  0.55607553]
+ [ 0.45276073  0.34955266]
+ [ 0.4616646   0.5882704 ]
+ [ 0.13119738 -0.00333059]
+ [ 0.71988046  0.76970477]
+ [ 0.52497653  0.29136553]
+ [ 0.5410529   0.92120117]
+ [ 0.68452705  0.71012867]
+ [ 0.2337473  -0.07436923]
+ [ 1.08260547  0.84582937]
+ [ 0.1916082   0.11248378]
+ [ 0.39836386  0.75311485]
+ [ 0.28518735  0.93858872]
+ [ 0.38807052  0.18133061]
+ [ 0.63700221  0.10680089]
+ [ 0.07537746  0.87011849]
+ [ 0.05143496  0.92324416]
+ [ 0.59046607  0.85062739]
+ [ 0.95464856  0.20999356]
+ [ 0.39022636  0.41063395]
+ [ 0.74868323  0.46397237]
+ [ 0.10045097  0.11879253]
+ [ 0.89433752  1.03371473]
+ [ 0.53620895  0.57297857]
+ [-0.0188387  -0.13703466]
+ [ 0.61823853  0.60810678]
+ [ 1.03962858  0.0380898 ]
+ [ 0.26880615  0.66730823]
+ [ 0.33815555  0.02208087]
+ [ 0.40122556  0.57272236]
+ [ 0.36783223  0.49271077]
+ [ 0.24794874 -0.11121995]
+ [ 0.37895649  0.52257625]
+ [ 0.39440563  0.15458999]
+ [ 0.01459219  0.53747933]
+ [ 0.15102869 -0.00759608]
+ [ 0.36258896  0.27571989]
+ [ 0.77089642  0.0331587 ]
+ [ 0.04605713  0.440743  ]
+ [ 0.56915226  0.45656813]
+ [ 0.93211078  1.10875662]
+ [ 0.93765995  0.24217491]
+ [ 0.42179041  0.70561071]
+ [ 0.40918934  0.7027752 ]
+ [ 0.56215189  0.20303511]
+ [ 1.07687488  0.96976891]
+ [ 0.17076204  0.06500837]
+ [-0.10814347  0.07249407]
+ [ 0.66982895  0.54841132]
+ [ 1.0255699   0.04996896]]
+Xu_noise shape: (100, 2)
+Step 0: Learning rate = 0.100000
+Step 1: Learning rate = 0.099995
+Step 2: Learning rate = 0.099989
+Step 3: Learning rate = 0.099984
+Step 4: Learning rate = 0.099979
+Step 5: Learning rate = 0.099974
+Step 6: Learning rate = 0.099968
+Step 7: Learning rate = 0.099963
+Step 8: Learning rate = 0.099958
+Step 9: Learning rate = 0.099953
+Step 10: Learning rate = 0.099947
+Step 11: Learning rate = 0.099942
+Step 12: Learning rate = 0.099937
+Step 13: Learning rate = 0.099932
+Step 14: Learning rate = 0.099926
+Step 15: Learning rate = 0.099921
+Step 16: Learning rate = 0.099916
+Step 17: Learning rate = 0.099910
+Step 18: Learning rate = 0.099905
+Step 19: Learning rate = 0.099900
+Step 20: Learning rate = 0.099895
+Step 21: Learning rate = 0.099889
+Step 22: Learning rate = 0.099884
+Step 23: Learning rate = 0.099879
+Step 24: Learning rate = 0.099874
+Step 25: Learning rate = 0.099868
+Step 26: Learning rate = 0.099863
+Step 27: Learning rate = 0.099858
+Step 28: Learning rate = 0.099853
+Step 29: Learning rate = 0.099847
+Step 30: Learning rate = 0.099842
+Step 31: Learning rate = 0.099837
+Step 32: Learning rate = 0.099832
+Step 33: Learning rate = 0.099826
+Step 34: Learning rate = 0.099821
+Step 35: Learning rate = 0.099816
+Step 36: Learning rate = 0.099811
+Step 37: Learning rate = 0.099805
+Step 38: Learning rate = 0.099800
+Step 39: Learning rate = 0.099795
+Step 40: Learning rate = 0.099790
+Step 41: Learning rate = 0.099784
+Step 42: Learning rate = 0.099779
+Step 43: Learning rate = 0.099774
+Step 44: Learning rate = 0.099768
+Step 45: Learning rate = 0.099763
+Step 46: Learning rate = 0.099758
+Step 47: Learning rate = 0.099753
+Step 48: Learning rate = 0.099747
+Step 49: Learning rate = 0.099742
+Step 50: Learning rate = 0.099737
+Step 51: Learning rate = 0.099732
+Step 52: Learning rate = 0.099726
+Step 53: Learning rate = 0.099721
+Step 54: Learning rate = 0.099716
+Step 55: Learning rate = 0.099711
+Step 56: Learning rate = 0.099705
+Step 57: Learning rate = 0.099700
+Step 58: Learning rate = 0.099695
+Step 59: Learning rate = 0.099690
+Step 60: Learning rate = 0.099684
+Step 61: Learning rate = 0.099679
+Step 62: Learning rate = 0.099674
+Step 63: Learning rate = 0.099669
+Step 64: Learning rate = 0.099663
+Step 65: Learning rate = 0.099658
+Step 66: Learning rate = 0.099653
+Step 67: Learning rate = 0.099648
+Step 68: Learning rate = 0.099642
+Step 69: Learning rate = 0.099637
+Step 70: Learning rate = 0.099632
+Step 71: Learning rate = 0.099627
+Step 72: Learning rate = 0.099621
+Step 73: Learning rate = 0.099616
+Step 74: Learning rate = 0.099611
+Step 75: Learning rate = 0.099606
+Step 76: Learning rate = 0.099600
+Step 77: Learning rate = 0.099595
+Step 78: Learning rate = 0.099590
+Step 79: Learning rate = 0.099585
+Step 80: Learning rate = 0.099579
+Step 81: Learning rate = 0.099574
+Step 82: Learning rate = 0.099569
+Step 83: Learning rate = 0.099564
+Step 84: Learning rate = 0.099558
+Step 85: Learning rate = 0.099553
+Step 86: Learning rate = 0.099548
+Step 87: Learning rate = 0.099543
+Step 88: Learning rate = 0.099537
+Step 89: Learning rate = 0.099532
+Step 90: Learning rate = 0.099527
+Step 91: Learning rate = 0.099522
+Step 92: Learning rate = 0.099517
+Step 93: Learning rate = 0.099511
+Step 94: Learning rate = 0.099506
+Step 95: Learning rate = 0.099501
+Step 96: Learning rate = 0.099496
+Step 97: Learning rate = 0.099490
+Step 98: Learning rate = 0.099485
+Step 99: Learning rate = 0.099480
+Step 100: Learning rate = 0.099475
+Step 101: Learning rate = 0.099469
+Step 102: Learning rate = 0.099464
+Step 103: Learning rate = 0.099459
+Step 104: Learning rate = 0.099454
+Step 105: Learning rate = 0.099448
+Step 106: Learning rate = 0.099443
+Step 107: Learning rate = 0.099438
+Step 108: Learning rate = 0.099433
+Step 109: Learning rate = 0.099427
+Step 110: Learning rate = 0.099422
+Step 111: Learning rate = 0.099417
+Step 112: Learning rate = 0.099412
+Step 113: Learning rate = 0.099406
+Step 114: Learning rate = 0.099401
+Step 115: Learning rate = 0.099396
+Step 116: Learning rate = 0.099391
+Step 117: Learning rate = 0.099386
+Step 118: Learning rate = 0.099380
+Step 119: Learning rate = 0.099375
+Step 120: Learning rate = 0.099370
+Step 121: Learning rate = 0.099365
+Step 122: Learning rate = 0.099359
+Step 123: Learning rate = 0.099354
+Step 124: Learning rate = 0.099349
+Step 125: Learning rate = 0.099344
+Step 126: Learning rate = 0.099338
+Step 127: Learning rate = 0.099333
+Step 128: Learning rate = 0.099328
+Step 129: Learning rate = 0.099323
+Step 130: Learning rate = 0.099317
+Step 131: Learning rate = 0.099312
+Step 132: Learning rate = 0.099307
+Step 133: Learning rate = 0.099302
+Step 134: Learning rate = 0.099297
+Step 135: Learning rate = 0.099291
+Step 136: Learning rate = 0.099286
+Step 137: Learning rate = 0.099281
+Step 138: Learning rate = 0.099276
+Step 139: Learning rate = 0.099270
+Step 140: Learning rate = 0.099265
+Step 141: Learning rate = 0.099260
+Step 142: Learning rate = 0.099255
+Step 143: Learning rate = 0.099250
+Step 144: Learning rate = 0.099244
+Step 145: Learning rate = 0.099239
+Step 146: Learning rate = 0.099234
+Step 147: Learning rate = 0.099229
+Step 148: Learning rate = 0.099223
+Step 149: Learning rate = 0.099218
+Step 150: Learning rate = 0.099213
+Step 151: Learning rate = 0.099208
+Step 152: Learning rate = 0.099202
+Step 153: Learning rate = 0.099197
+Step 154: Learning rate = 0.099192
+Step 155: Learning rate = 0.099187
+Step 156: Learning rate = 0.099182
+Step 157: Learning rate = 0.099176
+Step 158: Learning rate = 0.099171
+Step 159: Learning rate = 0.099166
+Step 160: Learning rate = 0.099161
+Step 161: Learning rate = 0.099155
+Step 162: Learning rate = 0.099150
+Step 163: Learning rate = 0.099145
+Step 164: Learning rate = 0.099140
+Step 165: Learning rate = 0.099135
+Step 166: Learning rate = 0.099129
+Step 167: Learning rate = 0.099124
+Step 168: Learning rate = 0.099119
+Step 169: Learning rate = 0.099114
+Step 170: Learning rate = 0.099108
+Step 171: Learning rate = 0.099103
+Step 172: Learning rate = 0.099098
+Step 173: Learning rate = 0.099093
+Step 174: Learning rate = 0.099088
+Step 175: Learning rate = 0.099082
+Step 176: Learning rate = 0.099077
+Step 177: Learning rate = 0.099072
+Step 178: Learning rate = 0.099067
+Step 179: Learning rate = 0.099061
+Step 180: Learning rate = 0.099056
+Step 181: Learning rate = 0.099051
+Step 182: Learning rate = 0.099046
+Step 183: Learning rate = 0.099041
+Step 184: Learning rate = 0.099035
+Step 185: Learning rate = 0.099030
+Step 186: Learning rate = 0.099025
+Step 187: Learning rate = 0.099020
+Step 188: Learning rate = 0.099014
+Step 189: Learning rate = 0.099009
+Step 190: Learning rate = 0.099004
+Step 191: Learning rate = 0.098999
+Step 192: Learning rate = 0.098994
+Step 193: Learning rate = 0.098988
+Step 194: Learning rate = 0.098983
+Step 195: Learning rate = 0.098978
+Step 196: Learning rate = 0.098973
+Step 197: Learning rate = 0.098968
+Step 198: Learning rate = 0.098962
+Step 199: Learning rate = 0.098957
+Step 200: Learning rate = 0.098952
+Step 201: Learning rate = 0.098947
+Step 202: Learning rate = 0.098942
+Step 203: Learning rate = 0.098936
+Step 204: Learning rate = 0.098931
+Step 205: Learning rate = 0.098926
+Step 206: Learning rate = 0.098921
+Step 207: Learning rate = 0.098915
+Step 208: Learning rate = 0.098910
+Step 209: Learning rate = 0.098905
+Step 210: Learning rate = 0.098900
+Step 211: Learning rate = 0.098895
+Step 212: Learning rate = 0.098889
+Step 213: Learning rate = 0.098884
+Step 214: Learning rate = 0.098879
+Step 215: Learning rate = 0.098874
+Step 216: Learning rate = 0.098869
+Step 217: Learning rate = 0.098863
+Step 218: Learning rate = 0.098858
+Step 219: Learning rate = 0.098853
+Step 220: Learning rate = 0.098848
+Step 221: Learning rate = 0.098843
+Step 222: Learning rate = 0.098837
+Step 223: Learning rate = 0.098832
+Step 224: Learning rate = 0.098827
+Step 225: Learning rate = 0.098822
+Step 226: Learning rate = 0.098816
+Step 227: Learning rate = 0.098811
+Step 228: Learning rate = 0.098806
+Step 229: Learning rate = 0.098801
+Step 230: Learning rate = 0.098796
+Step 231: Learning rate = 0.098790
+Step 232: Learning rate = 0.098785
+Step 233: Learning rate = 0.098780
+Step 234: Learning rate = 0.098775
+Step 235: Learning rate = 0.098770
+Step 236: Learning rate = 0.098764
+Step 237: Learning rate = 0.098759
+Step 238: Learning rate = 0.098754
+Step 239: Learning rate = 0.098749
+Step 240: Learning rate = 0.098744
+Step 241: Learning rate = 0.098738
+Step 242: Learning rate = 0.098733
+Step 243: Learning rate = 0.098728
+Step 244: Learning rate = 0.098723
+Step 245: Learning rate = 0.098718
+Step 246: Learning rate = 0.098712
+Step 247: Learning rate = 0.098707
+Step 248: Learning rate = 0.098702
+Step 249: Learning rate = 0.098697
+Step 250: Learning rate = 0.098692
+Step 251: Learning rate = 0.098686
+Step 252: Learning rate = 0.098681
+Step 253: Learning rate = 0.098676
+Step 254: Learning rate = 0.098671
+Step 255: Learning rate = 0.098666
+Step 256: Learning rate = 0.098660
+Step 257: Learning rate = 0.098655
+Step 258: Learning rate = 0.098650
+Step 259: Learning rate = 0.098645
+Step 260: Learning rate = 0.098640
+Step 261: Learning rate = 0.098634
+Step 262: Learning rate = 0.098629
+Step 263: Learning rate = 0.098624
+Step 264: Learning rate = 0.098619
+Step 265: Learning rate = 0.098614
+Step 266: Learning rate = 0.098608
+Step 267: Learning rate = 0.098603
+Step 268: Learning rate = 0.098598
+Step 269: Learning rate = 0.098593
+Step 270: Learning rate = 0.098588
+Step 271: Learning rate = 0.098583
+Step 272: Learning rate = 0.098577
+Step 273: Learning rate = 0.098572
+Step 274: Learning rate = 0.098567
+Step 275: Learning rate = 0.098562
+Step 276: Learning rate = 0.098557
+Step 277: Learning rate = 0.098551
+Step 278: Learning rate = 0.098546
+Step 279: Learning rate = 0.098541
+Step 280: Learning rate = 0.098536
+Step 281: Learning rate = 0.098531
+Step 282: Learning rate = 0.098525
+Step 283: Learning rate = 0.098520
+Step 284: Learning rate = 0.098515
+Step 285: Learning rate = 0.098510
+Step 286: Learning rate = 0.098505
+Step 287: Learning rate = 0.098499
+Step 288: Learning rate = 0.098494
+Step 289: Learning rate = 0.098489
+Step 290: Learning rate = 0.098484
+Step 291: Learning rate = 0.098479
+Step 292: Learning rate = 0.098474
+Step 293: Learning rate = 0.098468
+Step 294: Learning rate = 0.098463
+Step 295: Learning rate = 0.098458
+Step 296: Learning rate = 0.098453
+Step 297: Learning rate = 0.098448
+Step 298: Learning rate = 0.098442
+Step 299: Learning rate = 0.098437
+Step 300: Learning rate = 0.098432
+Step 301: Learning rate = 0.098427
+Step 302: Learning rate = 0.098422
+Step 303: Learning rate = 0.098416
+Step 304: Learning rate = 0.098411
+Step 305: Learning rate = 0.098406
+Step 306: Learning rate = 0.098401
+Step 307: Learning rate = 0.098396
+Step 308: Learning rate = 0.098391
+Step 309: Learning rate = 0.098385
+Step 310: Learning rate = 0.098380
+Step 311: Learning rate = 0.098375
+Step 312: Learning rate = 0.098370
+Step 313: Learning rate = 0.098365
+Step 314: Learning rate = 0.098359
+Step 315: Learning rate = 0.098354
+Step 316: Learning rate = 0.098349
+Step 317: Learning rate = 0.098344
+Step 318: Learning rate = 0.098339
+Step 319: Learning rate = 0.098334
+Step 320: Learning rate = 0.098328
+Step 321: Learning rate = 0.098323
+Step 322: Learning rate = 0.098318
+Step 323: Learning rate = 0.098313
+Step 324: Learning rate = 0.098308
+Step 325: Learning rate = 0.098302
+Step 326: Learning rate = 0.098297
+Step 327: Learning rate = 0.098292
+Step 328: Learning rate = 0.098287
+Step 329: Learning rate = 0.098282
+Step 330: Learning rate = 0.098277
+Step 331: Learning rate = 0.098271
+Step 332: Learning rate = 0.098266
+Step 333: Learning rate = 0.098261
+Step 334: Learning rate = 0.098256
+Step 335: Learning rate = 0.098251
+Step 336: Learning rate = 0.098246
+Step 337: Learning rate = 0.098240
+Step 338: Learning rate = 0.098235
+Step 339: Learning rate = 0.098230
+Step 340: Learning rate = 0.098225
+Step 341: Learning rate = 0.098220
+Step 342: Learning rate = 0.098214
+Step 343: Learning rate = 0.098209
+Step 344: Learning rate = 0.098204
+Step 345: Learning rate = 0.098199
+Step 346: Learning rate = 0.098194
+Step 347: Learning rate = 0.098189
+Step 348: Learning rate = 0.098183
+Step 349: Learning rate = 0.098178
+Step 350: Learning rate = 0.098173
+Step 351: Learning rate = 0.098168
+Step 352: Learning rate = 0.098163
+Step 353: Learning rate = 0.098158
+Step 354: Learning rate = 0.098152
+Step 355: Learning rate = 0.098147
+Step 356: Learning rate = 0.098142
+Step 357: Learning rate = 0.098137
+Step 358: Learning rate = 0.098132
+Step 359: Learning rate = 0.098127
+Step 360: Learning rate = 0.098121
+Step 361: Learning rate = 0.098116
+Step 362: Learning rate = 0.098111
+Step 363: Learning rate = 0.098106
+Step 364: Learning rate = 0.098101
+Step 365: Learning rate = 0.098096
+Step 366: Learning rate = 0.098090
+Step 367: Learning rate = 0.098085
+Step 368: Learning rate = 0.098080
+Step 369: Learning rate = 0.098075
+Step 370: Learning rate = 0.098070
+Step 371: Learning rate = 0.098065
+Step 372: Learning rate = 0.098059
+Step 373: Learning rate = 0.098054
+Step 374: Learning rate = 0.098049
+Step 375: Learning rate = 0.098044
+Step 376: Learning rate = 0.098039
+Step 377: Learning rate = 0.098034
+Step 378: Learning rate = 0.098028
+Step 379: Learning rate = 0.098023
+Step 380: Learning rate = 0.098018
+Step 381: Learning rate = 0.098013
+Step 382: Learning rate = 0.098008
+Step 383: Learning rate = 0.098003
+Step 384: Learning rate = 0.097997
+Step 385: Learning rate = 0.097992
+Step 386: Learning rate = 0.097987
+Step 387: Learning rate = 0.097982
+Step 388: Learning rate = 0.097977
+Step 389: Learning rate = 0.097972
+Step 390: Learning rate = 0.097966
+Step 391: Learning rate = 0.097961
+Step 392: Learning rate = 0.097956
+Step 393: Learning rate = 0.097951
+Step 394: Learning rate = 0.097946
+Step 395: Learning rate = 0.097941
+Step 396: Learning rate = 0.097935
+Step 397: Learning rate = 0.097930
+Step 398: Learning rate = 0.097925
+Step 399: Learning rate = 0.097920
+Step 400: Learning rate = 0.097915
+Step 401: Learning rate = 0.097910
+Step 402: Learning rate = 0.097905
+Step 403: Learning rate = 0.097899
+Step 404: Learning rate = 0.097894
+Step 405: Learning rate = 0.097889
+Step 406: Learning rate = 0.097884
+Step 407: Learning rate = 0.097879
+Step 408: Learning rate = 0.097874
+Step 409: Learning rate = 0.097868
+Step 410: Learning rate = 0.097863
+Step 411: Learning rate = 0.097858
+Step 412: Learning rate = 0.097853
+Step 413: Learning rate = 0.097848
+Step 414: Learning rate = 0.097843
+Step 415: Learning rate = 0.097837
+Step 416: Learning rate = 0.097832
+Step 417: Learning rate = 0.097827
+Step 418: Learning rate = 0.097822
+Step 419: Learning rate = 0.097817
+Step 420: Learning rate = 0.097812
+Step 421: Learning rate = 0.097807
+Step 422: Learning rate = 0.097801
+Step 423: Learning rate = 0.097796
+Step 424: Learning rate = 0.097791
+Step 425: Learning rate = 0.097786
+Step 426: Learning rate = 0.097781
+Step 427: Learning rate = 0.097776
+Step 428: Learning rate = 0.097771
+Step 429: Learning rate = 0.097765
+Step 430: Learning rate = 0.097760
+Step 431: Learning rate = 0.097755
+Step 432: Learning rate = 0.097750
+Step 433: Learning rate = 0.097745
+Step 434: Learning rate = 0.097740
+Step 435: Learning rate = 0.097734
+Step 436: Learning rate = 0.097729
+Step 437: Learning rate = 0.097724
+Step 438: Learning rate = 0.097719
+Step 439: Learning rate = 0.097714
+Step 440: Learning rate = 0.097709
+Step 441: Learning rate = 0.097704
+Step 442: Learning rate = 0.097698
+Step 443: Learning rate = 0.097693
+Step 444: Learning rate = 0.097688
+Step 445: Learning rate = 0.097683
+Step 446: Learning rate = 0.097678
+Step 447: Learning rate = 0.097673
+Step 448: Learning rate = 0.097668
+Step 449: Learning rate = 0.097662
+Step 450: Learning rate = 0.097657
+Step 451: Learning rate = 0.097652
+Step 452: Learning rate = 0.097647
+Step 453: Learning rate = 0.097642
+Step 454: Learning rate = 0.097637
+Step 455: Learning rate = 0.097632
+Step 456: Learning rate = 0.097626
+Step 457: Learning rate = 0.097621
+Step 458: Learning rate = 0.097616
+Step 459: Learning rate = 0.097611
+Step 460: Learning rate = 0.097606
+Step 461: Learning rate = 0.097601
+Step 462: Learning rate = 0.097596
+Step 463: Learning rate = 0.097590
+Step 464: Learning rate = 0.097585
+Step 465: Learning rate = 0.097580
+Step 466: Learning rate = 0.097575
+Step 467: Learning rate = 0.097570
+Step 468: Learning rate = 0.097565
+Step 469: Learning rate = 0.097560
+Step 470: Learning rate = 0.097554
+Step 471: Learning rate = 0.097549
+Step 472: Learning rate = 0.097544
+Step 473: Learning rate = 0.097539
+Step 474: Learning rate = 0.097534
+Step 475: Learning rate = 0.097529
+Step 476: Learning rate = 0.097524
+Step 477: Learning rate = 0.097518
+Step 478: Learning rate = 0.097513
+Step 479: Learning rate = 0.097508
+Step 480: Learning rate = 0.097503
+Step 481: Learning rate = 0.097498
+Step 482: Learning rate = 0.097493
+Step 483: Learning rate = 0.097488
+Step 484: Learning rate = 0.097483
+Step 485: Learning rate = 0.097477
+Step 486: Learning rate = 0.097472
+Step 487: Learning rate = 0.097467
+Step 488: Learning rate = 0.097462
+Step 489: Learning rate = 0.097457
+Step 490: Learning rate = 0.097452
+Step 491: Learning rate = 0.097447
+Step 492: Learning rate = 0.097441
+Step 493: Learning rate = 0.097436
+Step 494: Learning rate = 0.097431
+Step 495: Learning rate = 0.097426
+Step 496: Learning rate = 0.097421
+Step 497: Learning rate = 0.097416
+Step 498: Learning rate = 0.097411
+Step 499: Learning rate = 0.097406
+Step 500: Learning rate = 0.097400
+Step 501: Learning rate = 0.097395
+Step 502: Learning rate = 0.097390
+Step 503: Learning rate = 0.097385
+Step 504: Learning rate = 0.097380
+Step 505: Learning rate = 0.097375
+Step 506: Learning rate = 0.097370
+Step 507: Learning rate = 0.097364
+Step 508: Learning rate = 0.097359
+Step 509: Learning rate = 0.097354
+Step 510: Learning rate = 0.097349
+Step 511: Learning rate = 0.097344
+Step 512: Learning rate = 0.097339
+Step 513: Learning rate = 0.097334
+Step 514: Learning rate = 0.097329
+Step 515: Learning rate = 0.097323
+Step 516: Learning rate = 0.097318
+Step 517: Learning rate = 0.097313
+Step 518: Learning rate = 0.097308
+Step 519: Learning rate = 0.097303
+Step 520: Learning rate = 0.097298
+Step 521: Learning rate = 0.097293
+Step 522: Learning rate = 0.097288
+Step 523: Learning rate = 0.097282
+Step 524: Learning rate = 0.097277
+Step 525: Learning rate = 0.097272
+Step 526: Learning rate = 0.097267
+Step 527: Learning rate = 0.097262
+Step 528: Learning rate = 0.097257
+Step 529: Learning rate = 0.097252
+Step 530: Learning rate = 0.097247
+Step 531: Learning rate = 0.097241
+Step 532: Learning rate = 0.097236
+Step 533: Learning rate = 0.097231
+Step 534: Learning rate = 0.097226
+Step 535: Learning rate = 0.097221
+Step 536: Learning rate = 0.097216
+Step 537: Learning rate = 0.097211
+Step 538: Learning rate = 0.097206
+Step 539: Learning rate = 0.097200
+Step 540: Learning rate = 0.097195
+Step 541: Learning rate = 0.097190
+Step 542: Learning rate = 0.097185
+Step 543: Learning rate = 0.097180
+Step 544: Learning rate = 0.097175
+Step 545: Learning rate = 0.097170
+Step 546: Learning rate = 0.097165
+Step 547: Learning rate = 0.097160
+Step 548: Learning rate = 0.097154
+Step 549: Learning rate = 0.097149
+Step 550: Learning rate = 0.097144
+Step 551: Learning rate = 0.097139
+Step 552: Learning rate = 0.097134
+Step 553: Learning rate = 0.097129
+Step 554: Learning rate = 0.097124
+Step 555: Learning rate = 0.097119
+Step 556: Learning rate = 0.097113
+Step 557: Learning rate = 0.097108
+Step 558: Learning rate = 0.097103
+Step 559: Learning rate = 0.097098
+Step 560: Learning rate = 0.097093
+Step 561: Learning rate = 0.097088
+Step 562: Learning rate = 0.097083
+Step 563: Learning rate = 0.097078
+Step 564: Learning rate = 0.097073
+Step 565: Learning rate = 0.097067
+Step 566: Learning rate = 0.097062
+Step 567: Learning rate = 0.097057
+Step 568: Learning rate = 0.097052
+Step 569: Learning rate = 0.097047
+Step 570: Learning rate = 0.097042
+Step 571: Learning rate = 0.097037
+Step 572: Learning rate = 0.097032
+Step 573: Learning rate = 0.097027
+Step 574: Learning rate = 0.097021
+Step 575: Learning rate = 0.097016
+Step 576: Learning rate = 0.097011
+Step 577: Learning rate = 0.097006
+Step 578: Learning rate = 0.097001
+Step 579: Learning rate = 0.096996
+Step 580: Learning rate = 0.096991
+Step 581: Learning rate = 0.096986
+Step 582: Learning rate = 0.096981
+Step 583: Learning rate = 0.096975
+Step 584: Learning rate = 0.096970
+Step 585: Learning rate = 0.096965
+Step 586: Learning rate = 0.096960
+Step 587: Learning rate = 0.096955
+Step 588: Learning rate = 0.096950
+Step 589: Learning rate = 0.096945
+Step 590: Learning rate = 0.096940
+Step 591: Learning rate = 0.096935
+Step 592: Learning rate = 0.096929
+Step 593: Learning rate = 0.096924
+Step 594: Learning rate = 0.096919
+Step 595: Learning rate = 0.096914
+Step 596: Learning rate = 0.096909
+Step 597: Learning rate = 0.096904
+Step 598: Learning rate = 0.096899
+Step 599: Learning rate = 0.096894
+Step 600: Learning rate = 0.096889
+Step 601: Learning rate = 0.096884
+Step 602: Learning rate = 0.096878
+Step 603: Learning rate = 0.096873
+Step 604: Learning rate = 0.096868
+Step 605: Learning rate = 0.096863
+Step 606: Learning rate = 0.096858
+Step 607: Learning rate = 0.096853
+Step 608: Learning rate = 0.096848
+Step 609: Learning rate = 0.096843
+Step 610: Learning rate = 0.096838
+Step 611: Learning rate = 0.096832
+Step 612: Learning rate = 0.096827
+Step 613: Learning rate = 0.096822
+Step 614: Learning rate = 0.096817
+Step 615: Learning rate = 0.096812
+Step 616: Learning rate = 0.096807
+Step 617: Learning rate = 0.096802
+Step 618: Learning rate = 0.096797
+Step 619: Learning rate = 0.096792
+Step 620: Learning rate = 0.096787
+Step 621: Learning rate = 0.096781
+Step 622: Learning rate = 0.096776
+Step 623: Learning rate = 0.096771
+Step 624: Learning rate = 0.096766
+Step 625: Learning rate = 0.096761
+Step 626: Learning rate = 0.096756
+Step 627: Learning rate = 0.096751
+Step 628: Learning rate = 0.096746
+Step 629: Learning rate = 0.096741
+Step 630: Learning rate = 0.096736
+Step 631: Learning rate = 0.096731
+Step 632: Learning rate = 0.096725
+Step 633: Learning rate = 0.096720
+Step 634: Learning rate = 0.096715
+Step 635: Learning rate = 0.096710
+Step 636: Learning rate = 0.096705
+Step 637: Learning rate = 0.096700
+Step 638: Learning rate = 0.096695
+Step 639: Learning rate = 0.096690
+Step 640: Learning rate = 0.096685
+Step 641: Learning rate = 0.096680
+Step 642: Learning rate = 0.096674
+Step 643: Learning rate = 0.096669
+Step 644: Learning rate = 0.096664
+Step 645: Learning rate = 0.096659
+Step 646: Learning rate = 0.096654
+Step 647: Learning rate = 0.096649
+Step 648: Learning rate = 0.096644
+Step 649: Learning rate = 0.096639
+Step 650: Learning rate = 0.096634
+Step 651: Learning rate = 0.096629
+Step 652: Learning rate = 0.096624
+Step 653: Learning rate = 0.096618
+Step 654: Learning rate = 0.096613
+Step 655: Learning rate = 0.096608
+Step 656: Learning rate = 0.096603
+Step 657: Learning rate = 0.096598
+Step 658: Learning rate = 0.096593
+Step 659: Learning rate = 0.096588
+Step 660: Learning rate = 0.096583
+Step 661: Learning rate = 0.096578
+Step 662: Learning rate = 0.096573
+Step 663: Learning rate = 0.096568
+Step 664: Learning rate = 0.096563
+Step 665: Learning rate = 0.096557
+Step 666: Learning rate = 0.096552
+Step 667: Learning rate = 0.096547
+Step 668: Learning rate = 0.096542
+Step 669: Learning rate = 0.096537
+Step 670: Learning rate = 0.096532
+Step 671: Learning rate = 0.096527
+Step 672: Learning rate = 0.096522
+Step 673: Learning rate = 0.096517
+Step 674: Learning rate = 0.096512
+Step 675: Learning rate = 0.096507
+Step 676: Learning rate = 0.096501
+Step 677: Learning rate = 0.096496
+Step 678: Learning rate = 0.096491
+Step 679: Learning rate = 0.096486
+Step 680: Learning rate = 0.096481
+Step 681: Learning rate = 0.096476
+Step 682: Learning rate = 0.096471
+Step 683: Learning rate = 0.096466
+Step 684: Learning rate = 0.096461
+Step 685: Learning rate = 0.096456
+Step 686: Learning rate = 0.096451
+Step 687: Learning rate = 0.096446
+Step 688: Learning rate = 0.096440
+Step 689: Learning rate = 0.096435
+Step 690: Learning rate = 0.096430
+Step 691: Learning rate = 0.096425
+Step 692: Learning rate = 0.096420
+Step 693: Learning rate = 0.096415
+Step 694: Learning rate = 0.096410
+Step 695: Learning rate = 0.096405
+Step 696: Learning rate = 0.096400
+Step 697: Learning rate = 0.096395
+Step 698: Learning rate = 0.096390
+Step 699: Learning rate = 0.096385
+Step 700: Learning rate = 0.096380
+Step 701: Learning rate = 0.096374
+Step 702: Learning rate = 0.096369
+Step 703: Learning rate = 0.096364
+Step 704: Learning rate = 0.096359
+Step 705: Learning rate = 0.096354
+Step 706: Learning rate = 0.096349
+Step 707: Learning rate = 0.096344
+Step 708: Learning rate = 0.096339
+Step 709: Learning rate = 0.096334
+Step 710: Learning rate = 0.096329
+Step 711: Learning rate = 0.096324
+Step 712: Learning rate = 0.096319
+Step 713: Learning rate = 0.096314
+Step 714: Learning rate = 0.096308
+Step 715: Learning rate = 0.096303
+Step 716: Learning rate = 0.096298
+Step 717: Learning rate = 0.096293
+Step 718: Learning rate = 0.096288
+Step 719: Learning rate = 0.096283
+Step 720: Learning rate = 0.096278
+Step 721: Learning rate = 0.096273
+Step 722: Learning rate = 0.096268
+Step 723: Learning rate = 0.096263
+Step 724: Learning rate = 0.096258
+Step 725: Learning rate = 0.096253
+Step 726: Learning rate = 0.096248
+Step 727: Learning rate = 0.096243
+Step 728: Learning rate = 0.096237
+Step 729: Learning rate = 0.096232
+Step 730: Learning rate = 0.096227
+Step 731: Learning rate = 0.096222
+Step 732: Learning rate = 0.096217
+Step 733: Learning rate = 0.096212
+Step 734: Learning rate = 0.096207
+Step 735: Learning rate = 0.096202
+Step 736: Learning rate = 0.096197
+Step 737: Learning rate = 0.096192
+Step 738: Learning rate = 0.096187
+Step 739: Learning rate = 0.096182
+Step 740: Learning rate = 0.096177
+Step 741: Learning rate = 0.096172
+Step 742: Learning rate = 0.096167
+Step 743: Learning rate = 0.096161
+Step 744: Learning rate = 0.096156
+Step 745: Learning rate = 0.096151
+Step 746: Learning rate = 0.096146
+Step 747: Learning rate = 0.096141
+Step 748: Learning rate = 0.096136
+Step 749: Learning rate = 0.096131
+Step 750: Learning rate = 0.096126
+Step 751: Learning rate = 0.096121
+Step 752: Learning rate = 0.096116
+Step 753: Learning rate = 0.096111
+Step 754: Learning rate = 0.096106
+Step 755: Learning rate = 0.096101
+Step 756: Learning rate = 0.096096
+Step 757: Learning rate = 0.096091
+Step 758: Learning rate = 0.096086
+Step 759: Learning rate = 0.096080
+Step 760: Learning rate = 0.096075
+Step 761: Learning rate = 0.096070
+Step 762: Learning rate = 0.096065
+Step 763: Learning rate = 0.096060
+Step 764: Learning rate = 0.096055
+Step 765: Learning rate = 0.096050
+Step 766: Learning rate = 0.096045
+Step 767: Learning rate = 0.096040
+Step 768: Learning rate = 0.096035
+Step 769: Learning rate = 0.096030
+Step 770: Learning rate = 0.096025
+Step 771: Learning rate = 0.096020
+Step 772: Learning rate = 0.096015
+Step 773: Learning rate = 0.096010
+Step 774: Learning rate = 0.096005
+Step 775: Learning rate = 0.096000
+Step 776: Learning rate = 0.095994
+Step 777: Learning rate = 0.095989
+Step 778: Learning rate = 0.095984
+Step 779: Learning rate = 0.095979
+Step 780: Learning rate = 0.095974
+Step 781: Learning rate = 0.095969
+Step 782: Learning rate = 0.095964
+Step 783: Learning rate = 0.095959
+Step 784: Learning rate = 0.095954
+Step 785: Learning rate = 0.095949
+Step 786: Learning rate = 0.095944
+Step 787: Learning rate = 0.095939
+Step 788: Learning rate = 0.095934
+Step 789: Learning rate = 0.095929
+Step 790: Learning rate = 0.095924
+Step 791: Learning rate = 0.095919
+Step 792: Learning rate = 0.095914
+Step 793: Learning rate = 0.095909
+Step 794: Learning rate = 0.095903
+Step 795: Learning rate = 0.095898
+Step 796: Learning rate = 0.095893
+Step 797: Learning rate = 0.095888
+Step 798: Learning rate = 0.095883
+Step 799: Learning rate = 0.095878
+Step 800: Learning rate = 0.095873
+Step 801: Learning rate = 0.095868
+Step 802: Learning rate = 0.095863
+Step 803: Learning rate = 0.095858
+Step 804: Learning rate = 0.095853
+Step 805: Learning rate = 0.095848
+Step 806: Learning rate = 0.095843
+Step 807: Learning rate = 0.095838
+Step 808: Learning rate = 0.095833
+Step 809: Learning rate = 0.095828
+Step 810: Learning rate = 0.095823
+Step 811: Learning rate = 0.095818
+Step 812: Learning rate = 0.095813
+Step 813: Learning rate = 0.095808
+Step 814: Learning rate = 0.095802
+Step 815: Learning rate = 0.095797
+Step 816: Learning rate = 0.095792
+Step 817: Learning rate = 0.095787
+Step 818: Learning rate = 0.095782
+Step 819: Learning rate = 0.095777
+Step 820: Learning rate = 0.095772
+Step 821: Learning rate = 0.095767
+Step 822: Learning rate = 0.095762
+Step 823: Learning rate = 0.095757
+Step 824: Learning rate = 0.095752
+Step 825: Learning rate = 0.095747
+Step 826: Learning rate = 0.095742
+Step 827: Learning rate = 0.095737
+Step 828: Learning rate = 0.095732
+Step 829: Learning rate = 0.095727
+Step 830: Learning rate = 0.095722
+Step 831: Learning rate = 0.095717
+Step 832: Learning rate = 0.095712
+Step 833: Learning rate = 0.095707
+Step 834: Learning rate = 0.095702
+Step 835: Learning rate = 0.095697
+Step 836: Learning rate = 0.095692
+Step 837: Learning rate = 0.095686
+Step 838: Learning rate = 0.095681
+Step 839: Learning rate = 0.095676
+Step 840: Learning rate = 0.095671
+Step 841: Learning rate = 0.095666
+Step 842: Learning rate = 0.095661
+Step 843: Learning rate = 0.095656
+Step 844: Learning rate = 0.095651
+Step 845: Learning rate = 0.095646
+Step 846: Learning rate = 0.095641
+Step 847: Learning rate = 0.095636
+Step 848: Learning rate = 0.095631
+Step 849: Learning rate = 0.095626
+Step 850: Learning rate = 0.095621
+Step 851: Learning rate = 0.095616
+Step 852: Learning rate = 0.095611
+Step 853: Learning rate = 0.095606
+Step 854: Learning rate = 0.095601
+Step 855: Learning rate = 0.095596
+Step 856: Learning rate = 0.095591
+Step 857: Learning rate = 0.095586
+Step 858: Learning rate = 0.095581
+Step 859: Learning rate = 0.095576
+Step 860: Learning rate = 0.095571
+Step 861: Learning rate = 0.095566
+Step 862: Learning rate = 0.095561
+Step 863: Learning rate = 0.095555
+Step 864: Learning rate = 0.095550
+Step 865: Learning rate = 0.095545
+Step 866: Learning rate = 0.095540
+Step 867: Learning rate = 0.095535
+Step 868: Learning rate = 0.095530
+Step 869: Learning rate = 0.095525
+Step 870: Learning rate = 0.095520
+Step 871: Learning rate = 0.095515
+Step 872: Learning rate = 0.095510
+Step 873: Learning rate = 0.095505
+Step 874: Learning rate = 0.095500
+Step 875: Learning rate = 0.095495
+Step 876: Learning rate = 0.095490
+Step 877: Learning rate = 0.095485
+Step 878: Learning rate = 0.095480
+Step 879: Learning rate = 0.095475
+Step 880: Learning rate = 0.095470
+Step 881: Learning rate = 0.095465
+Step 882: Learning rate = 0.095460
+Step 883: Learning rate = 0.095455
+Step 884: Learning rate = 0.095450
+Step 885: Learning rate = 0.095445
+Step 886: Learning rate = 0.095440
+Step 887: Learning rate = 0.095435
+Step 888: Learning rate = 0.095430
+Step 889: Learning rate = 0.095425
+Step 890: Learning rate = 0.095420
+Step 891: Learning rate = 0.095415
+Step 892: Learning rate = 0.095410
+Step 893: Learning rate = 0.095405
+Step 894: Learning rate = 0.095400
+Step 895: Learning rate = 0.095395
+Step 896: Learning rate = 0.095390
+Step 897: Learning rate = 0.095384
+Step 898: Learning rate = 0.095379
+Step 899: Learning rate = 0.095374
+Step 900: Learning rate = 0.095369
+Step 901: Learning rate = 0.095364
+Step 902: Learning rate = 0.095359
+Step 903: Learning rate = 0.095354
+Step 904: Learning rate = 0.095349
+Step 905: Learning rate = 0.095344
+Step 906: Learning rate = 0.095339
+Step 907: Learning rate = 0.095334
+Step 908: Learning rate = 0.095329
+Step 909: Learning rate = 0.095324
+Step 910: Learning rate = 0.095319
+Step 911: Learning rate = 0.095314
+Step 912: Learning rate = 0.095309
+Step 913: Learning rate = 0.095304
+Step 914: Learning rate = 0.095299
+Step 915: Learning rate = 0.095294
+Step 916: Learning rate = 0.095289
+Step 917: Learning rate = 0.095284
+Step 918: Learning rate = 0.095279
+Step 919: Learning rate = 0.095274
+Step 920: Learning rate = 0.095269
+Step 921: Learning rate = 0.095264
+Step 922: Learning rate = 0.095259
+Step 923: Learning rate = 0.095254
+Step 924: Learning rate = 0.095249
+Step 925: Learning rate = 0.095244
+Step 926: Learning rate = 0.095239
+Step 927: Learning rate = 0.095234
+Step 928: Learning rate = 0.095229
+Step 929: Learning rate = 0.095224
+Step 930: Learning rate = 0.095219
+Step 931: Learning rate = 0.095214
+Step 932: Learning rate = 0.095209
+Step 933: Learning rate = 0.095204
+Step 934: Learning rate = 0.095199
+Step 935: Learning rate = 0.095194
+Step 936: Learning rate = 0.095189
+Step 937: Learning rate = 0.095184
+Step 938: Learning rate = 0.095179
+Step 939: Learning rate = 0.095174
+Step 940: Learning rate = 0.095169
+Step 941: Learning rate = 0.095164
+Step 942: Learning rate = 0.095159
+Step 943: Learning rate = 0.095154
+Step 944: Learning rate = 0.095149
+Step 945: Learning rate = 0.095144
+Step 946: Learning rate = 0.095139
+Step 947: Learning rate = 0.095134
+Step 948: Learning rate = 0.095129
+Step 949: Learning rate = 0.095124
+Step 950: Learning rate = 0.095119
+Step 951: Learning rate = 0.095114
+Step 952: Learning rate = 0.095109
+Step 953: Learning rate = 0.095104
+Step 954: Learning rate = 0.095099
+Step 955: Learning rate = 0.095093
+Step 956: Learning rate = 0.095088
+Step 957: Learning rate = 0.095083
+Step 958: Learning rate = 0.095078
+Step 959: Learning rate = 0.095073
+Step 960: Learning rate = 0.095068
+Step 961: Learning rate = 0.095063
+Step 962: Learning rate = 0.095058
+Step 963: Learning rate = 0.095053
+Step 964: Learning rate = 0.095048
+Step 965: Learning rate = 0.095043
+Step 966: Learning rate = 0.095038
+Step 967: Learning rate = 0.095033
+Step 968: Learning rate = 0.095028
+Step 969: Learning rate = 0.095023
+Step 970: Learning rate = 0.095018
+Step 971: Learning rate = 0.095013
+Step 972: Learning rate = 0.095008
+Step 973: Learning rate = 0.095003
+Step 974: Learning rate = 0.094998
+Step 975: Learning rate = 0.094993
+Step 976: Learning rate = 0.094988
+Step 977: Learning rate = 0.094983
+Step 978: Learning rate = 0.094978
+Step 979: Learning rate = 0.094973
+Step 980: Learning rate = 0.094968
+Step 981: Learning rate = 0.094963
+Step 982: Learning rate = 0.094958
+Step 983: Learning rate = 0.094953
+Step 984: Learning rate = 0.094948
+Step 985: Learning rate = 0.094943
+Step 986: Learning rate = 0.094938
+Step 987: Learning rate = 0.094933
+Step 988: Learning rate = 0.094928
+Step 989: Learning rate = 0.094923
+Step 990: Learning rate = 0.094918
+Step 991: Learning rate = 0.094913
+Step 992: Learning rate = 0.094908
+Step 993: Learning rate = 0.094903
+Step 994: Learning rate = 0.094898
+Step 995: Learning rate = 0.094893
+Step 996: Learning rate = 0.094888
+Step 997: Learning rate = 0.094883
+Step 998: Learning rate = 0.094878
+Step 999: Learning rate = 0.094873
+Step 1000: Learning rate = 0.094868
+Step 1001: Learning rate = 0.094863
+Step 1002: Learning rate = 0.094858
+Step 1003: Learning rate = 0.094853
+Step 1004: Learning rate = 0.094848
+Step 1005: Learning rate = 0.094843
+Step 1006: Learning rate = 0.094838
+Step 1007: Learning rate = 0.094833
+Step 1008: Learning rate = 0.094828
+Step 1009: Learning rate = 0.094823
+Step 1010: Learning rate = 0.094818
+Step 1011: Learning rate = 0.094813
+Step 1012: Learning rate = 0.094808
+Step 1013: Learning rate = 0.094803
+Step 1014: Learning rate = 0.094798
+Step 1015: Learning rate = 0.094793
+Step 1016: Learning rate = 0.094788
+Step 1017: Learning rate = 0.094783
+Step 1018: Learning rate = 0.094778
+Step 1019: Learning rate = 0.094773
+Step 1020: Learning rate = 0.094768
+Step 1021: Learning rate = 0.094763
+Step 1022: Learning rate = 0.094758
+Step 1023: Learning rate = 0.094753
+Step 1024: Learning rate = 0.094748
+Step 1025: Learning rate = 0.094743
+Step 1026: Learning rate = 0.094738
+Step 1027: Learning rate = 0.094733
+Step 1028: Learning rate = 0.094728
+Step 1029: Learning rate = 0.094724
+Step 1030: Learning rate = 0.094719
+Step 1031: Learning rate = 0.094714
+Step 1032: Learning rate = 0.094709
+Step 1033: Learning rate = 0.094704
+Step 1034: Learning rate = 0.094699
+Step 1035: Learning rate = 0.094694
+Step 1036: Learning rate = 0.094689
+Step 1037: Learning rate = 0.094684
+Step 1038: Learning rate = 0.094679
+Step 1039: Learning rate = 0.094674
+Step 1040: Learning rate = 0.094669
+Step 1041: Learning rate = 0.094664
+Step 1042: Learning rate = 0.094659
+Step 1043: Learning rate = 0.094654
+Step 1044: Learning rate = 0.094649
+Step 1045: Learning rate = 0.094644
+Step 1046: Learning rate = 0.094639
+Step 1047: Learning rate = 0.094634
+Step 1048: Learning rate = 0.094629
+Step 1049: Learning rate = 0.094624
+Step 1050: Learning rate = 0.094619
+Step 1051: Learning rate = 0.094614
+Step 1052: Learning rate = 0.094609
+Step 1053: Learning rate = 0.094604
+Step 1054: Learning rate = 0.094599
+Step 1055: Learning rate = 0.094594
+Step 1056: Learning rate = 0.094589
+Step 1057: Learning rate = 0.094584
+Step 1058: Learning rate = 0.094579
+Step 1059: Learning rate = 0.094574
+Step 1060: Learning rate = 0.094569
+Step 1061: Learning rate = 0.094564
+Step 1062: Learning rate = 0.094559
+Step 1063: Learning rate = 0.094554
+Step 1064: Learning rate = 0.094549
+Step 1065: Learning rate = 0.094544
+Step 1066: Learning rate = 0.094539
+Step 1067: Learning rate = 0.094534
+Step 1068: Learning rate = 0.094529
+Step 1069: Learning rate = 0.094524
+Step 1070: Learning rate = 0.094519
+Step 1071: Learning rate = 0.094514
+Step 1072: Learning rate = 0.094509
+Step 1073: Learning rate = 0.094504
+Step 1074: Learning rate = 0.094499
+Step 1075: Learning rate = 0.094494
+Step 1076: Learning rate = 0.094489
+Step 1077: Learning rate = 0.094484
+Step 1078: Learning rate = 0.094479
+Step 1079: Learning rate = 0.094474
+Step 1080: Learning rate = 0.094469
+Step 1081: Learning rate = 0.094464
+Step 1082: Learning rate = 0.094459
+Step 1083: Learning rate = 0.094454
+Step 1084: Learning rate = 0.094449
+Step 1085: Learning rate = 0.094444
+Step 1086: Learning rate = 0.094440
+Step 1087: Learning rate = 0.094435
+Step 1088: Learning rate = 0.094430
+Step 1089: Learning rate = 0.094425
+Step 1090: Learning rate = 0.094420
+Step 1091: Learning rate = 0.094415
+Step 1092: Learning rate = 0.094410
+Step 1093: Learning rate = 0.094405
+Step 1094: Learning rate = 0.094400
+Step 1095: Learning rate = 0.094395
+Step 1096: Learning rate = 0.094390
+Step 1097: Learning rate = 0.094385
+Step 1098: Learning rate = 0.094380
+Step 1099: Learning rate = 0.094375
+Step 1100: Learning rate = 0.094370
+Step 1101: Learning rate = 0.094365
+Step 1102: Learning rate = 0.094360
+Step 1103: Learning rate = 0.094355
+Step 1104: Learning rate = 0.094350
+Step 1105: Learning rate = 0.094345
+Step 1106: Learning rate = 0.094340
+Step 1107: Learning rate = 0.094335
+Step 1108: Learning rate = 0.094330
+Step 1109: Learning rate = 0.094325
+Step 1110: Learning rate = 0.094320
+Step 1111: Learning rate = 0.094315
+Step 1112: Learning rate = 0.094310
+Step 1113: Learning rate = 0.094305
+Step 1114: Learning rate = 0.094300
+Step 1115: Learning rate = 0.094295
+Step 1116: Learning rate = 0.094290
+Step 1117: Learning rate = 0.094285
+Step 1118: Learning rate = 0.094280
+Step 1119: Learning rate = 0.094275
+Step 1120: Learning rate = 0.094270
+Step 1121: Learning rate = 0.094266
+Step 1122: Learning rate = 0.094261
+Step 1123: Learning rate = 0.094256
+Step 1124: Learning rate = 0.094251
+Step 1125: Learning rate = 0.094246
+Step 1126: Learning rate = 0.094241
+Step 1127: Learning rate = 0.094236
+Step 1128: Learning rate = 0.094231
+Step 1129: Learning rate = 0.094226
+Step 1130: Learning rate = 0.094221
+Step 1131: Learning rate = 0.094216
+Step 1132: Learning rate = 0.094211
+Step 1133: Learning rate = 0.094206
+Step 1134: Learning rate = 0.094201
+Step 1135: Learning rate = 0.094196
+Step 1136: Learning rate = 0.094191
+Step 1137: Learning rate = 0.094186
+Step 1138: Learning rate = 0.094181
+Step 1139: Learning rate = 0.094176
+Step 1140: Learning rate = 0.094171
+Step 1141: Learning rate = 0.094166
+Step 1142: Learning rate = 0.094161
+Step 1143: Learning rate = 0.094156
+Step 1144: Learning rate = 0.094151
+Step 1145: Learning rate = 0.094146
+Step 1146: Learning rate = 0.094141
+Step 1147: Learning rate = 0.094137
+Step 1148: Learning rate = 0.094132
+Step 1149: Learning rate = 0.094127
+Step 1150: Learning rate = 0.094122
+Step 1151: Learning rate = 0.094117
+Step 1152: Learning rate = 0.094112
+Step 1153: Learning rate = 0.094107
+Step 1154: Learning rate = 0.094102
+Step 1155: Learning rate = 0.094097
+Step 1156: Learning rate = 0.094092
+Step 1157: Learning rate = 0.094087
+Step 1158: Learning rate = 0.094082
+Step 1159: Learning rate = 0.094077
+Step 1160: Learning rate = 0.094072
+Step 1161: Learning rate = 0.094067
+Step 1162: Learning rate = 0.094062
+Step 1163: Learning rate = 0.094057
+Step 1164: Learning rate = 0.094052
+Step 1165: Learning rate = 0.094047
+Step 1166: Learning rate = 0.094042
+Step 1167: Learning rate = 0.094037
+Step 1168: Learning rate = 0.094032
+Step 1169: Learning rate = 0.094027
+Step 1170: Learning rate = 0.094023
+Step 1171: Learning rate = 0.094018
+Step 1172: Learning rate = 0.094013
+Step 1173: Learning rate = 0.094008
+Step 1174: Learning rate = 0.094003
+Step 1175: Learning rate = 0.093998
+Step 1176: Learning rate = 0.093993
+Step 1177: Learning rate = 0.093988
+Step 1178: Learning rate = 0.093983
+Step 1179: Learning rate = 0.093978
+Step 1180: Learning rate = 0.093973
+Step 1181: Learning rate = 0.093968
+Step 1182: Learning rate = 0.093963
+Step 1183: Learning rate = 0.093958
+Step 1184: Learning rate = 0.093953
+Step 1185: Learning rate = 0.093948
+Step 1186: Learning rate = 0.093943
+Step 1187: Learning rate = 0.093938
+Step 1188: Learning rate = 0.093933
+Step 1189: Learning rate = 0.093928
+Step 1190: Learning rate = 0.093924
+Step 1191: Learning rate = 0.093919
+Step 1192: Learning rate = 0.093914
+Step 1193: Learning rate = 0.093909
+Step 1194: Learning rate = 0.093904
+Step 1195: Learning rate = 0.093899
+Step 1196: Learning rate = 0.093894
+Step 1197: Learning rate = 0.093889
+Step 1198: Learning rate = 0.093884
+Step 1199: Learning rate = 0.093879
+Step 1200: Learning rate = 0.093874
+Step 1201: Learning rate = 0.093869
+Step 1202: Learning rate = 0.093864
+Step 1203: Learning rate = 0.093859
+Step 1204: Learning rate = 0.093854
+Step 1205: Learning rate = 0.093849
+Step 1206: Learning rate = 0.093844
+Step 1207: Learning rate = 0.093839
+Step 1208: Learning rate = 0.093834
+Step 1209: Learning rate = 0.093830
+Step 1210: Learning rate = 0.093825
+Step 1211: Learning rate = 0.093820
+Step 1212: Learning rate = 0.093815
+Step 1213: Learning rate = 0.093810
+Step 1214: Learning rate = 0.093805
+Step 1215: Learning rate = 0.093800
+Step 1216: Learning rate = 0.093795
+Step 1217: Learning rate = 0.093790
+Step 1218: Learning rate = 0.093785
+Step 1219: Learning rate = 0.093780
+Step 1220: Learning rate = 0.093775
+Step 1221: Learning rate = 0.093770
+Step 1222: Learning rate = 0.093765
+Step 1223: Learning rate = 0.093760
+Step 1224: Learning rate = 0.093755
+Step 1225: Learning rate = 0.093750
+Step 1226: Learning rate = 0.093746
+Step 1227: Learning rate = 0.093741
+Step 1228: Learning rate = 0.093736
+Step 1229: Learning rate = 0.093731
+Step 1230: Learning rate = 0.093726
+Step 1231: Learning rate = 0.093721
+Step 1232: Learning rate = 0.093716
+Step 1233: Learning rate = 0.093711
+Step 1234: Learning rate = 0.093706
+Step 1235: Learning rate = 0.093701
+Step 1236: Learning rate = 0.093696
+Step 1237: Learning rate = 0.093691
+Step 1238: Learning rate = 0.093686
+Step 1239: Learning rate = 0.093681
+Step 1240: Learning rate = 0.093676
+Step 1241: Learning rate = 0.093672
+Step 1242: Learning rate = 0.093667
+Step 1243: Learning rate = 0.093662
+Step 1244: Learning rate = 0.093657
+Step 1245: Learning rate = 0.093652
+Step 1246: Learning rate = 0.093647
+Step 1247: Learning rate = 0.093642
+Step 1248: Learning rate = 0.093637
+Step 1249: Learning rate = 0.093632
+Step 1250: Learning rate = 0.093627
+Step 1251: Learning rate = 0.093622
+Step 1252: Learning rate = 0.093617
+Step 1253: Learning rate = 0.093612
+Step 1254: Learning rate = 0.093607
+Step 1255: Learning rate = 0.093602
+Step 1256: Learning rate = 0.093598
+Step 1257: Learning rate = 0.093593
+Step 1258: Learning rate = 0.093588
+Step 1259: Learning rate = 0.093583
+Step 1260: Learning rate = 0.093578
+Step 1261: Learning rate = 0.093573
+Step 1262: Learning rate = 0.093568
+Step 1263: Learning rate = 0.093563
+Step 1264: Learning rate = 0.093558
+Step 1265: Learning rate = 0.093553
+Step 1266: Learning rate = 0.093548
+Step 1267: Learning rate = 0.093543
+Step 1268: Learning rate = 0.093538
+Step 1269: Learning rate = 0.093533
+Step 1270: Learning rate = 0.093529
+Step 1271: Learning rate = 0.093524
+Step 1272: Learning rate = 0.093519
+Step 1273: Learning rate = 0.093514
+Step 1274: Learning rate = 0.093509
+Step 1275: Learning rate = 0.093504
+Step 1276: Learning rate = 0.093499
+Step 1277: Learning rate = 0.093494
+Step 1278: Learning rate = 0.093489
+Step 1279: Learning rate = 0.093484
+Step 1280: Learning rate = 0.093479
+Step 1281: Learning rate = 0.093474
+Step 1282: Learning rate = 0.093469
+Step 1283: Learning rate = 0.093464
+Step 1284: Learning rate = 0.093460
+Step 1285: Learning rate = 0.093455
+Step 1286: Learning rate = 0.093450
+Step 1287: Learning rate = 0.093445
+Step 1288: Learning rate = 0.093440
+Step 1289: Learning rate = 0.093435
+Step 1290: Learning rate = 0.093430
+Step 1291: Learning rate = 0.093425
+Step 1292: Learning rate = 0.093420
+Step 1293: Learning rate = 0.093415
+Step 1294: Learning rate = 0.093410
+Step 1295: Learning rate = 0.093405
+Step 1296: Learning rate = 0.093400
+Step 1297: Learning rate = 0.093396
+Step 1298: Learning rate = 0.093391
+Step 1299: Learning rate = 0.093386
+Step 1300: Learning rate = 0.093381
+Step 1301: Learning rate = 0.093376
+Step 1302: Learning rate = 0.093371
+Step 1303: Learning rate = 0.093366
+Step 1304: Learning rate = 0.093361
+Step 1305: Learning rate = 0.093356
+Step 1306: Learning rate = 0.093351
+Step 1307: Learning rate = 0.093346
+Step 1308: Learning rate = 0.093341
+Step 1309: Learning rate = 0.093337
+Step 1310: Learning rate = 0.093332
+Step 1311: Learning rate = 0.093327
+Step 1312: Learning rate = 0.093322
+Step 1313: Learning rate = 0.093317
+Step 1314: Learning rate = 0.093312
+Step 1315: Learning rate = 0.093307
+Step 1316: Learning rate = 0.093302
+Step 1317: Learning rate = 0.093297
+Step 1318: Learning rate = 0.093292
+Step 1319: Learning rate = 0.093287
+Step 1320: Learning rate = 0.093282
+Step 1321: Learning rate = 0.093278
+Step 1322: Learning rate = 0.093273
+Step 1323: Learning rate = 0.093268
+Step 1324: Learning rate = 0.093263
+Step 1325: Learning rate = 0.093258
+Step 1326: Learning rate = 0.093253
+Step 1327: Learning rate = 0.093248
+Step 1328: Learning rate = 0.093243
+Step 1329: Learning rate = 0.093238
+Step 1330: Learning rate = 0.093233
+Step 1331: Learning rate = 0.093228
+Step 1332: Learning rate = 0.093224
+Step 1333: Learning rate = 0.093219
+Step 1334: Learning rate = 0.093214
+Step 1335: Learning rate = 0.093209
+Step 1336: Learning rate = 0.093204
+Step 1337: Learning rate = 0.093199
+Step 1338: Learning rate = 0.093194
+Step 1339: Learning rate = 0.093189
+Step 1340: Learning rate = 0.093184
+Step 1341: Learning rate = 0.093179
+Step 1342: Learning rate = 0.093174
+Step 1343: Learning rate = 0.093170
+Step 1344: Learning rate = 0.093165
+Step 1345: Learning rate = 0.093160
+Step 1346: Learning rate = 0.093155
+Step 1347: Learning rate = 0.093150
+Step 1348: Learning rate = 0.093145
+Step 1349: Learning rate = 0.093140
+Step 1350: Learning rate = 0.093135
+Step 1351: Learning rate = 0.093130
+Step 1352: Learning rate = 0.093125
+Step 1353: Learning rate = 0.093120
+Step 1354: Learning rate = 0.093116
+Step 1355: Learning rate = 0.093111
+Step 1356: Learning rate = 0.093106
+Step 1357: Learning rate = 0.093101
+Step 1358: Learning rate = 0.093096
+Step 1359: Learning rate = 0.093091
+Step 1360: Learning rate = 0.093086
+Step 1361: Learning rate = 0.093081
+Step 1362: Learning rate = 0.093076
+Step 1363: Learning rate = 0.093071
+Step 1364: Learning rate = 0.093067
+Step 1365: Learning rate = 0.093062
+Step 1366: Learning rate = 0.093057
+Step 1367: Learning rate = 0.093052
+Step 1368: Learning rate = 0.093047
+Step 1369: Learning rate = 0.093042
+Step 1370: Learning rate = 0.093037
+Step 1371: Learning rate = 0.093032
+Step 1372: Learning rate = 0.093027
+Step 1373: Learning rate = 0.093022
+Step 1374: Learning rate = 0.093017
+Step 1375: Learning rate = 0.093013
+Step 1376: Learning rate = 0.093008
+Step 1377: Learning rate = 0.093003
+Step 1378: Learning rate = 0.092998
+Step 1379: Learning rate = 0.092993
+Step 1380: Learning rate = 0.092988
+Step 1381: Learning rate = 0.092983
+Step 1382: Learning rate = 0.092978
+Step 1383: Learning rate = 0.092973
+Step 1384: Learning rate = 0.092968
+Step 1385: Learning rate = 0.092964
+Step 1386: Learning rate = 0.092959
+Step 1387: Learning rate = 0.092954
+Step 1388: Learning rate = 0.092949
+Step 1389: Learning rate = 0.092944
+Step 1390: Learning rate = 0.092939
+Step 1391: Learning rate = 0.092934
+Step 1392: Learning rate = 0.092929
+Step 1393: Learning rate = 0.092924
+Step 1394: Learning rate = 0.092920
+Step 1395: Learning rate = 0.092915
+Step 1396: Learning rate = 0.092910
+Step 1397: Learning rate = 0.092905
+Step 1398: Learning rate = 0.092900
+Step 1399: Learning rate = 0.092895
+Step 1400: Learning rate = 0.092890
+Step 1401: Learning rate = 0.092885
+Step 1402: Learning rate = 0.092880
+Step 1403: Learning rate = 0.092875
+Step 1404: Learning rate = 0.092871
+Step 1405: Learning rate = 0.092866
+Step 1406: Learning rate = 0.092861
+Step 1407: Learning rate = 0.092856
+Step 1408: Learning rate = 0.092851
+Step 1409: Learning rate = 0.092846
+Step 1410: Learning rate = 0.092841
+Step 1411: Learning rate = 0.092836
+Step 1412: Learning rate = 0.092831
+Step 1413: Learning rate = 0.092827
+Step 1414: Learning rate = 0.092822
+Step 1415: Learning rate = 0.092817
+Step 1416: Learning rate = 0.092812
+Step 1417: Learning rate = 0.092807
+Step 1418: Learning rate = 0.092802
+Step 1419: Learning rate = 0.092797
+Step 1420: Learning rate = 0.092792
+Step 1421: Learning rate = 0.092787
+Step 1422: Learning rate = 0.092783
+Step 1423: Learning rate = 0.092778
+Step 1424: Learning rate = 0.092773
+Step 1425: Learning rate = 0.092768
+Step 1426: Learning rate = 0.092763
+Step 1427: Learning rate = 0.092758
+Step 1428: Learning rate = 0.092753
+Step 1429: Learning rate = 0.092748
+Step 1430: Learning rate = 0.092743
+Step 1431: Learning rate = 0.092739
+Step 1432: Learning rate = 0.092734
+Step 1433: Learning rate = 0.092729
+Step 1434: Learning rate = 0.092724
+Step 1435: Learning rate = 0.092719
+Step 1436: Learning rate = 0.092714
+Step 1437: Learning rate = 0.092709
+Step 1438: Learning rate = 0.092704
+Step 1439: Learning rate = 0.092700
+Step 1440: Learning rate = 0.092695
+Step 1441: Learning rate = 0.092690
+Step 1442: Learning rate = 0.092685
+Step 1443: Learning rate = 0.092680
+Step 1444: Learning rate = 0.092675
+Step 1445: Learning rate = 0.092670
+Step 1446: Learning rate = 0.092665
+Step 1447: Learning rate = 0.092660
+Step 1448: Learning rate = 0.092656
+Step 1449: Learning rate = 0.092651
+Step 1450: Learning rate = 0.092646
+Step 1451: Learning rate = 0.092641
+Step 1452: Learning rate = 0.092636
+Step 1453: Learning rate = 0.092631
+Step 1454: Learning rate = 0.092626
+Step 1455: Learning rate = 0.092621
+Step 1456: Learning rate = 0.092617
+Step 1457: Learning rate = 0.092612
+Step 1458: Learning rate = 0.092607
+Step 1459: Learning rate = 0.092602
+Step 1460: Learning rate = 0.092597
+Step 1461: Learning rate = 0.092592
+Step 1462: Learning rate = 0.092587
+Step 1463: Learning rate = 0.092582
+Step 1464: Learning rate = 0.092578
+Step 1465: Learning rate = 0.092573
+Step 1466: Learning rate = 0.092568
+Step 1467: Learning rate = 0.092563
+Step 1468: Learning rate = 0.092558
+Step 1469: Learning rate = 0.092553
+Step 1470: Learning rate = 0.092548
+Step 1471: Learning rate = 0.092543
+Step 1472: Learning rate = 0.092539
+Step 1473: Learning rate = 0.092534
+Step 1474: Learning rate = 0.092529
+Step 1475: Learning rate = 0.092524
+Step 1476: Learning rate = 0.092519
+Step 1477: Learning rate = 0.092514
+Step 1478: Learning rate = 0.092509
+Step 1479: Learning rate = 0.092504
+Step 1480: Learning rate = 0.092500
+Step 1481: Learning rate = 0.092495
+Step 1482: Learning rate = 0.092490
+Step 1483: Learning rate = 0.092485
+Step 1484: Learning rate = 0.092480
+Step 1485: Learning rate = 0.092475
+Step 1486: Learning rate = 0.092470
+Step 1487: Learning rate = 0.092465
+Step 1488: Learning rate = 0.092461
+Step 1489: Learning rate = 0.092456
+Step 1490: Learning rate = 0.092451
+Step 1491: Learning rate = 0.092446
+Step 1492: Learning rate = 0.092441
+Step 1493: Learning rate = 0.092436
+Step 1494: Learning rate = 0.092431
+Step 1495: Learning rate = 0.092426
+Step 1496: Learning rate = 0.092422
+Step 1497: Learning rate = 0.092417
+Step 1498: Learning rate = 0.092412
+Step 1499: Learning rate = 0.092407
+Step 1500: Learning rate = 0.092402
+Step 1501: Learning rate = 0.092397
+Step 1502: Learning rate = 0.092392
+Step 1503: Learning rate = 0.092388
+Step 1504: Learning rate = 0.092383
+Step 1505: Learning rate = 0.092378
+Step 1506: Learning rate = 0.092373
+Step 1507: Learning rate = 0.092368
+Step 1508: Learning rate = 0.092363
+Step 1509: Learning rate = 0.092358
+Step 1510: Learning rate = 0.092353
+Step 1511: Learning rate = 0.092349
+Step 1512: Learning rate = 0.092344
+Step 1513: Learning rate = 0.092339
+Step 1514: Learning rate = 0.092334
+Step 1515: Learning rate = 0.092329
+Step 1516: Learning rate = 0.092324
+Step 1517: Learning rate = 0.092319
+Step 1518: Learning rate = 0.092315
+Step 1519: Learning rate = 0.092310
+Step 1520: Learning rate = 0.092305
+Step 1521: Learning rate = 0.092300
+Step 1522: Learning rate = 0.092295
+Step 1523: Learning rate = 0.092290
+Step 1524: Learning rate = 0.092285
+Step 1525: Learning rate = 0.092280
+Step 1526: Learning rate = 0.092276
+Step 1527: Learning rate = 0.092271
+Step 1528: Learning rate = 0.092266
+Step 1529: Learning rate = 0.092261
+Step 1530: Learning rate = 0.092256
+Step 1531: Learning rate = 0.092251
+Step 1532: Learning rate = 0.092246
+Step 1533: Learning rate = 0.092242
+Step 1534: Learning rate = 0.092237
+Step 1535: Learning rate = 0.092232
+Step 1536: Learning rate = 0.092227
+Step 1537: Learning rate = 0.092222
+Step 1538: Learning rate = 0.092217
+Step 1539: Learning rate = 0.092212
+Step 1540: Learning rate = 0.092208
+Step 1541: Learning rate = 0.092203
+Step 1542: Learning rate = 0.092198
+Step 1543: Learning rate = 0.092193
+Step 1544: Learning rate = 0.092188
+Step 1545: Learning rate = 0.092183
+Step 1546: Learning rate = 0.092178
+Step 1547: Learning rate = 0.092174
+Step 1548: Learning rate = 0.092169
+Step 1549: Learning rate = 0.092164
+Step 1550: Learning rate = 0.092159
+Step 1551: Learning rate = 0.092154
+Step 1552: Learning rate = 0.092149
+Step 1553: Learning rate = 0.092144
+Step 1554: Learning rate = 0.092140
+Step 1555: Learning rate = 0.092135
+Step 1556: Learning rate = 0.092130
+Step 1557: Learning rate = 0.092125
+Step 1558: Learning rate = 0.092120
+Step 1559: Learning rate = 0.092115
+Step 1560: Learning rate = 0.092111
+Step 1561: Learning rate = 0.092106
+Step 1562: Learning rate = 0.092101
+Step 1563: Learning rate = 0.092096
+Step 1564: Learning rate = 0.092091
+Step 1565: Learning rate = 0.092086
+Step 1566: Learning rate = 0.092081
+Step 1567: Learning rate = 0.092077
+Step 1568: Learning rate = 0.092072
+Step 1569: Learning rate = 0.092067
+Step 1570: Learning rate = 0.092062
+Step 1571: Learning rate = 0.092057
+Step 1572: Learning rate = 0.092052
+Step 1573: Learning rate = 0.092047
+Step 1574: Learning rate = 0.092043
+Step 1575: Learning rate = 0.092038
+Step 1576: Learning rate = 0.092033
+Step 1577: Learning rate = 0.092028
+Step 1578: Learning rate = 0.092023
+Step 1579: Learning rate = 0.092018
+Step 1580: Learning rate = 0.092014
+Step 1581: Learning rate = 0.092009
+Step 1582: Learning rate = 0.092004
+Step 1583: Learning rate = 0.091999
+Step 1584: Learning rate = 0.091994
+Step 1585: Learning rate = 0.091989
+Step 1586: Learning rate = 0.091984
+Step 1587: Learning rate = 0.091980
+Step 1588: Learning rate = 0.091975
+Step 1589: Learning rate = 0.091970
+Step 1590: Learning rate = 0.091965
+Step 1591: Learning rate = 0.091960
+Step 1592: Learning rate = 0.091955
+Step 1593: Learning rate = 0.091951
+Step 1594: Learning rate = 0.091946
+Step 1595: Learning rate = 0.091941
+Step 1596: Learning rate = 0.091936
+Step 1597: Learning rate = 0.091931
+Step 1598: Learning rate = 0.091926
+Step 1599: Learning rate = 0.091921
+Step 1600: Learning rate = 0.091917
+Step 1601: Learning rate = 0.091912
+Step 1602: Learning rate = 0.091907
+Step 1603: Learning rate = 0.091902
+Step 1604: Learning rate = 0.091897
+Step 1605: Learning rate = 0.091892
+Step 1606: Learning rate = 0.091888
+Step 1607: Learning rate = 0.091883
+Step 1608: Learning rate = 0.091878
+Step 1609: Learning rate = 0.091873
+Step 1610: Learning rate = 0.091868
+Step 1611: Learning rate = 0.091863
+Step 1612: Learning rate = 0.091859
+Step 1613: Learning rate = 0.091854
+Step 1614: Learning rate = 0.091849
+Step 1615: Learning rate = 0.091844
+Step 1616: Learning rate = 0.091839
+Step 1617: Learning rate = 0.091834
+Step 1618: Learning rate = 0.091829
+Step 1619: Learning rate = 0.091825
+Step 1620: Learning rate = 0.091820
+Step 1621: Learning rate = 0.091815
+Step 1622: Learning rate = 0.091810
+Step 1623: Learning rate = 0.091805
+Step 1624: Learning rate = 0.091800
+Step 1625: Learning rate = 0.091796
+Step 1626: Learning rate = 0.091791
+Step 1627: Learning rate = 0.091786
+Step 1628: Learning rate = 0.091781
+Step 1629: Learning rate = 0.091776
+Step 1630: Learning rate = 0.091771
+Step 1631: Learning rate = 0.091767
+Step 1632: Learning rate = 0.091762
+Step 1633: Learning rate = 0.091757
+Step 1634: Learning rate = 0.091752
+Step 1635: Learning rate = 0.091747
+Step 1636: Learning rate = 0.091742
+Step 1637: Learning rate = 0.091738
+Step 1638: Learning rate = 0.091733
+Step 1639: Learning rate = 0.091728
+Step 1640: Learning rate = 0.091723
+Step 1641: Learning rate = 0.091718
+Step 1642: Learning rate = 0.091713
+Step 1643: Learning rate = 0.091709
+Step 1644: Learning rate = 0.091704
+Step 1645: Learning rate = 0.091699
+Step 1646: Learning rate = 0.091694
+Step 1647: Learning rate = 0.091689
+Step 1648: Learning rate = 0.091684
+Step 1649: Learning rate = 0.091680
+Step 1650: Learning rate = 0.091675
+Step 1651: Learning rate = 0.091670
+Step 1652: Learning rate = 0.091665
+Step 1653: Learning rate = 0.091660
+Step 1654: Learning rate = 0.091656
+Step 1655: Learning rate = 0.091651
+Step 1656: Learning rate = 0.091646
+Step 1657: Learning rate = 0.091641
+Step 1658: Learning rate = 0.091636
+Step 1659: Learning rate = 0.091631
+Step 1660: Learning rate = 0.091627
+Step 1661: Learning rate = 0.091622
+Step 1662: Learning rate = 0.091617
+Step 1663: Learning rate = 0.091612
+Step 1664: Learning rate = 0.091607
+Step 1665: Learning rate = 0.091602
+Step 1666: Learning rate = 0.091598
+Step 1667: Learning rate = 0.091593
+Step 1668: Learning rate = 0.091588
+Step 1669: Learning rate = 0.091583
+Step 1670: Learning rate = 0.091578
+Step 1671: Learning rate = 0.091573
+Step 1672: Learning rate = 0.091569
+Step 1673: Learning rate = 0.091564
+Step 1674: Learning rate = 0.091559
+Step 1675: Learning rate = 0.091554
+Step 1676: Learning rate = 0.091549
+Step 1677: Learning rate = 0.091545
+Step 1678: Learning rate = 0.091540
+Step 1679: Learning rate = 0.091535
+Step 1680: Learning rate = 0.091530
+Step 1681: Learning rate = 0.091525
+Step 1682: Learning rate = 0.091520
+Step 1683: Learning rate = 0.091516
+Step 1684: Learning rate = 0.091511
+Step 1685: Learning rate = 0.091506
+Step 1686: Learning rate = 0.091501
+Step 1687: Learning rate = 0.091496
+Step 1688: Learning rate = 0.091491
+Step 1689: Learning rate = 0.091487
+Step 1690: Learning rate = 0.091482
+Step 1691: Learning rate = 0.091477
+Step 1692: Learning rate = 0.091472
+Step 1693: Learning rate = 0.091467
+Step 1694: Learning rate = 0.091463
+Step 1695: Learning rate = 0.091458
+Step 1696: Learning rate = 0.091453
+Step 1697: Learning rate = 0.091448
+Step 1698: Learning rate = 0.091443
+Step 1699: Learning rate = 0.091438
+Step 1700: Learning rate = 0.091434
+Step 1701: Learning rate = 0.091429
+Step 1702: Learning rate = 0.091424
+Step 1703: Learning rate = 0.091419
+Step 1704: Learning rate = 0.091414
+Step 1705: Learning rate = 0.091410
+Step 1706: Learning rate = 0.091405
+Step 1707: Learning rate = 0.091400
+Step 1708: Learning rate = 0.091395
+Step 1709: Learning rate = 0.091390
+Step 1710: Learning rate = 0.091386
+Step 1711: Learning rate = 0.091381
+Step 1712: Learning rate = 0.091376
+Step 1713: Learning rate = 0.091371
+Step 1714: Learning rate = 0.091366
+Step 1715: Learning rate = 0.091361
+Step 1716: Learning rate = 0.091357
+Step 1717: Learning rate = 0.091352
+Step 1718: Learning rate = 0.091347
+Step 1719: Learning rate = 0.091342
+Step 1720: Learning rate = 0.091337
+Step 1721: Learning rate = 0.091333
+Step 1722: Learning rate = 0.091328
+Step 1723: Learning rate = 0.091323
+Step 1724: Learning rate = 0.091318
+Step 1725: Learning rate = 0.091313
+Step 1726: Learning rate = 0.091309
+Step 1727: Learning rate = 0.091304
+Step 1728: Learning rate = 0.091299
+Step 1729: Learning rate = 0.091294
+Step 1730: Learning rate = 0.091289
+Step 1731: Learning rate = 0.091284
+Step 1732: Learning rate = 0.091280
+Step 1733: Learning rate = 0.091275
+Step 1734: Learning rate = 0.091270
+Step 1735: Learning rate = 0.091265
+Step 1736: Learning rate = 0.091260
+Step 1737: Learning rate = 0.091256
+Step 1738: Learning rate = 0.091251
+Step 1739: Learning rate = 0.091246
+Step 1740: Learning rate = 0.091241
+Step 1741: Learning rate = 0.091236
+Step 1742: Learning rate = 0.091232
+Step 1743: Learning rate = 0.091227
+Step 1744: Learning rate = 0.091222
+Step 1745: Learning rate = 0.091217
+Step 1746: Learning rate = 0.091212
+Step 1747: Learning rate = 0.091208
+Step 1748: Learning rate = 0.091203
+Step 1749: Learning rate = 0.091198
+Step 1750: Learning rate = 0.091193
+Step 1751: Learning rate = 0.091188
+Step 1752: Learning rate = 0.091184
+Step 1753: Learning rate = 0.091179
+Step 1754: Learning rate = 0.091174
+Step 1755: Learning rate = 0.091169
+Step 1756: Learning rate = 0.091164
+Step 1757: Learning rate = 0.091160
+Step 1758: Learning rate = 0.091155
+Step 1759: Learning rate = 0.091150
+Step 1760: Learning rate = 0.091145
+Step 1761: Learning rate = 0.091140
+Step 1762: Learning rate = 0.091136
+Step 1763: Learning rate = 0.091131
+Step 1764: Learning rate = 0.091126
+Step 1765: Learning rate = 0.091121
+Step 1766: Learning rate = 0.091116
+Step 1767: Learning rate = 0.091112
+Step 1768: Learning rate = 0.091107
+Step 1769: Learning rate = 0.091102
+Step 1770: Learning rate = 0.091097
+Step 1771: Learning rate = 0.091092
+Step 1772: Learning rate = 0.091088
+Step 1773: Learning rate = 0.091083
+Step 1774: Learning rate = 0.091078
+Step 1775: Learning rate = 0.091073
+Step 1776: Learning rate = 0.091068
+Step 1777: Learning rate = 0.091064
+Step 1778: Learning rate = 0.091059
+Step 1779: Learning rate = 0.091054
+Step 1780: Learning rate = 0.091049
+Step 1781: Learning rate = 0.091044
+Step 1782: Learning rate = 0.091040
+Step 1783: Learning rate = 0.091035
+Step 1784: Learning rate = 0.091030
+Step 1785: Learning rate = 0.091025
+Step 1786: Learning rate = 0.091020
+Step 1787: Learning rate = 0.091016
+Step 1788: Learning rate = 0.091011
+Step 1789: Learning rate = 0.091006
+Step 1790: Learning rate = 0.091001
+Step 1791: Learning rate = 0.090996
+Step 1792: Learning rate = 0.090992
+Step 1793: Learning rate = 0.090987
+Step 1794: Learning rate = 0.090982
+Step 1795: Learning rate = 0.090977
+Step 1796: Learning rate = 0.090972
+Step 1797: Learning rate = 0.090968
+Step 1798: Learning rate = 0.090963
+Step 1799: Learning rate = 0.090958
+Step 1800: Learning rate = 0.090953
+Step 1801: Learning rate = 0.090948
+Step 1802: Learning rate = 0.090944
+Step 1803: Learning rate = 0.090939
+Step 1804: Learning rate = 0.090934
+Step 1805: Learning rate = 0.090929
+Step 1806: Learning rate = 0.090925
+Step 1807: Learning rate = 0.090920
+Step 1808: Learning rate = 0.090915
+Step 1809: Learning rate = 0.090910
+Step 1810: Learning rate = 0.090905
+Step 1811: Learning rate = 0.090901
+Step 1812: Learning rate = 0.090896
+Step 1813: Learning rate = 0.090891
+Step 1814: Learning rate = 0.090886
+Step 1815: Learning rate = 0.090881
+Step 1816: Learning rate = 0.090877
+Step 1817: Learning rate = 0.090872
+Step 1818: Learning rate = 0.090867
+Step 1819: Learning rate = 0.090862
+Step 1820: Learning rate = 0.090857
+Step 1821: Learning rate = 0.090853
+Step 1822: Learning rate = 0.090848
+Step 1823: Learning rate = 0.090843
+Step 1824: Learning rate = 0.090838
+Step 1825: Learning rate = 0.090834
+Step 1826: Learning rate = 0.090829
+Step 1827: Learning rate = 0.090824
+Step 1828: Learning rate = 0.090819
+Step 1829: Learning rate = 0.090814
+Step 1830: Learning rate = 0.090810
+Step 1831: Learning rate = 0.090805
+Step 1832: Learning rate = 0.090800
+Step 1833: Learning rate = 0.090795
+Step 1834: Learning rate = 0.090790
+Step 1835: Learning rate = 0.090786
+Step 1836: Learning rate = 0.090781
+Step 1837: Learning rate = 0.090776
+Step 1838: Learning rate = 0.090771
+Step 1839: Learning rate = 0.090767
+Step 1840: Learning rate = 0.090762
+Step 1841: Learning rate = 0.090757
+Step 1842: Learning rate = 0.090752
+Step 1843: Learning rate = 0.090747
+Step 1844: Learning rate = 0.090743
+Step 1845: Learning rate = 0.090738
+Step 1846: Learning rate = 0.090733
+Step 1847: Learning rate = 0.090728
+Step 1848: Learning rate = 0.090724
+Step 1849: Learning rate = 0.090719
+Step 1850: Learning rate = 0.090714
+Step 1851: Learning rate = 0.090709
+Step 1852: Learning rate = 0.090704
+Step 1853: Learning rate = 0.090700
+Step 1854: Learning rate = 0.090695
+Step 1855: Learning rate = 0.090690
+Step 1856: Learning rate = 0.090685
+Step 1857: Learning rate = 0.090681
+Step 1858: Learning rate = 0.090676
+Step 1859: Learning rate = 0.090671
+Step 1860: Learning rate = 0.090666
+Step 1861: Learning rate = 0.090661
+Step 1862: Learning rate = 0.090657
+Step 1863: Learning rate = 0.090652
+Step 1864: Learning rate = 0.090647
+Step 1865: Learning rate = 0.090642
+Step 1866: Learning rate = 0.090638
+Step 1867: Learning rate = 0.090633
+Step 1868: Learning rate = 0.090628
+Step 1869: Learning rate = 0.090623
+Step 1870: Learning rate = 0.090618
+Step 1871: Learning rate = 0.090614
+Step 1872: Learning rate = 0.090609
+Step 1873: Learning rate = 0.090604
+Step 1874: Learning rate = 0.090599
+Step 1875: Learning rate = 0.090595
+Step 1876: Learning rate = 0.090590
+Step 1877: Learning rate = 0.090585
+Step 1878: Learning rate = 0.090580
+Step 1879: Learning rate = 0.090576
+Step 1880: Learning rate = 0.090571
+Step 1881: Learning rate = 0.090566
+Step 1882: Learning rate = 0.090561
+Step 1883: Learning rate = 0.090556
+Step 1884: Learning rate = 0.090552
+Step 1885: Learning rate = 0.090547
+Step 1886: Learning rate = 0.090542
+Step 1887: Learning rate = 0.090537
+Step 1888: Learning rate = 0.090533
+Step 1889: Learning rate = 0.090528
+Step 1890: Learning rate = 0.090523
+Step 1891: Learning rate = 0.090518
+Step 1892: Learning rate = 0.090514
+Step 1893: Learning rate = 0.090509
+Step 1894: Learning rate = 0.090504
+Step 1895: Learning rate = 0.090499
+Step 1896: Learning rate = 0.090494
+Step 1897: Learning rate = 0.090490
+Step 1898: Learning rate = 0.090485
+Step 1899: Learning rate = 0.090480
+Step 1900: Learning rate = 0.090475
+Step 1901: Learning rate = 0.090471
+Step 1902: Learning rate = 0.090466
+Step 1903: Learning rate = 0.090461
+Step 1904: Learning rate = 0.090456
+Step 1905: Learning rate = 0.090452
+Step 1906: Learning rate = 0.090447
+Step 1907: Learning rate = 0.090442
+Step 1908: Learning rate = 0.090437
+Step 1909: Learning rate = 0.090432
+Step 1910: Learning rate = 0.090428
+Step 1911: Learning rate = 0.090423
+Step 1912: Learning rate = 0.090418
+Step 1913: Learning rate = 0.090413
+Step 1914: Learning rate = 0.090409
+Step 1915: Learning rate = 0.090404
+Step 1916: Learning rate = 0.090399
+Step 1917: Learning rate = 0.090394
+Step 1918: Learning rate = 0.090390
+Step 1919: Learning rate = 0.090385
+Step 1920: Learning rate = 0.090380
+Step 1921: Learning rate = 0.090375
+Step 1922: Learning rate = 0.090371
+Step 1923: Learning rate = 0.090366
+Step 1924: Learning rate = 0.090361
+Step 1925: Learning rate = 0.090356
+Step 1926: Learning rate = 0.090352
+Step 1927: Learning rate = 0.090347
+Step 1928: Learning rate = 0.090342
+Step 1929: Learning rate = 0.090337
+Step 1930: Learning rate = 0.090332
+Step 1931: Learning rate = 0.090328
+Step 1932: Learning rate = 0.090323
+Step 1933: Learning rate = 0.090318
+Step 1934: Learning rate = 0.090313
+Step 1935: Learning rate = 0.090309
+Step 1936: Learning rate = 0.090304
+Step 1937: Learning rate = 0.090299
+Step 1938: Learning rate = 0.090294
+Step 1939: Learning rate = 0.090290
+Step 1940: Learning rate = 0.090285
+Step 1941: Learning rate = 0.090280
+Step 1942: Learning rate = 0.090275
+Step 1943: Learning rate = 0.090271
+Step 1944: Learning rate = 0.090266
+Step 1945: Learning rate = 0.090261
+Step 1946: Learning rate = 0.090256
+Step 1947: Learning rate = 0.090252
+Step 1948: Learning rate = 0.090247
+Step 1949: Learning rate = 0.090242
+Step 1950: Learning rate = 0.090237
+Step 1951: Learning rate = 0.090233
+Step 1952: Learning rate = 0.090228
+Step 1953: Learning rate = 0.090223
+Step 1954: Learning rate = 0.090218
+Step 1955: Learning rate = 0.090214
+Step 1956: Learning rate = 0.090209
+Step 1957: Learning rate = 0.090204
+Step 1958: Learning rate = 0.090199
+Step 1959: Learning rate = 0.090195
+Step 1960: Learning rate = 0.090190
+Step 1961: Learning rate = 0.090185
+Step 1962: Learning rate = 0.090180
+Step 1963: Learning rate = 0.090176
+Step 1964: Learning rate = 0.090171
+Step 1965: Learning rate = 0.090166
+Step 1966: Learning rate = 0.090161
+Step 1967: Learning rate = 0.090157
+Step 1968: Learning rate = 0.090152
+Step 1969: Learning rate = 0.090147
+Step 1970: Learning rate = 0.090142
+Step 1971: Learning rate = 0.090138
+Step 1972: Learning rate = 0.090133
+Step 1973: Learning rate = 0.090128
+Step 1974: Learning rate = 0.090123
+Step 1975: Learning rate = 0.090119
+Step 1976: Learning rate = 0.090114
+Step 1977: Learning rate = 0.090109
+Step 1978: Learning rate = 0.090104
+Step 1979: Learning rate = 0.090100
+Step 1980: Learning rate = 0.090095
+Step 1981: Learning rate = 0.090090
+Step 1982: Learning rate = 0.090085
+Step 1983: Learning rate = 0.090081
+Step 1984: Learning rate = 0.090076
+Step 1985: Learning rate = 0.090071
+Step 1986: Learning rate = 0.090066
+Step 1987: Learning rate = 0.090062
+Step 1988: Learning rate = 0.090057
+Step 1989: Learning rate = 0.090052
+Step 1990: Learning rate = 0.090047
+Step 1991: Learning rate = 0.090043
+Step 1992: Learning rate = 0.090038
+Step 1993: Learning rate = 0.090033
+Step 1994: Learning rate = 0.090028
+Step 1995: Learning rate = 0.090024
+Step 1996: Learning rate = 0.090019
+Step 1997: Learning rate = 0.090014
+Step 1998: Learning rate = 0.090009
+Step 1999: Learning rate = 0.090005
+adam
+0.100000
+2000
+Initial loss: -3.603968124757165e+16
+Final loss: 1024.5363652164704
+start inference
+#############################################
+z_uncertain_list shape (100, 2)
+#############################################
+#############################################
+z_uncertain_list shape (100, 2)
+#############################################
+#############################################
+z_uncertain_list shape (100, 2)
+#############################################
+
+                      mean       std    median      5.0%     95.0%     n_eff     r_hat
+ z_uncertain0[0]      1.90      0.00      1.90      1.90      1.90      3.71      1.56
+ z_uncertain0[1]      0.83      0.00      0.83      0.83      0.83      2.98      2.02
+ z_uncertain1[0]      0.09      0.00      0.09      0.09      0.10      8.32      1.29
+ z_uncertain1[1]     -1.71      0.00     -1.71     -1.71     -1.71      4.33      1.35
+z_uncertain10[0]     -0.08      0.00     -0.08     -0.08     -0.08      3.19      2.04
+z_uncertain10[1]     -1.57      0.00     -1.57     -1.57     -1.57      5.69      1.21
+z_uncertain11[0]     -0.84      0.00     -0.84     -0.84     -0.84      4.05      1.64
+z_uncertain11[1]     -1.65      0.00     -1.65     -1.65     -1.65      5.89      1.12
+z_uncertain12[0]      0.91      0.00      0.91      0.91      0.91      3.43      1.51
+z_uncertain12[1]     -0.38      0.00     -0.38     -0.38     -0.37      3.30      1.78
+z_uncertain13[0]      0.81      0.00      0.81      0.81      0.81      4.71      1.06
+z_uncertain13[1]     -0.55      0.00     -0.55     -0.55     -0.55      2.57      2.82
+z_uncertain14[0]      0.88      0.00      0.88      0.88      0.88      2.51      2.57
+z_uncertain14[1]      0.67      0.00      0.67      0.67      0.67      3.02      2.82
+z_uncertain15[0]      0.07      0.00      0.07      0.07      0.07      3.03      2.04
+z_uncertain15[1]     -1.04      0.00     -1.04     -1.04     -1.04      2.77      2.29
+z_uncertain16[0]      1.51      0.07      1.54      1.40      1.59      2.40      3.01
+z_uncertain16[1]      1.80      0.00      1.80      1.80      1.80      5.60      1.06
+z_uncertain17[0]     -1.89      0.00     -1.89     -1.90     -1.89     10.41      1.00
+z_uncertain17[1]     -0.58      0.00     -0.58     -0.58     -0.57      2.94      2.08
+z_uncertain18[0]     -0.80      0.00     -0.80     -0.80     -0.80      5.86      1.00
+z_uncertain18[1]     -1.74      0.00     -1.74     -1.74     -1.74      3.22      1.62
+z_uncertain19[0]      1.14      0.00      1.14      1.14      1.14      2.74      2.41
+z_uncertain19[1]     -0.65      0.00     -0.65     -0.66     -0.65      3.65      1.64
+ z_uncertain2[0]      0.11      0.00      0.11      0.11      0.11      4.00      1.06
+ z_uncertain2[1]      1.67      0.00      1.67      1.67      1.67      3.64      1.99
+z_uncertain20[0]     -1.59      0.00     -1.59     -1.59     -1.59      3.09      2.08
+z_uncertain20[1]      1.47      0.00      1.47      1.47      1.47     11.04      1.19
+z_uncertain21[0]     -0.98      0.00     -0.98     -0.98     -0.98      3.56      1.70
+z_uncertain21[1]     -0.30      0.00     -0.30     -0.30     -0.30      3.11      1.85
+z_uncertain22[0]     -1.97      0.00     -1.97     -1.97     -1.97      2.77      2.17
+z_uncertain22[1]      1.19      0.00      1.19      1.19      1.19      6.80      1.16
+z_uncertain23[0]     -1.34      0.00     -1.34     -1.34     -1.34      2.55      2.53
+z_uncertain23[1]      0.02      0.00      0.02      0.02      0.03      2.42      3.27
+z_uncertain24[0]      0.95      0.00      0.95      0.95      0.95      2.86      2.11
+z_uncertain24[1]      1.51      0.00      1.51      1.51      1.51      3.02      1.92
+z_uncertain25[0]     -1.88      0.00     -1.88     -1.88     -1.88      5.54      1.00
+z_uncertain25[1]     -1.47      0.00     -1.47     -1.47     -1.47      2.74      2.44
+z_uncertain26[0]      0.65      0.00      0.65      0.65      0.65      4.81      1.34
+z_uncertain26[1]      1.10      0.00      1.11      1.10      1.11      3.77      1.64
+z_uncertain27[0]      0.73      0.00      0.73      0.73      0.74      2.89      2.14
+z_uncertain27[1]      1.28      0.00      1.28      1.28      1.28      8.84      1.19
+z_uncertain28[0]     -0.66      0.00     -0.66     -0.66     -0.66      2.96      2.02
+z_uncertain28[1]     -1.58      0.00     -1.58     -1.58     -1.58      6.65      1.02
+z_uncertain29[0]      0.76      0.00      0.76      0.76      0.76      2.91      2.13
+z_uncertain29[1]     -0.02      0.00     -0.02     -0.02     -0.02      2.91      2.02
+ z_uncertain3[0]     -1.24      0.00     -1.24     -1.24     -1.23      2.84      2.17
+ z_uncertain3[1]     -1.15      0.00     -1.15     -1.15     -1.15      2.58      2.59
+z_uncertain30[0]      1.29      0.07      1.26      1.21      1.40      2.39      3.03
+z_uncertain30[1]      1.80      0.00      1.80      1.80      1.80      5.60      1.06
+z_uncertain31[0]     -1.41      0.00     -1.41     -1.41     -1.41      3.19      1.88
+z_uncertain31[1]      0.54      0.00      0.54      0.54      0.54      6.78      1.14
+z_uncertain32[0]     -1.03      0.00     -1.03     -1.03     -1.02      5.36      1.33
+z_uncertain32[1]     -1.16      0.00     -1.16     -1.17     -1.16     10.89      1.08
+z_uncertain33[0]      0.17      0.00      0.17      0.17      0.17      4.54      1.62
+z_uncertain33[1]      1.20      0.00      1.20      1.20      1.20      6.82      1.22
+z_uncertain34[0]      1.04      0.00      1.04      1.04      1.04      3.55      1.72
+z_uncertain34[1]     -1.21      0.00     -1.21     -1.21     -1.21      7.47      1.00
+z_uncertain35[0]      0.21      0.00      0.21      0.21      0.21      4.98      1.28
+z_uncertain35[1]      0.40      0.00      0.40      0.40      0.40      4.71      1.31
+z_uncertain36[0]     -0.50      0.00     -0.50     -0.50     -0.50      3.59      1.47
+z_uncertain36[1]      1.46      0.00      1.46      1.46      1.46      3.07      2.21
+z_uncertain37[0]     -1.67      0.00     -1.67     -1.67     -1.67      4.94      1.09
+z_uncertain37[1]     -1.63      0.00     -1.63     -1.63     -1.63      2.75      3.79
+z_uncertain38[0]     -0.88      0.00     -0.88     -0.88     -0.88      4.97      1.00
+z_uncertain38[1]      1.98      0.00      1.98      1.98      1.98      6.32      1.43
+z_uncertain39[0]      0.16      0.00      0.16      0.16      0.16      4.47      1.42
+z_uncertain39[1]     -0.20      0.00     -0.20     -0.20     -0.20      2.87      2.20
+ z_uncertain4[0]      1.58      0.00      1.58      1.58      1.59      9.79      1.21
+ z_uncertain4[1]     -0.20      0.00     -0.20     -0.20     -0.20      6.25      1.03
+z_uncertain40[0]      1.04      0.00      1.04      1.04      1.04      3.55      1.69
+z_uncertain40[1]     -0.73      0.00     -0.73     -0.73     -0.73      2.80      2.23
+z_uncertain41[0]      0.12      0.00      0.12      0.12      0.12      4.04      1.84
+z_uncertain41[1]      0.68      0.00      0.68      0.67      0.68      2.58      2.41
+z_uncertain42[0]     -1.13      0.00     -1.13     -1.13     -1.12      2.52      2.54
+z_uncertain42[1]     -1.09      0.00     -1.09     -1.09     -1.09      6.46      1.23
+z_uncertain43[0]      0.98      0.00      0.98      0.98      0.98      5.36      1.65
+z_uncertain43[1]      1.15      0.00      1.15      1.15      1.15      5.77      1.27
+z_uncertain44[0]      1.09      0.00      1.09      1.09      1.09      6.80      1.20
+z_uncertain44[1]     -1.84      0.00     -1.84     -1.85     -1.84      2.78      2.31
+z_uncertain45[0]     -1.32      0.00     -1.32     -1.32     -1.32      3.04      2.08
+z_uncertain45[1]      0.09      0.00      0.09      0.09      0.09      7.89      1.09
+z_uncertain46[0]      1.92      0.00      1.92      1.92      1.92      6.74      1.20
+z_uncertain46[1]      1.37      0.00      1.37      1.37      1.37      9.70      1.00
+z_uncertain47[0]     -1.88      0.00     -1.88     -1.88     -1.87      3.02      1.92
+z_uncertain47[1]      1.18      0.00      1.18      1.18      1.18      3.99      1.29
+z_uncertain48[0]     -0.44      0.00     -0.44     -0.44     -0.44      4.79      1.01
+z_uncertain48[1]      0.89      0.00      0.89      0.89      0.89      4.06      1.49
+z_uncertain49[0]     -0.80      0.00     -0.80     -0.80     -0.80      8.32      1.09
+z_uncertain49[1]     -0.39      0.00     -0.39     -0.39     -0.39      6.46      1.11
+ z_uncertain5[0]     -1.94      0.00     -1.94     -1.94     -1.94      9.86      1.01
+ z_uncertain5[1]     -1.67      0.00     -1.67     -1.67     -1.67      3.86      1.51
+z_uncertain50[0]     -1.45      0.03     -1.44     -1.48     -1.42      2.39      3.60
+z_uncertain50[1]      1.18      0.00      1.18      1.18      1.18      2.60      2.58
+z_uncertain51[0]      0.47      0.00      0.47      0.47      0.47      9.64      1.01
+z_uncertain51[1]      0.51      0.00      0.51      0.51      0.51      2.52      2.72
+z_uncertain52[0]      1.55      0.00      1.55      1.55      1.55      2.60      2.86
+z_uncertain52[1]      1.85      0.00      1.85      1.85      1.85      8.54      1.00
+z_uncertain53[0]      1.96      0.00      1.96      1.96      1.96      8.71      1.05
+z_uncertain53[1]      1.79      0.00      1.79      1.79      1.79      5.35      1.50
+z_uncertain54[0]      1.08      0.00      1.08      1.08      1.08      2.48      2.88
+z_uncertain54[1]      1.66      0.00      1.66      1.66      1.66      4.56      1.18
+z_uncertain55[0]      1.53      0.00      1.53      1.53      1.53      3.06      2.13
+z_uncertain55[1]     -0.57      0.00     -0.57     -0.57     -0.57      6.36      1.02
+z_uncertain56[0]      1.70      0.00      1.70      1.70      1.70      6.03      1.32
+z_uncertain56[1]      1.95      0.00      1.95      1.95      1.95      3.80      1.31
+z_uncertain57[0]      0.71      0.00      0.71      0.71      0.71      5.45      1.10
+z_uncertain57[1]      0.01      0.00      0.01      0.01      0.01      4.45      1.44
+z_uncertain58[0]     -1.80      0.00     -1.80     -1.80     -1.79      4.32      1.37
+z_uncertain58[1]      0.22      0.00      0.22      0.22      0.23      4.09      1.01
+z_uncertain59[0]      1.14      0.00      1.14      1.14      1.14      5.40      1.02
+z_uncertain59[1]     -0.74      0.00     -0.74     -0.74     -0.74      5.30      1.01
+ z_uncertain6[0]      1.22      0.00      1.22      1.22      1.23      4.83      1.70
+ z_uncertain6[1]      0.11      0.00      0.11      0.10      0.11      8.12      1.09
+z_uncertain60[0]     -0.48      0.00     -0.48     -0.48     -0.47      3.62      1.47
+z_uncertain60[1]      0.99      0.00      0.99      0.99      0.99      3.67      1.65
+z_uncertain61[0]      0.99      0.00      0.99      0.99      0.99      2.86      1.95
+z_uncertain61[1]     -0.50      0.00     -0.50     -0.50     -0.50      2.76      2.25
+z_uncertain62[0]     -0.81      0.00     -0.81     -0.81     -0.81     10.89      1.00
+z_uncertain62[1]      1.14      0.00      1.14      1.14      1.14      5.24      1.15
+z_uncertain63[0]      0.13      0.00      0.13      0.13      0.13      2.74      2.59
+z_uncertain63[1]      0.70      0.00      0.70      0.70      0.70      2.74      2.43
+z_uncertain64[0]     -1.38      0.00     -1.38     -1.38     -1.37      5.75      1.49
+z_uncertain64[1]     -1.72      0.00     -1.72     -1.72     -1.72      2.54      2.87
+z_uncertain65[0]     -1.60      0.00     -1.60     -1.60     -1.60      7.34      1.18
+z_uncertain65[1]     -1.75      0.00     -1.75     -1.75     -1.75      7.12      1.10
+z_uncertain66[0]     -0.18      0.00     -0.18     -0.18     -0.17      3.80      1.68
+z_uncertain66[1]      1.08      0.00      1.08      1.08      1.08      5.32      1.33
+z_uncertain67[0]      0.81      0.00      0.81      0.80      0.81      2.53      2.54
+z_uncertain67[1]      1.88      0.00      1.88      1.88      1.88      7.16      1.06
+z_uncertain68[0]     -1.73      0.00     -1.73     -1.73     -1.73      3.77      1.30
+z_uncertain68[1]      0.94      0.00      0.94      0.94      0.95      2.60      3.12
+z_uncertain69[0]     -0.32      0.00     -0.32     -0.32     -0.32      9.79      1.25
+z_uncertain69[1]      1.81      0.00      1.81      1.81      1.81      3.43      1.53
+ z_uncertain7[0]      1.33      0.00      1.33      1.33      1.33      3.97      1.44
+ z_uncertain7[1]      1.25      0.00      1.25      1.25      1.25      7.63      1.21
+z_uncertain70[0]      0.47      0.00      0.47      0.47      0.47      5.38      1.47
+z_uncertain70[1]     -1.96      0.00     -1.96     -1.96     -1.96      5.96      1.71
+z_uncertain71[0]     -1.39      0.03     -1.40     -1.42     -1.36      2.40      3.50
+z_uncertain71[1]      1.18      0.00      1.18      1.18      1.18      4.00      1.29
+z_uncertain72[0]     -1.92      0.00     -1.92     -1.92     -1.92      5.28      1.33
+z_uncertain72[1]      1.75      0.00      1.75      1.75      1.75      3.51      1.49
+z_uncertain73[0]      0.29      0.00      0.29      0.29      0.30      2.66      2.69
+z_uncertain73[1]     -0.36      0.00     -0.36     -0.36     -0.36      8.28      1.13
+z_uncertain74[0]     -1.85      0.00     -1.85     -1.86     -1.85      6.26      1.05
+z_uncertain74[1]      1.60      0.00      1.60      1.60      1.60      5.41      1.64
+z_uncertain75[0]     -0.14      0.00     -0.14     -0.14     -0.14      2.47      3.34
+z_uncertain75[1]     -0.12      0.00     -0.12     -0.12     -0.12      3.86      1.60
+z_uncertain76[0]     -0.04      0.00     -0.04     -0.04     -0.04      5.77      1.04
+z_uncertain76[1]      0.46      0.00      0.46      0.46      0.46      8.01      1.02
+z_uncertain77[0]     -1.74      0.00     -1.74     -1.74     -1.74      3.69      1.87
+z_uncertain77[1]      1.81      0.00      1.81      1.81      1.81      3.18      2.03
+z_uncertain78[0]      0.03      0.00      0.03      0.03      0.03      9.13      1.21
+z_uncertain78[1]      1.34      0.00      1.34      1.34      1.35      6.30      1.46
+z_uncertain79[0]      0.84      0.00      0.84      0.84      0.84      2.94      1.93
+z_uncertain79[1]     -1.52      0.00     -1.52     -1.52     -1.52      3.95      1.51
+ z_uncertain8[0]     -1.54      0.00     -1.54     -1.55     -1.54      2.60      2.46
+ z_uncertain8[1]     -1.98      0.00     -1.98     -1.99     -1.98      6.77      1.10
+z_uncertain80[0]     -1.65      0.00     -1.65     -1.65     -1.65      5.67      1.24
+z_uncertain80[1]     -1.80      0.00     -1.80     -1.80     -1.79      3.40      1.61
+z_uncertain81[0]      1.37      0.00      1.37      1.36      1.37      2.59      2.40
+z_uncertain81[1]      0.73      0.00      0.73      0.73      0.73      2.78      2.89
+z_uncertain82[0]      1.61      0.00      1.61      1.60      1.61      2.48      3.18
+z_uncertain82[1]      0.07      0.00      0.07      0.07      0.07      7.05      1.29
+z_uncertain83[0]     -0.99      0.00     -0.99     -0.99     -0.99      6.04      1.11
+z_uncertain83[1]      1.09      0.00      1.09      1.09      1.09      3.50      1.77
+z_uncertain84[0]      1.13      0.00      1.13      1.13      1.13      9.76      1.08
+z_uncertain84[1]      0.32      0.00      0.32      0.32      0.33      3.87      1.70
+z_uncertain85[0]     -0.25      0.00     -0.25     -0.25     -0.25      2.62      2.43
+z_uncertain85[1]     -1.64      0.00     -1.64     -1.64     -1.64      2.86      2.08
+z_uncertain86[0]      0.29      0.00      0.29      0.29      0.30      2.78      2.46
+z_uncertain86[1]     -0.36      0.00     -0.36     -0.36     -0.36      8.28      1.13
+z_uncertain87[0]      0.47      0.00      0.47      0.47      0.47     12.59      1.25
+z_uncertain87[1]      0.91      0.00      0.91      0.91      0.91      8.51      1.14
+z_uncertain88[0]     -1.17      0.00     -1.17     -1.17     -1.16      2.83      1.94
+z_uncertain88[1]      0.77      0.00      0.77      0.77      0.77      2.40      3.28
+z_uncertain89[0]      1.67      0.00      1.67      1.67      1.67      4.01      1.81
+z_uncertain89[1]     -0.41      0.00     -0.41     -0.41     -0.41      4.85      1.88
+ z_uncertain9[0]     -0.54      0.00     -0.54     -0.54     -0.54      3.72      1.52
+ z_uncertain9[1]     -1.08      0.00     -1.08     -1.08     -1.08      5.92      1.09
+z_uncertain90[0]     -0.38      0.00     -0.38     -0.38     -0.38      3.90      1.65
+z_uncertain90[1]      1.96      0.00      1.96      1.96      1.96      3.01      2.37
+z_uncertain91[0]     -0.73      0.00     -0.73     -0.73     -0.73      3.23      2.05
+z_uncertain91[1]     -1.05      0.00     -1.05     -1.05     -1.04      3.09      1.89
+z_uncertain92[0]     -0.98      0.00     -0.98     -0.98     -0.98      6.31      1.30
+z_uncertain92[1]      0.53      0.00      0.53      0.53      0.53      5.87      1.05
+z_uncertain93[0]     -1.16      0.00     -1.16     -1.16     -1.15      4.71      1.83
+z_uncertain93[1]     -1.70      0.00     -1.70     -1.70     -1.70      8.15      1.29
+z_uncertain94[0]     -0.71      0.00     -0.71     -0.71     -0.70      3.39      1.52
+z_uncertain94[1]      1.08      0.00      1.08      1.07      1.08      4.65      1.50
+z_uncertain95[0]     -1.28      0.00     -1.28     -1.29     -1.28      4.99      1.06
+z_uncertain95[1]     -1.94      0.00     -1.94     -1.95     -1.94      2.96      2.21
+z_uncertain96[0]     -1.78      0.00     -1.78     -1.78     -1.78      7.87      1.17
+z_uncertain96[1]      0.13      0.00      0.13      0.13      0.13      3.95      1.93
+z_uncertain97[0]     -1.15      0.00     -1.15     -1.15     -1.15      6.23      1.01
+z_uncertain97[1]      0.12      0.00      0.12      0.12      0.12      7.61      1.00
+z_uncertain98[0]     -0.40      0.00     -0.40     -0.41     -0.40      2.81      2.49
+z_uncertain98[1]     -1.88      0.00     -1.88     -1.88     -1.88      2.84      2.31
+z_uncertain99[0]     -0.29      0.00     -0.29     -0.29     -0.29      3.09      1.74
+z_uncertain99[1]     -1.21      0.00     -1.21     -1.21     -1.21     19.82      1.12
+
+Number of divergences: 0
+{'z_uncertain0': Array([[1.90020675, 0.82662637],
+       [1.90039396, 0.82657353],
+       [1.90033963, 0.82659949],
+       ...,
+       [1.90143478, 0.82850928],
+       [1.90145681, 0.82846457],
+       [1.90148305, 0.82856762]], dtype=float64), 'z_uncertain1': Array([[ 0.09470692, -1.70713361],
+       [ 0.09474307, -1.70722707],
+       [ 0.09474667, -1.70735892],
+       ...,
+       [ 0.09462467, -1.70845375],
+       [ 0.09461629, -1.70843455],
+       [ 0.09459947, -1.70845682]], dtype=float64), 'z_uncertain10': Array([[-0.08033774, -1.57057161],
+       [-0.08034466, -1.57057024],
+       [-0.08038131, -1.57053945],
+       ...,
+       [-0.07788254, -1.57067749],
+       [-0.07789795, -1.57066331],
+       [-0.07789409, -1.57059682]], dtype=float64), 'z_uncertain11': Array([[-0.83887346, -1.65000563],
+       [-0.8389797 , -1.64992289],
+       [-0.83902671, -1.64978463],
+       ...,
+       [-0.8361807 , -1.64677128],
+       [-0.83615595, -1.64682181],
+       [-0.83605483, -1.64680511]], dtype=float64), 'z_uncertain12': Array([[ 0.91292166, -0.37879579],
+       [ 0.91293681, -0.37870919],
+       [ 0.9131483 , -0.37881814],
+       ...,
+       [ 0.91417365, -0.37534198],
+       [ 0.91414254, -0.37534132],
+       [ 0.91414742, -0.37536279]], dtype=float64), 'z_uncertain13': Array([[ 0.8083905 , -0.54875009],
+       [ 0.80836413, -0.54872917],
+       [ 0.80824372, -0.5487065 ],
+       ...,
+       [ 0.81003806, -0.55250409],
+       [ 0.80998637, -0.5525306 ],
+       [ 0.80995374, -0.55258155]], dtype=float64), 'z_uncertain14': Array([[0.88094483, 0.66849486],
+       [0.88099791, 0.66851786],
+       [0.88096552, 0.66857825],
+       ...,
+       [0.8836175 , 0.66753668],
+       [0.88361036, 0.66757616],
+       [0.88356649, 0.66752828]], dtype=float64), 'z_uncertain15': Array([[ 0.06464517, -1.04481307],
+       [ 0.06459675, -1.04476473],
+       [ 0.06455401, -1.04481917],
+       ...,
+       [ 0.06766365, -1.04063727],
+       [ 0.06763125, -1.04062516],
+       [ 0.06759671, -1.04058022]], dtype=float64), 'z_uncertain16': Array([[1.59517736, 1.80176204],
+       [1.5950604 , 1.80162957],
+       [1.59498853, 1.8016766 ],
+       ...,
+       [1.40230424, 1.80257657],
+       [1.40226468, 1.80251789],
+       [1.40229213, 1.80242572]], dtype=float64), 'z_uncertain17': Array([[-1.89394539, -0.57331987],
+       [-1.89397494, -0.57339246],
+       [-1.89403017, -0.57340959],
+       ...,
+       [-1.89547858, -0.57700166],
+       [-1.89544869, -0.57699135],
+       [-1.89547696, -0.57705559]], dtype=float64), 'z_uncertain18': Array([[-0.79636784, -1.7397254 ],
+       [-0.79631984, -1.73974743],
+       [-0.79635594, -1.73966506],
+       ...,
+       [-0.79710212, -1.73842777],
+       [-0.79714265, -1.73838071],
+       [-0.79713602, -1.73844488]], dtype=float64), 'z_uncertain19': Array([[ 1.13426046, -0.65489408],
+       [ 1.13434141, -0.65494497],
+       [ 1.13438803, -0.65486211],
+       ...,
+       [ 1.13795131, -0.65459111],
+       [ 1.13793682, -0.65456981],
+       [ 1.13791844, -0.65455775]], dtype=float64), 'z_uncertain2': Array([[0.10702311, 1.6671636 ],
+       [0.1068954 , 1.66716273],
+       [0.10692677, 1.66731484],
+       ...,
+       [0.10671052, 1.6662901 ],
+       [0.10673006, 1.66629914],
+       [0.10683969, 1.66632261]], dtype=float64), 'z_uncertain20': Array([[-1.59402484,  1.46405584],
+       [-1.59400778,  1.46401715],
+       [-1.59399973,  1.46413811],
+       ...,
+       [-1.59177167,  1.46603307],
+       [-1.59181427,  1.46609736],
+       [-1.59175705,  1.46611226]], dtype=float64), 'z_uncertain21': Array([[-0.97721034, -0.30037284],
+       [-0.97720734, -0.30044869],
+       [-0.97729121, -0.30050827],
+       ...,
+       [-0.97724557, -0.30332244],
+       [-0.97721646, -0.30336257],
+       [-0.97716575, -0.30338466]], dtype=float64), 'z_uncertain22': Array([[-1.97118931,  1.18789402],
+       [-1.97127785,  1.18785282],
+       [-1.97128876,  1.1878411 ],
+       ...,
+       [-1.96693218,  1.18730394],
+       [-1.96696306,  1.18728725],
+       [-1.96701323,  1.18734706]], dtype=float64), 'z_uncertain23': Array([[-1.33798666,  0.02269897],
+       [-1.33799885,  0.02249789],
+       [-1.33788698,  0.02255684],
+       ...,
+       [-1.34388066,  0.02523754],
+       [-1.34385154,  0.02519765],
+       [-1.34380053,  0.02517515]], dtype=float64), 'z_uncertain24': Array([[0.94772471, 1.50980095],
+       [0.94769113, 1.50986459],
+       [0.94765348, 1.50987487],
+       ...,
+       [0.95103886, 1.5128616 ],
+       [0.95103493, 1.51289027],
+       [0.9510843 , 1.51299556]], dtype=float64), 'z_uncertain25': Array([[-1.87774947, -1.46756171],
+       [-1.87785413, -1.46742974],
+       [-1.87786824, -1.46739345],
+       ...,
+       [-1.87753539, -1.46884779],
+       [-1.8775667 , -1.46877027],
+       [-1.87755767, -1.46876547]], dtype=float64), 'z_uncertain26': Array([[0.64622245, 1.10304053],
+       [0.64623613, 1.10295068],
+       [0.64637547, 1.10291454],
+       ...,
+       [0.64766246, 1.10535243],
+       [0.64774233, 1.10539684],
+       [0.64778441, 1.10547462]], dtype=float64), 'z_uncertain27': Array([[0.73236002, 1.27704111],
+       [0.73232599, 1.27702454],
+       [0.73237202, 1.27693184],
+       ...,
+       [0.73523838, 1.27374076],
+       [0.73525694, 1.2737947 ],
+       [0.73526886, 1.27378398]], dtype=float64), 'z_uncertain28': Array([[-0.65961389, -1.58116632],
+       [-0.65951955, -1.58118215],
+       [-0.65940871, -1.58103045],
+       ...,
+       [-0.65599084, -1.58384406],
+       [-0.65598035, -1.58375356],
+       [-0.65595499, -1.58378163]], dtype=float64), 'z_uncertain29': Array([[ 0.76376645, -0.0169354 ],
+       [ 0.76374413, -0.01706107],
+       [ 0.76372263, -0.017123  ],
+       ...,
+       [ 0.75960559, -0.01874239],
+       [ 0.75960062, -0.01869898],
+       [ 0.75964004, -0.01871686]], dtype=float64), 'z_uncertain3': Array([[-1.23798079, -1.14876676],
+       [-1.23788968, -1.14890118],
+       [-1.2378734 , -1.14888103],
+       ...,
+       [-1.23419317, -1.14524451],
+       [-1.2341639 , -1.1452634 ],
+       [-1.23415122, -1.14531695]], dtype=float64), 'z_uncertain30': Array([[1.2081505 , 1.80176494],
+       [1.20828619, 1.80162472],
+       [1.20849581, 1.80167467],
+       ...,
+       [1.40047744, 1.80257645],
+       [1.4005191 , 1.80251804],
+       [1.40055787, 1.80242563]], dtype=float64), 'z_uncertain31': Array([[-1.41094221,  0.54096599],
+       [-1.41082375,  0.54092322],
+       [-1.41087241,  0.54091135],
+       ...,
+       [-1.41273405,  0.54033278],
+       [-1.41275118,  0.54032673],
+       [-1.41273713,  0.54039505]], dtype=float64), 'z_uncertain32': Array([[-1.028862  , -1.16327609],
+       [-1.0286281 , -1.16327215],
+       [-1.02857571, -1.16318877],
+       ...,
+       [-1.02560055, -1.16366141],
+       [-1.02557118, -1.1636604 ],
+       [-1.02556046, -1.16366984]], dtype=float64), 'z_uncertain33': Array([[0.17100798, 1.19598862],
+       [0.17101735, 1.19605616],
+       [0.1709921 , 1.19600775],
+       ...,
+       [0.17046824, 1.19566753],
+       [0.17044274, 1.19560215],
+       [0.17048936, 1.19571145]], dtype=float64), 'z_uncertain34': Array([[ 1.04268391, -1.20940362],
+       [ 1.04250099, -1.20934773],
+       [ 1.04253846, -1.20924084],
+       ...,
+       [ 1.0411534 , -1.20699321],
+       [ 1.0412062 , -1.20703178],
+       [ 1.04119043, -1.20697983]], dtype=float64), 'z_uncertain35': Array([[0.21021163, 0.4031915 ],
+       [0.21023954, 0.40325746],
+       [0.21028987, 0.40327235],
+       ...,
+       [0.21095054, 0.40187296],
+       [0.21090745, 0.4018664 ],
+       [0.2109062 , 0.40189621]], dtype=float64), 'z_uncertain36': Array([[-0.49708937,  1.45891132],
+       [-0.49719971,  1.45879634],
+       [-0.4973063 ,  1.45891518],
+       ...,
+       [-0.49935107,  1.45703196],
+       [-0.49928959,  1.45708021],
+       [-0.49934648,  1.45709753]], dtype=float64), 'z_uncertain37': Array([[-1.6706355 , -1.62936871],
+       [-1.67035314, -1.6293615 ],
+       [-1.67029476, -1.62930862],
+       ...,
+       [-1.6697248 , -1.6261336 ],
+       [-1.66972093, -1.62614094],
+       [-1.66974566, -1.62615965]], dtype=float64), 'z_uncertain38': Array([[-0.8812534 ,  1.98083898],
+       [-0.88132707,  1.98081152],
+       [-0.88139744,  1.98081315],
+       ...,
+       [-0.88265043,  1.9828979 ],
+       [-0.88264126,  1.98287297],
+       [-0.8827131 ,  1.98287815]], dtype=float64), 'z_uncertain39': Array([[ 0.15627185, -0.19662261],
+       [ 0.1564673 , -0.19674282],
+       [ 0.15641402, -0.19669336],
+       ...,
+       [ 0.15593038, -0.19973667],
+       [ 0.15602648, -0.19974511],
+       [ 0.15602058, -0.19976401]], dtype=float64), 'z_uncertain4': Array([[ 1.58423673, -0.20355498],
+       [ 1.5842556 , -0.20374438],
+       [ 1.5842319 , -0.20382493],
+       ...,
+       [ 1.58265629, -0.20241539],
+       [ 1.58266553, -0.20244743],
+       [ 1.58269362, -0.20237931]], dtype=float64), 'z_uncertain40': Array([[ 1.03926435, -0.72557161],
+       [ 1.03924556, -0.72540621],
+       [ 1.03927568, -0.72556135],
+       ...,
+       [ 1.04212123, -0.72722207],
+       [ 1.04212749, -0.72720993],
+       [ 1.04219782, -0.72721417]], dtype=float64), 'z_uncertain41': Array([[0.12026978, 0.67489568],
+       [0.12027518, 0.67500928],
+       [0.12015459, 0.67504792],
+       ...,
+       [0.11954843, 0.678564  ],
+       [0.11952641, 0.6785699 ],
+       [0.11956236, 0.67844935]], dtype=float64), 'z_uncertain42': Array([[-1.12438228, -1.08585651],
+       [-1.12423726, -1.0857773 ],
+       [-1.12425956, -1.08580423],
+       ...,
+       [-1.12871777, -1.08774389],
+       [-1.1287027 , -1.08772843],
+       [-1.12871474, -1.08773887]], dtype=float64), 'z_uncertain43': Array([[0.97904884, 1.1544271 ],
+       [0.9790454 , 1.15446984],
+       [0.97890857, 1.15445725],
+       ...,
+       [0.98153674, 1.15359735],
+       [0.98154126, 1.15365509],
+       [0.98159706, 1.15381559]], dtype=float64), 'z_uncertain44': Array([[ 1.09159713, -1.84426809],
+       [ 1.09164661, -1.84431995],
+       [ 1.09161415, -1.84449047],
+       ...,
+       [ 1.08899507, -1.84188289],
+       [ 1.08897856, -1.84196413],
+       [ 1.08897715, -1.84188686]], dtype=float64), 'z_uncertain45': Array([[-1.32242092,  0.08892022],
+       [-1.32221355,  0.08886086],
+       [-1.32217598,  0.08877167],
+       ...,
+       [-1.32050887,  0.08830555],
+       [-1.32045383,  0.08836351],
+       [-1.32041559,  0.0883605 ]], dtype=float64), 'z_uncertain46': Array([[1.92154176, 1.36867853],
+       [1.92160701, 1.36865357],
+       [1.92154451, 1.36864604],
+       ...,
+       [1.92477442, 1.36752128],
+       [1.92475371, 1.36749654],
+       [1.92476385, 1.36749278]], dtype=float64), 'z_uncertain47': Array([[-1.87520041,  1.17651288],
+       [-1.8752603 ,  1.17649984],
+       [-1.87532279,  1.17651074],
+       ...,
+       [-1.87251218,  1.17599772],
+       [-1.87255471,  1.17595699],
+       [-1.8724971 ,  1.17595484]], dtype=float64), 'z_uncertain48': Array([[-0.44011021,  0.89052734],
+       [-0.4400788 ,  0.8905094 ],
+       [-0.44002165,  0.89046416],
+       ...,
+       [-0.43779651,  0.89405075],
+       [-0.43780006,  0.89405913],
+       [-0.43777982,  0.89402771]], dtype=float64), 'z_uncertain49': Array([[-0.80331934, -0.38916869],
+       [-0.80313909, -0.38912888],
+       [-0.80318334, -0.38918053],
+       ...,
+       [-0.80460405, -0.39102111],
+       [-0.80462613, -0.39103585],
+       [-0.80468776, -0.39108446]], dtype=float64), 'z_uncertain5': Array([[-1.93635304, -1.67029669],
+       [-1.93625698, -1.67042153],
+       [-1.93638728, -1.67039976],
+       ...,
+       [-1.93710005, -1.67050606],
+       [-1.93705364, -1.67051617],
+       [-1.93707931, -1.67053708]], dtype=float64), 'z_uncertain50': Array([[-1.47871262,  1.17850947],
+       [-1.47867801,  1.17843039],
+       [-1.47849312,  1.17846362],
+       ...,
+       [-1.42058041,  1.17598682],
+       [-1.42062673,  1.17595552],
+       [-1.42061357,  1.1759385 ]], dtype=float64), 'z_uncertain51': Array([[0.47364508, 0.50860494],
+       [0.47361423, 0.50856614],
+       [0.47349048, 0.50856831],
+       ...,
+       [0.47177435, 0.50671986],
+       [0.47182402, 0.50669528],
+       [0.47182784, 0.50666138]], dtype=float64), 'z_uncertain52': Array([[1.547876  , 1.85051367],
+       [1.54787393, 1.8505384 ],
+       [1.54792758, 1.85063899],
+       ...,
+       [1.55268002, 1.84843988],
+       [1.55264766, 1.84852644],
+       [1.55266189, 1.84852853]], dtype=float64), 'z_uncertain53': Array([[1.95946358, 1.78946234],
+       [1.95934763, 1.7894416 ],
+       [1.95940449, 1.78944019],
+       ...,
+       [1.9599504 , 1.79060595],
+       [1.95983588, 1.79064712],
+       [1.95983594, 1.79062961]], dtype=float64), 'z_uncertain54': Array([[1.07932761, 1.66192567],
+       [1.07936459, 1.66181062],
+       [1.07932864, 1.66184806],
+       ...,
+       [1.08195505, 1.65974138],
+       [1.08192125, 1.65974974],
+       [1.08192346, 1.65979947]], dtype=float64), 'z_uncertain55': Array([[ 1.52870256, -0.57204641],
+       [ 1.52876517, -0.57199254],
+       [ 1.52897   , -0.57206201],
+       ...,
+       [ 1.53158827, -0.57265724],
+       [ 1.53156485, -0.57264359],
+       [ 1.53152596, -0.57262072]], dtype=float64), 'z_uncertain56': Array([[1.69479663, 1.95351777],
+       [1.69484939, 1.95348169],
+       [1.69469998, 1.95348474],
+       ...,
+       [1.69702497, 1.9526747 ],
+       [1.69699886, 1.9526994 ],
+       [1.69703636, 1.95271006]], dtype=float64), 'z_uncertain57': Array([[0.71286519, 0.01034528],
+       [0.71288777, 0.01017401],
+       [0.71283112, 0.01023229],
+       ...,
+       [0.71285728, 0.01020966],
+       [0.712848  , 0.01012633],
+       [0.71284136, 0.01016533]], dtype=float64), 'z_uncertain58': Array([[-1.79519588,  0.22221523],
+       [-1.7953249 ,  0.22230544],
+       [-1.79535153,  0.22239975],
+       ...,
+       [-1.79542473,  0.22325556],
+       [-1.79543804,  0.22319717],
+       [-1.79549798,  0.2231562 ]], dtype=float64), 'z_uncertain59': Array([[ 1.144083  , -0.73831888],
+       [ 1.1441184 , -0.73839623],
+       [ 1.1442023 , -0.73827629],
+       ...,
+       [ 1.14277578, -0.73954434],
+       [ 1.14273885, -0.73947078],
+       [ 1.14266535, -0.73942214]], dtype=float64), 'z_uncertain6': Array([[1.223414  , 0.10466088],
+       [1.22347878, 0.10465457],
+       [1.22341804, 0.10466284],
+       ...,
+       [1.2244937 , 0.10473314],
+       [1.22448612, 0.1047308 ],
+       [1.22446267, 0.10467734]], dtype=float64), 'z_uncertain60': Array([[-0.47483704,  0.99371992],
+       [-0.47490543,  0.99359595],
+       [-0.47474099,  0.99360943],
+       ...,
+       [-0.47838631,  0.99281038],
+       [-0.47834598,  0.99276885],
+       [-0.4783642 ,  0.99283609]], dtype=float64), 'z_uncertain61': Array([[ 0.98943052, -0.49607452],
+       [ 0.9893333 , -0.49599101],
+       [ 0.98929979, -0.49608976],
+       ...,
+       [ 0.99510059, -0.49882528],
+       [ 0.9951339 , -0.49877992],
+       [ 0.99513543, -0.49887355]], dtype=float64), 'z_uncertain62': Array([[-0.80430846,  1.14100013],
+       [-0.80435613,  1.1410372 ],
+       [-0.80450235,  1.14100448],
+       ...,
+       [-0.80621473,  1.1395543 ],
+       [-0.80623319,  1.13953498],
+       [-0.80628038,  1.13949084]], dtype=float64), 'z_uncertain63': Array([[0.13085468, 0.70269704],
+       [0.13085484, 0.70265567],
+       [0.13084057, 0.70280412],
+       ...,
+       [0.13248091, 0.70031269],
+       [0.13253897, 0.70027341],
+       [0.1325263 , 0.70026345]], dtype=float64), 'z_uncertain64': Array([[-1.37566979, -1.71987171],
+       [-1.37562221, -1.71979889],
+       [-1.37575722, -1.71986809],
+       ...,
+       [-1.3750511 , -1.71722572],
+       [-1.37505605, -1.7172177 ],
+       [-1.37505824, -1.71720463]], dtype=float64), 'z_uncertain65': Array([[-1.59869431, -1.75101859],
+       [-1.59875746, -1.75106192],
+       [-1.59869972, -1.7510242 ],
+       ...,
+       [-1.59917696, -1.75102628],
+       [-1.59911597, -1.75098042],
+       [-1.59915764, -1.75103679]], dtype=float64), 'z_uncertain66': Array([[-0.17754588,  1.07993322],
+       [-0.1777433 ,  1.08012124],
+       [-0.17794606,  1.08009525],
+       ...,
+       [-0.17488242,  1.07959057],
+       [-0.17486329,  1.0795375 ],
+       [-0.17487013,  1.07955059]], dtype=float64), 'z_uncertain67': Array([[0.80789713, 1.88320306],
+       [0.80798207, 1.88314155],
+       [0.80807285, 1.88320567],
+       ...,
+       [0.80312257, 1.88414289],
+       [0.80327126, 1.88418885],
+       [0.80328947, 1.88412604]], dtype=float64), 'z_uncertain68': Array([[-1.73372232,  0.94288098],
+       [-1.7337447 ,  0.94279793],
+       [-1.7337763 ,  0.94290673],
+       ...,
+       [-1.73050347,  0.94485968],
+       [-1.73054287,  0.94484967],
+       [-1.73051829,  0.94483702]], dtype=float64), 'z_uncertain69': Array([[-0.32036008,  1.80638322],
+       [-0.32038414,  1.80636324],
+       [-0.3203136 ,  1.8063665 ],
+       ...,
+       [-0.32154729,  1.80914066],
+       [-0.32151965,  1.80921076],
+       [-0.32149434,  1.80913   ]], dtype=float64), 'z_uncertain7': Array([[1.33020718, 1.24909439],
+       [1.33015332, 1.24905868],
+       [1.33024632, 1.24896402],
+       ...,
+       [1.32843125, 1.25118666],
+       [1.32842371, 1.25121226],
+       [1.328446  , 1.25117553]], dtype=float64), 'z_uncertain70': Array([[ 0.47230106, -1.95788323],
+       [ 0.47235194, -1.95796692],
+       [ 0.47231945, -1.95796918],
+       ...,
+       [ 0.47272732, -1.95781088],
+       [ 0.47275567, -1.9578184 ],
+       [ 0.47289866, -1.95783154]], dtype=float64), 'z_uncertain71': Array([[-1.35618765,  1.17656382],
+       [-1.35623377,  1.17646749],
+       [-1.35623009,  1.17652973],
+       ...,
+       [-1.41979501,  1.17598732],
+       [-1.41982563,  1.17595492],
+       [-1.41976695,  1.17593911]], dtype=float64), 'z_uncertain72': Array([[-1.91924533,  1.74865413],
+       [-1.91921647,  1.7487539 ],
+       [-1.91943075,  1.74876711],
+       ...,
+       [-1.91985762,  1.75138337],
+       [-1.91980519,  1.75136444],
+       [-1.91977082,  1.75130191]], dtype=float64), 'z_uncertain73': Array([[ 0.29422513, -0.35685521],
+       [ 0.29552253, -0.35683496],
+       [ 0.29538243, -0.35674691],
+       ...,
+       [ 0.29428523, -0.35714555],
+       [ 0.29415451, -0.3570639 ],
+       [ 0.29412466, -0.35711506]], dtype=float64), 'z_uncertain74': Array([[-1.85532569,  1.60098377],
+       [-1.85525711,  1.60102232],
+       [-1.85512424,  1.6010593 ],
+       ...,
+       [-1.85451634,  1.60251526],
+       [-1.85449775,  1.60260598],
+       [-1.85451631,  1.60257248]], dtype=float64), 'z_uncertain75': Array([[-0.14375583, -0.1218622 ],
+       [-0.14380102, -0.12184942],
+       [-0.14377612, -0.12194169],
+       ...,
+       [-0.14102726, -0.11913521],
+       [-0.14105404, -0.1191254 ],
+       [-0.14104105, -0.11916124]], dtype=float64), 'z_uncertain76': Array([[-0.04101389,  0.45699813],
+       [-0.04110569,  0.45702616],
+       [-0.04117621,  0.45712157],
+       ...,
+       [-0.04125259,  0.45762681],
+       [-0.04121949,  0.45756581],
+       [-0.04121991,  0.45760331]], dtype=float64), 'z_uncertain77': Array([[-1.73688369,  1.81252391],
+       [-1.7368027 ,  1.81256654],
+       [-1.73671115,  1.81252929],
+       ...,
+       [-1.73788094,  1.81292432],
+       [-1.7378306 ,  1.81293633],
+       [-1.7379093 ,  1.81298314]], dtype=float64), 'z_uncertain78': Array([[0.03148322, 1.34487427],
+       [0.03140053, 1.34493969],
+       [0.03132965, 1.34495752],
+       ...,
+       [0.03117037, 1.34384164],
+       [0.03115012, 1.34382906],
+       [0.03113492, 1.34370837]], dtype=float64), 'z_uncertain79': Array([[ 0.83865818, -1.51882169],
+       [ 0.83864208, -1.51880009],
+       [ 0.83878069, -1.51877625],
+       ...,
+       [ 0.83738084, -1.51667096],
+       [ 0.8374007 , -1.51664596],
+       [ 0.83735697, -1.51667467]], dtype=float64), 'z_uncertain8': Array([[-1.54088605, -1.98336336],
+       [-1.54093687, -1.98323275],
+       [-1.54100497, -1.98310587],
+       ...,
+       [-1.5464071 , -1.98458698],
+       [-1.54642591, -1.98460828],
+       [-1.54644729, -1.98463736]], dtype=float64), 'z_uncertain80': Array([[-1.6518414 , -1.79367239],
+       [-1.65187707, -1.79346173],
+       [-1.65179997, -1.79364363],
+       ...,
+       [-1.65435752, -1.7969764 ],
+       [-1.65438848, -1.79691679],
+       [-1.65440881, -1.79698356]], dtype=float64), 'z_uncertain81': Array([[1.36820402, 0.73223286],
+       [1.36820754, 0.73224892],
+       [1.36819939, 0.73221995],
+       ...,
+       [1.36482613, 0.72746487],
+       [1.36478588, 0.72750224],
+       [1.36476354, 0.72748006]], dtype=float64), 'z_uncertain82': Array([[1.60748392, 0.07007741],
+       [1.60747576, 0.07009145],
+       [1.60750618, 0.07014534],
+       ...,
+       [1.60376706, 0.06835487],
+       [1.60379165, 0.06835638],
+       [1.60380714, 0.06827959]], dtype=float64), 'z_uncertain83': Array([[-0.9875832 ,  1.0927978 ],
+       [-0.98755014,  1.09267048],
+       [-0.98751157,  1.09270464],
+       ...,
+       [-0.99178048,  1.09047375],
+       [-0.99172811,  1.0904622 ],
+       [-0.99163884,  1.09051621]], dtype=float64), 'z_uncertain84': Array([[1.13404392, 0.32495861],
+       [1.13401163, 0.32510617],
+       [1.13394859, 0.32505616],
+       ...,
+       [1.13304464, 0.32044316],
+       [1.13308622, 0.32043294],
+       [1.13312525, 0.32053005]], dtype=float64), 'z_uncertain85': Array([[-0.25072679, -1.63812174],
+       [-0.25056768, -1.6381234 ],
+       [-0.25057232, -1.63815778],
+       ...,
+       [-0.25426604, -1.64091949],
+       [-0.25424583, -1.64093388],
+       [-0.25420085, -1.64094475]], dtype=float64), 'z_uncertain86': Array([[ 0.30260469, -0.35685519],
+       [ 0.30137328, -0.35683485],
+       [ 0.30088411, -0.35674678],
+       ...,
+       [ 0.29364384, -0.35714565],
+       [ 0.29369704, -0.35706491],
+       [ 0.29384474, -0.35711392]], dtype=float64), 'z_uncertain87': Array([[0.47121136, 0.90742495],
+       [0.47121254, 0.90733436],
+       [0.47123471, 0.90739942],
+       ...,
+       [0.47272197, 0.9069953 ],
+       [0.47275399, 0.90701863],
+       [0.47267161, 0.90704948]], dtype=float64), 'z_uncertain88': Array([[-1.16553282,  0.76602119],
+       [-1.16553944,  0.76612651],
+       [-1.1654489 ,  0.76608145],
+       ...,
+       [-1.16757147,  0.77086417],
+       [-1.16755234,  0.77082458],
+       [-1.16758047,  0.77086346]], dtype=float64), 'z_uncertain89': Array([[ 1.67233658, -0.40860983],
+       [ 1.67218208, -0.40878088],
+       [ 1.67209829, -0.40879864],
+       ...,
+       [ 1.66962793, -0.40755217],
+       [ 1.66967611, -0.40750171],
+       [ 1.66963028, -0.40749041]], dtype=float64), 'z_uncertain9': Array([[-0.53773631, -1.08301924],
+       [-0.53782589, -1.0831002 ],
+       [-0.53786526, -1.08313494],
+       ...,
+       [-0.53952288, -1.08389749],
+       [-0.53946742, -1.08384834],
+       [-0.53950071, -1.08380679]], dtype=float64), 'z_uncertain90': Array([[-0.3763169 ,  1.95874791],
+       [-0.37626662,  1.95864714],
+       [-0.37623467,  1.95875565],
+       ...,
+       [-0.38161176,  1.95681593],
+       [-0.38154321,  1.95683297],
+       [-0.38148042,  1.95687791]], dtype=float64), 'z_uncertain91': Array([[-0.72918134, -1.04330498],
+       [-0.72912929, -1.04331115],
+       [-0.72911603, -1.04339494],
+       ...,
+       [-0.72658151, -1.04702639],
+       [-0.72659299, -1.04704478],
+       [-0.72654804, -1.04710793]], dtype=float64), 'z_uncertain92': Array([[-0.97589055,  0.53156684],
+       [-0.97582142,  0.5314877 ],
+       [-0.97574799,  0.53149105],
+       ...,
+       [-0.97873434,  0.528177  ],
+       [-0.97880542,  0.52809816],
+       [-0.97880405,  0.52811624]], dtype=float64), 'z_uncertain93': Array([[-1.15616286, -1.70140498],
+       [-1.156166  , -1.70130472],
+       [-1.15629438, -1.701277  ],
+       ...,
+       [-1.15617111, -1.70238336],
+       [-1.15613535, -1.70236137],
+       [-1.15617518, -1.70237596]], dtype=float64), 'z_uncertain94': Array([[-0.70512707,  1.07535458],
+       [-0.70520823,  1.07542239],
+       [-0.70515474,  1.07528331],
+       ...,
+       [-0.70331958,  1.07436507],
+       [-0.70333231,  1.07435322],
+       [-0.70343147,  1.07443809]], dtype=float64), 'z_uncertain95': Array([[-1.28561678, -1.94615695],
+       [-1.28541735, -1.94606998],
+       [-1.28552218, -1.94609205],
+       ...,
+       [-1.28468176, -1.94195387],
+       [-1.28467324, -1.94198111],
+       [-1.28459246, -1.94199946]], dtype=float64), 'z_uncertain96': Array([[-1.77971918,  0.13308631],
+       [-1.77974853,  0.13312457],
+       [-1.77971774,  0.13312286],
+       ...,
+       [-1.77731042,  0.12991326],
+       [-1.77731773,  0.12987014],
+       [-1.77724349,  0.12987846]], dtype=float64), 'z_uncertain97': Array([[-1.14995659,  0.11621143],
+       [-1.1500398 ,  0.11630591],
+       [-1.15017881,  0.11627557],
+       ...,
+       [-1.14864232,  0.11776089],
+       [-1.14866028,  0.11780703],
+       [-1.14868817,  0.11783719]], dtype=float64), 'z_uncertain98': Array([[-0.40600807, -1.87779934],
+       [-0.40585758, -1.87779926],
+       [-0.40585533, -1.87775839],
+       ...,
+       [-0.40245118, -1.87924904],
+       [-0.40248215, -1.8791905 ],
+       [-0.40255482, -1.87915313]], dtype=float64), 'z_uncertain99': Array([[-0.28715137, -1.2148492 ],
+       [-0.28726728, -1.21480752],
+       [-0.2875014 , -1.21464507],
+       ...,
+       [-0.28874378, -1.21301495],
+       [-0.28879962, -1.21300366],
+       [-0.28879366, -1.21306252]], dtype=float64)}
+Script finished in 113 minutes and 25 seconds.

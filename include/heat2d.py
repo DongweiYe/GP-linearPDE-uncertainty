@@ -6,20 +6,24 @@ from math import pi
 from include.derivatives import first_order_x1_1, first_order_x2_1, second_order_x1_0_x1_0, second_order_x2_0_x2_0, \
     second_order_x2_1_x1_1, third_order_x2_0_x2_0_x1_1, third_order_x2_1_x1_0_x1_0, fourth_order_x2_0_x2_0_x1_0_x1_0
 from include.kernels import rbf_kernel
+from scipy.stats import truncnorm
+
 plt.rcParams.update({"figure.figsize": (12, 6)})
 plt.rcParams.update({'font.size': 22})
 
 def f_xt(Xf) -> jnp.ndarray:
     x = Xf[:, :1]
     t = Xf[:, -1:]
-    f: jnp.ndarray = jnp.exp((-1) * t) * (4 * (pi ** 2) + (-1)) * jnp.sin(2 * pi * x)
+    # f: jnp.ndarray = jnp.exp((-1) * t) * (4 * (pi ** 2) + (-1)) * jnp.sin(2 * pi * x)
+    f: jnp.ndarray = jnp.exp((-1) * t) * ((1/4) * (pi ** 2) + (-1)) * jnp.sin((pi/2) * x)
     return f
 
 
 def u_xt(Xu_fixed) -> jnp.ndarray:
     x = Xu_fixed[:, :1]
     t = Xu_fixed[:, -1:]
-    u: jnp.ndarray = jnp.exp((-1) * t) * jnp.sin(2 * pi * x)
+    # u: jnp.ndarray = jnp.exp((-1) * t) * jnp.sin(2 * pi * x)
+    u: jnp.ndarray = jnp.exp((-1) * t) * jnp.sin((pi/2) * x)
     return u
 
 
@@ -33,17 +37,20 @@ def u_xt_noise(Xu_noise) -> jnp.ndarray:
 
 
 def get_u_training_data_2d(key_x_u, key_x_u_init, key_t_u_low, key_t_u_high, key_x_noise, key_t_noise, sample_num,
-                           init_num, bnum) -> (jnp.ndarray, jnp.ndarray, jnp.ndarray, jnp.ndarray, jnp.ndarray,
-                                               jnp.ndarray, jnp.ndarray, jnp.ndarray, jnp.ndarray, jnp.ndarray):
+                           init_num, bnum, noise_std) -> (jnp.ndarray, jnp.ndarray, jnp.ndarray, jnp.ndarray, jnp.ndarray,
+                                              jnp.ndarray, jnp.ndarray, jnp.ndarray, jnp.ndarray):
+    # noise_std = 1e-1
     Xu_certain = jax.random.uniform(key_x_u, shape=(sample_num, 2), dtype=jnp.float64)
     yu_certain = u_xt(Xu_certain)
     # yu_noise = u_xt_noise(Xu_certain)
     xu, tu = Xu_certain[:, :1], Xu_certain[:, -1:]
-    noise_std = 1e-2
+
     xu_noise = xu + noise_std * jax.random.normal(key_x_noise, shape=xu.shape)
     tu_noise = tu + noise_std * jax.random.normal(key_t_noise, shape=tu.shape)
-    Xu_noise = jnp.concatenate([xu_noise, tu_noise], axis=1)
+    xu_noise = jnp.clip(xu_noise, 0, 1)
+    tu_noise = jnp.clip(tu_noise, 0, 1)
 
+    Xu_noise = jnp.concatenate([xu_noise, tu_noise], axis=1)
     # init + boundary
     xu_init = jax.random.uniform(key_x_u_init, shape=(init_num, 1), dtype=jnp.float64)
     tu_init = jnp.zeros(shape=(init_num, 1))

@@ -1,0 +1,1142 @@
+hpc-node02
+	Adding nVidia Cuda Toolkit 11.8
+	Adding nVidia cuDNN 8.6 (.0.163)
+	Adding nvtop
+Thu Jun 13 10:27:57 2024       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 550.54.15              Driver Version: 550.54.15      CUDA Version: 12.4     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA L40                     On  |   00000000:17:00.0 Off |                    0 |
+| N/A   41C    P0             88W /  300W |     692MiB /  46068MiB |     85%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA L40                     On  |   00000000:65:00.0 Off |                    0 |
+| N/A   26C    P8             26W /  300W |       0MiB /  46068MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   2  NVIDIA L40                     On  |   00000000:CA:00.0 Off |                    0 |
+| N/A   29C    P0             76W /  300W |     450MiB /  46068MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+|   3  NVIDIA L40                     On  |   00000000:E3:00.0 Off |                    0 |
+| N/A   28C    P8             27W /  300W |       0MiB /  46068MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|    0   N/A  N/A      2587      C   python                                        684MiB |
+|    2   N/A  N/A      3528      C   python                                        442MiB |
++-----------------------------------------------------------------------------------------+
+Date              = Thu Jun 13 10:27:57 CEST 2024
+Hostname          = hpc-node02
+Working Directory = /local/292991
+Number of nodes used        : 1
+Number of MPI tasks         : 1
+Number of threads           : 16
+Number of MPI tasks per node: 1
+Number of threads per core  : 
+Name of nodes used          : hpc-node02
+Gpu devices                 : 1
+Starting worker: 
+Xu_fixed:  [[0.         0.32476761]
+ [0.         0.1021458 ]
+ [0.         0.56911352]
+ [0.         0.27434187]
+ [0.         0.04175272]
+ [0.         0.64804776]
+ [0.         0.82866935]
+ [0.         0.31712783]
+ [0.         0.39392626]
+ [0.         0.54286135]
+ [0.42300447 0.        ]
+ [0.37513696 0.        ]
+ [0.51259359 0.        ]
+ [0.54022212 0.        ]
+ [0.25327558 0.        ]
+ [1.         0.44494309]
+ [1.         0.2372967 ]
+ [1.         0.23578896]
+ [1.         0.1257783 ]
+ [1.         0.2879024 ]
+ [1.         0.84487144]
+ [1.         0.7475847 ]
+ [1.         0.91285911]
+ [1.         0.54357489]
+ [1.         0.87495156]]
+sigma_init_yu: 0.31649215432442585	sigma_init_yf: 18.110598031070833	sigma_init: 14.275535214602792
+new_sigma_init_yu: 0.31649215432442585	new_sigma_init_yf: 0.47320166946057735	new_sigma_init: 0.4814565139387193
+Xu_noise: [[ 0.53441744 -0.01512023]
+ [ 0.37383673  0.84915495]
+ [ 0.61160043  0.25683977]
+ [ 0.21138835  0.81214232]
+ [ 0.47124844  0.27870854]]
+Xu_noise shape: (5, 2)
+Step 0: Learning rate = 0.100000
+Step 1: Learning rate = 0.099989
+Step 2: Learning rate = 0.099979
+Step 3: Learning rate = 0.099968
+Step 4: Learning rate = 0.099958
+Step 5: Learning rate = 0.099947
+Step 6: Learning rate = 0.099937
+Step 7: Learning rate = 0.099926
+Step 8: Learning rate = 0.099916
+Step 9: Learning rate = 0.099905
+Step 10: Learning rate = 0.099895
+Step 11: Learning rate = 0.099884
+Step 12: Learning rate = 0.099874
+Step 13: Learning rate = 0.099863
+Step 14: Learning rate = 0.099853
+Step 15: Learning rate = 0.099842
+Step 16: Learning rate = 0.099832
+Step 17: Learning rate = 0.099821
+Step 18: Learning rate = 0.099811
+Step 19: Learning rate = 0.099800
+Step 20: Learning rate = 0.099790
+Step 21: Learning rate = 0.099779
+Step 22: Learning rate = 0.099768
+Step 23: Learning rate = 0.099758
+Step 24: Learning rate = 0.099747
+Step 25: Learning rate = 0.099737
+Step 26: Learning rate = 0.099726
+Step 27: Learning rate = 0.099716
+Step 28: Learning rate = 0.099705
+Step 29: Learning rate = 0.099695
+Step 30: Learning rate = 0.099684
+Step 31: Learning rate = 0.099674
+Step 32: Learning rate = 0.099663
+Step 33: Learning rate = 0.099653
+Step 34: Learning rate = 0.099642
+Step 35: Learning rate = 0.099632
+Step 36: Learning rate = 0.099621
+Step 37: Learning rate = 0.099611
+Step 38: Learning rate = 0.099600
+Step 39: Learning rate = 0.099590
+Step 40: Learning rate = 0.099579
+Step 41: Learning rate = 0.099569
+Step 42: Learning rate = 0.099558
+Step 43: Learning rate = 0.099548
+Step 44: Learning rate = 0.099537
+Step 45: Learning rate = 0.099527
+Step 46: Learning rate = 0.099517
+Step 47: Learning rate = 0.099506
+Step 48: Learning rate = 0.099496
+Step 49: Learning rate = 0.099485
+Step 50: Learning rate = 0.099475
+Step 51: Learning rate = 0.099464
+Step 52: Learning rate = 0.099454
+Step 53: Learning rate = 0.099443
+Step 54: Learning rate = 0.099433
+Step 55: Learning rate = 0.099422
+Step 56: Learning rate = 0.099412
+Step 57: Learning rate = 0.099401
+Step 58: Learning rate = 0.099391
+Step 59: Learning rate = 0.099380
+Step 60: Learning rate = 0.099370
+Step 61: Learning rate = 0.099359
+Step 62: Learning rate = 0.099349
+Step 63: Learning rate = 0.099338
+Step 64: Learning rate = 0.099328
+Step 65: Learning rate = 0.099317
+Step 66: Learning rate = 0.099307
+Step 67: Learning rate = 0.099297
+Step 68: Learning rate = 0.099286
+Step 69: Learning rate = 0.099276
+Step 70: Learning rate = 0.099265
+Step 71: Learning rate = 0.099255
+Step 72: Learning rate = 0.099244
+Step 73: Learning rate = 0.099234
+Step 74: Learning rate = 0.099223
+Step 75: Learning rate = 0.099213
+Step 76: Learning rate = 0.099202
+Step 77: Learning rate = 0.099192
+Step 78: Learning rate = 0.099182
+Step 79: Learning rate = 0.099171
+Step 80: Learning rate = 0.099161
+Step 81: Learning rate = 0.099150
+Step 82: Learning rate = 0.099140
+Step 83: Learning rate = 0.099129
+Step 84: Learning rate = 0.099119
+Step 85: Learning rate = 0.099108
+Step 86: Learning rate = 0.099098
+Step 87: Learning rate = 0.099088
+Step 88: Learning rate = 0.099077
+Step 89: Learning rate = 0.099067
+Step 90: Learning rate = 0.099056
+Step 91: Learning rate = 0.099046
+Step 92: Learning rate = 0.099035
+Step 93: Learning rate = 0.099025
+Step 94: Learning rate = 0.099014
+Step 95: Learning rate = 0.099004
+Step 96: Learning rate = 0.098994
+Step 97: Learning rate = 0.098983
+Step 98: Learning rate = 0.098973
+Step 99: Learning rate = 0.098962
+Step 100: Learning rate = 0.098952
+Step 101: Learning rate = 0.098942
+Step 102: Learning rate = 0.098931
+Step 103: Learning rate = 0.098921
+Step 104: Learning rate = 0.098910
+Step 105: Learning rate = 0.098900
+Step 106: Learning rate = 0.098889
+Step 107: Learning rate = 0.098879
+Step 108: Learning rate = 0.098869
+Step 109: Learning rate = 0.098858
+Step 110: Learning rate = 0.098848
+Step 111: Learning rate = 0.098837
+Step 112: Learning rate = 0.098827
+Step 113: Learning rate = 0.098816
+Step 114: Learning rate = 0.098806
+Step 115: Learning rate = 0.098796
+Step 116: Learning rate = 0.098785
+Step 117: Learning rate = 0.098775
+Step 118: Learning rate = 0.098764
+Step 119: Learning rate = 0.098754
+Step 120: Learning rate = 0.098744
+Step 121: Learning rate = 0.098733
+Step 122: Learning rate = 0.098723
+Step 123: Learning rate = 0.098712
+Step 124: Learning rate = 0.098702
+Step 125: Learning rate = 0.098692
+Step 126: Learning rate = 0.098681
+Step 127: Learning rate = 0.098671
+Step 128: Learning rate = 0.098660
+Step 129: Learning rate = 0.098650
+Step 130: Learning rate = 0.098640
+Step 131: Learning rate = 0.098629
+Step 132: Learning rate = 0.098619
+Step 133: Learning rate = 0.098608
+Step 134: Learning rate = 0.098598
+Step 135: Learning rate = 0.098588
+Step 136: Learning rate = 0.098577
+Step 137: Learning rate = 0.098567
+Step 138: Learning rate = 0.098557
+Step 139: Learning rate = 0.098546
+Step 140: Learning rate = 0.098536
+Step 141: Learning rate = 0.098525
+Step 142: Learning rate = 0.098515
+Step 143: Learning rate = 0.098505
+Step 144: Learning rate = 0.098494
+Step 145: Learning rate = 0.098484
+Step 146: Learning rate = 0.098474
+Step 147: Learning rate = 0.098463
+Step 148: Learning rate = 0.098453
+Step 149: Learning rate = 0.098442
+Step 150: Learning rate = 0.098432
+Step 151: Learning rate = 0.098422
+Step 152: Learning rate = 0.098411
+Step 153: Learning rate = 0.098401
+Step 154: Learning rate = 0.098391
+Step 155: Learning rate = 0.098380
+Step 156: Learning rate = 0.098370
+Step 157: Learning rate = 0.098359
+Step 158: Learning rate = 0.098349
+Step 159: Learning rate = 0.098339
+Step 160: Learning rate = 0.098328
+Step 161: Learning rate = 0.098318
+Step 162: Learning rate = 0.098308
+Step 163: Learning rate = 0.098297
+Step 164: Learning rate = 0.098287
+Step 165: Learning rate = 0.098277
+Step 166: Learning rate = 0.098266
+Step 167: Learning rate = 0.098256
+Step 168: Learning rate = 0.098246
+Step 169: Learning rate = 0.098235
+Step 170: Learning rate = 0.098225
+Step 171: Learning rate = 0.098214
+Step 172: Learning rate = 0.098204
+Step 173: Learning rate = 0.098194
+Step 174: Learning rate = 0.098183
+Step 175: Learning rate = 0.098173
+Step 176: Learning rate = 0.098163
+Step 177: Learning rate = 0.098152
+Step 178: Learning rate = 0.098142
+Step 179: Learning rate = 0.098132
+Step 180: Learning rate = 0.098121
+Step 181: Learning rate = 0.098111
+Step 182: Learning rate = 0.098101
+Step 183: Learning rate = 0.098090
+Step 184: Learning rate = 0.098080
+Step 185: Learning rate = 0.098070
+Step 186: Learning rate = 0.098059
+Step 187: Learning rate = 0.098049
+Step 188: Learning rate = 0.098039
+Step 189: Learning rate = 0.098028
+Step 190: Learning rate = 0.098018
+Step 191: Learning rate = 0.098008
+Step 192: Learning rate = 0.097997
+Step 193: Learning rate = 0.097987
+Step 194: Learning rate = 0.097977
+Step 195: Learning rate = 0.097966
+Step 196: Learning rate = 0.097956
+Step 197: Learning rate = 0.097946
+Step 198: Learning rate = 0.097935
+Step 199: Learning rate = 0.097925
+Step 200: Learning rate = 0.097915
+Step 201: Learning rate = 0.097905
+Step 202: Learning rate = 0.097894
+Step 203: Learning rate = 0.097884
+Step 204: Learning rate = 0.097874
+Step 205: Learning rate = 0.097863
+Step 206: Learning rate = 0.097853
+Step 207: Learning rate = 0.097843
+Step 208: Learning rate = 0.097832
+Step 209: Learning rate = 0.097822
+Step 210: Learning rate = 0.097812
+Step 211: Learning rate = 0.097801
+Step 212: Learning rate = 0.097791
+Step 213: Learning rate = 0.097781
+Step 214: Learning rate = 0.097771
+Step 215: Learning rate = 0.097760
+Step 216: Learning rate = 0.097750
+Step 217: Learning rate = 0.097740
+Step 218: Learning rate = 0.097729
+Step 219: Learning rate = 0.097719
+Step 220: Learning rate = 0.097709
+Step 221: Learning rate = 0.097698
+Step 222: Learning rate = 0.097688
+Step 223: Learning rate = 0.097678
+Step 224: Learning rate = 0.097668
+Step 225: Learning rate = 0.097657
+Step 226: Learning rate = 0.097647
+Step 227: Learning rate = 0.097637
+Step 228: Learning rate = 0.097626
+Step 229: Learning rate = 0.097616
+Step 230: Learning rate = 0.097606
+Step 231: Learning rate = 0.097596
+Step 232: Learning rate = 0.097585
+Step 233: Learning rate = 0.097575
+Step 234: Learning rate = 0.097565
+Step 235: Learning rate = 0.097554
+Step 236: Learning rate = 0.097544
+Step 237: Learning rate = 0.097534
+Step 238: Learning rate = 0.097524
+Step 239: Learning rate = 0.097513
+Step 240: Learning rate = 0.097503
+Step 241: Learning rate = 0.097493
+Step 242: Learning rate = 0.097483
+Step 243: Learning rate = 0.097472
+Step 244: Learning rate = 0.097462
+Step 245: Learning rate = 0.097452
+Step 246: Learning rate = 0.097441
+Step 247: Learning rate = 0.097431
+Step 248: Learning rate = 0.097421
+Step 249: Learning rate = 0.097411
+Step 250: Learning rate = 0.097400
+Step 251: Learning rate = 0.097390
+Step 252: Learning rate = 0.097380
+Step 253: Learning rate = 0.097370
+Step 254: Learning rate = 0.097359
+Step 255: Learning rate = 0.097349
+Step 256: Learning rate = 0.097339
+Step 257: Learning rate = 0.097329
+Step 258: Learning rate = 0.097318
+Step 259: Learning rate = 0.097308
+Step 260: Learning rate = 0.097298
+Step 261: Learning rate = 0.097288
+Step 262: Learning rate = 0.097277
+Step 263: Learning rate = 0.097267
+Step 264: Learning rate = 0.097257
+Step 265: Learning rate = 0.097247
+Step 266: Learning rate = 0.097236
+Step 267: Learning rate = 0.097226
+Step 268: Learning rate = 0.097216
+Step 269: Learning rate = 0.097206
+Step 270: Learning rate = 0.097195
+Step 271: Learning rate = 0.097185
+Step 272: Learning rate = 0.097175
+Step 273: Learning rate = 0.097165
+Step 274: Learning rate = 0.097154
+Step 275: Learning rate = 0.097144
+Step 276: Learning rate = 0.097134
+Step 277: Learning rate = 0.097124
+Step 278: Learning rate = 0.097113
+Step 279: Learning rate = 0.097103
+Step 280: Learning rate = 0.097093
+Step 281: Learning rate = 0.097083
+Step 282: Learning rate = 0.097073
+Step 283: Learning rate = 0.097062
+Step 284: Learning rate = 0.097052
+Step 285: Learning rate = 0.097042
+Step 286: Learning rate = 0.097032
+Step 287: Learning rate = 0.097021
+Step 288: Learning rate = 0.097011
+Step 289: Learning rate = 0.097001
+Step 290: Learning rate = 0.096991
+Step 291: Learning rate = 0.096981
+Step 292: Learning rate = 0.096970
+Step 293: Learning rate = 0.096960
+Step 294: Learning rate = 0.096950
+Step 295: Learning rate = 0.096940
+Step 296: Learning rate = 0.096929
+Step 297: Learning rate = 0.096919
+Step 298: Learning rate = 0.096909
+Step 299: Learning rate = 0.096899
+Step 300: Learning rate = 0.096889
+Step 301: Learning rate = 0.096878
+Step 302: Learning rate = 0.096868
+Step 303: Learning rate = 0.096858
+Step 304: Learning rate = 0.096848
+Step 305: Learning rate = 0.096838
+Step 306: Learning rate = 0.096827
+Step 307: Learning rate = 0.096817
+Step 308: Learning rate = 0.096807
+Step 309: Learning rate = 0.096797
+Step 310: Learning rate = 0.096787
+Step 311: Learning rate = 0.096776
+Step 312: Learning rate = 0.096766
+Step 313: Learning rate = 0.096756
+Step 314: Learning rate = 0.096746
+Step 315: Learning rate = 0.096736
+Step 316: Learning rate = 0.096725
+Step 317: Learning rate = 0.096715
+Step 318: Learning rate = 0.096705
+Step 319: Learning rate = 0.096695
+Step 320: Learning rate = 0.096685
+Step 321: Learning rate = 0.096674
+Step 322: Learning rate = 0.096664
+Step 323: Learning rate = 0.096654
+Step 324: Learning rate = 0.096644
+Step 325: Learning rate = 0.096634
+Step 326: Learning rate = 0.096624
+Step 327: Learning rate = 0.096613
+Step 328: Learning rate = 0.096603
+Step 329: Learning rate = 0.096593
+Step 330: Learning rate = 0.096583
+Step 331: Learning rate = 0.096573
+Step 332: Learning rate = 0.096563
+Step 333: Learning rate = 0.096552
+Step 334: Learning rate = 0.096542
+Step 335: Learning rate = 0.096532
+Step 336: Learning rate = 0.096522
+Step 337: Learning rate = 0.096512
+Step 338: Learning rate = 0.096501
+Step 339: Learning rate = 0.096491
+Step 340: Learning rate = 0.096481
+Step 341: Learning rate = 0.096471
+Step 342: Learning rate = 0.096461
+Step 343: Learning rate = 0.096451
+Step 344: Learning rate = 0.096440
+Step 345: Learning rate = 0.096430
+Step 346: Learning rate = 0.096420
+Step 347: Learning rate = 0.096410
+Step 348: Learning rate = 0.096400
+Step 349: Learning rate = 0.096390
+Step 350: Learning rate = 0.096380
+Step 351: Learning rate = 0.096369
+Step 352: Learning rate = 0.096359
+Step 353: Learning rate = 0.096349
+Step 354: Learning rate = 0.096339
+Step 355: Learning rate = 0.096329
+Step 356: Learning rate = 0.096319
+Step 357: Learning rate = 0.096308
+Step 358: Learning rate = 0.096298
+Step 359: Learning rate = 0.096288
+Step 360: Learning rate = 0.096278
+Step 361: Learning rate = 0.096268
+Step 362: Learning rate = 0.096258
+Step 363: Learning rate = 0.096248
+Step 364: Learning rate = 0.096237
+Step 365: Learning rate = 0.096227
+Step 366: Learning rate = 0.096217
+Step 367: Learning rate = 0.096207
+Step 368: Learning rate = 0.096197
+Step 369: Learning rate = 0.096187
+Step 370: Learning rate = 0.096177
+Step 371: Learning rate = 0.096167
+Step 372: Learning rate = 0.096156
+Step 373: Learning rate = 0.096146
+Step 374: Learning rate = 0.096136
+Step 375: Learning rate = 0.096126
+Step 376: Learning rate = 0.096116
+Step 377: Learning rate = 0.096106
+Step 378: Learning rate = 0.096096
+Step 379: Learning rate = 0.096086
+Step 380: Learning rate = 0.096075
+Step 381: Learning rate = 0.096065
+Step 382: Learning rate = 0.096055
+Step 383: Learning rate = 0.096045
+Step 384: Learning rate = 0.096035
+Step 385: Learning rate = 0.096025
+Step 386: Learning rate = 0.096015
+Step 387: Learning rate = 0.096005
+Step 388: Learning rate = 0.095994
+Step 389: Learning rate = 0.095984
+Step 390: Learning rate = 0.095974
+Step 391: Learning rate = 0.095964
+Step 392: Learning rate = 0.095954
+Step 393: Learning rate = 0.095944
+Step 394: Learning rate = 0.095934
+Step 395: Learning rate = 0.095924
+Step 396: Learning rate = 0.095914
+Step 397: Learning rate = 0.095903
+Step 398: Learning rate = 0.095893
+Step 399: Learning rate = 0.095883
+Step 400: Learning rate = 0.095873
+Step 401: Learning rate = 0.095863
+Step 402: Learning rate = 0.095853
+Step 403: Learning rate = 0.095843
+Step 404: Learning rate = 0.095833
+Step 405: Learning rate = 0.095823
+Step 406: Learning rate = 0.095813
+Step 407: Learning rate = 0.095802
+Step 408: Learning rate = 0.095792
+Step 409: Learning rate = 0.095782
+Step 410: Learning rate = 0.095772
+Step 411: Learning rate = 0.095762
+Step 412: Learning rate = 0.095752
+Step 413: Learning rate = 0.095742
+Step 414: Learning rate = 0.095732
+Step 415: Learning rate = 0.095722
+Step 416: Learning rate = 0.095712
+Step 417: Learning rate = 0.095702
+Step 418: Learning rate = 0.095692
+Step 419: Learning rate = 0.095681
+Step 420: Learning rate = 0.095671
+Step 421: Learning rate = 0.095661
+Step 422: Learning rate = 0.095651
+Step 423: Learning rate = 0.095641
+Step 424: Learning rate = 0.095631
+Step 425: Learning rate = 0.095621
+Step 426: Learning rate = 0.095611
+Step 427: Learning rate = 0.095601
+Step 428: Learning rate = 0.095591
+Step 429: Learning rate = 0.095581
+Step 430: Learning rate = 0.095571
+Step 431: Learning rate = 0.095561
+Step 432: Learning rate = 0.095550
+Step 433: Learning rate = 0.095540
+Step 434: Learning rate = 0.095530
+Step 435: Learning rate = 0.095520
+Step 436: Learning rate = 0.095510
+Step 437: Learning rate = 0.095500
+Step 438: Learning rate = 0.095490
+Step 439: Learning rate = 0.095480
+Step 440: Learning rate = 0.095470
+Step 441: Learning rate = 0.095460
+Step 442: Learning rate = 0.095450
+Step 443: Learning rate = 0.095440
+Step 444: Learning rate = 0.095430
+Step 445: Learning rate = 0.095420
+Step 446: Learning rate = 0.095410
+Step 447: Learning rate = 0.095400
+Step 448: Learning rate = 0.095390
+Step 449: Learning rate = 0.095379
+Step 450: Learning rate = 0.095369
+Step 451: Learning rate = 0.095359
+Step 452: Learning rate = 0.095349
+Step 453: Learning rate = 0.095339
+Step 454: Learning rate = 0.095329
+Step 455: Learning rate = 0.095319
+Step 456: Learning rate = 0.095309
+Step 457: Learning rate = 0.095299
+Step 458: Learning rate = 0.095289
+Step 459: Learning rate = 0.095279
+Step 460: Learning rate = 0.095269
+Step 461: Learning rate = 0.095259
+Step 462: Learning rate = 0.095249
+Step 463: Learning rate = 0.095239
+Step 464: Learning rate = 0.095229
+Step 465: Learning rate = 0.095219
+Step 466: Learning rate = 0.095209
+Step 467: Learning rate = 0.095199
+Step 468: Learning rate = 0.095189
+Step 469: Learning rate = 0.095179
+Step 470: Learning rate = 0.095169
+Step 471: Learning rate = 0.095159
+Step 472: Learning rate = 0.095149
+Step 473: Learning rate = 0.095139
+Step 474: Learning rate = 0.095129
+Step 475: Learning rate = 0.095119
+Step 476: Learning rate = 0.095109
+Step 477: Learning rate = 0.095099
+Step 478: Learning rate = 0.095088
+Step 479: Learning rate = 0.095078
+Step 480: Learning rate = 0.095068
+Step 481: Learning rate = 0.095058
+Step 482: Learning rate = 0.095048
+Step 483: Learning rate = 0.095038
+Step 484: Learning rate = 0.095028
+Step 485: Learning rate = 0.095018
+Step 486: Learning rate = 0.095008
+Step 487: Learning rate = 0.094998
+Step 488: Learning rate = 0.094988
+Step 489: Learning rate = 0.094978
+Step 490: Learning rate = 0.094968
+Step 491: Learning rate = 0.094958
+Step 492: Learning rate = 0.094948
+Step 493: Learning rate = 0.094938
+Step 494: Learning rate = 0.094928
+Step 495: Learning rate = 0.094918
+Step 496: Learning rate = 0.094908
+Step 497: Learning rate = 0.094898
+Step 498: Learning rate = 0.094888
+Step 499: Learning rate = 0.094878
+Step 500: Learning rate = 0.094868
+Step 501: Learning rate = 0.094858
+Step 502: Learning rate = 0.094848
+Step 503: Learning rate = 0.094838
+Step 504: Learning rate = 0.094828
+Step 505: Learning rate = 0.094818
+Step 506: Learning rate = 0.094808
+Step 507: Learning rate = 0.094798
+Step 508: Learning rate = 0.094788
+Step 509: Learning rate = 0.094778
+Step 510: Learning rate = 0.094768
+Step 511: Learning rate = 0.094758
+Step 512: Learning rate = 0.094748
+Step 513: Learning rate = 0.094738
+Step 514: Learning rate = 0.094728
+Step 515: Learning rate = 0.094719
+Step 516: Learning rate = 0.094709
+Step 517: Learning rate = 0.094699
+Step 518: Learning rate = 0.094689
+Step 519: Learning rate = 0.094679
+Step 520: Learning rate = 0.094669
+Step 521: Learning rate = 0.094659
+Step 522: Learning rate = 0.094649
+Step 523: Learning rate = 0.094639
+Step 524: Learning rate = 0.094629
+Step 525: Learning rate = 0.094619
+Step 526: Learning rate = 0.094609
+Step 527: Learning rate = 0.094599
+Step 528: Learning rate = 0.094589
+Step 529: Learning rate = 0.094579
+Step 530: Learning rate = 0.094569
+Step 531: Learning rate = 0.094559
+Step 532: Learning rate = 0.094549
+Step 533: Learning rate = 0.094539
+Step 534: Learning rate = 0.094529
+Step 535: Learning rate = 0.094519
+Step 536: Learning rate = 0.094509
+Step 537: Learning rate = 0.094499
+Step 538: Learning rate = 0.094489
+Step 539: Learning rate = 0.094479
+Step 540: Learning rate = 0.094469
+Step 541: Learning rate = 0.094459
+Step 542: Learning rate = 0.094449
+Step 543: Learning rate = 0.094440
+Step 544: Learning rate = 0.094430
+Step 545: Learning rate = 0.094420
+Step 546: Learning rate = 0.094410
+Step 547: Learning rate = 0.094400
+Step 548: Learning rate = 0.094390
+Step 549: Learning rate = 0.094380
+Step 550: Learning rate = 0.094370
+Step 551: Learning rate = 0.094360
+Step 552: Learning rate = 0.094350
+Step 553: Learning rate = 0.094340
+Step 554: Learning rate = 0.094330
+Step 555: Learning rate = 0.094320
+Step 556: Learning rate = 0.094310
+Step 557: Learning rate = 0.094300
+Step 558: Learning rate = 0.094290
+Step 559: Learning rate = 0.094280
+Step 560: Learning rate = 0.094270
+Step 561: Learning rate = 0.094261
+Step 562: Learning rate = 0.094251
+Step 563: Learning rate = 0.094241
+Step 564: Learning rate = 0.094231
+Step 565: Learning rate = 0.094221
+Step 566: Learning rate = 0.094211
+Step 567: Learning rate = 0.094201
+Step 568: Learning rate = 0.094191
+Step 569: Learning rate = 0.094181
+Step 570: Learning rate = 0.094171
+Step 571: Learning rate = 0.094161
+Step 572: Learning rate = 0.094151
+Step 573: Learning rate = 0.094141
+Step 574: Learning rate = 0.094132
+Step 575: Learning rate = 0.094122
+Step 576: Learning rate = 0.094112
+Step 577: Learning rate = 0.094102
+Step 578: Learning rate = 0.094092
+Step 579: Learning rate = 0.094082
+Step 580: Learning rate = 0.094072
+Step 581: Learning rate = 0.094062
+Step 582: Learning rate = 0.094052
+Step 583: Learning rate = 0.094042
+Step 584: Learning rate = 0.094032
+Step 585: Learning rate = 0.094023
+Step 586: Learning rate = 0.094013
+Step 587: Learning rate = 0.094003
+Step 588: Learning rate = 0.093993
+Step 589: Learning rate = 0.093983
+Step 590: Learning rate = 0.093973
+Step 591: Learning rate = 0.093963
+Step 592: Learning rate = 0.093953
+Step 593: Learning rate = 0.093943
+Step 594: Learning rate = 0.093933
+Step 595: Learning rate = 0.093924
+Step 596: Learning rate = 0.093914
+Step 597: Learning rate = 0.093904
+Step 598: Learning rate = 0.093894
+Step 599: Learning rate = 0.093884
+Step 600: Learning rate = 0.093874
+Step 601: Learning rate = 0.093864
+Step 602: Learning rate = 0.093854
+Step 603: Learning rate = 0.093844
+Step 604: Learning rate = 0.093834
+Step 605: Learning rate = 0.093825
+Step 606: Learning rate = 0.093815
+Step 607: Learning rate = 0.093805
+Step 608: Learning rate = 0.093795
+Step 609: Learning rate = 0.093785
+Step 610: Learning rate = 0.093775
+Step 611: Learning rate = 0.093765
+Step 612: Learning rate = 0.093755
+Step 613: Learning rate = 0.093746
+Step 614: Learning rate = 0.093736
+Step 615: Learning rate = 0.093726
+Step 616: Learning rate = 0.093716
+Step 617: Learning rate = 0.093706
+Step 618: Learning rate = 0.093696
+Step 619: Learning rate = 0.093686
+Step 620: Learning rate = 0.093676
+Step 621: Learning rate = 0.093667
+Step 622: Learning rate = 0.093657
+Step 623: Learning rate = 0.093647
+Step 624: Learning rate = 0.093637
+Step 625: Learning rate = 0.093627
+Step 626: Learning rate = 0.093617
+Step 627: Learning rate = 0.093607
+Step 628: Learning rate = 0.093598
+Step 629: Learning rate = 0.093588
+Step 630: Learning rate = 0.093578
+Step 631: Learning rate = 0.093568
+Step 632: Learning rate = 0.093558
+Step 633: Learning rate = 0.093548
+Step 634: Learning rate = 0.093538
+Step 635: Learning rate = 0.093529
+Step 636: Learning rate = 0.093519
+Step 637: Learning rate = 0.093509
+Step 638: Learning rate = 0.093499
+Step 639: Learning rate = 0.093489
+Step 640: Learning rate = 0.093479
+Step 641: Learning rate = 0.093469
+Step 642: Learning rate = 0.093460
+Step 643: Learning rate = 0.093450
+Step 644: Learning rate = 0.093440
+Step 645: Learning rate = 0.093430
+Step 646: Learning rate = 0.093420
+Step 647: Learning rate = 0.093410
+Step 648: Learning rate = 0.093400
+Step 649: Learning rate = 0.093391
+Step 650: Learning rate = 0.093381
+Step 651: Learning rate = 0.093371
+Step 652: Learning rate = 0.093361
+Step 653: Learning rate = 0.093351
+Step 654: Learning rate = 0.093341
+Step 655: Learning rate = 0.093332
+Step 656: Learning rate = 0.093322
+Step 657: Learning rate = 0.093312
+Step 658: Learning rate = 0.093302
+Step 659: Learning rate = 0.093292
+Step 660: Learning rate = 0.093282
+Step 661: Learning rate = 0.093273
+Step 662: Learning rate = 0.093263
+Step 663: Learning rate = 0.093253
+Step 664: Learning rate = 0.093243
+Step 665: Learning rate = 0.093233
+Step 666: Learning rate = 0.093224
+Step 667: Learning rate = 0.093214
+Step 668: Learning rate = 0.093204
+Step 669: Learning rate = 0.093194
+Step 670: Learning rate = 0.093184
+Step 671: Learning rate = 0.093174
+Step 672: Learning rate = 0.093165
+Step 673: Learning rate = 0.093155
+Step 674: Learning rate = 0.093145
+Step 675: Learning rate = 0.093135
+Step 676: Learning rate = 0.093125
+Step 677: Learning rate = 0.093116
+Step 678: Learning rate = 0.093106
+Step 679: Learning rate = 0.093096
+Step 680: Learning rate = 0.093086
+Step 681: Learning rate = 0.093076
+Step 682: Learning rate = 0.093067
+Step 683: Learning rate = 0.093057
+Step 684: Learning rate = 0.093047
+Step 685: Learning rate = 0.093037
+Step 686: Learning rate = 0.093027
+Step 687: Learning rate = 0.093017
+Step 688: Learning rate = 0.093008
+Step 689: Learning rate = 0.092998
+Step 690: Learning rate = 0.092988
+Step 691: Learning rate = 0.092978
+Step 692: Learning rate = 0.092968
+Step 693: Learning rate = 0.092959
+Step 694: Learning rate = 0.092949
+Step 695: Learning rate = 0.092939
+Step 696: Learning rate = 0.092929
+Step 697: Learning rate = 0.092920
+Step 698: Learning rate = 0.092910
+Step 699: Learning rate = 0.092900
+Step 700: Learning rate = 0.092890
+Step 701: Learning rate = 0.092880
+Step 702: Learning rate = 0.092871
+Step 703: Learning rate = 0.092861
+Step 704: Learning rate = 0.092851
+Step 705: Learning rate = 0.092841
+Step 706: Learning rate = 0.092831
+Step 707: Learning rate = 0.092822
+Step 708: Learning rate = 0.092812
+Step 709: Learning rate = 0.092802
+Step 710: Learning rate = 0.092792
+Step 711: Learning rate = 0.092783
+Step 712: Learning rate = 0.092773
+Step 713: Learning rate = 0.092763
+Step 714: Learning rate = 0.092753
+Step 715: Learning rate = 0.092743
+Step 716: Learning rate = 0.092734
+Step 717: Learning rate = 0.092724
+Step 718: Learning rate = 0.092714
+Step 719: Learning rate = 0.092704
+Step 720: Learning rate = 0.092695
+Step 721: Learning rate = 0.092685
+Step 722: Learning rate = 0.092675
+Step 723: Learning rate = 0.092665
+Step 724: Learning rate = 0.092656
+Step 725: Learning rate = 0.092646
+Step 726: Learning rate = 0.092636
+Step 727: Learning rate = 0.092626
+Step 728: Learning rate = 0.092617
+Step 729: Learning rate = 0.092607
+Step 730: Learning rate = 0.092597
+Step 731: Learning rate = 0.092587
+Step 732: Learning rate = 0.092578
+Step 733: Learning rate = 0.092568
+Step 734: Learning rate = 0.092558
+Step 735: Learning rate = 0.092548
+Step 736: Learning rate = 0.092539
+Step 737: Learning rate = 0.092529
+Step 738: Learning rate = 0.092519
+Step 739: Learning rate = 0.092509
+Step 740: Learning rate = 0.092500
+Step 741: Learning rate = 0.092490
+Step 742: Learning rate = 0.092480
+Step 743: Learning rate = 0.092470
+Step 744: Learning rate = 0.092461
+Step 745: Learning rate = 0.092451
+Step 746: Learning rate = 0.092441
+Step 747: Learning rate = 0.092431
+Step 748: Learning rate = 0.092422
+Step 749: Learning rate = 0.092412
+Step 750: Learning rate = 0.092402
+Step 751: Learning rate = 0.092392
+Step 752: Learning rate = 0.092383
+Step 753: Learning rate = 0.092373
+Step 754: Learning rate = 0.092363
+Step 755: Learning rate = 0.092353
+Step 756: Learning rate = 0.092344
+Step 757: Learning rate = 0.092334
+Step 758: Learning rate = 0.092324
+Step 759: Learning rate = 0.092315
+Step 760: Learning rate = 0.092305
+Step 761: Learning rate = 0.092295
+Step 762: Learning rate = 0.092285
+Step 763: Learning rate = 0.092276
+Step 764: Learning rate = 0.092266
+Step 765: Learning rate = 0.092256
+Step 766: Learning rate = 0.092246
+Step 767: Learning rate = 0.092237
+Step 768: Learning rate = 0.092227
+Step 769: Learning rate = 0.092217
+Step 770: Learning rate = 0.092208
+Step 771: Learning rate = 0.092198
+Step 772: Learning rate = 0.092188
+Step 773: Learning rate = 0.092178
+Step 774: Learning rate = 0.092169
+Step 775: Learning rate = 0.092159
+Step 776: Learning rate = 0.092149
+Step 777: Learning rate = 0.092140
+Step 778: Learning rate = 0.092130
+Step 779: Learning rate = 0.092120
+Step 780: Learning rate = 0.092111
+Step 781: Learning rate = 0.092101
+Step 782: Learning rate = 0.092091
+Step 783: Learning rate = 0.092081
+Step 784: Learning rate = 0.092072
+Step 785: Learning rate = 0.092062
+Step 786: Learning rate = 0.092052
+Step 787: Learning rate = 0.092043
+Step 788: Learning rate = 0.092033
+Step 789: Learning rate = 0.092023
+Step 790: Learning rate = 0.092014
+Step 791: Learning rate = 0.092004
+Step 792: Learning rate = 0.091994
+Step 793: Learning rate = 0.091984
+Step 794: Learning rate = 0.091975
+Step 795: Learning rate = 0.091965
+Step 796: Learning rate = 0.091955
+Step 797: Learning rate = 0.091946
+Step 798: Learning rate = 0.091936
+Step 799: Learning rate = 0.091926
+Step 800: Learning rate = 0.091917
+Step 801: Learning rate = 0.091907
+Step 802: Learning rate = 0.091897
+Step 803: Learning rate = 0.091888
+Step 804: Learning rate = 0.091878
+Step 805: Learning rate = 0.091868
+Step 806: Learning rate = 0.091859
+Step 807: Learning rate = 0.091849
+Step 808: Learning rate = 0.091839
+Step 809: Learning rate = 0.091829
+Step 810: Learning rate = 0.091820
+Step 811: Learning rate = 0.091810
+Step 812: Learning rate = 0.091800
+Step 813: Learning rate = 0.091791
+Step 814: Learning rate = 0.091781
+Step 815: Learning rate = 0.091771
+Step 816: Learning rate = 0.091762
+Step 817: Learning rate = 0.091752
+Step 818: Learning rate = 0.091742
+Step 819: Learning rate = 0.091733
+Step 820: Learning rate = 0.091723
+Step 821: Learning rate = 0.091713
+Step 822: Learning rate = 0.091704
+Step 823: Learning rate = 0.091694
+Step 824: Learning rate = 0.091684
+Step 825: Learning rate = 0.091675
+Step 826: Learning rate = 0.091665
+Step 827: Learning rate = 0.091656
+Step 828: Learning rate = 0.091646
+Step 829: Learning rate = 0.091636
+Step 830: Learning rate = 0.091627
+Step 831: Learning rate = 0.091617
+Step 832: Learning rate = 0.091607
+Step 833: Learning rate = 0.091598
+Step 834: Learning rate = 0.091588
+Step 835: Learning rate = 0.091578
+Step 836: Learning rate = 0.091569
+Step 837: Learning rate = 0.091559
+Step 838: Learning rate = 0.091549
+Step 839: Learning rate = 0.091540
+Step 840: Learning rate = 0.091530
+Step 841: Learning rate = 0.091520
+Step 842: Learning rate = 0.091511
+Step 843: Learning rate = 0.091501
+Step 844: Learning rate = 0.091491
+Step 845: Learning rate = 0.091482
+Step 846: Learning rate = 0.091472
+Step 847: Learning rate = 0.091463
+Step 848: Learning rate = 0.091453
+Step 849: Learning rate = 0.091443
+Step 850: Learning rate = 0.091434
+Step 851: Learning rate = 0.091424
+Step 852: Learning rate = 0.091414
+Step 853: Learning rate = 0.091405
+Step 854: Learning rate = 0.091395
+Step 855: Learning rate = 0.091386
+Step 856: Learning rate = 0.091376
+Step 857: Learning rate = 0.091366
+Step 858: Learning rate = 0.091357
+Step 859: Learning rate = 0.091347
+Step 860: Learning rate = 0.091337
+Step 861: Learning rate = 0.091328
+Step 862: Learning rate = 0.091318
+Step 863: Learning rate = 0.091309
+Step 864: Learning rate = 0.091299
+Step 865: Learning rate = 0.091289
+Step 866: Learning rate = 0.091280
+Step 867: Learning rate = 0.091270
+Step 868: Learning rate = 0.091260
+Step 869: Learning rate = 0.091251
+Step 870: Learning rate = 0.091241
+Step 871: Learning rate = 0.091232
+Step 872: Learning rate = 0.091222
+Step 873: Learning rate = 0.091212
+Step 874: Learning rate = 0.091203
+Step 875: Learning rate = 0.091193
+Step 876: Learning rate = 0.091184
+Step 877: Learning rate = 0.091174
+Step 878: Learning rate = 0.091164
+Step 879: Learning rate = 0.091155
+Step 880: Learning rate = 0.091145
+Step 881: Learning rate = 0.091136
+Step 882: Learning rate = 0.091126
+Step 883: Learning rate = 0.091116
+Step 884: Learning rate = 0.091107
+Step 885: Learning rate = 0.091097
+Step 886: Learning rate = 0.091088
+Step 887: Learning rate = 0.091078
+Step 888: Learning rate = 0.091068
+Step 889: Learning rate = 0.091059
+Step 890: Learning rate = 0.091049
+Step 891: Learning rate = 0.091040
+Step 892: Learning rate = 0.091030
+Step 893: Learning rate = 0.091020
+Step 894: Learning rate = 0.091011
+Step 895: Learning rate = 0.091001
+Step 896: Learning rate = 0.090992
+Step 897: Learning rate = 0.090982
+Step 898: Learning rate = 0.090972
+Step 899: Learning rate = 0.090963
+Step 900: Learning rate = 0.090953
+Step 901: Learning rate = 0.090944
+Step 902: Learning rate = 0.090934
+Step 903: Learning rate = 0.090925
+Step 904: Learning rate = 0.090915
+Step 905: Learning rate = 0.090905
+Step 906: Learning rate = 0.090896
+Step 907: Learning rate = 0.090886
+Step 908: Learning rate = 0.090877
+Step 909: Learning rate = 0.090867
+Step 910: Learning rate = 0.090857
+Step 911: Learning rate = 0.090848
+Step 912: Learning rate = 0.090838
+Step 913: Learning rate = 0.090829
+Step 914: Learning rate = 0.090819
+Step 915: Learning rate = 0.090810
+Step 916: Learning rate = 0.090800
+Step 917: Learning rate = 0.090790
+Step 918: Learning rate = 0.090781
+Step 919: Learning rate = 0.090771
+Step 920: Learning rate = 0.090762
+Step 921: Learning rate = 0.090752
+Step 922: Learning rate = 0.090743
+Step 923: Learning rate = 0.090733
+Step 924: Learning rate = 0.090724
+Step 925: Learning rate = 0.090714
+Step 926: Learning rate = 0.090704
+Step 927: Learning rate = 0.090695
+Step 928: Learning rate = 0.090685
+Step 929: Learning rate = 0.090676
+Step 930: Learning rate = 0.090666
+Step 931: Learning rate = 0.090657
+Step 932: Learning rate = 0.090647
+Step 933: Learning rate = 0.090638
+Step 934: Learning rate = 0.090628
+Step 935: Learning rate = 0.090618
+Step 936: Learning rate = 0.090609
+Step 937: Learning rate = 0.090599
+Step 938: Learning rate = 0.090590
+Step 939: Learning rate = 0.090580
+Step 940: Learning rate = 0.090571
+Step 941: Learning rate = 0.090561
+Step 942: Learning rate = 0.090552
+Step 943: Learning rate = 0.090542
+Step 944: Learning rate = 0.090533
+Step 945: Learning rate = 0.090523
+Step 946: Learning rate = 0.090514
+Step 947: Learning rate = 0.090504
+Step 948: Learning rate = 0.090494
+Step 949: Learning rate = 0.090485
+Step 950: Learning rate = 0.090475
+Step 951: Learning rate = 0.090466
+Step 952: Learning rate = 0.090456
+Step 953: Learning rate = 0.090447
+Step 954: Learning rate = 0.090437
+Step 955: Learning rate = 0.090428
+Step 956: Learning rate = 0.090418
+Step 957: Learning rate = 0.090409
+Step 958: Learning rate = 0.090399
+Step 959: Learning rate = 0.090390
+Step 960: Learning rate = 0.090380
+Step 961: Learning rate = 0.090371
+Step 962: Learning rate = 0.090361
+Step 963: Learning rate = 0.090352
+Step 964: Learning rate = 0.090342
+Step 965: Learning rate = 0.090332
+Step 966: Learning rate = 0.090323
+Step 967: Learning rate = 0.090313
+Step 968: Learning rate = 0.090304
+Step 969: Learning rate = 0.090294
+Step 970: Learning rate = 0.090285
+Step 971: Learning rate = 0.090275
+Step 972: Learning rate = 0.090266
+Step 973: Learning rate = 0.090256
+Step 974: Learning rate = 0.090247
+Step 975: Learning rate = 0.090237
+Step 976: Learning rate = 0.090228
+Step 977: Learning rate = 0.090218
+Step 978: Learning rate = 0.090209
+Step 979: Learning rate = 0.090199
+Step 980: Learning rate = 0.090190
+Step 981: Learning rate = 0.090180
+Step 982: Learning rate = 0.090171
+Step 983: Learning rate = 0.090161
+Step 984: Learning rate = 0.090152
+Step 985: Learning rate = 0.090142
+Step 986: Learning rate = 0.090133
+Step 987: Learning rate = 0.090123
+Step 988: Learning rate = 0.090114
+Step 989: Learning rate = 0.090104
+Step 990: Learning rate = 0.090095
+Step 991: Learning rate = 0.090085
+Step 992: Learning rate = 0.090076
+Step 993: Learning rate = 0.090066
+Step 994: Learning rate = 0.090057
+Step 995: Learning rate = 0.090047
+Step 996: Learning rate = 0.090038
+Step 997: Learning rate = 0.090028
+Step 998: Learning rate = 0.090019
+Step 999: Learning rate = 0.090009
+adam
+0.100000
+1000
+Initial loss: 113097874.05268784
+Final loss: 177.0637674581339
+start inference
+#############################################
+z_uncertain_list shape (5, 2)
+#############################################
+#############################################
+z_uncertain_list shape (5, 2)
+#############################################
+#############################################
+z_uncertain_list shape (5, 2)
+#############################################
+
+                     mean       std    median      5.0%     95.0%     n_eff     r_hat
+z_uncertain0[0]      1.00      0.00      1.00      1.00      1.00    389.76      1.00
+z_uncertain0[1]      0.87      0.01      0.87      0.84      0.88      3.59      1.55
+z_uncertain1[0]      0.25      0.48      0.39     -0.03      0.54     11.83      1.08
+z_uncertain1[1]     -0.18      0.47     -0.00     -0.83      0.01      7.73      1.15
+z_uncertain2[0]      0.97      0.12      1.00      1.00      1.01     18.59      1.06
+z_uncertain2[1]      0.90      0.18      0.85      0.84      0.88     20.15      1.09
+z_uncertain3[0]      0.01      0.01      0.00     -0.01      0.02    154.28      1.01
+z_uncertain3[1]      0.04      0.04      0.04      0.04      0.04     67.48      1.02
+z_uncertain4[0]      1.00      0.00      1.00      1.00      1.00   1180.15      1.00
+z_uncertain4[1]      0.13      0.00      0.13      0.12      0.13   1198.06      1.00
+
+Number of divergences: 5
+{'z_uncertain0': Array([[1.00218612, 0.87335832],
+       [0.99683779, 0.87768842],
+       [0.99864635, 0.87815068],
+       ...,
+       [0.99588205, 0.84181833],
+       [0.99914437, 0.84463446],
+       [0.99976871, 0.8449267 ]], dtype=float64), 'z_uncertain1': Array([[ 1.70712193e-01, -1.58169501e+00],
+       [ 5.86936013e-02, -1.56650676e+00],
+       [ 6.03961252e-02, -1.56492063e+00],
+       ...,
+       [ 3.69901608e-01,  3.87923815e-04],
+       [ 3.72719809e-01,  8.99650124e-04],
+       [ 3.79942493e-01, -1.25823756e-03]], dtype=float64), 'z_uncertain2': Array([[0.47062206, 1.40707151],
+       [0.49056007, 1.38265518],
+       [0.49195834, 1.3879275 ],
+       ...,
+       [0.99901517, 0.84404348],
+       [1.0006917 , 0.84551318],
+       [0.99769575, 0.84427863]], dtype=float64), 'z_uncertain3': Array([[-0.06675956, -0.38752833],
+       [ 0.00108396, -0.31853855],
+       [-0.00629931, -0.29312212],
+       ...,
+       [ 0.01133068,  0.04067188],
+       [ 0.01307438,  0.04074548],
+       [-0.00697267,  0.04291993]], dtype=float64), 'z_uncertain4': Array([[0.99975007, 0.12546345],
+       [1.00060682, 0.12596689],
+       [1.0017796 , 0.12444789],
+       ...,
+       [0.99800908, 0.12852598],
+       [1.00297224, 0.12320308],
+       [0.99955669, 0.12585594]], dtype=float64)}
+Script finished in 11 minutes and 10 seconds.

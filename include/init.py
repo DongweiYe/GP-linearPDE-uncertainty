@@ -16,11 +16,12 @@ def initialize_params_2d(sigma_init, lengthscale_init):
 
 
 class ModelInitializer_2d:
-    def __init__(self, number_u, number_f, sample_num, number_init, number_bound):
+    def __init__(self, number_u, number_f, sample_num, number_init, number_bound, noise_std):
         self.number_u = number_u
         self.number_f = number_f
         self.number_init = number_init
         self.number_bound = number_bound
+        self.noise_std = noise_std
 
         self.number_Y = number_u + number_bound * 2 + number_init + number_f
 
@@ -28,13 +29,16 @@ class ModelInitializer_2d:
         self.Xu_certain, self.yu_certain, self.xu_noise, self.tu_noise, self.Xu_noise, self.xu_fixed, self.tu_fixed, \
         self.Xu_fixed, self.Yu_fixed = get_u_training_data_2d(key_x_u, key_x_u_init, key_t_u_low, key_t_u_high,
                                                               key_x_noise, key_t_noise, self.number_u, self.number_init,
-                                                              self.number_bound)
+                                                              self.number_bound, self.noise_std)
         self.xf, self.tf, self.Xf, self.yf = get_f_training_data_2d(key_x_f, self.number_f)
 
         self.X = jnp.concatenate((self.Xu_noise, self.Xu_fixed, self.Xf))
         self.Y = jnp.concatenate((self.yu_certain, self.Yu_fixed, self.yf))
         self.Y_u = jnp.concatenate((self.yu_certain, self.Yu_fixed))
         self.Xu = jnp.concatenate((self.Xu_noise, self.Xu_fixed))
+
+        self.xtest = jnp.concatenate((self.Xu_fixed, self.Xf))
+        self.ytest = jnp.concatenate((self.Yu_fixed, self.yf))
 
         # TODO: add mean(yu_noise) to projection
         sigma_init = jnp.std(self.Y)
@@ -48,16 +52,20 @@ class ModelInitializer_2d:
 
         kernel_params_only_u = {'sigma': sigma_init, 'lengthscale': lengthscale_init}
 
-        k_ff_inv = jnp.linalg.solve(heat_equation_kff(self.Xf, self.Xf, kernel_params_only_u),
-                                    jnp.eye(heat_equation_kff(self.Xf, self.Xf, kernel_params_only_u).shape[0]))
-        yf_u = heat_equation_kuf(self.Xf, self.Xf, kernel_params_only_u) @ k_ff_inv @ self.yf
+        k_ff = heat_equation_kff(self.Xf, self.Xf, kernel_params_only_u)
+        k_ff_inv_yf: jnp.ndarray = jnp.linalg.solve(k_ff, self.yf)
+        yf_u =heat_equation_kuf(self.Xf, self.Xf, kernel_params_only_u) @ k_ff_inv_yf
+
+        # k_ff_inv = jnp.linalg.solve(heat_equation_kff(self.Xf, self.Xf, kernel_params_only_u),
+        #                             jnp.eye(heat_equation_kff(self.Xf, self.Xf, kernel_params_only_u).shape[0]))
+        # yf_u = heat_equation_kuf(self.Xf, self.Xf, kernel_params_only_u) @ k_ff_inv @ self.yf
         new_Y = jnp.concatenate((self.yu_certain, yf_u))
         new_sigma_init = jnp.std(new_Y)
         new_sigma_init_yf = jnp.std(yf_u)
         print(f"new_sigma_init_yu: {sigma_init_yu}", f"new_sigma_init_yf: {new_sigma_init_yf}",
               f"new_sigma_init: {new_sigma_init}", sep='\t')
 
-        self.heat_params_init = initialize_params_2d(new_sigma_init, lengthscale_init)
+        self.heat_params_init = initialize_params_2d(sigma_init_yu, lengthscale_init)
 
     def initialize(self):
         return self.heat_params_init
