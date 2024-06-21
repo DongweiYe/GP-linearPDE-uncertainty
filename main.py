@@ -130,7 +130,6 @@ if __name__ == '__main__':
                       method='L-BFGS-B')
     map_estimate = result.x.reshape(Xu_noise.shape)
 
-    # 打印 MAP 估计值
     print("MAP Estimate:\n", map_estimate)
 
 
