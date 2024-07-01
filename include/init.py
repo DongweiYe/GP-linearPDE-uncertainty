@@ -1,7 +1,9 @@
 import jax.numpy as jnp
 from include.config import key_x_u, key_x_f, key_x_u_init, key_t_u_low, key_t_u_high, key_x_noise,\
     key_t_noise
-from include.heat2d import get_u_training_data_2d, get_f_training_data_2d, heat_equation_kff, heat_equation_kuf
+from include.heat2d import get_u_training_data_2d, get_f_training_data_2d, heat_equation_kff, heat_equation_kuf, \
+    get_u_training_data_2d_qmc
+
 
 def initialize_params_2d(sigma_init, lengthscale_init):
     # Initialize RBF kernel hyperparameters
@@ -22,40 +24,40 @@ class ModelInitializer_2d:
         self.number_init = number_init
         self.number_bound = number_bound
         self.noise_std = noise_std
-
-        self.number_Y = number_u + number_bound * 2 + number_init + number_f
+        # self.number_Y = number_u + number_bound * 2 + number_init + number_f
 
         # Initialize data
         self.Xu_certain, self.yu_certain, self.xu_noise, self.tu_noise, self.Xu_noise, self.xu_fixed, self.tu_fixed, \
-        self.Xu_fixed, self.Yu_fixed = get_u_training_data_2d(key_x_u, key_x_u_init, key_t_u_low, key_t_u_high,
+        self.Xu_fixed, self.Yu_fixed, self.number_init, self.number_bound = get_u_training_data_2d_qmc(key_x_u, key_x_u_init, key_t_u_low, key_t_u_high,
                                                               key_x_noise, key_t_noise, self.number_u, self.number_init,
                                                               self.number_bound, self.noise_std)
         self.xf, self.tf, self.Xf, self.yf = get_f_training_data_2d(key_x_f, self.number_f)
 
-        self.X = jnp.concatenate((self.Xu_noise, self.Xu_fixed, self.Xf))
+        self.X_with_noise = jnp.concatenate((self.Xu_noise, self.Xu_fixed, self.Xf))
+        self.X_without_noise = jnp.concatenate((self.Xu_certain, self.Xu_fixed, self.Xf))
         self.Y = jnp.concatenate((self.yu_certain, self.Yu_fixed, self.yf))
-        self.Y_u = jnp.concatenate((self.yu_certain, self.Yu_fixed))
-        self.Xu = jnp.concatenate((self.Xu_noise, self.Xu_fixed))
+        self.number_Y = self.Y.shape[0]
+        self.Yu = jnp.concatenate((self.yu_certain, self.Yu_fixed))
+        self.Xu_with_noise = jnp.concatenate((self.Xu_noise, self.Xu_fixed))
+        self.Xu_without_noise = jnp.concatenate((self.Xu_certain, self.Xu_fixed))
 
         self.xtest = jnp.concatenate((self.Xu_fixed, self.Xf))
         self.ytest = jnp.concatenate((self.Yu_fixed, self.yf))
 
         # TODO: add mean(yu_noise) to projection
         sigma_init = jnp.std(self.Y)
-        sigma_init_yu = jnp.std(self.Y_u)
+        sigma_init_yu = jnp.std(self.Yu)
         sigma_init_yf = jnp.std(self.yf)
         print(f"sigma_init_yu: {sigma_init_yu}", f"sigma_init_yf: {sigma_init_yf}", f"sigma_init: {sigma_init}",
               sep='\t')
 
-        distances_init = jnp.sqrt((self.X[:, None, :] - self.X[None, :, :]) ** 2)
+        distances_init = jnp.sqrt((self.X_with_noise[:, None, :] - self.X_with_noise[None, :, :]) ** 2)
         lengthscale_init = jnp.mean(distances_init, axis=(0, 1))
 
         kernel_params_only_u = {'sigma': sigma_init, 'lengthscale': lengthscale_init}
-
         k_ff = heat_equation_kff(self.Xf, self.Xf, kernel_params_only_u)
         k_ff_inv_yf: jnp.ndarray = jnp.linalg.solve(k_ff, self.yf)
         yf_u =heat_equation_kuf(self.Xf, self.Xf, kernel_params_only_u) @ k_ff_inv_yf
-
         # k_ff_inv = jnp.linalg.solve(heat_equation_kff(self.Xf, self.Xf, kernel_params_only_u),
         #                             jnp.eye(heat_equation_kff(self.Xf, self.Xf, kernel_params_only_u).shape[0]))
         # yf_u = heat_equation_kuf(self.Xf, self.Xf, kernel_params_only_u) @ k_ff_inv @ self.yf
@@ -65,8 +67,9 @@ class ModelInitializer_2d:
         print(f"new_sigma_init_yu: {sigma_init_yu}", f"new_sigma_init_yf: {new_sigma_init_yf}",
               f"new_sigma_init: {new_sigma_init}", sep='\t')
 
-        self.heat_params_init = initialize_params_2d(sigma_init_yu, lengthscale_init)
+        self.heat_params_init = initialize_params_2d(new_sigma_init, lengthscale_init)
 
+        print("use %%%new_sigma_init%%%% for kernel_params")
     def initialize(self):
         return self.heat_params_init
 

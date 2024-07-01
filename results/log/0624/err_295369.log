@@ -1,0 +1,71 @@
+Traceback (most recent call last):
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.9/site-packages/scipy/optimize/_differentiable_functions.py", line 141, in fun_wrapped
+    fx = np.asarray(fx).item()
+ValueError: can only convert an array of size 1 to a Python scalar
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/local/295369/main.py", line 129, in <module>
+    result = minimize(neg_log_posterior, initial_guess, args=(Xu_fixed, Xf, Y, Xu_noise, prior_var*jnp.eye(2), param_iter),
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.9/site-packages/scipy/optimize/_minimize.py", line 699, in minimize
+    res = _minimize_lbfgsb(fun, x0, args, jac, bounds,
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.9/site-packages/scipy/optimize/_lbfgsb_py.py", line 308, in _minimize_lbfgsb
+    sf = _prepare_scalar_function(fun, x0, jac=jac, args=args, epsilon=eps,
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.9/site-packages/scipy/optimize/_optimize.py", line 263, in _prepare_scalar_function
+    sf = ScalarFunction(fun, x0, args, grad, hess,
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.9/site-packages/scipy/optimize/_differentiable_functions.py", line 158, in __init__
+    self._update_fun()
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.9/site-packages/scipy/optimize/_differentiable_functions.py", line 251, in _update_fun
+    self._update_fun_impl()
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.9/site-packages/scipy/optimize/_differentiable_functions.py", line 155, in update_fun
+    self.f = fun_wrapped(self.x)
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.9/site-packages/scipy/optimize/_differentiable_functions.py", line 143, in fun_wrapped
+    raise ValueError(
+ValueError: The user-provided objective function must return a scalar value.
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[29919,1],0]
+  Exit code:    1
+--------------------------------------------------------------------------
+/tmp/slurmd/job295369/slurm_script: line 57: /home/yanw/uncertain/results/log/0624/295369_version.log: No such file or directory
+/tmp/slurmd/job295369/slurm_script: line 58: /home/yanw/uncertain/results/log/0624/295369_version.log: No such file or directory
+ERROR: Pipe to stdout was broken
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
+BrokenPipeError: [Errno 32] Broken pipe
+/tmp/slurmd/job295369/slurm_script: line 57: /home/yanw/uncertain/results/log/0624/295369_version.log: No such file or directory
+/tmp/slurmd/job295369/slurm_script: line 58: /home/yanw/uncertain/results/log/0624/295369_version.log: No such file or directory
+ERROR: Pipe to stdout was broken
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
+BrokenPipeError: [Errno 32] Broken pipe
+/tmp/slurmd/job295369/slurm_script: line 57: /home/yanw/uncertain/results/log/0624/295369_version.log: No such file or directory
+/tmp/slurmd/job295369/slurm_script: line 58: /home/yanw/uncertain/results/log/0624/295369_version.log: No such file or directory
+ERROR: Pipe to stdout was broken
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
+BrokenPipeError: [Errno 32] Broken pipe
+/tmp/slurmd/job295369/slurm_script: line 57: /home/yanw/uncertain/results/log/0624/295369_version.log: No such file or directory
+/tmp/slurmd/job295369/slurm_script: line 58: /home/yanw/uncertain/results/log/0624/295369_version.log: No such file or directory
+ERROR: Pipe to stdout was broken
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
+BrokenPipeError: [Errno 32] Broken pipe
+/tmp/slurmd/job295369/slurm_script: line 57: /home/yanw/uncertain/results/log/0624/295369_version.log: No such file or directory
+/tmp/slurmd/job295369/slurm_script: line 58: /home/yanw/uncertain/results/log/0624/295369_version.log: No such file or directory
+ERROR: Pipe to stdout was broken
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
+BrokenPipeError: [Errno 32] Broken pipe
+/tmp/slurmd/job295369/slurm_script: line 57: /home/yanw/uncertain/results/log/0624/295369_version.log: No such file or directory
+/tmp/slurmd/job295369/slurm_script: line 58: /home/yanw/uncertain/results/log/0624/295369_version.log: No such file or directory
+ERROR: Pipe to stdout was broken
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
+BrokenPipeError: [Errno 32] Broken pipe
+/tmp/slurmd/job295369/slurm_script: line 67: /home/yanw/uncertain/results/log/0624/295369_version.log: No such file or directory
+cp: missing destination file operand after '*.png/home/yanw/uncertain/results/figures/0624'
+Try 'cp --help' for more information.
+cp: missing destination file operand after '/home/yanw/uncertain'
+Try 'cp --help' for more information.

@@ -1,3 +1,5 @@
+import datetime
+from scipy.stats import qmc
 import jax
 import jax.numpy as jnp
 import matplotlib.pyplot as plt
@@ -14,26 +16,63 @@ plt.rcParams.update({'font.size': 22})
 def f_xt(Xf) -> jnp.ndarray:
     x = Xf[:, :1]
     t = Xf[:, -1:]
-    # f: jnp.ndarray = jnp.exp((-1) * t) * (4 * (pi ** 2) + (-1)) * jnp.sin(2 * pi * x)
-    f: jnp.ndarray = jnp.exp((-1) * t) * ((1/4) * (pi ** 2) + (-1)) * jnp.sin((pi/2) * x)
+    f: jnp.ndarray = jnp.exp((-1) * t) * (4 * (pi ** 2) + (-1)) * jnp.sin(2 * pi * x)
+    # f: jnp.ndarray = jnp.exp((-1) * t) * ((1/4) * (pi ** 2) + (-1)) * jnp.sin((pi/2) * x)
     return f
 
 
 def u_xt(Xu_fixed) -> jnp.ndarray:
     x = Xu_fixed[:, :1]
     t = Xu_fixed[:, -1:]
-    # u: jnp.ndarray = jnp.exp((-1) * t) * jnp.sin(2 * pi * x)
-    u: jnp.ndarray = jnp.exp((-1) * t) * jnp.sin((pi/2) * x)
+    u: jnp.ndarray = jnp.exp((-1) * t) * jnp.sin(2 * pi * x)
+    # u: jnp.ndarray = jnp.exp((-1) * t) * jnp.sin((pi/2) * x)
     return u
 
+def plot_u_f(Xu_certain_all, Xf, Xu_noise):
+    x = jnp.linspace(0, 1, 100)
+    t = jnp.linspace(0, 1, 100)
+    X, T = jnp.meshgrid(x, t)
+    X_plot = jnp.vstack([X.ravel(), T.ravel()]).T
 
-def u_xt_noise(Xu_noise) -> jnp.ndarray:
-    x = Xu_noise[:, :1]
-    t = Xu_noise[:, -1:]
-    u: jnp.ndarray = jnp.exp((-1) * t) * jnp.sin(2 * pi * x)
-    noise_std = 4e-2
-    u_noise = u + noise_std * jax.random.normal(jax.random.PRNGKey(0), shape=u.shape)
-    return u_noise
+    f_values = f_xt(X_plot).reshape(X.shape)
+    u_values = u_xt(X_plot).reshape(X.shape)
+
+    # Plot the functions with enhanced aesthetics
+    fig, ax = plt.subplots(1, 2, figsize=(14, 6), constrained_layout=True)
+
+    # f(x, t) plot
+    c1 = ax[0].contourf(X, T, f_values, levels=50, cmap='viridis')
+    fig.colorbar(c1, ax=ax[0], orientation='vertical', label='f(x, t) value')
+    ax[0].scatter(Xf[:, 0], Xf[:, 1], color='black', label='Xu points')
+    ax[0].set_title('f(x, t)', fontsize=16)
+    ax[0].set_xlabel('x', fontsize=14)
+    ax[0].set_ylabel('t', fontsize=14)
+    ax[0].tick_params(axis='both', which='major', labelsize=12)
+
+    # u(x, t) plot
+    c2 = ax[1].contourf(X, T, u_values, levels=50, cmap='plasma')
+    fig.colorbar(c2, ax=ax[1], orientation='vertical', label='u(x, t) value')
+    ax[1].scatter(Xu_certain_all[:, 0], Xu_certain_all[:, 1], color='black', label='Xu points')
+    ax[1].scatter(Xu_noise[:, 0], Xu_noise[:, 1], color='red', label='Xu noise points', marker='x')
+    ax[1].set_title('u(x, t)', fontsize=16)
+    ax[1].set_xlabel('x', fontsize=14)
+    ax[1].set_ylabel('t', fontsize=14)
+    ax[1].tick_params(axis='both', which='major', labelsize=12)
+
+    # General layout adjustments
+    for a in ax:
+        a.set_aspect('auto')
+        a.grid(True, linestyle='--', alpha=0.6)
+    current_time = datetime.datetime.now().strftime("%M%S")
+    plt.suptitle('Function Plots of f(x, t) and u(x, t)', fontsize=18)
+    plt.savefig(f'u_f_plot_{current_time}.png')
+# def u_xt_noise(Xu_noise) -> jnp.ndarray:
+#     x = Xu_noise[:, :1]
+#     t = Xu_noise[:, -1:]
+#     u: jnp.ndarray = jnp.exp((-1) * t) * jnp.sin(2 * pi * x)
+#     noise_std = 4e-2
+#     u_noise = u + noise_std * jax.random.normal(jax.random.PRNGKey(0), shape=u.shape)
+#     return u_noise
 
 
 def get_u_training_data_2d(key_x_u, key_x_u_init, key_t_u_low, key_t_u_high, key_x_noise, key_t_noise, sample_num,
@@ -47,8 +86,8 @@ def get_u_training_data_2d(key_x_u, key_x_u_init, key_t_u_low, key_t_u_high, key
 
     xu_noise = xu + noise_std * jax.random.normal(key_x_noise, shape=xu.shape)
     tu_noise = tu + noise_std * jax.random.normal(key_t_noise, shape=tu.shape)
-    xu_noise = jnp.clip(xu_noise, 0, 1)
-    tu_noise = jnp.clip(tu_noise, 0, 1)
+    # xu_noise = jnp.clip(xu_noise, 0, 1)
+    # tu_noise = jnp.clip(tu_noise, 0, 1)
 
     Xu_noise = jnp.concatenate([xu_noise, tu_noise], axis=1)
     # init + boundary
@@ -70,8 +109,56 @@ def get_u_training_data_2d(key_x_u, key_x_u_init, key_t_u_low, key_t_u_high, key
     return Xu_certain, yu_certain, xu_noise, tu_noise, Xu_noise, xu_fixed, tu_fixed, Xu_fixed, Yu_fixed
 
 
+def get_u_training_data_2d_qmc(key_x_u, key_x_u_init, key_t_u_low, key_t_u_high, key_x_noise, key_t_noise, sample_num,
+                           init_num, bnum, noise_std) -> (jnp.ndarray, jnp.ndarray, jnp.ndarray, jnp.ndarray, jnp.ndarray,
+                                              jnp.ndarray, jnp.ndarray, jnp.ndarray, jnp.ndarray):
+    qMCsampler = qmc.Sobol(d=2, seed=0)
+    qMCsample = qMCsampler.random_base2(m=int(jnp.log2(sample_num)))  # 生成最近的2的幂次个样本
+    if qMCsample.shape[0] > sample_num:
+        qMCsample = qMCsample[:sample_num]
+
+    Xu_certain = jnp.array(qMCsample)
+    yu_certain = u_xt(Xu_certain)
+    # yu_noise = u_xt_noise(Xu_certain)
+    xu, tu = Xu_certain[:, :1], Xu_certain[:, -1:]
+
+    xu_noise = xu + noise_std * jax.random.normal(key_x_noise, shape=xu.shape)
+    tu_noise = tu + noise_std * jax.random.normal(key_t_noise, shape=tu.shape)
+    # xu_noise = jnp.clip(xu_noise, 0, 1)
+    # tu_noise = jnp.clip(tu_noise, 0, 1)
+    Xu_noise = jnp.concatenate([xu_noise, tu_noise], axis=1)
+
+
+    # init + boundary
+    qmc_sampler_init = qmc.Sobol(d=1, seed=1)
+    qmc_sampler_bound_low = qmc.Sobol(d=1, seed=2)
+    qmc_sampler_bound_high = qmc.Sobol(d=1, seed=3)
+    xu_init = jnp.array(qmc_sampler_init.random_base2(m=int(jnp.log2(init_num))))
+    init_num = xu_init.shape[0]
+    tu_init = jnp.zeros(shape=(init_num, 1))
+
+    tu_bound_low = jnp.array(qmc_sampler_bound_low.random_base2(m=int(jnp.log2(bnum))))
+    tu_bound_high = jnp.array(qmc_sampler_bound_high.random_base2(m=int(jnp.log2(bnum))))
+    bnum = tu_bound_low.shape[0]
+    xu_bound_low = jnp.zeros(shape=(bnum, 1))
+    xu_bound_high = jnp.ones(shape=(bnum, 1))
+
+    xu_fixed = jnp.concatenate((xu_bound_low, xu_init, xu_bound_high))
+    tu_fixed = jnp.concatenate((tu_bound_low, tu_init, tu_bound_high))
+    Xu_fixed = jnp.concatenate([xu_fixed, tu_fixed], axis=1)
+    print("Xu_fixed: ", Xu_fixed)
+    Yu_fixed = u_xt(Xu_fixed)
+
+    return Xu_certain, yu_certain, xu_noise, tu_noise, Xu_noise, xu_fixed, tu_fixed, Xu_fixed, Yu_fixed, init_num, bnum
+
+
 def get_f_training_data_2d(key_x_f, sample_num) -> (jnp.ndarray, jnp.ndarray, jnp.ndarray, jnp.ndarray):
-    Xf = jax.random.uniform(key_x_f, shape=(sample_num, 2), dtype=jnp.float64)
+    # Xf = jax.random.uniform(key_x_f, shape=(sample_num, 2), dtype=jnp.float64)
+    qMCsampler = qmc.Sobol(d=2, seed=4)
+    qMCsample = qMCsampler.random_base2(m=int(jnp.log2(sample_num)))
+    if qMCsample.shape[0] > sample_num:
+        qMCsample = qMCsample[:sample_num]
+    Xf = jnp.array(qMCsample)
     yf = f_xt(Xf)
     xf, tf = Xf[:, :1], Xf[:, -1:]
 

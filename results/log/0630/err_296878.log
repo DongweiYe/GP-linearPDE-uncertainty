@@ -1,0 +1,24 @@
+Traceback (most recent call last):
+  File "/local/296878/main.py", line 118, in <module>
+    plot_u_f()
+  File "/local/296878/include/heat2d.py", line 35, in plot_u_f
+    f_values = f_xt(X).reshape(X.shape)
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.9/site-packages/jax/_src/numpy/array_methods.py", line 148, in _reshape
+    newshape = _compute_newshape(a, args[0] if len(args) == 1 else args)
+  File "/home/yanw/.conda/envs/uncertain/lib/python3.9/site-packages/jax/_src/numpy/array_methods.py", line 136, in _compute_newshape
+    raise TypeError(f"cannot reshape array of shape {np.shape(a)} (size {np.size(a)}) "
+TypeError: cannot reshape array of shape (10000, 1) (size 10000) into shape (10000, 2) (size 20000)
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun detected that one or more processes exited with non-zero status, thus causing
+the job to be terminated. The first process to do so was:
+
+  Process name: [[31083,1],0]
+  Exit code:    1
+--------------------------------------------------------------------------
+cp: cannot stat '*.png': No such file or directory
+cp: missing destination file operand after '/home/yanw/uncertain'
+Try 'cp --help' for more information.

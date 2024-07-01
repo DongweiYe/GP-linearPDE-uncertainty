@@ -1,0 +1,33 @@
+/tmp/slurmd/job296437/slurm_script: line 57: /home/yanw/uncertain/results/log/0628/296437_version.log: No such file or directory
+/tmp/slurmd/job296437/slurm_script: line 58: /home/yanw/uncertain/results/log/0628/296437_version.log: No such file or directory
+ERROR: Pipe to stdout was broken
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
+BrokenPipeError: [Errno 32] Broken pipe
+/tmp/slurmd/job296437/slurm_script: line 57: /home/yanw/uncertain/results/log/0628/296437_version.log: No such file or directory
+/tmp/slurmd/job296437/slurm_script: line 58: /home/yanw/uncertain/results/log/0628/296437_version.log: No such file or directory
+ERROR: Pipe to stdout was broken
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
+BrokenPipeError: [Errno 32] Broken pipe
+/tmp/slurmd/job296437/slurm_script: line 57: /home/yanw/uncertain/results/log/0628/296437_version.log: No such file or directory
+/tmp/slurmd/job296437/slurm_script: line 58: /home/yanw/uncertain/results/log/0628/296437_version.log: No such file or directory
+ERROR: Pipe to stdout was broken
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
+BrokenPipeError: [Errno 32] Broken pipe
+/tmp/slurmd/job296437/slurm_script: line 57: /home/yanw/uncertain/results/log/0628/296437_version.log: No such file or directory
+/tmp/slurmd/job296437/slurm_script: line 58: /home/yanw/uncertain/results/log/0628/296437_version.log: No such file or directory
+ERROR: Pipe to stdout was broken
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
+BrokenPipeError: [Errno 32] Broken pipe
+/tmp/slurmd/job296437/slurm_script: line 57: /home/yanw/uncertain/results/log/0628/296437_version.log: No such file or directory
+/tmp/slurmd/job296437/slurm_script: line 58: /home/yanw/uncertain/results/log/0628/296437_version.log: No such file or directory
+ERROR: Pipe to stdout was broken
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
+BrokenPipeError: [Errno 32] Broken pipe
+/tmp/slurmd/job296437/slurm_script: line 57: /home/yanw/uncertain/results/log/0628/296437_version.log: No such file or directory
+/tmp/slurmd/job296437/slurm_script: line 58: /home/yanw/uncertain/results/log/0628/296437_version.log: No such file or directory
+ERROR: Pipe to stdout was broken
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
+BrokenPipeError: [Errno 32] Broken pipe
+cp: missing destination file operand after '/home/yanw/uncertain'
+Try 'cp --help' for more information.
+mv: cannot stat '*.log': No such file or directory

@@ -66,7 +66,7 @@ def train_heat_equation_model_2d(heat_params_init, Xuz, Xfz, Xfg, number_Y, Y, n
     # plt.ylim(-100, 100)
     ax.plot(losses, 'bo-', label='train')
     plt.xlabel(f"loss = {loss}")
-    print_optimizer_info(fig)
+    # print_optimizer_info(fig)
     lr_text = f"{learning_rate:.6f}"
     optimizer_text = f"{optimizer_in_use_name}"
     epoch_text = f"{num_epochs}"

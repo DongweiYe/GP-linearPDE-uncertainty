@@ -1,0 +1,3 @@
+/local/295114/include/mcmc_posterior.py:70: UserWarning: There are not enough devices to run parallel chains: expected 2 but got 1. Chains will be drawn sequentially. If you are running MCMC in CPU, consider using `numpyro.set_host_device_count(2)` at the beginning of your program. You can double-check how many devices are available in your system using `jax.local_device_count()`.
+  mcmc = MCMC(kernel, num_warmup=num_warmup, num_samples=num_samples,num_chains=2, chain_method='parallel', progress_bar=False)
+slurmstepd-hpc-node01: error: *** JOB 295114 ON hpc-node01 CANCELLED AT 2024-06-23T00:35:05 DUE TO TIME LIMIT ***

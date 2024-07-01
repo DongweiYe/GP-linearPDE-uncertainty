@@ -1,12 +1,12 @@
 #!/bin/bash
 #SBATCH --job-name=uncertain
-#SBATCH -p am
+#SBATCH -p am,mia,mia-pof
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=16
 #SBATCH --mem-per-cpu=128G
 #SBATCH --gres=gpu:1
-#SBATCH --time=10:03:00
+#SBATCH --time=64:03:00
 #SBATCH --output=uncertain_%j.log
 #SBATCH --error=err_%j.log
 
@@ -73,7 +73,7 @@ echo "Script finished in $((running_time / 60)) minutes and $((running_time % 60
 mkdir -p ${SLURM_SUBMIT_DIR}/results/figures/${today}
 mkdir -p ${SLURM_SUBMIT_DIR}/results/log/${today}
 cp *.pdf ${SLURM_SUBMIT_DIR}/results/figures/${today}
-cp *.png${SLURM_SUBMIT_DIR}/results/figures/${today}
+cp *.png ${SLURM_SUBMIT_DIR}/results/figures/${today}
 cp ${SCRATCH_DIRECTORY} ${SLURM_SUBMIT_DIR}
 cd ${SLURM_SUBMIT_DIR}
 mkdir -p ${SLURM_SUBMIT_DIR}/results/log/${today}
