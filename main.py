@@ -30,15 +30,16 @@ jax.config.update("jax_enable_x64", True)
 # 5: change noise data
 # 6: mcmc adapted with two types of noise
 # 7: plot the distribution of the posterior
+# 8: prediction
+# 9: plot the prediction
+# 10: solved the memory issue
+# 11: rewrite the derivative of the kernel
 
 
 # TODO
 # 1: reaction_diffusion
-# 3: prediction
-# 4: 画分布图
-#检查是不是画一个图,画出一个图多分布
 
-#跑出结果来
+
 # %%
 learning_rate_pred = 0.01
 epoch_pred= 100
