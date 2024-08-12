@@ -71,8 +71,9 @@ def train_heat_equation_model_2d(heat_params_init, Xuz, Xfz, Xfg, number_Y, Y, n
     optimizer_text = f"{optimizer_in_use_name}"
     epoch_text = f"{num_epochs}"
     current_time = datetime.datetime.now().strftime("%m%d_%H%M%S")
-    # plt.savefig(f"train_{optimizer_text}_{lr_text}_{epoch_text}_{current_time}.pdf", format='pdf')
-    # print(f"Initial loss: {init_loss}")
-    # print(f"Final loss: {loss}")
+    #plt.savefig(f"train_{lr_text}_{epoch_text}_{current_time}.pdf", format='pdf')
+    print(f"Initial loss: {init_loss}")
+    print(f"Final loss: {loss}")
+    plt.close(fig)
     return param_iter, optimizer_text, lr_text, epoch_text
 

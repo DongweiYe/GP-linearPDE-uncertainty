@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=uncertain
+#SBATCH --job-name=pred
 #SBATCH -p main,mia,mia-pof,am
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
@@ -9,6 +9,7 @@
 #SBATCH --time=64:03:00
 #SBATCH --output=uncertain_%j.log
 #SBATCH --error=err_%j.log
+
 
 
 hostname
@@ -46,7 +47,7 @@ echo "Starting worker: "
 export JAX_PLATFORM_NAME=gpu
 export JAX_TRACEBACK_FILTERING=off
 export XLA_PYTHON_CLIENT_PREALLOCATE=false
-mpirun -np 1 python main.py
+mpirun -np 1 python main_loadForPred.py
 # -----------------end--------------------------------
 
 

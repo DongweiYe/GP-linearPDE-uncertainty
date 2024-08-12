@@ -1,7 +1,7 @@
 # %%
 import pymc as pm
-from .heat2d import heat_equation_kuu_noise, heat_equation_kuf, heat_equation_kfu, heat_equation_kff, \
-    heat_equation_kff_noise, heat_equation_kuu, heat_equation_kuu_noise2
+from .heat2d import compute_kuu, compute_kuf, compute_kfu, \
+    compute_kff
 import numpyro
 import numpyro.distributions as dist
 from numpyro.infer import MCMC, NUTS, HMC,BarkerMH
@@ -11,20 +11,50 @@ from collections import namedtuple
 from numpyro.infer.mcmc import MCMCKernel, MCMC
 import numpy as np
 
-def compute_K(init, z_prior, Xfz, Xfg):
+# def compute_K_old(init, z_prior, Xfz, Xfg):
+#     Xuz = z_prior
+#     params = {'sigma': init[-1][0], 'lengthscale': init[-1][1]}
+#     zz_uu = compute_kuu(Xuz, Xuz, params)
+#     zz_uf = compute_kuu(Xuz, Xfz, params)
+#     zg_uf = compute_kuf(Xuz, Xfg, params)
+#     zz_fu = compute_kuu(Xfz, Xuz, params)
+#     zz_ff = compute_kuu(Xfz, Xfz, params)
+#     zg_ff = compute_kuf(Xfz, Xfg, params)
+#     gz_fu = compute_kfu(Xfg, Xuz, params)
+#     gz_ff = compute_kfu(Xfg, Xfz, params)
+#     gg_ff = compute_kff(Xfg, Xfg, params)
+#
+#
+#     # zz_uu = heat_equation_kuu(Xuz, Xuz, params)
+#     # zz_uf = heat_equation_kuu(Xuz, Xfz, params)
+#     # zg_uf = heat_equation_kuf(Xuz, Xfg, params)
+#     # zz_fu = heat_equation_kuu(Xfz, Xuz, params)
+#     # zz_ff = heat_equation_kuu(Xfz, Xfz, params)
+#     # zg_ff = heat_equation_kuf(Xfz, Xfg, params)
+#     # gz_fu = heat_equation_kfu(Xfg, Xuz, params)
+#     # gz_ff = heat_equation_kfu(Xfg, Xfz, params)
+#     # gg_ff = heat_equation_kff(Xfg, Xfg, params)
+#     K = jnp.block([[zz_uu, zz_uf, zg_uf], [zz_fu, zz_ff, zg_ff], [gz_fu, gz_ff, gg_ff]])
+#     return K
+
+def compute_K(init, z_prior, Xcz, Xcg):
     Xuz = z_prior
-    params = {'sigma': init[-1][0], 'lengthscale': init[-1][1]}
-    zz_uu = heat_equation_kuu(Xuz, Xuz, params)
-    zz_uf = heat_equation_kuu(Xuz, Xfz, params)
-    zg_uf = heat_equation_kuf(Xuz, Xfg, params)
-    zz_fu = heat_equation_kuu(Xfz, Xuz, params)
-    zz_ff = heat_equation_kuu(Xfz, Xfz, params)
-    zg_ff = heat_equation_kuf(Xfz, Xfg, params)
-    gz_fu = heat_equation_kfu(Xfg, Xuz, params)
-    gz_ff = heat_equation_kfu(Xfg, Xfz, params)
-    gg_ff = heat_equation_kff(Xfg, Xfg, params)
-    K = jnp.block([[zz_uu, zz_uf, zg_uf], [zz_fu, zz_ff, zg_ff], [gz_fu, gz_ff, gg_ff]])
+    params = init
+    params_kuu = {'sigma': init[-1][0], 'lengthscale': init[-1][1]}
+    lengthscale_x = params[0][1][0].item()
+    lengthscale_t = params[0][1][1].item()
+    zz_uu = compute_kuu(Xuz, Xuz, params_kuu)
+    zz_uc = compute_kuu(Xuz, Xcz, params_kuu)
+    zg_uc = compute_kuf(Xuz, Xcg, params, lengthscale_x, lengthscale_t)
+    zz_cu = compute_kuu(Xcz, Xuz, params_kuu)
+    zz_cc = compute_kuu(Xcz, Xcz, params_kuu)
+    zg_cc = compute_kuf(Xcz, Xcg, params, lengthscale_x, lengthscale_t)
+    gz_cu = compute_kfu(Xcg, Xuz, params, lengthscale_x, lengthscale_t)
+    gz_cc = compute_kfu(Xcg, Xcz, params, lengthscale_x, lengthscale_t)
+    gg_cc = compute_kff(Xcg, Xcg, params, lengthscale_x, lengthscale_t)
+    K = jnp.block([[zz_uu, zz_uc, zg_uc], [zz_cu, zz_cc, zg_cc], [gz_cu, gz_cc, gg_cc]])
     return K
+
 
 def log_prior(x, mean, cov):
     dim = mean.shape[0]
@@ -34,56 +64,233 @@ def log_likelihood(y, cov):
     dim = y.shape[0]
     return -0.5 * (y.T @ jnp.linalg.inv(cov) @ y) - 0.5 * dim * jnp.log(2 * jnp.pi) - 0.5 * jnp.log(jnp.linalg.det(cov))
 
-# import jax.numpy as jnp
-# from jax import random, lax
 
-def metropolis_hasting(rng_key, max_samples, assumption_variance, prior_mean, prior_cov, init, Xfz, Xfg, Y, k):
+def single_component_metropolis_hasting(rng_key, max_samples, assumption_sigma, prior_mean, prior_cov, init, Xfz, Xfg, Y, k, num_x_only):
     prior_mean_flat = jnp.ravel(prior_mean)
-    prior_cov_flat = jnp.kron(prior_cov, jnp.eye(prior_mean.shape[0]))
+    prior_cov_flat = jnp.kron(prior_cov, jnp.eye(prior_mean.shape[0]))  # shape (2*num_vague, 2*num_vague)
 
     num_vague = prior_mean.shape[0]
+    num_x_t_noise = num_vague - num_x_only
+
     xvague_sample_current = prior_mean_flat
-    xvague_sample_list = xvague_sample_current
+    xvague_sample_list = jnp.empty((0, prior_mean_flat.shape[0]), dtype=prior_mean_flat.dtype)
+
+    current_log_prob = dist.MultivariateNormal(prior_mean_flat, covariance_matrix=prior_cov_flat).log_prob(
+        xvague_sample_current)
+
 
     num_warmup = int(max_samples * k)
     print(f"Setting {k} of max_samples as warm-up")
     acceptance_count = 0
+    print("num_warmup:", num_warmup)
+    acceptance_flags = []
 
     for i in range(max_samples - 1):
+        for j in range(num_x_t_noise * 2 + num_x_only):
+            rng_key, key_new = random.split(rng_key)
+            step_size = assumption_sigma
+
+            if j < num_x_t_noise * 2:
+                x_new = xvague_sample_current.at[j].set(
+                    random.normal(key_new, shape=()) * step_size + xvague_sample_current[j]
+                )
+            else:
+                index_x = num_x_t_noise * 2 + (j - num_x_t_noise * 2) * 2
+                x_new = xvague_sample_current.at[index_x].set(
+                    random.normal(key_new, shape=()) * step_size + xvague_sample_current[index_x]
+                )
+
+            x_new = jnp.maximum(jnp.minimum(1, x_new), 0)  # Non-negative
+
+            x_new_reshape = x_new.reshape(prior_mean.shape)
+            xvague_sample_current_reshape = xvague_sample_current.reshape(prior_mean.shape)
+
+            ### \rho \propto p(X^u)p(y^u,y^f|X^u) ###
+            # p(X^u)
+            p_x_prior_new_log = dist.MultivariateNormal(prior_mean_flat, covariance_matrix=prior_cov_flat).log_prob(
+                x_new)
+            p_x_prior_current_log = dist.MultivariateNormal(prior_mean_flat, covariance_matrix=prior_cov_flat).log_prob(
+                xvague_sample_current)
+            cov_current = compute_K(init, xvague_sample_current_reshape, Xfz, Xfg)
+            cov_new = compute_K(init, x_new_reshape, Xfz, Xfg)
+            # p(y^u, y^f | X^u)
+            Y_ravel = Y.ravel()
+            p_y_likelihood_new_log = dist.MultivariateNormal(jnp.zeros(Y_ravel.shape),
+                                                             covariance_matrix=cov_new).log_prob(Y_ravel)
+            p_y_likelihood_current_log = dist.MultivariateNormal(jnp.zeros(Y_ravel.shape),
+                                                                 covariance_matrix=cov_current).log_prob(Y_ravel)
+            # p(X^u)p(y^u,y^f|X^u)
+            p_x_new_log = p_x_prior_new_log + p_y_likelihood_new_log
+            p_x_current_log = p_x_prior_current_log + p_y_likelihood_current_log
+
+            accept_ratio_init = jnp.exp(p_x_new_log - p_x_current_log)
+            accept_ratio = jnp.minimum(accept_ratio_init, 1)
+            print("-----------------------------------------------------------------------")
+            print(f"Iteration {i}, Variable {j}")
+            print(f"Current sample: {xvague_sample_current}")
+            print(f"New sample: {x_new}")
+            print(f"Acceptance ratio: {accept_ratio}")
+            print("-----------------------------------------------------------------------")
+            print("\n")
+
+            rng_key, key_uniform = random.split(rng_key)
+            if random.uniform(key_uniform) < accept_ratio:
+                xvague_sample_current = x_new
+                current_log_prob = p_x_prior_new_log
+                acceptance_count += 1
+                acceptance_flags.append(1)
+            else:
+                acceptance_flags.append(0)
+
+        if i >= num_warmup:
+            xvague_sample_list = jnp.vstack((xvague_sample_list, xvague_sample_current))
+
+        if i % 100 == 0:
+            print(
+                f"Iteration {i}: Current sample = {xvague_sample_current}, new prior probability = {current_log_prob}, new likelihood = {p_y_likelihood_new_log}, new log prob = {p_x_new_log}")
+
+    acceptance_rate = jnp.mean(jnp.array(acceptance_flags))
+    print(f"#######Acceptance rate: {acceptance_rate}########")
+    # print("cov_current:", cov_current)
+    # print("cov_new:", cov_new)
+    return xvague_sample_list
+
+
+
+# def compute_conditional_distribution(j, xvague_sample_current, prior_mean, prior_cov, init, Xfz, Xfg, Y):
+#     mean = prior_mean[j]
+#     var = prior_cov[j, j]
+#     return mean, var
+#
+#
+# def gibbs_sampling(rng_key, max_samples, prior_mean, prior_cov, init, Xfz, Xfg, Y, k):
+#     prior_mean_flat = jnp.ravel(prior_mean)
+#     prior_cov_flat = jnp.kron(prior_cov, jnp.eye(prior_mean.shape[0]))  # shape (2*num_vague, 2*num_vague)
+#
+#     num_vague = prior_mean.shape[0]
+#     xvague_sample_current = prior_mean_flat
+#     xvague_sample_list = jnp.empty((0, prior_mean_flat.shape[0]), dtype=prior_mean_flat.dtype)
+#
+#     num_warmup = int(max_samples * k)
+#     print(f"Setting {k} of max_samples as warm-up")
+#     print("num_warmup:", num_warmup)
+#
+#     for i in range(max_samples - 1):
+#         for j in range(num_vague * 2):
+#             mean, var = compute_conditional_distribution(j, xvague_sample_current, prior_mean_flat, prior_cov_flat,
+#                                                          init, Xfz, Xfg, Y)
+#             rng_key, key_new = random.split(rng_key)
+#             x_j_new = random.normal(key_new, shape=()) * jnp.sqrt(var) + mean
+#
+#             xvague_sample_current = xvague_sample_current.at[j].set(x_j_new)
+#
+#         if i >= num_warmup:
+#             xvague_sample_list = jnp.vstack((xvague_sample_list, xvague_sample_current))
+#
+#         if i % 100 == 0:
+#             print(f"Iteration {i}: Current sample = {xvague_sample_current}")
+#
+#     return xvague_sample_list
+
+
+def metropolis_hasting(rng_key, max_samples, assumption_sigma, prior_mean, prior_cov, init, Xfz, Xfg, Y, k):
+    prior_mean_flat = jnp.ravel(prior_mean)
+    prior_cov_flat = jnp.kron(prior_cov, jnp.eye(prior_mean.shape[0])) #shape (2*num_vague, 2*num_vague)
+
+    num_vague = prior_mean.shape[0]
+    xvague_sample_current = prior_mean_flat
+    xvague_sample_list = jnp.empty((0, prior_mean_flat.shape[0]), dtype=prior_mean_flat.dtype)
+
+    current_log_prob = dist.MultivariateNormal(prior_mean_flat, covariance_matrix=prior_cov_flat).log_prob(xvague_sample_current)
+
+    num_warmup = int(max_samples * k)
+    print(f"Setting {k} of max_samples as warm-up")
+    acceptance_count = 0
+    print("num_warmup:", num_warmup)
+    x_new = prior_mean_flat
+    acceptance_flags = []
+    for i in range(max_samples - 1):
         rng_key, key_new = random.split(rng_key)
-        x_new = random.multivariate_normal(key_new, xvague_sample_current, jnp.eye(num_vague * 2) * assumption_variance)
-        x_new = jnp.maximum(x_new, 0)  # Non-negative constraint
+
+        #assumption_variance = assumption_sigma**2
+        #x_new = random.multivariate_normal(key_new, prior_mean_flat, jnp.eye(num_vague * 2) * assumption_variance)
+        step_size = assumption_sigma
+        #x_new = xvague_sample_current + random.uniform(key_new, (num_vague * 2,)) * step_size
+        # x_new =xvague_sample_current + random.uniform(key_new, shape=xvague_sample_current.shape, minval=-step_size,maxval=step_size)
+        #x_new = xvague_sample_current + random.normal(key_new, shape=xvague_sample_current.shape) * step_size
+        x_new = random.multivariate_normal(key_new, mean=xvague_sample_current, cov=jnp.eye(num_vague * 2) * step_size)
+
+        x_new = jnp.maximum(jnp.minimum(1, x_new), 0)  # Non-negative
 
         x_new_reshape = x_new.reshape(prior_mean.shape)
         xvague_sample_current_reshape = xvague_sample_current.reshape(prior_mean.shape)
 
-        log_prior_current = log_prior(xvague_sample_current, prior_mean_flat, prior_cov_flat)
-        log_prior_new = log_prior(x_new, prior_mean_flat, prior_cov_flat)
+        # log_prior_current = log_prior(xvague_sample_current, prior_mean_flat, prior_cov_flat)
+        # log_prior_new = log_prior(x_new, prior_mean_flat, prior_cov_flat)
+        # cov_current = compute_K(init, xvague_sample_current_reshape, Xfz, Xfg)
+        # cov_new = compute_K(init, x_new_reshape, Xfz, Xfg)
+        # log_likelihood_current = log_likelihood(Y, cov_current)
+        # log_likelihood_new = log_likelihood(Y, cov_new)
+        # log_prob_current = log_prior_current + log_likelihood_current
+        # log_prob_new = log_prior_new + log_likelihood_new
+        # #accept_ratio_cal = jnp.sqrt(jnp.linalg.det(cov_current) / jnp.linalg.det(cov_new)) * jnp.exp(log_prob_new - log_prob_current)
+        # accept_ratio_cal_without = jnp.exp(log_prob_new - log_prob_current)
+
+        ### \rho \propto p(X^u)p(y^u,y^f|X^u) ###
+        # p(X^u)
+        p_x_prior_new_log = dist.MultivariateNormal(prior_mean_flat, covariance_matrix=prior_cov_flat).log_prob(x_new)
+        p_x_prior_current_log = dist.MultivariateNormal(prior_mean_flat, covariance_matrix=prior_cov_flat).log_prob(xvague_sample_current)
         cov_current = compute_K(init, xvague_sample_current_reshape, Xfz, Xfg)
         cov_new = compute_K(init, x_new_reshape, Xfz, Xfg)
-        log_likelihood_current = log_likelihood(Y, cov_current)
-        log_likelihood_new = log_likelihood(Y, cov_new)
+        # p(y^u, y^f | X^u)
+        Y_ravel = Y.ravel()
+        p_y_likelihood_new_log = dist.MultivariateNormal(jnp.zeros(Y_ravel.shape), covariance_matrix=cov_new).log_prob(Y_ravel)
+        p_y_likelihood_current_log = dist.MultivariateNormal(jnp.zeros(Y_ravel.shape), covariance_matrix=cov_current).log_prob(Y_ravel)
+        # p(X^u)p(y^u,y^f|X^u)
+        p_x_new_log = p_x_prior_new_log + p_y_likelihood_new_log
+        p_x_current_log = p_x_prior_current_log + p_y_likelihood_current_log
 
-        log_prob_current = log_prior_current + log_likelihood_current
-        log_prob_new = log_prior_new + log_likelihood_new
+        accept_ratio_init = jnp.exp(p_x_new_log - p_x_current_log)
+        accept_ratio =jnp.minimum(accept_ratio_init, 1)
+        print("new sample is :", x_new)
+        print(f"ratio for {i}: {accept_ratio}")
 
-        accept_ratio = jnp.sqrt(jnp.linalg.det(cov_current) / jnp.linalg.det(cov_new)) * jnp.exp(log_prob_new - log_prob_current)
         rng_key, key_uniform = random.split(rng_key)
         if random.uniform(key_uniform) < accept_ratio:
             xvague_sample_current = x_new
+            current_log_prob = p_x_prior_new_log
             acceptance_count += 1
-            if i >= num_warmup:
-                xvague_sample_list = jnp.vstack((xvague_sample_list, xvague_sample_current))
-
-        # # Adaptive logic for warm-up phase
+            acceptance_flags.append(1)
+        else:
+            acceptance_flags.append(0)
+        if i >= num_warmup:
+            xvague_sample_list = jnp.vstack((xvague_sample_list, xvague_sample_current))
+        if i % 100 == 0:
+            print(f"Iteration {i}: Current sample = {xvague_sample_current}, new prior probability = {current_log_prob}, new likelihood = {p_y_likelihood_new_log}, new log prob = {p_x_new_log}")
+        # # Adaptive warm-up
         # if i < num_warmup:
         #     current_acceptance_rate = acceptance_count / (i + 1)
         #     if current_acceptance_rate < 0.234:
-        #         assumption_variance *= 1.1  # Increase variance
+        #         assumption_sigma *= 1.1
         #     elif current_acceptance_rate > 0.234:
-        #         assumption_variance *= 0.9  # Decrease variance
-
+        #         assumption_sigma *= 0.9
+        # # Adaptive warm-up
+        # initial_variance = assumption_sigma
+        # min_variance = initial_variance * 0.1
+        # max_variance = initial_variance * 10.0
+        # if i < num_warmup:
+        #     current_acceptance_rate = acceptance_count / (i + 1)
+        #     target_acceptance_rate = 0.234
+        #     adjustment_factor = 1.1 if current_acceptance_rate < target_acceptance_rate else 0.9
+        #     assumption_sigma *= adjustment_factor
+        #     assumption_sigma = max(min_variance, min(max_variance, assumption_sigma))
+        #     print(f"Iteration {i}, Acceptance Rate: {current_acceptance_rate:.4f}, Variance: {assumption_sigma:.4f}")
+    acceptance_rate = jnp.mean(jnp.array(acceptance_flags))
+    print(f"#######Acceptance rate: {acceptance_rate}########")
+    print("cov_current:", cov_current)
+    print("cov_new:", cov_new)
     return xvague_sample_list
+
 # def metropolis_hasting(rng_key, max_samples, assumption_variance, prior_mean, prior_cov, init, Xfz, Xfg, Y):
 #     prior_mean_flat = jnp.ravel(prior_mean)
 #     prior_cov_flat = jnp.kron(prior_cov, jnp.eye(prior_mean.shape[0]))

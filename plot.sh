@@ -1,15 +1,14 @@
 #!/bin/bash
-#SBATCH --job-name=uncertain
-#SBATCH -p main,mia,mia-pof,am
+#SBATCH --job-name=plot
+#SBATCH -p am,mia,mia-pof,main
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=16
-#SBATCH --mem-per-cpu=200G
+#SBATCH --mem-per-cpu=128G
 #SBATCH --gres=gpu:1
 #SBATCH --time=64:03:00
 #SBATCH --output=uncertain_%j.log
 #SBATCH --error=err_%j.log
-
 
 hostname
 start_time=$(date +%s)
@@ -46,7 +45,7 @@ echo "Starting worker: "
 export JAX_PLATFORM_NAME=gpu
 export JAX_TRACEBACK_FILTERING=off
 export XLA_PYTHON_CLIENT_PREALLOCATE=false
-mpirun -np 1 python main.py
+mpirun -np 1 python main_loadForPlot.py
 # -----------------end--------------------------------
 
 
@@ -73,12 +72,8 @@ echo "Script finished in $((running_time / 60)) minutes and $((running_time % 60
 # -----------------get output---------------------
 mkdir -p ${SLURM_SUBMIT_DIR}/results/figures/${today}
 mkdir -p ${SLURM_SUBMIT_DIR}/results/log/${today}
-mkdir -p ${SLURM_SUBMIT_DIR}/results/datas/trained_params/${today}
-
 cp *.pdf ${SLURM_SUBMIT_DIR}/results/figures/${today}
 cp *.png ${SLURM_SUBMIT_DIR}/results/figures/${today}
-cp *.pkl ${SLURM_SUBMIT_DIR}/results/datas/trained_params/${today}
-
 cp ${SCRATCH_DIRECTORY} ${SLURM_SUBMIT_DIR}
 cd ${SLURM_SUBMIT_DIR}
 mkdir -p ${SLURM_SUBMIT_DIR}/results/log/${today}
