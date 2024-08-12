@@ -1,7 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="PYTHON_MODULE" version="4">
   <component name="NewModuleRootManager">
-    <content url="file://$MODULE_DIR$" />
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/results/datas/trained_params/0806" />
+      <excludeFolder url="file://$MODULE_DIR$/results/figures/0124" />
+      <excludeFolder url="file://$MODULE_DIR$/results/figures/0127" />
+      <excludeFolder url="file://$MODULE_DIR$/results/figures/0618" />
+      <excludeFolder url="file://$MODULE_DIR$/results/figures/0619" />
+      <excludeFolder url="file://$MODULE_DIR$/results/figures/0625" />
+      <excludeFolder url="file://$MODULE_DIR$/results/figures/0626" />
+      <excludeFolder url="file://$MODULE_DIR$/results/figures/0627" />
+      <excludeFolder url="file://$MODULE_DIR$/results/figures/0629" />
+      <excludeFolder url="file://$MODULE_DIR$/results/figures/0703" />
+      <excludeFolder url="file://$MODULE_DIR$/results/figures/0723" />
+      <excludeFolder url="file://$MODULE_DIR$/results/figures/0724" />
+      <excludeFolder url="file://$MODULE_DIR$/results/figures/0725" />
+      <excludeFolder url="file://$MODULE_DIR$/results/figures/0726" />
+      <excludeFolder url="file://$MODULE_DIR$/results/figures/0727" />
+      <excludeFolder url="file://$MODULE_DIR$/results/figures/0729" />
+      <excludeFolder url="file://$MODULE_DIR$/results/figures/0730" />
+      <excludeFolder url="file://$MODULE_DIR$/results/figures/0731" />
+      <excludeFolder url="file://$MODULE_DIR$/results/figures/0801" />
+      <excludeFolder url="file://$MODULE_DIR$/results/figures/1018" />
+      <excludeFolder url="file://$MODULE_DIR$/results/log/0124" />
+      <excludeFolder url="file://$MODULE_DIR$/results/log/0127" />
+      <excludeFolder url="file://$MODULE_DIR$/results/log/0128" />
+      <excludeFolder url="file://$MODULE_DIR$/results/log/0618" />
+      <excludeFolder url="file://$MODULE_DIR$/results/log/0619" />
+      <excludeFolder url="file://$MODULE_DIR$/results/log/0625" />
+      <excludeFolder url="file://$MODULE_DIR$/results/log/0626" />
+      <excludeFolder url="file://$MODULE_DIR$/results/log/0627" />
+      <excludeFolder url="file://$MODULE_DIR$/results/log/0629" />
+      <excludeFolder url="file://$MODULE_DIR$/results/log/0703" />
+      <excludeFolder url="file://$MODULE_DIR$/results/log/0723" />
+      <excludeFolder url="file://$MODULE_DIR$/results/log/0724" />
+      <excludeFolder url="file://$MODULE_DIR$/results/log/0725" />
+      <excludeFolder url="file://$MODULE_DIR$/results/log/0726" />
+      <excludeFolder url="file://$MODULE_DIR$/results/log/0727" />
+      <excludeFolder url="file://$MODULE_DIR$/results/log/0729" />
+      <excludeFolder url="file://$MODULE_DIR$/results/log/0730" />
+      <excludeFolder url="file://$MODULE_DIR$/results/log/0731" />
+      <excludeFolder url="file://$MODULE_DIR$/results/log/0801" />
+      <excludeFolder url="file://$MODULE_DIR$/results/log/1018" />
+    </content>
     <orderEntry type="jdk" jdkName="Remote Python 3.9.12 (sftp://yanw@hpc-head2.ewi.utwente.nl:22/deepstore/software/anaconda3/2022.05/bin/python)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
