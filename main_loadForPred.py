@@ -14,7 +14,7 @@ import gc
 import jaxlib
 from include.mcmc_posterior import compute_K
 from include.plot_dist import plot_dist
-from include.plot_pred import plot_and_save_prediction_results
+from include.plot_pred import plot_and_save_prediction_results, prediction_mean, prediction_variance
 from include.plot_pred_test import plot_prediction_results_test
 from include.train import train_heat_equation_model_2d
 
@@ -27,8 +27,8 @@ current_time = datetime.datetime.now().strftime("%m%d")
 learning_rate_pred = 0.1
 epoch_pred = 10
 
-text = "f32_chains1_k0.6_assumption0.5_prior_std0.3_noisestd0.1_init4_b4_0.09_k0.6_100_3404.pkl"
-load_path = f"results/datas/trained_params/0812"
+text = "f32_chains1_k0.6_assumption0.5_prior_std0.3_noisestd0.1_init4_b4_0.09_k0.6_100_1752.pkl"
+load_path = f"results/datas/trained_params/0813"
 
 
 # %%
@@ -42,13 +42,13 @@ if __name__ == '__main__':
         return prior_samples
 
 
-    def find_kde_peak(data):
-        kde = gaussian_kde(data)
-        x_vals = jnp.linspace(jnp.min(data), jnp.max(data), 1000)
-        kde_vals = kde(x_vals)
-        peak_idx = jnp.argmax(kde_vals)
-        peak = x_vals[peak_idx]
-        return peak
+    # def find_kde_peak(data):
+    #     kde = gaussian_kde(data)
+    #     x_vals = jnp.linspace(jnp.min(data), jnp.max(data), 1000)
+    #     kde_vals = kde(x_vals)
+    #     peak_idx = jnp.argmax(kde_vals)
+    #     peak = x_vals[peak_idx]
+    #     return peak
 
 
     def find_closest_to_gt(gt, values, labels):
@@ -109,16 +109,16 @@ if __name__ == '__main__':
         sns.kdeplot(data, ax=ax, color='tab:blue', label='x denoised', bw_adjust=bw)
         sns.kdeplot(prior_data, ax=ax, color='tab:orange', label='x prior', linestyle='--')
 
-        posterior_peak = find_kde_peak(data)
-        ax.axvline(posterior_peak, color='tab:purple', linestyle='-.', linewidth=1, label='posterior peak')
+        # posterior_peak = find_kde_peak(data)
+        # ax.axvline(posterior_peak, color='tab:purple', linestyle='-.', linewidth=1, label='posterior peak')
         posterior_mean = jnp.mean(data)
         ax.axvline(posterior_mean, color='tab:cyan', linestyle='-', linewidth=2, label='posterior mean')
 
-        gt_value = Xu_certain[vague_points, 0]
-        noise_value = Xu_noise[vague_points, 0]
-        values = [noise_value, posterior_peak, posterior_mean]
-        labels = ['x noised', 'posterior peak', 'posterior mean']
-        closest_label, distances = find_closest_to_gt(gt_value, values, labels)
+        # gt_value = Xu_certain[vague_points, 0]
+        # noise_value = Xu_noise[vague_points, 0]
+        # values = [noise_value, posterior_peak, posterior_mean]
+        # labels = ['x noised', 'posterior peak', 'posterior mean']
+        # closest_label, distances = find_closest_to_gt(gt_value, values, labels)
 
         # ax.legend(loc='upper left')
         ax.set_xlabel(f'x_uncertain{vague_points}')
@@ -133,16 +133,16 @@ if __name__ == '__main__':
         sns.kdeplot(data1, ax=ax2, color='tab:blue', label='t denoised', bw_adjust=bw)
         sns.kdeplot(prior_data1, ax=ax2, color='tab:orange', label='t prior', linestyle='--')
 
-        posterior_peak1 = find_kde_peak(data1)
-        ax2.axvline(posterior_peak1, color='tab:purple', linestyle='-.', linewidth=1, label='posterior peak')
+        # posterior_peak1 = find_kde_peak(data1)
+        # ax2.axvline(posterior_peak1, color='tab:purple', linestyle='-.', linewidth=1, label='posterior peak')
         posterior_mean1 = jnp.mean(data1)
         ax2.axvline(posterior_mean1, color='tab:cyan', linestyle='-', linewidth=2, label='posterior mean')
 
-        gt_value1 = Xu_certain[vague_points, 1]
-        noise_value1 = Xu_noise[vague_points, 1]
-        values1 = [noise_value1, posterior_peak1, posterior_mean1]
-        labels1 = ['t noised', 'posterior peak', 'posterior mean']
-        closest_label1, distances1 = find_closest_to_gt(gt_value1, values1, labels1)
+        # gt_value1 = Xu_certain[vague_points, 1]
+        # noise_value1 = Xu_noise[vague_points, 1]
+        # values1 = [noise_value1, posterior_peak1, posterior_mean1]
+        # labels1 = ['t noised', 'posterior peak', 'posterior mean']
+        # closest_label1, distances1 = find_closest_to_gt(gt_value1, values1, labels1)
 
         # ax2.legend(loc='upper left')
         ax2.set_xlabel(f't_uncertain{vague_points}')
@@ -170,15 +170,15 @@ if __name__ == '__main__':
         ax.axvline(Xu_noise[vague_points, 0], color='seagreen', linestyle=':', linewidth=2, label='x noised')
         ax.hist(posterior_data, bins=30, density=True, alpha=0.6, color='tab:blue', label='x denoised')
         ax.hist(prior_data, bins=30, density=True, alpha=0.6, color='tab:orange', label='x prior')
-        posterior_peak = find_kde_peak(posterior_data)
+        # posterior_peak = find_kde_peak(posterior_data)
         # ax.axvline(posterior_peak, color='tab:purple', linestyle='-', linewidth=2, label='posterior peak')
         posterior_mean = jnp.mean(posterior_data)
         ax.axvline(posterior_mean, color='tab:cyan', linestyle='solid', linewidth=2, label='posterior mean')
         ax.axvline(Xu_certain[vague_points, 0], color='tab:red', linestyle='--', linewidth=2, label='x GT')
 
-        values = [Xu_noise[vague_points, 0], posterior_peak, posterior_mean]
-        labels = ['x noised', 'posterior peak', 'posterior mean']
-        closest_label, _ = find_closest_to_gt(Xu_certain[vague_points, 0], values, labels)
+        # values = [Xu_noise[vague_points, 0], posterior_peak, posterior_mean]
+        # labels = ['x noised', 'posterior peak', 'posterior mean']
+        # closest_label, _ = find_closest_to_gt(Xu_certain[vague_points, 0], values, labels)
 
         ax.set_xlabel(f'uncertain position {vague_points + 1}', fontsize=22)
         ax.set_ylabel('density', fontsize=22)
@@ -203,15 +203,15 @@ if __name__ == '__main__':
         ax2.axvline(Xu_noise[vague_points, 1], color='seagreen', linestyle=':', linewidth=2, label='t noised')
         ax2.hist(posterior_data1, bins=30, density=True, alpha=0.6, color='tab:blue', label='t denoised')
         ax2.hist(prior_data1, bins=30, density=True, alpha=0.6, color='tab:orange', label='t prior')
-        posterior_peak1 = find_kde_peak(posterior_data1)
+        # posterior_peak1 = find_kde_peak(posterior_data1)
         # ax2.axvline(posterior_peak1, color='tab:purple', linestyle='-', linewidth=2, label='posterior peak')
         posterior_mean1 = jnp.mean(posterior_data1)
         ax2.axvline(posterior_mean1, color='tab:cyan', linestyle='solid', linewidth=2, label='posterior mean')
         ax2.axvline(Xu_certain[vague_points, 1], color='tab:red', linestyle='--', linewidth=2, label='t GT')
 
-        values1 = [Xu_noise[vague_points, 1], posterior_peak1, posterior_mean1]
-        labels1 = ['t noised', 'posterior peak', 'posterior mean']
-        closest_label1, _ = find_closest_to_gt(Xu_certain[vague_points, 1], values1, labels1)
+        # values1 = [Xu_noise[vague_points, 1], posterior_peak1, posterior_mean1]
+        # labels1 = ['t noised', 'posterior peak', 'posterior mean']
+        # closest_label1, _ = find_closest_to_gt(Xu_certain[vague_points, 1], values1, labels1)
 
         ax2.set_xlabel(f'uncertain time {vague_points + 1}', fontsize=22)
         ax2.set_ylabel('density', fontsize=22)
@@ -239,7 +239,7 @@ if __name__ == '__main__':
     plot_u_pred(Xu_without_noise, Xu_certain, Xf, Xu_noise, noise_std, Xu_pred_mean, prior_var, assumption_sigma, k,
                 max_samples, learning, num_chains, number_f)
     plot_dist(Xu_without_noise, Xu_certain, Xf, Xu_noise, noise_std, Xu_pred_mean, prior_var, assumption_sigma, k,
-              max_samples, learning, num_chains, number_f, posterior_samples_list, prior_samples)
+              max_samples, learning, num_chains, number_f, posterior_samples_list, prior_samples,number_u)
 
     print('end inference')
 
@@ -344,7 +344,7 @@ if __name__ == '__main__':
         # # try:
         # #     sigma_star_gpu = jax.device_put(sigma_star_cpu, device=jax.devices("gpu")[0])
         # # except jaxlib.xla_extension.XlaRuntimeError:
-        # #     print("GPU 内存不足，无法将 sigma_star 传输到 GPU")
+        # #     print("GPU lack of memory")
         # #     raise
         # del K_cpu, y_cpu, k_x_star_cpu, K_inv_y, K_inv_k_x_star, mu_star_cpu, sigma_star_cpu
         #
@@ -354,7 +354,7 @@ if __name__ == '__main__':
         K_inv_k_x_star = la.solve(K, k_x_star, assume_a='pos')
         mu_star_gpu = jnp.dot(k_x_star.T, K_inv_y)
         sigma_star_gpu = k_x_star_x_star - jnp.einsum('ij,ij->i', k_x_star.T, K_inv_k_x_star.T).reshape(-1, 1)
-        del K, k_x_star, K_inv_y, K_inv_k_x_star
+        del K, k_x_star, K_inv_y, K_inv_k_x_star, k_x_star_x_star, params_kuu, params, k_zz_u_star, k_zz_c_star, k_gz_c_star
         gc.collect()
         return mu_star_gpu.flatten(), sigma_star_gpu
 
@@ -392,11 +392,9 @@ if __name__ == '__main__':
     y_final_mean_list_posterior = jnp.array(y_final_mean_list_posterior)
     y_final_var_list_posterior = jnp.array(y_final_var_list_posterior)
 
-    y_final_mean_list_posterior = jnp.vstack(y_final_mean_list_posterior)
-    y_final_var_list_posterior = jnp.vstack(y_final_var_list_posterior)
 
-    print("Prediction mean shape: ", y_final_mean_list_posterior.shape)
-    print("Prediction variance shape: ", y_final_var_list_posterior.shape)
+    print("posterior Prediction mean shape: ", y_final_mean_list_posterior.shape)
+    print("posteriro Prediction variance shape: ", y_final_var_list_posterior.shape)
 
     prior_samples_reshaped = prior_samples.reshape(prior_samples.shape[0], -1, 2)
     for i in range(prior_samples_reshaped.shape[0]):
@@ -433,24 +431,19 @@ if __name__ == '__main__':
 
     y_final_mean_list_prior = jnp.vstack(y_final_mean_list_prior)
     y_final_var_list_prior = jnp.vstack(y_final_var_list_prior)
+    print("prior Prediction mean shape: ", y_final_mean_list_prior.shape)
+    print("prior Prediction variance shape: ", y_final_var_list_prior.shape)
 
-    def prediction_mean(ypred_list):
-        return jnp.mean(ypred_list, axis=0)
 
-    def prediction_variance(ypred_list, yvar_list):
-        ymean_var = jnp.var(ypred_list, axis=0)
-        yvar_mean = jnp.mean(yvar_list, axis=0)
-
-        return ymean_var + yvar_mean
 
     y_final_mean_posterior = prediction_mean(y_final_mean_list_posterior)
     y_final_var_posterior = prediction_variance(y_final_mean_list_posterior, y_final_var_list_posterior)
     y_final_mean_prior = prediction_mean(y_final_mean_list_prior)
     y_final_var_prior = prediction_variance(y_final_mean_list_prior, y_final_var_list_prior)
-    print("posterior Prediction mean shape: ", y_final_mean_posterior.shape)
-    print("posterior Prediction variance shape: ", y_final_var_posterior.shape)
-    print("prior Prediction mean shape: ", y_final_mean_prior.shape)
-    print("prior Prediction variance shape: ", y_final_var_prior.shape)
+    print("final posterior Prediction mean shape: ", y_final_mean_posterior.shape)
+    print("final posterior Prediction variance shape: ", y_final_var_posterior.shape)
+    print("final prior Prediction mean shape: ", y_final_mean_prior.shape)
+    print("final prior Prediction variance shape: ", y_final_var_prior.shape)
     print("-------------------end prediction-------------------")
     def save_variables(added_text, **variables):
         root_folder = "."

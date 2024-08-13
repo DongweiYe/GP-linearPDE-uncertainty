@@ -6,7 +6,7 @@ from include.check_hyperparameters import check_hyperparamters
 from include.heat2d import plot_u_f, f_xt, plot_u_f_pred, get_u_test_data_2d_qmc, plot_u_pred
 from include.mcmc_posterior import *
 from include.init import ModelInitializer_2d
-from include.plot_dist import plot_dist
+from include.plot_dist import plot_dist, plot_with_noise
 from include.train import train_heat_equation_model_2d
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -34,6 +34,7 @@ jax.config.update("jax_enable_x64", True)
 # 9: plot the prediction
 # 10: solved the memory issue
 # 11: rewrite the derivative of the kernel
+# 12: save all the results in a pickle file and enable the user to load the results
 
 
 # TODO
@@ -52,11 +53,11 @@ k = 0.6
 num_chains = 1
 
 bw=2
-num_prior_samples = 5000
+num_prior_samples = 100
 learning_rate = 4e-2
 test_num = 2**4
-number_u = 2**2 # 2种情况都有 x=4 xt=4
-number_u_only_x = 0
+number_u = 2**2 # xt
+number_u_only_x = 2**2
 number_f = 2**5
 number_init = 2**2
 number_bound = 2**2
@@ -266,7 +267,7 @@ if __name__ == '__main__':
         sns.kdeplot(data, ax=ax, color='tab:blue', label='x denoised', bw_adjust=bw)
         sns.kdeplot(prior_data, ax=ax, color='tab:orange', label='x prior', linestyle='--')
 
-        posterior_peak = find_kde_peak(data)
+        # posterior_peak = find_kde_peak(data)
         #ax.axvline(posterior_peak, color='tab:purple', linestyle='-.', linewidth=1, label='posterior peak')
         posterior_mean = jnp.mean(data)
         ax.axvline(posterior_mean, color='tab:cyan', linestyle='-', linewidth=2, label='posterior mean')
@@ -290,7 +291,7 @@ if __name__ == '__main__':
         sns.kdeplot(data1, ax=ax2, color='tab:blue', label='t denoised', bw_adjust=bw)
         sns.kdeplot(prior_data1, ax=ax2, color='tab:orange', label='t prior', linestyle='--')
 
-        posterior_peak1 = find_kde_peak(data1)
+        # posterior_peak1 = find_kde_peak(data1)
         #ax2.axvline(posterior_peak1, color='tab:purple', linestyle='-.', linewidth=1, label='posterior peak')
         posterior_mean1 = jnp.mean(data1)
         ax2.axvline(posterior_mean1, color='tab:cyan', linestyle='-', linewidth=2, label='posterior mean')
@@ -324,7 +325,7 @@ if __name__ == '__main__':
         ax.axvline(Xu_noise[vague_points, 0], color='seagreen', linestyle=':', linewidth=2, label='x noised')
         ax.hist(posterior_data, bins=30, density=True, alpha=0.6, color='tab:blue', label='x denoised')
         ax.hist(prior_data, bins=30, density=True, alpha=0.6, color='tab:orange', label='x prior')
-        posterior_peak = find_kde_peak(posterior_data)
+        # posterior_peak = find_kde_peak(posterior_data)
         # ax.axvline(posterior_peak, color='tab:purple', linestyle='-', linewidth=2, label='posterior peak')
         posterior_mean = jnp.mean(posterior_data)
         ax.axvline(posterior_mean, color='tab:cyan', linestyle='solid', linewidth=2, label='posterior mean')
@@ -357,7 +358,7 @@ if __name__ == '__main__':
         ax2.axvline(Xu_noise[vague_points, 1], color='seagreen', linestyle=':', linewidth=2, label='t noised')
         ax2.hist(posterior_data1, bins=30, density=True, alpha=0.6, color='tab:blue', label='t denoised')
         ax2.hist(prior_data1, bins=30, density=True, alpha=0.6, color='tab:orange', label='t prior')
-        posterior_peak1 = find_kde_peak(posterior_data1)
+        # posterior_peak1 = find_kde_peak(posterior_data1)
         # ax2.axvline(posterior_peak1, color='tab:purple', linestyle='-', linewidth=2, label='posterior peak')
         posterior_mean1 = jnp.mean(posterior_data1)
         ax2.axvline(posterior_mean1, color='tab:cyan', linestyle='solid', linewidth=2, label='posterior mean')
@@ -392,8 +393,8 @@ if __name__ == '__main__':
     Xu_pred_mean = jnp.mean(posterior_samples_list, axis=0)
     # Xu_pred_map = posterior_samples_list[jnp.argmax(posterior_samples_list[:, -1])]
     plot_u_pred(Xu_without_noise, Xu_certain, Xf, Xu_noise, noise_std, Xu_pred_mean, prior_var,assumption_sigma,k,max_samples,learning,num_chains,number_f)
-    plot_dist(Xu_without_noise, Xu_certain, Xf, Xu_noise, noise_std, Xu_pred_mean, prior_var,assumption_sigma,k,max_samples,learning,num_chains,number_f,posterior_samples_list, prior_samples)
-
+    plot_dist(Xu_without_noise, Xu_certain, Xf, Xu_noise, noise_std, Xu_pred_mean, prior_var,assumption_sigma,k,max_samples,learning,num_chains,number_f,posterior_samples_list, prior_samples,number_u)
+    plot_with_noise(number_u, number_u_only_x, posterior_samples_list, prior_samples, Xu_certain, Xu_noise, bw)
 
     save_variables(added_text, Xu_without_noise=Xu_without_noise, Xu_certain=Xu_certain, Xf=Xf, Xu_noise=Xu_noise,
                    noise_std=noise_std, Xu_pred=Xu_pred_mean, prior_var=prior_var, assumption_sigma=assumption_sigma,

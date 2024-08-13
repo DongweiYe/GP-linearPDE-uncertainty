@@ -10,7 +10,9 @@ def prediction_mean(ypred_list):
 
 def prediction_variance(ypred_list, yvar_list):
     ymean_var = jnp.var(ypred_list, axis=0)
-    yvar_mean = jnp.mean(yvar_list, axis=0)
+    yvar_diag = jnp.diagonal(yvar_list, axis1=1, axis2=2)
+    yvar_mean = jnp.mean(yvar_diag, axis=0)
+
     return ymean_var + yvar_mean
 
 def plot_heatmap(ax, data, title, cmap, vmin, vmax):
@@ -32,11 +34,10 @@ def save_individual_plot(data, title, cmap, vmin, vmax, filename):
     plt.close()
 
 def plot_and_save_prediction_results(X_plot_prediction, u_values_gt, y_final_mean_list_prior, y_final_var_list_prior, y_final_mean_list_posterior, y_final_var_list_posterior):
-    # 计算预测结果
-    gp_mean_posterior = prediction_mean(y_final_mean_list_posterior).reshape(100, 100)
+    gp_mean_posterior = prediction_mean(y_final_mean_list_posterior).reshape(X_plot_prediction.shape)
     abs_diff_gt_gp = jnp.abs(u_values_gt - gp_mean_posterior)
-    var_prior = prediction_variance(y_final_mean_list_prior, y_final_var_list_prior).reshape(100, 100)
-    var_posterior = prediction_variance(y_final_mean_list_posterior, y_final_var_list_posterior).reshape(100, 100)
+    var_prior = prediction_variance(y_final_mean_list_prior, y_final_var_list_prior).reshape(X_plot_prediction.shape)
+    var_posterior = prediction_variance(y_final_mean_list_posterior, y_final_var_list_posterior).reshape(X_plot_prediction.shape)
     abs_var_diff = jnp.abs(var_prior - var_posterior)
 
     plot_titles = [
