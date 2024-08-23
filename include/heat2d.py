@@ -255,7 +255,7 @@ def plot_u_f_pred(Xu_certain_all, Xf, Xu_noise, noise_std, Xu_pred, prior_var,as
     plt.savefig(f'pred_k{k}_priorvar_{prior_var}_assump{assumption_sigma}_nstd{noise_std}_iter{max_samples}_{current_time}.png')
 
 
-def plot_u_pred(Xu_certain_all, Xu_certain, Xf, Xu_noise, noise_std, Xu_pred, prior_var,assumption_sigma,k,max_samples,learning,num_chains,number_f):
+def plot_u_pred(Xu_certain_all, Xu_certain, Xf, Xu_noise, noise_std, Xu_pred, prior_var,assumption_sigma,k,max_samples,learning,num_chains,number_f,added_text):
     x = jnp.linspace(0, 1, 100)
     t = jnp.linspace(0, 1, 100)
     X, T = jnp.meshgrid(x, t)
@@ -282,9 +282,36 @@ def plot_u_pred(Xu_certain_all, Xu_certain, Xf, Xu_noise, noise_std, Xu_pred, pr
     ax.grid(True, linestyle='--', alpha=0.6)
 
     current_time = datetime.datetime.now().strftime("%M%S")
-    plt.savefig(f'pred_f{number_f}_chains{num_chains}_learning{learning}_k{k}_priorvar_{prior_var}_assump{assumption_sigma}_nstd{noise_std}_iter{max_samples}_{current_time}.png')
+    plt.savefig(f'contourf_{added_text}.png')
 
+def plot_u_pred_rd(Xu_certain_all, Xu_certain, Xf, Xu_noise, noise_std, Xu_pred, prior_var,assumption_sigma,k,max_samples,learning,num_chains,number_f,added_text):
+    x = jnp.linspace(-1, 1, 100)
+    t = jnp.linspace(0, 1, 100)
+    X, T = jnp.meshgrid(x, t)
+    X_plot = jnp.vstack([X.ravel(), T.ravel()]).T
+    u_values = u_xt(X_plot).reshape(X.shape)
 
+    fig, ax = plt.subplots(figsize=(8, 6), constrained_layout=True)
+
+    # u(x, t) plot
+    c1 = ax.contourf(X, T, u_values, levels=50, cmap='plasma')
+    # c1 = ax.contour(X, T, u_values, levels=50, cmap='plasma', alpha=0.5)  # Using contour for line contours
+    # ax.contourf(X, T, u_values, levels=50, cmap='plasma', alpha=0.3)  # Using contourf for filled contours
+    fig.colorbar(c1, ax=ax, orientation='vertical', label='u(x, t) value')
+    #ax.scatter(Xu_certain_all[:, 0], Xu_certain_all[:, 1], color='black', label='GT', marker='o')
+    ax.scatter(Xu_certain[:, 0], Xu_certain[:, 1], color='black', label='GT', marker='o')
+    ax.scatter(Xu_noise[:, 0], Xu_noise[:, 1], color='tab:blue', label='Xu noise', marker='x')
+    ax.scatter(Xu_pred[:, 0], Xu_pred[:, 1], color='tab:red', label='Posterior', marker='o')
+    ax.set_title('u(x, t)', fontsize=16)
+    ax.set_xlabel('x', fontsize=14)
+    ax.set_ylabel('t', fontsize=14)
+    ax.tick_params(axis='both', which='major', labelsize=12)
+    #ax.legend(loc='upper right', fontsize=12)
+    ax.set_aspect('auto')
+    ax.grid(True, linestyle='--', alpha=0.6)
+
+    current_time = datetime.datetime.now().strftime("%M%S")
+    plt.savefig(f'contourf_{added_text}.png')
 
 def get_u_training_data_2d(key_x_u, key_x_u_init, key_t_u_low, key_t_u_high, key_x_noise, key_t_noise, sample_num,
                            init_num, bnum, noise_std) -> (jnp.ndarray, jnp.ndarray, jnp.ndarray, jnp.ndarray, jnp.ndarray,
@@ -295,8 +322,8 @@ def get_u_training_data_2d(key_x_u, key_x_u_init, key_t_u_low, key_t_u_high, key
     # yu_noise = u_xt_noise(Xu_certain)
     xu, tu = Xu_certain[:, :1], Xu_certain[:, -1:]
 
-    xu_noise = xu + noise_std * jax.random.normal(key_x_noise, shape=xu.shape)
-    tu_noise = tu + noise_std * jax.random.normal(key_t_noise, shape=tu.shape)
+    xu_noise = xu -jnp.abs(noise_std * jax.random.normal(key_x_noise, shape=xu.shape))
+    tu_noise = tu -jnp.abs(noise_std * jax.random.normal(key_t_noise, shape=tu.shape))
     # xu_noise = jnp.clip(xu_noise, 0, 1)
     # tu_noise = jnp.clip(tu_noise, 0, 1)
 
@@ -325,9 +352,7 @@ def get_u_training_data_2d_qmc(key_x_u, key_x_u_init, key_t_u_low, key_t_u_high,
                                               jnp.ndarray, jnp.ndarray, jnp.ndarray, jnp.ndarray):
     qMCsampler = qmc.Sobol(d=2, seed=0)
     sample_num_total = sample_num + number_u_only_x
-    print("sample_num: ", sample_num_total)
-    print("log2(sample_num): ", jnp.round(jnp.log2(sample_num_total)))
-    qMCsample = qMCsampler.random_base2(m=int(jnp.round(jnp.log2(sample_num_total))))  # 生成最近的2的幂次个样本
+    qMCsample = qMCsampler.random_base2(m=int(jnp.round(jnp.log2(sample_num_total))))
     if qMCsample.shape[0] > sample_num_total:
         qMCsample = qMCsample[:sample_num_total]
 
@@ -351,15 +376,36 @@ def get_u_training_data_2d_qmc(key_x_u, key_x_u_init, key_t_u_low, key_t_u_high,
     print("xu: ", xu)
 
     # init + boundary
-    qmc_sampler_init = qmc.Sobol(d=1, seed=1)
-    qmc_sampler_bound_low = qmc.Sobol(d=1, seed=2)
-    qmc_sampler_bound_high = qmc.Sobol(d=1, seed=3)
-    xu_init = jnp.array(qmc_sampler_init.random_base2(m=int(jnp.log2(init_num))))
+    # qmc_sampler_init = qmc.Sobol(d=1, seed=1)
+    # qmc_sampler_bound_low = qmc.Sobol(d=1, seed=2)
+    # qmc_sampler_bound_high = qmc.Sobol(d=1, seed=3)
+    # xu_init = jnp.array(qmc_sampler_init.random_base2(m=int(jnp.log2(init_num))))
+    # init_num = xu_init.shape[0]
+    # tu_init = jnp.zeros(shape=(init_num, 1))
+    #
+    # tu_bound_low = jnp.array(qmc_sampler_bound_low.random_base2(m=int(jnp.log2(bnum))))
+    # tu_bound_high = jnp.array(qmc_sampler_bound_high.random_base2(m=int(jnp.log2(bnum))))
+    # bnum = tu_bound_low.shape[0]
+    # xu_bound_low = jnp.zeros(shape=(bnum, 1))
+    # xu_bound_high = jnp.ones(shape=(bnum, 1))
+    #
+    # xu_fixed = jnp.concatenate((xu_bound_low, xu_init, xu_bound_high))
+    # tu_fixed = jnp.concatenate((tu_bound_low, tu_init, tu_bound_high))
+    # Xu_fixed = jnp.concatenate([xu_fixed, tu_fixed], axis=1)
+    xu_init = ((jnp.cos(jnp.arange(init_num + 1) * jnp.pi / init_num)) + 1) / 2
+    xu_init = xu_init[1:-1, ]
+    xu_init = jnp.expand_dims(xu_init, axis=-1)
+    print("xu_init.shape", xu_init.shape)
     init_num = xu_init.shape[0]
     tu_init = jnp.zeros(shape=(init_num, 1))
+    print("tu_init.shape", tu_init.shape)
 
-    tu_bound_low = jnp.array(qmc_sampler_bound_low.random_base2(m=int(jnp.log2(bnum))))
-    tu_bound_high = jnp.array(qmc_sampler_bound_high.random_base2(m=int(jnp.log2(bnum))))
+    tu_bound_low = ((jnp.cos(jnp.arange(bnum + 1) * jnp.pi / bnum)) + 1) / 2
+    tu_bound_low = jnp.expand_dims(tu_bound_low, axis=-1)
+    print("tu_bound_low.shape", tu_bound_low.shape)
+    tu_bound_high = ((jnp.cos(jnp.arange(bnum + 1) * jnp.pi / bnum)) + 1) / 2
+    tu_bound_high = jnp.expand_dims(tu_bound_high, axis=-1)
+    print("tu_bound_high.shape", tu_bound_high.shape)
     bnum = tu_bound_low.shape[0]
     xu_bound_low = jnp.zeros(shape=(bnum, 1))
     xu_bound_high = jnp.ones(shape=(bnum, 1))
@@ -367,6 +413,7 @@ def get_u_training_data_2d_qmc(key_x_u, key_x_u_init, key_t_u_low, key_t_u_high,
     xu_fixed = jnp.concatenate((xu_bound_low, xu_init, xu_bound_high))
     tu_fixed = jnp.concatenate((tu_bound_low, tu_init, tu_bound_high))
     Xu_fixed = jnp.concatenate([xu_fixed, tu_fixed], axis=1)
+
     print("Xu_fixed: ", Xu_fixed)
     Yu_fixed = u_xt(Xu_fixed)
 
@@ -375,15 +422,20 @@ def get_u_training_data_2d_qmc(key_x_u, key_x_u_init, key_t_u_low, key_t_u_high,
 
 def get_f_training_data_2d(key_x_f, sample_num) -> (jnp.ndarray, jnp.ndarray, jnp.ndarray, jnp.ndarray):
     # Xf = jax.random.uniform(key_x_f, shape=(sample_num, 2), dtype=jnp.float64)
-    qMCsampler = qmc.Sobol(d=2, seed=4)
-    qMCsample = qMCsampler.random_base2(m=int(jnp.log2(sample_num)))
-    if qMCsample.shape[0] > sample_num:
-        qMCsample = qMCsample[:sample_num]
-    Xf = jnp.array(qMCsample)
-    yf = f_xt(Xf)
-    xf, tf = Xf[:, :1], Xf[:, -1:]
+    # qMCsampler = qmc.Sobol(d=2, seed=4)
+    # qMCsample = qMCsampler.random_base2(m=int(jnp.log2(sample_num)))
+    # if qMCsample.shape[0] > sample_num:
+    #     qMCsample = qMCsample[:sample_num]
+    # Xf = jnp.array(qMCsample)
+    #
+    # xf, tf = Xf[:, :1], Xf[:, -1:]
 
-    return xf, tf, Xf, yf
+    xf =((jnp.cos(jnp.arange(sample_num+1) * jnp.pi /sample_num))+1 )/ 2
+    tf = xf
+    Xf, Tf = jnp.meshgrid(xf, tf)
+    X_f = jnp.vstack([Xf.ravel(), Tf.ravel()]).T
+    yf = f_xt(X_f)
+    return xf, tf, X_f, yf
 
 def get_u_test_data_2d_qmc(sample_num):
     qMCsampler = qmc.Sobol(d=2, seed=5)

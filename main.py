@@ -6,7 +6,7 @@ from include.check_hyperparameters import check_hyperparamters
 from include.heat2d import plot_u_f, f_xt, plot_u_f_pred, get_u_test_data_2d_qmc, plot_u_pred
 from include.mcmc_posterior import *
 from include.init import ModelInitializer_2d
-from include.plot_dist import plot_dist, plot_with_noise
+from include.plot_dist import plot_dist, plot_with_noise, plot_and_save_kde_histograms
 from include.train import train_heat_equation_model_2d
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -35,32 +35,35 @@ jax.config.update("jax_enable_x64", True)
 # 10: solved the memory issue
 # 11: rewrite the derivative of the kernel
 # 12: save all the results in a pickle file and enable the user to load the results
+# 13: reaction_diffusion
 
-
-# TODO
-# 1: reaction_diffusion
 
 
 # %%
 learning_rate_pred = 0.01
 epoch_pred= 100
+
 noise_std = 0.1
-prior_std = 0.3
+prior_std = 0.04
 prior_var = prior_std**2# prior variance
-max_samples = 100
-assumption_sigma = 0.5 # step size
+max_samples = 3000
+assumption_sigma = 0.05 # step size
 k = 0.6
 num_chains = 1
 
 bw=2
-num_prior_samples = 100
+num_prior_samples = 400
 learning_rate = 4e-2
 test_num = 2**4
 number_u = 2**2 # xt
 number_u_only_x = 2**2
-number_f = 2**5
-number_init = 2**2
-number_bound = 2**2
+number_f = 2**3
+number_init = 2**3
+number_bound = 2**3
+
+number_f_real = (2**3)**2
+number_init_real = 2**3-1
+number_bound_real = 2**3+1
 
 param_text = "para"
 optimizer_in_use = optax.adam
@@ -105,10 +108,10 @@ if __name__ == '__main__':
     print("Xu_fixed:", Xu_fixed)
     print("Yu_fixed:", Yu_fixed)
 
-    Xu = model_initializer.Xu_with_noise
+    Xu_all_noise = model_initializer.Xu_with_noise
     Xu_without_noise = model_initializer.Xu_without_noise
     Yu = model_initializer.Yu
-    print("Xu:", Xu)
+    print("Xu_all_noise:", Xu_all_noise)
     print("Yu:", Yu)
 
     Xf = model_initializer.Xf
@@ -181,9 +184,21 @@ if __name__ == '__main__':
     # map_estimate = result.x.reshape(Xu_noise.shape)
     #
     # print("MAP Estimate:\n", map_estimate)
+    # def generate_prior_samples(rng_key, num_samples, prior_mean, prior_cov):
+    #     prior_samples = random.multivariate_normal(rng_key, mean=prior_mean.ravel(), cov=prior_cov,
+    #                                                shape=(num_samples,))
+    #     return prior_samples
+
+
     def generate_prior_samples(rng_key, num_samples, prior_mean, prior_cov):
         prior_samples = random.multivariate_normal(rng_key, mean=prior_mean.ravel(), cov=prior_cov,
                                                    shape=(num_samples,))
+
+        min_val = jnp.min(prior_samples)
+        max_val = jnp.max(prior_samples)
+
+        prior_samples = (prior_samples - min_val) / (max_val - min_val)
+
         return prior_samples
 
 
@@ -216,11 +231,9 @@ if __name__ == '__main__':
         print(f"Variables saved to {file_path}")
 
 
-
     prior_rng_key, prior_key = random.split(random.PRNGKey(49))
     prior_cov_flat = jnp.kron(jnp.eye(2) * prior_var, jnp.eye(Xu_noise.shape[0]))
     prior_samples = generate_prior_samples(prior_key, num_prior_samples, Xu_noise, prior_cov_flat)
-
 
     print(f"assumption_sigma={assumption_sigma}")
     rng_key = jax.random.PRNGKey(42)
@@ -252,149 +265,18 @@ if __name__ == '__main__':
     print("posterior_samples_list:", posterior_samples_list)
     print("Xu_certain:", Xu_certain)
     print("Xu_noise:", Xu_noise)
-
-    plt.rcParams["figure.figsize"] = (40, 10)
-    plt.rcParams.update({'font.size': 18})
-
-    fig1, axes1 = plt.subplots(2, number_u, figsize=(20, 10))
-
-    for vague_points in range(number_u):
-        ax = axes1[0, vague_points]
-        data = posterior_samples_list[:, vague_points, 0]
-        prior_data = prior_samples[:, vague_points * 2]
-        ax.axvline(Xu_certain[vague_points, 0], color='tab:red', label='x GT', linestyle='--', linewidth=2)
-        ax.axvline(Xu_noise[vague_points, 0], color='seagreen', label='x noised', linestyle=':', linewidth=2)
-        sns.kdeplot(data, ax=ax, color='tab:blue', label='x denoised', bw_adjust=bw)
-        sns.kdeplot(prior_data, ax=ax, color='tab:orange', label='x prior', linestyle='--')
-
-        # posterior_peak = find_kde_peak(data)
-        #ax.axvline(posterior_peak, color='tab:purple', linestyle='-.', linewidth=1, label='posterior peak')
-        posterior_mean = jnp.mean(data)
-        ax.axvline(posterior_mean, color='tab:cyan', linestyle='-', linewidth=2, label='posterior mean')
-
-        gt_value = Xu_certain[vague_points, 0]
-        noise_value = Xu_noise[vague_points, 0]
-        # values = [noise_value, posterior_mean]
-        # labels = ['x noised', 'posterior mean']
-        # closest_label, distances = find_closest_to_gt(gt_value, values, labels)
-
-       # ax.legend(loc='upper left')
-        ax.set_xlabel(f'x_uncertain{vague_points}')
-        # ax.text(0.5, -0.08 , f'{closest_label}', transform=ax.transAxes, ha='center', va='top', fontsize=12, color='red')
-
-    for vague_points in range(number_u):
-        ax2 = axes1[1, vague_points]
-        data1 = posterior_samples_list[:, vague_points, 1]
-        prior_data1 = prior_samples[:, vague_points * 2 + 1]
-        ax2.axvline(Xu_certain[vague_points, 1], color='tab:red', label='t GT', linestyle='--', linewidth=2)
-        ax2.axvline(Xu_noise[vague_points, 1], color='seagreen', label='t noised', linestyle=':', linewidth=2)
-        sns.kdeplot(data1, ax=ax2, color='tab:blue', label='t denoised', bw_adjust=bw)
-        sns.kdeplot(prior_data1, ax=ax2, color='tab:orange', label='t prior', linestyle='--')
-
-        # posterior_peak1 = find_kde_peak(data1)
-        #ax2.axvline(posterior_peak1, color='tab:purple', linestyle='-.', linewidth=1, label='posterior peak')
-        posterior_mean1 = jnp.mean(data1)
-        ax2.axvline(posterior_mean1, color='tab:cyan', linestyle='-', linewidth=2, label='posterior mean')
-
-        gt_value1 = Xu_certain[vague_points, 1]
-        noise_value1 = Xu_noise[vague_points, 1]
-        # values1 = [noise_value1, posterior_mean1]
-        # labels1 = ['t noised', 'posterior mean']
-        # closest_label1, distances1 = find_closest_to_gt(gt_value1, values1, labels1)
-
-        #ax2.legend(loc='upper left')
-        ax2.set_xlabel(f't_uncertain{vague_points}')
-        # ax2.text(0.5, -0.2, f' {closest_label1}', transform=ax2.transAxes, ha='center', va='top', fontsize=12,
-        #          color='red')
-
     current_time = datetime.datetime.now().strftime("%M%S")
-    fig1.savefig(
-        f"kdeplot_f{number_f}_chains{num_chains}_k{k}_assumption{assumption_sigma}_prior_std{prior_std}_noisestd{noise_std}_init{number_init}_b{number_bound}_{prior_var}_k{k}_{max_samples}_{current_time}.png",
-        bbox_inches='tight')
-
-
-    fig2, axes2 = plt.subplots(2, number_u, figsize=(20, 10))
-
-    fig2.subplots_adjust(hspace=0.4, wspace=0.4, top=0.85)
-
-    for vague_points in range(number_u):
-        ax = axes2[0, vague_points]
-        posterior_data = posterior_samples_list[:, vague_points, 0]
-        prior_data = prior_samples[:, vague_points * 2]
-
-        ax.axvline(Xu_noise[vague_points, 0], color='seagreen', linestyle=':', linewidth=2, label='x noised')
-        ax.hist(posterior_data, bins=30, density=True, alpha=0.6, color='tab:blue', label='x denoised')
-        ax.hist(prior_data, bins=30, density=True, alpha=0.6, color='tab:orange', label='x prior')
-        # posterior_peak = find_kde_peak(posterior_data)
-        # ax.axvline(posterior_peak, color='tab:purple', linestyle='-', linewidth=2, label='posterior peak')
-        posterior_mean = jnp.mean(posterior_data)
-        ax.axvline(posterior_mean, color='tab:cyan', linestyle='solid', linewidth=2, label='posterior mean')
-        ax.axvline(Xu_certain[vague_points, 0], color='tab:red', linestyle='--', linewidth=2, label='x GT')
-
-        # values = [Xu_noise[vague_points, 0], posterior_peak, posterior_mean]
-        # labels = ['x noised', 'posterior peak', 'posterior mean']
-        # closest_label, _ = find_closest_to_gt(Xu_certain[vague_points, 0], values, labels)
-
-        ax.set_xlabel(f'uncertain position {vague_points + 1}', fontsize=22)
-        ax.set_ylabel('density', fontsize=22)
-        # ax.text(0.5, -0.15, f'Closest to GT: {closest_label}', transform=ax.transAxes, ha='center', va='top',
-        #         fontsize=14, color='blue')
-        ax.tick_params(axis='both', which='major', labelsize=16)
-
-    handles1, labels1 = [], []
-    for ax in axes2[0]:
-        for handle, label in zip(*ax.get_legend_handles_labels()):
-            if label not in labels1:
-                handles1.append(handle)
-                labels1.append(label)
-
-    fig2.legend(handles1, labels1, loc='upper center', bbox_to_anchor=(0.5, 0.93), fontsize=16, ncol=len(labels1))
-
-    for vague_points in range(number_u):
-        ax2 = axes2[1, vague_points]
-        posterior_data1 = posterior_samples_list[:, vague_points, 1]
-        prior_data1 = prior_samples[:, vague_points * 2 + 1]
-
-        ax2.axvline(Xu_noise[vague_points, 1], color='seagreen', linestyle=':', linewidth=2, label='t noised')
-        ax2.hist(posterior_data1, bins=30, density=True, alpha=0.6, color='tab:blue', label='t denoised')
-        ax2.hist(prior_data1, bins=30, density=True, alpha=0.6, color='tab:orange', label='t prior')
-        # posterior_peak1 = find_kde_peak(posterior_data1)
-        # ax2.axvline(posterior_peak1, color='tab:purple', linestyle='-', linewidth=2, label='posterior peak')
-        posterior_mean1 = jnp.mean(posterior_data1)
-        ax2.axvline(posterior_mean1, color='tab:cyan', linestyle='solid', linewidth=2, label='posterior mean')
-        ax2.axvline(Xu_certain[vague_points, 1], color='tab:red', linestyle='--', linewidth=2, label='t GT')
-
-        # values1 = [Xu_noise[vague_points, 1], posterior_peak1, posterior_mean1]
-        # labels1 = ['t noised', 'posterior mean']
-        #closest_label1, _ = find_closest_to_gt(Xu_certain[vague_points, 1], values1, labels1)
-
-        ax2.set_xlabel(f'uncertain time {vague_points + 1}', fontsize=22)
-        ax2.set_ylabel('density', fontsize=22)
-        # ax2.text(0.5, -0.15, f'Closest to GT: {closest_label1}', transform=ax2.transAxes, ha='center', va='top',
-        #          fontsize=14, color='blue')
-        ax2.tick_params(axis='both', which='major', labelsize=16)
-
-    handles2, labels2 = [], []
-    for ax2 in axes2[1]:
-        for handle, label in zip(*ax2.get_legend_handles_labels()):
-            if label not in labels2:
-                handles2.append(handle)
-                labels2.append(label)
-
-    fig2.legend(handles2, labels2, loc='upper center', bbox_to_anchor=(0.5, 0.48), fontsize=16, ncol=len(labels2))
-
-    fig2.savefig(
-            f"hist_f{number_f}_chains{num_chains}_k{k}_assumption{assumption_sigma}_prior_std{prior_std}_noisestd{noise_std}_init{number_init}_b{number_bound}_{prior_var}_k{k}_{max_samples}_{current_time}.png",
-            bbox_inches='tight')
-    added_text =  f"f{number_f}_chains{num_chains}_k{k}_assumption{assumption_sigma}_prior_std{prior_std}_noisestd{noise_std}_init{number_init}_b{number_bound}_{prior_var}_k{k}_{max_samples}_{current_time}"
-
-
+    added_text =  f"chains{num_chains}_k{k}_assumption{assumption_sigma}_prior{prior_std}_noise{noise_std}_maxsamples{max_samples}_numpriorsamples_{num_prior_samples}_{current_time}"
 
     Xu_pred_mean = jnp.mean(posterior_samples_list, axis=0)
     # Xu_pred_map = posterior_samples_list[jnp.argmax(posterior_samples_list[:, -1])]
-    plot_u_pred(Xu_without_noise, Xu_certain, Xf, Xu_noise, noise_std, Xu_pred_mean, prior_var,assumption_sigma,k,max_samples,learning,num_chains,number_f)
-    plot_dist(Xu_without_noise, Xu_certain, Xf, Xu_noise, noise_std, Xu_pred_mean, prior_var,assumption_sigma,k,max_samples,learning,num_chains,number_f,posterior_samples_list, prior_samples,number_u)
-    plot_with_noise(number_u, number_u_only_x, posterior_samples_list, prior_samples, Xu_certain, Xu_noise, bw)
+    plot_u_pred(Xu_without_noise, Xu_certain, Xf, Xu_noise, noise_std, Xu_pred_mean, prior_var,assumption_sigma,k,max_samples,learning,num_chains,number_f,added_text)
+    plot_dist(Xu_without_noise, Xu_certain, Xf, Xu_noise, noise_std, Xu_pred_mean, prior_var,assumption_sigma,k,max_samples,learning,num_chains,number_f,posterior_samples_list,
+              prior_samples,number_u,added_text)
+    plot_with_noise(number_u, number_u_only_x, posterior_samples_list, prior_samples, Xu_certain, Xu_noise, bw,added_text)
+    plot_and_save_kde_histograms(posterior_samples_list, prior_samples, Xu_certain, Xu_noise, number_u, number_f,
+                                 num_chains, k, assumption_sigma, prior_std, noise_std, number_init_real, number_bound_real,
+                                 prior_var, max_samples,bw, added_text)
 
     save_variables(added_text, Xu_without_noise=Xu_without_noise, Xu_certain=Xu_certain, Xf=Xf, Xu_noise=Xu_noise,
                    noise_std=noise_std, Xu_pred=Xu_pred_mean, prior_var=prior_var, assumption_sigma=assumption_sigma,
@@ -402,7 +284,7 @@ if __name__ == '__main__':
                    posterior_samples_list=posterior_samples_list, prior_samples=prior_samples, Y=Y,
                    param_iter=param_iter, Xu_fixed=Xu_fixed, epochs=epochs,
                    learning_rate=learning_rate,
-                   optimizer_in_use=optimizer_in_use)
+                   optimizer_in_use=optimizer_in_use,number_u_only_x=number_u_only_x,prior_std=prior_std,number_init=number_init, number_bound=number_bound)
 
 # %%
 # # %%

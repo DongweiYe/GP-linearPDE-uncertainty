@@ -230,7 +230,7 @@ if __name__ == '__main__':
     Xu_pred_mean = jnp.mean(posterior_samples_list, axis=0)
 
     plot_u_pred(Xu_without_noise, Xu_certain, Xf, Xu_noise, noise_std, Xu_pred_mean, prior_var, assumption_sigma, k,
-                max_samples, learning, num_chains, number_f)
+                max_samples, learning, num_chains, number_f, added_text)
     plot_dist(Xu_without_noise, Xu_certain, Xf, Xu_noise, noise_std, Xu_pred_mean, prior_var, assumption_sigma, k,
-              max_samples, learning, num_chains, number_f, posterior_samples_list, prior_samples)
+              max_samples, learning, num_chains, number_f, posterior_samples_list, prior_samples, number_u, added_text)
 

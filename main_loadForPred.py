@@ -13,8 +13,9 @@ import jax.scipy.linalg as la
 import gc
 import jaxlib
 from include.mcmc_posterior import compute_K
-from include.plot_dist import plot_dist
-from include.plot_pred import plot_and_save_prediction_results, prediction_mean, prediction_variance
+from include.plot_dist import plot_dist, plot_with_noise, plot_and_save_kde_histograms
+from include.plot_pred import plot_and_save_prediction_results, prediction_mean, prediction_variance, \
+    plot_and_save_prediction_results_combine
 from include.plot_pred_test import plot_prediction_results_test
 from include.train import train_heat_equation_model_2d
 
@@ -26,9 +27,10 @@ num_prior_samples = 500
 current_time = datetime.datetime.now().strftime("%m%d")
 learning_rate_pred = 0.1
 epoch_pred = 10
+pred_mesh = 400
 
-text = "f32_chains1_k0.6_assumption0.5_prior_std0.3_noisestd0.1_init4_b4_0.09_k0.6_100_1752.pkl"
-load_path = f"results/datas/trained_params/0813"
+text = "chains1_k0.6_assumption0.05_prior0.04_noise0.1_maxsamples3000_numpriorsamples_400_0615.pkl"
+load_path = f"results/datas/trained_params/0820"
 
 
 # %%
@@ -36,9 +38,18 @@ load_path = f"results/datas/trained_params/0813"
 if __name__ == '__main__':
     # %%
     print('start inference')
+    print("pred_mesh:", pred_mesh, "\n")
+
+
     def generate_prior_samples(rng_key, num_samples, prior_mean, prior_cov):
         prior_samples = random.multivariate_normal(rng_key, mean=prior_mean.ravel(), cov=prior_cov,
                                                    shape=(num_samples,))
+
+        min_val = jnp.min(prior_samples)
+        max_val = jnp.max(prior_samples)
+
+        prior_samples = (prior_samples - min_val) / (max_val - min_val)
+
         return prior_samples
 
 
@@ -95,159 +106,30 @@ if __name__ == '__main__':
     epochs = variables['epochs']
     learning_rate = variables['learning_rate']
     optimizer_in_use = variables['optimizer_in_use']
-
-    plt.rcParams["figure.figsize"] = (40, 10)
-
-    fig1, axes1 = plt.subplots(2, number_u, figsize=(20, 10))
-
-    for vague_points in range(number_u):
-        ax = axes1[0, vague_points]
-        data = posterior_samples_list[:, vague_points, 0]
-        prior_data = prior_samples[:, vague_points * 2]
-        ax.axvline(Xu_certain[vague_points, 0], color='tab:red', label='x GT', linestyle='--', linewidth=2)
-        ax.axvline(Xu_noise[vague_points, 0], color='seagreen', label='x noised', linestyle=':', linewidth=2)
-        sns.kdeplot(data, ax=ax, color='tab:blue', label='x denoised', bw_adjust=bw)
-        sns.kdeplot(prior_data, ax=ax, color='tab:orange', label='x prior', linestyle='--')
-
-        # posterior_peak = find_kde_peak(data)
-        # ax.axvline(posterior_peak, color='tab:purple', linestyle='-.', linewidth=1, label='posterior peak')
-        posterior_mean = jnp.mean(data)
-        ax.axvline(posterior_mean, color='tab:cyan', linestyle='-', linewidth=2, label='posterior mean')
-
-        # gt_value = Xu_certain[vague_points, 0]
-        # noise_value = Xu_noise[vague_points, 0]
-        # values = [noise_value, posterior_peak, posterior_mean]
-        # labels = ['x noised', 'posterior peak', 'posterior mean']
-        # closest_label, distances = find_closest_to_gt(gt_value, values, labels)
-
-        # ax.legend(loc='upper left')
-        ax.set_xlabel(f'x_uncertain{vague_points}')
-        # ax.text(0.5, -0.08, f'{closest_label}', transform=ax.transAxes, ha='center', va='top', fontsize=12, color='red')
-
-    for vague_points in range(number_u):
-        ax2 = axes1[1, vague_points]
-        data1 = posterior_samples_list[:, vague_points, 1]
-        prior_data1 = prior_samples[:, vague_points * 2 + 1]
-        ax2.axvline(Xu_certain[vague_points, 1], color='tab:red', label='t GT', linestyle='--', linewidth=2)
-        ax2.axvline(Xu_noise[vague_points, 1], color='seagreen', label='t noised', linestyle=':', linewidth=2)
-        sns.kdeplot(data1, ax=ax2, color='tab:blue', label='t denoised', bw_adjust=bw)
-        sns.kdeplot(prior_data1, ax=ax2, color='tab:orange', label='t prior', linestyle='--')
-
-        # posterior_peak1 = find_kde_peak(data1)
-        # ax2.axvline(posterior_peak1, color='tab:purple', linestyle='-.', linewidth=1, label='posterior peak')
-        posterior_mean1 = jnp.mean(data1)
-        ax2.axvline(posterior_mean1, color='tab:cyan', linestyle='-', linewidth=2, label='posterior mean')
-
-        # gt_value1 = Xu_certain[vague_points, 1]
-        # noise_value1 = Xu_noise[vague_points, 1]
-        # values1 = [noise_value1, posterior_peak1, posterior_mean1]
-        # labels1 = ['t noised', 'posterior peak', 'posterior mean']
-        # closest_label1, distances1 = find_closest_to_gt(gt_value1, values1, labels1)
-
-        # ax2.legend(loc='upper left')
-        ax2.set_xlabel(f't_uncertain{vague_points}')
-        # ax2.text(0.5, -0.2, f' {closest_label1}', transform=ax2.transAxes, ha='center', va='top', fontsize=12,
-        #          color='red')
-
-    current_time = datetime.datetime.now().strftime("%M%S")
-    fig1.savefig(
-        f"LOADED_kdeplot_f{number_f}_chains{num_chains}_k{k}_assumption{assumption_sigma}_noisestd{noise_std}_{prior_var}_k{k}_{max_samples}_{current_time}.png",
-        bbox_inches='tight')
-    Xu_pred = jnp.mean(posterior_samples_list, axis=0)
-    Xu_pred_map = posterior_samples_list[jnp.argmax(posterior_samples_list[:, -1])]
-    plot_u_pred(Xu_without_noise, Xu_certain, Xf, Xu_noise, noise_std, Xu_pred, prior_var, assumption_sigma, k,
-                max_samples, learning, num_chains, number_f)
-
-    fig2, axes2 = plt.subplots(2, number_u, figsize=(20, 10))
-
-    fig2.subplots_adjust(hspace=0.4, wspace=0.4, top=0.85)
-
-    for vague_points in range(number_u):
-        ax = axes2[0, vague_points]
-        posterior_data = posterior_samples_list[:, vague_points, 0]
-        prior_data = prior_samples[:, vague_points * 2]
-
-        ax.axvline(Xu_noise[vague_points, 0], color='seagreen', linestyle=':', linewidth=2, label='x noised')
-        ax.hist(posterior_data, bins=30, density=True, alpha=0.6, color='tab:blue', label='x denoised')
-        ax.hist(prior_data, bins=30, density=True, alpha=0.6, color='tab:orange', label='x prior')
-        # posterior_peak = find_kde_peak(posterior_data)
-        # ax.axvline(posterior_peak, color='tab:purple', linestyle='-', linewidth=2, label='posterior peak')
-        posterior_mean = jnp.mean(posterior_data)
-        ax.axvline(posterior_mean, color='tab:cyan', linestyle='solid', linewidth=2, label='posterior mean')
-        ax.axvline(Xu_certain[vague_points, 0], color='tab:red', linestyle='--', linewidth=2, label='x GT')
-
-        # values = [Xu_noise[vague_points, 0], posterior_peak, posterior_mean]
-        # labels = ['x noised', 'posterior peak', 'posterior mean']
-        # closest_label, _ = find_closest_to_gt(Xu_certain[vague_points, 0], values, labels)
-
-        ax.set_xlabel(f'uncertain position {vague_points + 1}', fontsize=22)
-        ax.set_ylabel('density', fontsize=22)
-        # ax.text(0.5, -0.15, f'Closest to GT: {closest_label}', transform=ax.transAxes, ha='center', va='top',
-        #         fontsize=14, color='blue')
-        ax.tick_params(axis='both', which='major', labelsize=16)
-
-    handles1, labels1 = [], []
-    for ax in axes2[0]:
-        for handle, label in zip(*ax.get_legend_handles_labels()):
-            if label not in labels1:
-                handles1.append(handle)
-                labels1.append(label)
-
-    fig2.legend(handles1, labels1, loc='upper center', bbox_to_anchor=(0.5, 0.93), fontsize=16, ncol=len(labels1))
-
-    for vague_points in range(number_u):
-        ax2 = axes2[1, vague_points]
-        posterior_data1 = posterior_samples_list[:, vague_points, 1]
-        prior_data1 = prior_samples[:, vague_points * 2 + 1]
-
-        ax2.axvline(Xu_noise[vague_points, 1], color='seagreen', linestyle=':', linewidth=2, label='t noised')
-        ax2.hist(posterior_data1, bins=30, density=True, alpha=0.6, color='tab:blue', label='t denoised')
-        ax2.hist(prior_data1, bins=30, density=True, alpha=0.6, color='tab:orange', label='t prior')
-        # posterior_peak1 = find_kde_peak(posterior_data1)
-        # ax2.axvline(posterior_peak1, color='tab:purple', linestyle='-', linewidth=2, label='posterior peak')
-        posterior_mean1 = jnp.mean(posterior_data1)
-        ax2.axvline(posterior_mean1, color='tab:cyan', linestyle='solid', linewidth=2, label='posterior mean')
-        ax2.axvline(Xu_certain[vague_points, 1], color='tab:red', linestyle='--', linewidth=2, label='t GT')
-
-        # values1 = [Xu_noise[vague_points, 1], posterior_peak1, posterior_mean1]
-        # labels1 = ['t noised', 'posterior peak', 'posterior mean']
-        # closest_label1, _ = find_closest_to_gt(Xu_certain[vague_points, 1], values1, labels1)
-
-        ax2.set_xlabel(f'uncertain time {vague_points + 1}', fontsize=22)
-        ax2.set_ylabel('density', fontsize=22)
-        # ax2.text(0.5, -0.15, f'Closest to GT: {closest_label1}', transform=ax2.transAxes, ha='center', va='top',
-        #          fontsize=14, color='blue')
-        ax2.tick_params(axis='both', which='major', labelsize=16)
-
-    handles2, labels2 = [], []
-    for ax2 in axes2[1]:
-        for handle, label in zip(*ax2.get_legend_handles_labels()):
-            if label not in labels2:
-                handles2.append(handle)
-                labels2.append(label)
-
-    fig2.legend(handles2, labels2, loc='upper center', bbox_to_anchor=(0.5, 0.48), fontsize=16, ncol=len(labels2))
-
-    fig2.savefig(
-        f"LOADED_hist_f{number_f}_chains{num_chains}_k{k}_assumption{assumption_sigma}_noisestd{noise_std}_{prior_var}_k{k}_{max_samples}_{current_time}.png",
-        bbox_inches='tight')
+    number_u_only_x = variables['number_u_only_x']
+    prior_std = variables['prior_std']
+    number_init = variables['number_init']
+    number_bound = variables['number_bound']
 
     added_text = f"Predction_f{number_f}_chains{num_chains}_k{k}_assumption{assumption_sigma}_noisestd{noise_std}_{prior_var}_k{k}_{max_samples}_{current_time}"
 
     Xu_pred_mean = jnp.mean(posterior_samples_list, axis=0)
 
     plot_u_pred(Xu_without_noise, Xu_certain, Xf, Xu_noise, noise_std, Xu_pred_mean, prior_var, assumption_sigma, k,
-                max_samples, learning, num_chains, number_f)
+                max_samples, learning, num_chains, number_f, added_text)
     plot_dist(Xu_without_noise, Xu_certain, Xf, Xu_noise, noise_std, Xu_pred_mean, prior_var, assumption_sigma, k,
-              max_samples, learning, num_chains, number_f, posterior_samples_list, prior_samples,number_u)
-
+              max_samples, learning, num_chains, number_f, posterior_samples_list, prior_samples,number_u, added_text)
+    plot_with_noise(number_u, number_u_only_x, posterior_samples_list, prior_samples, Xu_certain, Xu_noise, bw, added_text)
+    plot_and_save_kde_histograms(posterior_samples_list, prior_samples, Xu_certain, Xu_noise, number_u, number_f,
+                                 num_chains, k, assumption_sigma, prior_std, noise_std, number_init, number_bound,
+                                 prior_var, max_samples, bw, added_text)
     print('end inference')
 
 # %%
 # # %%
     print("start prediction")
-    x_prediction = jnp.linspace(0, 1, 40)
-    t_prediction = jnp.linspace(0, 1, 40)
+    x_prediction = jnp.linspace(0, 1, pred_mesh)
+    t_prediction = jnp.linspace(0, 1, pred_mesh)
 
     X_prediction, T_prediction = jnp.meshgrid(x_prediction, t_prediction)
 
@@ -308,6 +190,15 @@ if __name__ == '__main__':
     #     sigma_star = k_x_star_x_star - jnp.einsum('ij,ij->i', k_x_star.T, K_inv_k_x_star.T).reshape(-1, 1)
     #
     #     return mu_star.flatten(), sigma_star
+    def blockwise_matrix_multiply(A, B, block_size):
+        M, N = A.shape
+        _, P = B.shape
+        C = jnp.zeros((M, P))
+        for i in range(0, M, block_size):
+            for j in range(0, P, block_size):
+                C = C.at[i:i + block_size, j:j + block_size].add(
+                    jnp.dot(A[i:i + block_size, :], B[:, j:j + block_size]))
+        return C
 
     def gp_predict(init, z_prior, Xcz, Xcg, y, x_star):
         print("Starting gp_predict function")
@@ -323,11 +214,59 @@ if __name__ == '__main__':
         k_zz_u_star = compute_kuu(z_prior, x_star, params_kuu)
         k_zz_c_star = compute_kuu(Xcz, x_star, params_kuu)
         k_gz_c_star = compute_kfu(Xcg, x_star, params, lengthscale_x, lengthscale_t)
-        # k_gz_c_star_T = compute_kuf(x_star, Xcg, params)
+
         k_x_star = jnp.vstack((k_zz_u_star, k_zz_c_star, k_gz_c_star))
         k_x_star_x_star = compute_kuu(x_star, x_star, params_kuu)
-        # print("jnp.allclose(k_gz_c_star.T, k_gz_c_star_T)", jnp.allclose(k_gz_c_star.T, k_gz_c_star_T))
+        del k_zz_u_star, k_zz_c_star, k_gz_c_star, params_kuu, params
 
+        K_inv_y = la.solve(K, y, assume_a='pos')
+        K_inv_k_x_star = la.solve(K, k_x_star, assume_a='pos')
+        mu_star_gpu = jnp.dot(k_x_star.T, K_inv_y)
+        del K, K_inv_y
+        k_x_star_T = k_x_star.T
+        del k_x_star
+        k_x_star_T_K_inv_k_x_star = k_x_star_T@K_inv_k_x_star
+        del k_x_star_T, K_inv_k_x_star
+        sigma_star_gpu = k_x_star_x_star - k_x_star_T_K_inv_k_x_star
+
+        del k_x_star_x_star
+        gc.collect()
+        return mu_star_gpu.flatten(), sigma_star_gpu
+
+    def gp_predict_diagonal(init, z_prior, Xcz, Xcg, y, x_star):
+        print("Starting gp_predict_diagonal function")
+        params_kuu = {'sigma': init[-1][0], 'lengthscale': init[-1][1]}
+        params = init
+        K = compute_K(init, z_prior, Xcz, Xcg)
+        print("Computed K matrix")
+
+        K_inv_y = la.solve(K, y, assume_a='pos')
+
+        mu_star = []
+        sigma_star_diag = []
+
+        for i in range(x_star.shape[0]):
+            x_star_i = x_star[i:i + 1]
+
+            k_zz_u_star = compute_kuu(z_prior, x_star_i, params_kuu)
+            k_zz_c_star = compute_kuu(Xcz, x_star_i, params_kuu)
+            k_gz_c_star = compute_kfu(Xcg, x_star_i, params, params[0][1][0].item(), params[0][1][1].item())
+
+            k_x_star_i = jnp.vstack((k_zz_u_star, k_zz_c_star, k_gz_c_star))
+            mu_star_i = jnp.dot(k_x_star_i.T, K_inv_y)
+
+            K_inv_k_x_star_i = la.solve(K, k_x_star_i, assume_a='pos')
+            sigma_star_i = compute_kuu(x_star_i, x_star_i, params_kuu) - jnp.dot(k_x_star_i.T, K_inv_k_x_star_i)
+
+            mu_star.append(mu_star_i)
+            sigma_star_diag.append(sigma_star_i)
+
+        mu_star = jnp.concatenate(mu_star, axis=0)
+        sigma_star_diag = jnp.concatenate(sigma_star_diag, axis=0).flatten()
+
+        del K_inv_y, K, mu_star_i, sigma_star_i, k_zz_u_star, k_zz_c_star, k_gz_c_star, k_x_star_i, K_inv_k_x_star_i
+        gc.collect()
+        return mu_star.flatten(), sigma_star_diag
         # # CPU
         # K_cpu = jax.device_put(K + 1e-6 * jnp.eye(K.shape[0]), device=jax.devices("cpu")[0])
         # y_cpu = jax.device_put(y.reshape(-1, 1), device=jax.devices("cpu")[0])
@@ -348,15 +287,50 @@ if __name__ == '__main__':
         # #     raise
         # del K_cpu, y_cpu, k_x_star_cpu, K_inv_y, K_inv_k_x_star, mu_star_cpu, sigma_star_cpu
         #
+        ## block_size = 100
+        # block_result = blockwise_matrix_multiply(k_x_star_T, K_inv_k_x_star, block_size=block_size)
+        # del k_x_star_T, K_inv_k_x_star
+        # sigma_star_gpu = k_x_star_x_star - block_result
+        # print("block_size=", block_size)
 
-        # # only GPU
+
+    def gp_predict_diagonal_batch(init, z_prior, Xcz, Xcg, y, x_star, batch_size=2000):
+        print("Starting gp_predict_diagonal_batch function")
+        params_kuu = {'sigma': init[-1][0], 'lengthscale': init[-1][1]}
+        params = init
+        K = compute_K(init, z_prior, Xcz, Xcg)
+        print("Computed K matrix")
+
         K_inv_y = la.solve(K, y, assume_a='pos')
-        K_inv_k_x_star = la.solve(K, k_x_star, assume_a='pos')
-        mu_star_gpu = jnp.dot(k_x_star.T, K_inv_y)
-        sigma_star_gpu = k_x_star_x_star - jnp.einsum('ij,ij->i', k_x_star.T, K_inv_k_x_star.T).reshape(-1, 1)
-        del K, k_x_star, K_inv_y, K_inv_k_x_star, k_x_star_x_star, params_kuu, params, k_zz_u_star, k_zz_c_star, k_gz_c_star
+
+        mu_star = []
+        sigma_star_diag = []
+
+        for i in range(0, x_star.shape[0], batch_size):
+            x_star_batch = x_star[i:i + batch_size]
+
+            k_zz_u_star = compute_kuu(z_prior, x_star_batch, params_kuu)
+            k_zz_c_star = compute_kuu(Xcz, x_star_batch, params_kuu)
+            k_gz_c_star = compute_kfu(Xcg, x_star_batch, params, params[0][1][0].item(), params[0][1][1].item())
+
+            k_x_star_batch = jnp.vstack((k_zz_u_star, k_zz_c_star, k_gz_c_star))
+            mu_star_batch = jnp.dot(k_x_star_batch.T, K_inv_y)
+
+            K_inv_k_x_star_batch = la.solve(K, k_x_star_batch, assume_a='pos')
+            sigma_star_batch = compute_kuu(x_star_batch, x_star_batch, params_kuu) - jnp.dot(k_x_star_batch.T,
+                                                                                             K_inv_k_x_star_batch)
+            sigma_star_batch_diag = sigma_star_batch.diagonal()
+
+            mu_star.append(mu_star_batch)
+            sigma_star_diag.append(sigma_star_batch_diag)
+
+        mu_star = jnp.concatenate(mu_star, axis=0)
+        sigma_star_diag = jnp.concatenate(sigma_star_diag, axis=0).flatten()
+
+        del K_inv_y, K, k_zz_u_star, k_zz_c_star, k_gz_c_star, k_x_star_batch, K_inv_k_x_star_batch
         gc.collect()
-        return mu_star_gpu.flatten(), sigma_star_gpu
+        return mu_star.flatten(), sigma_star_diag
+
 
 
     for i in range(posterior_samples_list.shape[0]):
@@ -374,7 +348,7 @@ if __name__ == '__main__':
         lengthscale = param_iter[-1][1]
         sigma = param_iter[-1][0]
 
-        y_final_mean, y_final_var = gp_predict(param_iter, Xu_sample, Xu_fixed, Xf, Y, X_plot_prediction)
+        y_final_mean, y_final_var = gp_predict_diagonal_batch(param_iter, Xu_sample, Xu_fixed, Xf, Y, X_plot_prediction)
         print("Prediction mean shape: ", y_final_mean.shape)
         print("Prediction variance shape: ", y_final_var.shape)
 
@@ -388,13 +362,6 @@ if __name__ == '__main__':
         gc.collect()
         jax.clear_caches()
         print("posterior memory cleaned up after iteration", i)
-
-    y_final_mean_list_posterior = jnp.array(y_final_mean_list_posterior)
-    y_final_var_list_posterior = jnp.array(y_final_var_list_posterior)
-
-
-    print("posterior Prediction mean shape: ", y_final_mean_list_posterior.shape)
-    print("posteriro Prediction variance shape: ", y_final_var_list_posterior.shape)
 
     prior_samples_reshaped = prior_samples.reshape(prior_samples.shape[0], -1, 2)
     for i in range(prior_samples_reshaped.shape[0]):
@@ -412,13 +379,14 @@ if __name__ == '__main__':
         lengthscale = param_iter[-1][1]
         sigma = param_iter[-1][0]
 
-        y_final_mean_prior, y_final_var_prior = gp_predict(param_iter, Xu_sample_prior, Xu_fixed, Xf, Y,
+        y_final_mean_prior, y_final_var_prior = gp_predict_diagonal_batch(param_iter, Xu_sample_prior, Xu_fixed, Xf, Y,
                                                            X_plot_prediction)
-
+        print("prior Prediction mean shape: ", y_final_mean_prior.shape)
+        print("prior Prediction variance shape: ", y_final_var_prior.shape)
         # y_final_mean_list_prior = jnp.vstack((y_final_mean_list_prior, y_final_mean_prior.reshape(1, -1)))
         # y_final_var_list_prior = jnp.vstack((y_final_var_list_prior, y_final_var_prior.reshape(1, -1)))
-        y_final_mean_list_prior.append(y_final_mean_prior.reshape(1, -1))
-        y_final_var_list_prior.append(y_final_var_prior.reshape(1, -1))
+        y_final_mean_list_prior.append(y_final_mean_prior.T)
+        y_final_var_list_prior.append(y_final_var_prior.T)
 
         del Xu_sample_prior, y_final_mean_prior, y_final_var_prior
 
@@ -426,25 +394,6 @@ if __name__ == '__main__':
         jax.clear_caches()
         print("prior memory cleaned up after iteration", i)
 
-    y_final_mean_list_prior = jnp.array(y_final_mean_list_prior)
-    y_final_var_list_prior = jnp.array(y_final_var_list_prior)
-
-    y_final_mean_list_prior = jnp.vstack(y_final_mean_list_prior)
-    y_final_var_list_prior = jnp.vstack(y_final_var_list_prior)
-    print("prior Prediction mean shape: ", y_final_mean_list_prior.shape)
-    print("prior Prediction variance shape: ", y_final_var_list_prior.shape)
-
-
-
-    y_final_mean_posterior = prediction_mean(y_final_mean_list_posterior)
-    y_final_var_posterior = prediction_variance(y_final_mean_list_posterior, y_final_var_list_posterior)
-    y_final_mean_prior = prediction_mean(y_final_mean_list_prior)
-    y_final_var_prior = prediction_variance(y_final_mean_list_prior, y_final_var_list_prior)
-    print("final posterior Prediction mean shape: ", y_final_mean_posterior.shape)
-    print("final posterior Prediction variance shape: ", y_final_var_posterior.shape)
-    print("final prior Prediction mean shape: ", y_final_mean_prior.shape)
-    print("final prior Prediction variance shape: ", y_final_var_prior.shape)
-    print("-------------------end prediction-------------------")
     def save_variables(added_text, **variables):
         root_folder = "."
         if not os.path.exists(root_folder):
@@ -457,14 +406,81 @@ if __name__ == '__main__':
             pickle.dump(variables, f)
         print(f"Variables saved to {file_path}")
 
+    #gpu
+    # y_final_mean_list_posterior = jnp.array(y_final_mean_list_posterior)
+    # y_final_var_list_posterior = jnp.array(y_final_var_list_posterior)
+    #
+    # print("posterior Prediction mean shape: ", y_final_mean_list_posterior.shape)
+    # print("posterior Prediction variance shape: ", y_final_var_list_posterior.shape)
+    #
+    # y_final_mean_list_prior = jnp.array(y_final_mean_list_prior)
+    # y_final_var_list_prior = jnp.array(y_final_var_list_prior)
+    #
+    # print("prior Prediction mean shape: ", y_final_mean_list_prior.shape)
+    # print("prior Prediction variance shape: ", y_final_var_list_prior.shape)
+
+    # CPU
+    # y_final_mean_list_posterior = jax.device_put(y_final_mean_list_posterior, device=jax.devices("cpu")[0])
+    # y_final_var_list_posterior = jax.device_put(y_final_var_list_posterior, device=jax.devices("cpu")[0])
+
+    y_final_mean_list_posterior = jnp.array(y_final_mean_list_posterior)
+    y_final_var_list_posterior = jnp.array(y_final_var_list_posterior)
+
+    print("posterior Prediction mean shape: ", y_final_mean_list_posterior.shape)
+    print("posterior Prediction variance shape: ", y_final_var_list_posterior.shape)
+
+    # y_final_mean_list_prior = jax.device_put(y_final_mean_list_prior, device=jax.devices("cpu")[0])
+    # y_final_var_list_prior = jax.device_put(y_final_var_list_prior, device=jax.devices("cpu")[0])
+    y_final_mean_list_prior = jnp.array(y_final_mean_list_prior)
+    y_final_var_list_prior = jnp.array(y_final_var_list_prior)
+    print("prior Prediction mean shape: ", y_final_mean_list_prior.shape)
+    print("prior Prediction variance shape: ", y_final_var_list_prior.shape)
+
+    y_final_mean_posterior = prediction_mean(y_final_mean_list_posterior)
+
+    #y_final_var_list_posterior_diag = jnp.diagonal(y_final_var_list_posterior, axis1=1, axis2=2)
+    y_final_var_posterior = prediction_variance(y_final_mean_list_posterior, y_final_var_list_posterior)
+    y_final_mean_prior = prediction_mean(y_final_mean_list_prior)
+
+    #y_final_var_list_prior_diag = jnp.diagonal(y_final_var_list_prior, axis1=1, axis2=2)
+    y_final_var_prior = prediction_variance(y_final_mean_list_prior, y_final_var_list_prior)
+    print("final posterior Prediction mean shape: ", y_final_mean_posterior.shape)
+    print("final posterior Prediction variance shape: ", y_final_var_posterior.shape)
+    print("final prior Prediction mean shape: ", y_final_mean_prior.shape)
+    print("final prior Prediction variance shape: ", y_final_var_prior.shape)
+    print("-------------------end prediction-------------------")
 
     u_values_gt = u_xt(X_plot_prediction)
-    save_variables(added_text, X_plot_prediction=X_plot_prediction, u_values_gt=u_values_gt,
-                   y_final_mean_list_prior=y_final_mean_list_prior, y_final_var_list_prior=y_final_var_list_prior,
-                   y_final_mean_list_posterior=y_final_mean_list_posterior, y_final_var_list_posterior=y_final_var_list_posterior)
 
-    plot_and_save_prediction_results(X_plot_prediction, u_values_gt, y_final_mean_list_prior, y_final_var_list_prior,
-                                     y_final_mean_list_posterior, y_final_var_list_posterior)
+
+    gp_mean_posterior = prediction_mean(y_final_mean_list_posterior).reshape(pred_mesh, pred_mesh)
+    u_values_gt = u_values_gt.reshape(pred_mesh, pred_mesh)
+    abs_diff_gt_gp = jnp.abs(u_values_gt - gp_mean_posterior)
+    var_prior = prediction_variance(y_final_mean_list_prior, y_final_var_list_prior).reshape(pred_mesh, pred_mesh)
+    var_posterior = prediction_variance(y_final_mean_list_posterior, y_final_var_list_posterior).reshape(pred_mesh,
+                                                                                                         pred_mesh)
+    abs_var_diff = jnp.abs(var_prior - var_posterior)
+
+    plot_and_save_prediction_results(u_values_gt,
+                                    gp_mean_posterior,
+                                    abs_diff_gt_gp,
+                                    var_prior,
+                                    var_posterior,
+                                    abs_var_diff, added_text)
+    plot_and_save_prediction_results_combine(u_values_gt,
+                                             gp_mean_posterior,
+                                             abs_diff_gt_gp,
+                                             var_prior,
+                                             var_posterior,
+                                             abs_var_diff, added_text)
+
+    save_variables(added_text, u_values_gt=u_values_gt,
+                            gp_mean_posterior= gp_mean_posterior,
+                            abs_diff_gt_gp=abs_diff_gt_gp,
+                            var_prior=var_prior,
+                            var_posterior=var_posterior,
+                            abs_var_diff=abs_var_diff,
+                            added_text=added_text)
 
     # # %%
     # u_values_gt = u_xt(X_plot_prediction)

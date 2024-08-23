@@ -44,7 +44,6 @@ class ModelInitializer_2d:
         self.xtest = jnp.concatenate((self.Xu_fixed, self.Xf))
         self.ytest = jnp.concatenate((self.Yu_fixed, self.yf))
 
-        # TODO: add mean(yu_noise) to projection
         sigma_init = jnp.std(self.Y)
         sigma_init_yu = jnp.std(self.Yu)
         sigma_init_yf = jnp.std(self.yf)
