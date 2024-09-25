@@ -15,7 +15,16 @@ hostname
 start_time=$(date +%s)
 cd /local
 mkdir ${SLURM_JOBID}
-cd ${SLURM_JOBID}
+
+ScratchDir="/local/${SLURM_JOBID}"
+if [ -d "$ScratchDir" ]; then
+   echo "'$ScratchDir' already found !"
+else
+   echo "'$ScratchDir' not found, creating !"
+   mkdir $ScratchDir
+fi
+cd $ScratchDir
+
 cp -r ${SLURM_SUBMIT_DIR}/* .
 export OMPI_MCA_mca_base_component_show_load_errors=0
 module load nvidia/cuda-11.8
@@ -79,11 +88,16 @@ cp *.pdf ${SLURM_SUBMIT_DIR}/results/figures/${today}
 cp *.png ${SLURM_SUBMIT_DIR}/results/figures/${today}
 cp *.pkl ${SLURM_SUBMIT_DIR}/results/datas/trained_params/${today}
 
-cp ${SCRATCH_DIRECTORY} ${SLURM_SUBMIT_DIR}
 cd ${SLURM_SUBMIT_DIR}
-mkdir -p ${SLURM_SUBMIT_DIR}/results/log/${today}
 mv *.log ${SLURM_SUBMIT_DIR}/results/log/${today}
-rm -rf ${SCRATCH_DIRECTORY}
+
+cd ~
+if [ -d "$ScratchDir" ]; then
+   echo "'$ScratchDir' found and now copying files, please wait ..."
+   rm -rf $ScratchDir
+else
+   echo "Warning: '$ScratchDir' NOT found."
+fi
 # -----------------end--------------------------------
 
 

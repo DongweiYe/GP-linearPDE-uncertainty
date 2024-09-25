@@ -1,15 +1,14 @@
 #!/bin/bash
-#SBATCH --job-name=pred_h
-#SBATCH -p mia,mia-pof,am
+#SBATCH --job-name=test_f_rd
+#SBATCH -p main,mia,mia-pof,am
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=16
 #SBATCH --mem-per-cpu=200G
 #SBATCH --gres=gpu:1
 #SBATCH --time=64:03:00
-#SBATCH --output=pred_h_%j.log
+#SBATCH --output=test_f_rd_%j.log
 #SBATCH --error=err_%j.log
-#SBATCH --exclude=hpc-node05
 
 
 hostname
@@ -56,7 +55,7 @@ echo "Starting worker: "
 export JAX_PLATFORM_NAME=gpu
 export JAX_TRACEBACK_FILTERING=off
 export XLA_PYTHON_CLIENT_PREALLOCATE=false
-mpirun -np 1 python main_loadForPred.py
+mpirun -np 1 python test_f_rd.py
 # -----------------end--------------------------------
 
 
@@ -89,11 +88,9 @@ cp *.pdf ${SLURM_SUBMIT_DIR}/results/figures/${today}
 cp *.png ${SLURM_SUBMIT_DIR}/results/figures/${today}
 cp *.pkl ${SLURM_SUBMIT_DIR}/results/datas/trained_params/${today}
 
-cp ${SCRATCH_DIRECTORY} ${SLURM_SUBMIT_DIR}
 cd ${SLURM_SUBMIT_DIR}
-mkdir -p ${SLURM_SUBMIT_DIR}/results/log/${today}
 mv *.log ${SLURM_SUBMIT_DIR}/results/log/${today}
-# Clean up on the compute node !
+
 cd ~
 if [ -d "$ScratchDir" ]; then
    echo "'$ScratchDir' found and now copying files, please wait ..."
@@ -101,8 +98,9 @@ if [ -d "$ScratchDir" ]; then
 else
    echo "Warning: '$ScratchDir' NOT found."
 fi
-
 # -----------------end--------------------------------
-# Finish the scripts
-exit 0
 
+
+
+# Finish the script
+exit 0

@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=rd
-#SBATCH -p main,mia,mia-pof,am
+#SBATCH -p mia,mia-pof,am
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=16
@@ -9,13 +9,23 @@
 #SBATCH --time=64:03:00
 #SBATCH --output=rd_%j.log
 #SBATCH --error=err_%j.log
+#SBATCH --exclude=hpc-node05
 
 
 hostname
 start_time=$(date +%s)
 cd /local
 mkdir ${SLURM_JOBID}
-cd ${SLURM_JOBID}
+
+ScratchDir="/local/${SLURM_JOBID}"
+if [ -d "$ScratchDir" ]; then
+   echo "'$ScratchDir' already found !"
+else
+   echo "'$ScratchDir' not found, creating !"
+   mkdir $ScratchDir
+fi
+cd $ScratchDir
+
 cp -r ${SLURM_SUBMIT_DIR}/* .
 export OMPI_MCA_mca_base_component_show_load_errors=0
 module load nvidia/cuda-11.8
@@ -70,6 +80,7 @@ echo "Script finished in $((running_time / 60)) minutes and $((running_time % 60
 
 
 
+
 # -----------------get output---------------------
 mkdir -p ${SLURM_SUBMIT_DIR}/results/figures/${today}
 mkdir -p ${SLURM_SUBMIT_DIR}/results/log/${today}
@@ -79,11 +90,23 @@ cp *.pdf ${SLURM_SUBMIT_DIR}/results/figures/${today}
 cp *.png ${SLURM_SUBMIT_DIR}/results/figures/${today}
 cp *.pkl ${SLURM_SUBMIT_DIR}/results/datas/trained_params/${today}
 
-cp ${SCRATCH_DIRECTORY} ${SLURM_SUBMIT_DIR}
 cd ${SLURM_SUBMIT_DIR}
-mkdir -p ${SLURM_SUBMIT_DIR}/results/log/${today}
 mv *.log ${SLURM_SUBMIT_DIR}/results/log/${today}
-rm -rf ${SCRATCH_DIRECTORY}
+
+#cp ${SCRATCH_DIRECTORY} ${SLURM_SUBMIT_DIR}
+#echo "SCRATCH_DIRECTORY is set to: ${SCRATCH_DIRECTORY}"
+##export SCRATCH_DIRECTORY=/local/${SLURM_JOBID}
+#rm -rf ${SCRATCH_DIRECTORY}
+
+# Clean up on the compute node !
+cd ~
+if [ -d "$ScratchDir" ]; then
+   echo "'$ScratchDir' found and now copying files, please wait ..."
+   rm -rf $ScratchDir
+else
+   echo "Warning: '$ScratchDir' NOT found."
+fi
+
 # -----------------end--------------------------------
 
 

@@ -120,6 +120,92 @@ def compute_kff(x1: jnp.ndarray, x2: jnp.ndarray, initial_theta, lengthscale_x, 
     total_expression = term1 - ( term2 + term3 + term4 + term5)
 
     return total_expression
+
+
+@jit
+def compute_kuu_rd(x1: ArrayLike, x2: ArrayLike, params) -> jnp.ndarray:
+    return deep_rbf_kernel(x1, x2, params)
+
+
+@jit
+def compute_kuf_rd(x1: jnp.ndarray, x2: jnp.ndarray, initial_theta, lengthscale_x, lengthscale_t) -> jnp.ndarray:
+    # lengthscale_x = initial_theta[0][1][0].item()
+    # lengthscale_t = initial_theta[0][1][1].item()
+
+    t1 = x1[:, -1]
+    t2 = x2[:, -1]
+    x1_spatial = x1[:, :-1]
+    x2_spatial = x2[:, :-1]
+
+    params = {'sigma': initial_theta[-1][0], 'lengthscale': initial_theta[-1][1]}
+    k = deep_rbf_kernel(x1, x2, params)
+
+    term1 = (t1[:, None] - t2[None, :]) / lengthscale_t ** 2
+    term2 = 0.01 * (jnp.sum((x1_spatial[:, None] - x2_spatial[None, :]) ** 2, axis=-1) / lengthscale_x ** 4)
+    term3 = 0.01 *  (1 / lengthscale_x ** 2)
+
+    k_uf = k * (term1 + term3 - term2)
+
+    return k_uf
+
+@jit
+def compute_kfu_rd(x1: jnp.ndarray, x2: jnp.ndarray, initial_theta, lengthscale_x, lengthscale_t) -> jnp.ndarray:
+    # lengthscale_x = initial_theta[0][1][0].item()
+    # lengthscale_t = initial_theta[0][1][1].item()
+    t1 = x1[:, -1]
+    t2 = x2[:, -1]
+    x1_spatial = x1[:, :-1]
+    x2_spatial = x2[:, :-1]
+
+    params = {'sigma': initial_theta[-1][0], 'lengthscale': initial_theta[-1][1]}
+    k = deep_rbf_kernel(x1, x2, params)
+
+    term1 = -(t1[:, None] - t2[None, :]) / lengthscale_t ** 2
+    term2 = 0.01 * (jnp.sum((x2_spatial[None] - x1_spatial[:, None]) ** 2, axis=-1) / lengthscale_x ** 4)
+    term3 = 0.01 *  (1 / lengthscale_x ** 2)
+
+    k_fu = k * (term1 - term2 + term3)
+
+    return k_fu
+
+
+@jit
+def compute_kff_rd(x1: jnp.ndarray, x2: jnp.ndarray, initial_theta, lengthscale_x, lengthscale_t) -> jnp.ndarray:
+    # lengthscale_x = initial_theta[0][1][0].item()
+    # lengthscale_t = initial_theta[0][1][1].item()
+    t1 = x1[:, -1]
+    t2 = x2[:, -1]
+    x1_spatial = x1[:, :-1]
+    x2_spatial = x2[:, :-1]
+
+    params = {'sigma': initial_theta[-1][0], 'lengthscale': initial_theta[-1][1]}
+    k = deep_rbf_kernel(x1, x2, params)
+
+    alpha = 0.01
+    term1 = k * ((t1[:, None] - t2) / lengthscale_t ** 2) * (
+            -(t1[:, None] - t2) / lengthscale_t ** 2
+            - (alpha * (jnp.sum((x2_spatial[None] - x1_spatial[:, None]) ** 2, axis=-1) / lengthscale_x ** 4))
+            + (alpha * (1 / lengthscale_x ** 2))
+    ) + k / lengthscale_t ** 2
+
+    term2 = (2 * alpha * k / lengthscale_x ** 6) * jnp.sum((x1_spatial[:, None] - x2_spatial[None]) ** 2, axis=-1) - (
+                2 * alpha * k / lengthscale_x ** 4)
+
+    term3 = -k * (t2 - t1[:, None]) / (lengthscale_x ** 2 * lengthscale_t ** 2) + k * jnp.sum(
+        (x1_spatial[:, None] - x2_spatial[None]) ** 2, axis=-1) * (t2 - t1[:, None]) / (
+                        lengthscale_x ** 4 * lengthscale_t ** 2)
+
+    term4 = -alpha * k / lengthscale_x ** 4 + alpha * (
+                k * jnp.sum((x1_spatial[:, None] - x2_spatial[None]) ** 2, axis=-1) / lengthscale_x ** 6)
+
+    term5 = k * (3 * alpha * jnp.sum((x2_spatial[None] - x1_spatial[:, None]) ** 2, axis=-1) / lengthscale_x ** 6 - (
+                alpha * jnp.sum((x2_spatial[None] - x1_spatial[:, None]) ** 4, axis=-1) / lengthscale_x ** 8))
+
+    total_expression = term1 - alpha * (term2 + term3 + term4 + term5)
+
+    return total_expression
+
+
 ################################################# nlml ##########################################################
 def heat_equation_nlml_loss_2d(heat_params, Xuz, Xfz, Xfg, number_Y, Y) -> float:
     init = heat_params
@@ -148,6 +234,92 @@ def heat_equation_nlml_loss_2d(heat_params, Xuz, Xfz, Xfg, number_Y, Y) -> float
     # print("gg_ff: ", gg_ff)
 
     K = jnp.block([[zz_uu, zz_uf, zg_uf], [zz_fu, zz_ff, zg_ff], [gz_fu, gz_ff, gg_ff]])
+    # jitter = 1e-7
+    # K_jittered = K + jitter * jnp.eye(K.shape[0])
+    # K  = K_jittered
+    # print("########################jittered########################", jitter)
+    sign, logdet = jnp.linalg.slogdet(K)
+    K_inv_Y = jnp.linalg.solve(K, Y)
+    signed_logdet = sign * logdet
+    K_inv_Y_product = Y.T @ K_inv_Y
+    scalar_result = jnp.squeeze(K_inv_Y_product)
+    nlml = (1 / 2 * signed_logdet) + (1 / 2 * scalar_result) + ((number_Y / 2) * jnp.log(2 * jnp.pi))
+
+    # print("K: ", K)
+    # print("K.shape: ", K.shape)
+    # print("logdet: ", logdet)
+    # print("K_inv_Y: ", K_inv_Y)
+    # print("signed_logdet: ", signed_logdet)
+    # print("Y.T @ K_inv_Y: ", Y.T @ K_inv_Y)
+    # print("Y.T @ K_inv_Y shape: ", (Y.T @ K_inv_Y).shape)
+    # print("scalar_result: ", scalar_result)
+    # print("scalar_result.shape: ", scalar_result.shape)
+    # print("nlml: ", nlml)
+    # print("nlml.shape: ", nlml.shape)
+    return  nlml
+
+
+def heat_equation_nlml_loss_2d_rd(heat_params, Xuz, Xfz, Xfg, number_Y, Y) -> float:
+    init = heat_params
+    params =  heat_params
+    params_kuu = {'sigma': init[-1][0], 'lengthscale': init[-1][1]}
+    lengthscale_x = params[0][1][0].item()
+    lengthscale_t = params[0][1][1].item()
+
+    zz_uu = compute_kuu_rd(Xuz, Xuz, params_kuu)
+    zz_uf = compute_kuu_rd(Xuz, Xfz, params_kuu)
+    zg_uf = compute_kuf_rd(Xuz, Xfg, params, lengthscale_x, lengthscale_t)
+    zz_fu = compute_kuu_rd(Xfz, Xuz, params_kuu)
+    zz_ff = compute_kuu_rd(Xfz, Xfz, params_kuu)
+    zg_ff = compute_kuf_rd(Xfz, Xfg, params, lengthscale_x, lengthscale_t)
+    gz_fu = compute_kfu_rd(Xfg, Xuz, params, lengthscale_x, lengthscale_t)
+    gz_ff = compute_kfu_rd(Xfg, Xfz, params, lengthscale_x, lengthscale_t)
+    gg_ff = compute_kff_rd(Xfg, Xfg, params, lengthscale_x, lengthscale_t)
+
+    K = jnp.block([[zz_uu, zz_uf, zg_uf], [zz_fu, zz_ff, zg_ff], [gz_fu, gz_ff, gg_ff]])
+
+    sign, logdet = jnp.linalg.slogdet(K)
+    K_inv_Y = jnp.linalg.solve(K, Y)
+    signed_logdet = sign * logdet
+    K_inv_Y_product = Y.T @ K_inv_Y
+    scalar_result = jnp.squeeze(K_inv_Y_product)
+    nlml = (1 / 2 * signed_logdet) + (1 / 2 * scalar_result) + ((number_Y / 2) * jnp.log(2 * jnp.pi))
+
+    return  nlml
+
+
+
+def heat_equation_nlml_loss_2d(heat_params, Xuz, Xfz, Xfg, number_Y, Y) -> float:
+    init = heat_params
+    params =  heat_params
+    params_kuu = {'sigma': init[-1][0], 'lengthscale': init[-1][1]}
+    lengthscale_x = params[0][1][0].item()
+    lengthscale_t = params[0][1][1].item()
+
+    zz_uu = compute_kuu(Xuz, Xuz, params_kuu)
+    zz_uf = compute_kuu(Xuz, Xfz, params_kuu)
+    zg_uf = compute_kuf(Xuz, Xfg, params, lengthscale_x, lengthscale_t)
+    zz_fu = compute_kuu(Xfz, Xuz, params_kuu)
+    zz_ff = compute_kuu(Xfz, Xfz, params_kuu)
+    zg_ff = compute_kuf(Xfz, Xfg, params, lengthscale_x, lengthscale_t)
+    gz_fu = compute_kfu(Xfg, Xuz, params, lengthscale_x, lengthscale_t)
+    gz_ff = compute_kfu(Xfg, Xfz, params, lengthscale_x, lengthscale_t)
+    gg_ff = compute_kff(Xfg, Xfg, params, lengthscale_x, lengthscale_t)
+    # print("zz_uu: ", zz_uu)
+    # print("zz_uf: ", zz_uf)
+    # print("zg_uf: ", zg_uf)
+    # print("zz_fu: ", zz_fu)
+    # print("zz_ff: ", zz_ff)
+    # print("zg_ff: ", zg_ff)
+    # print("gz_fu: ", gz_fu)
+    # print("gz_ff: ", gz_ff)
+    # print("gg_ff: ", gg_ff)
+
+    K = jnp.block([[zz_uu, zz_uf, zg_uf], [zz_fu, zz_ff, zg_ff], [gz_fu, gz_ff, gg_ff]])
+    # jitter = 1e-7
+    # K_jittered = K + jitter * jnp.eye(K.shape[0])
+    # K  = K_jittered
+    # print("########################jittered########################", jitter)
     sign, logdet = jnp.linalg.slogdet(K)
     K_inv_Y = jnp.linalg.solve(K, Y)
     signed_logdet = sign * logdet
@@ -284,20 +456,26 @@ def plot_u_pred(Xu_certain_all, Xu_certain, Xf, Xu_noise, noise_std, Xu_pred, pr
     current_time = datetime.datetime.now().strftime("%M%S")
     plt.savefig(f'contourf_{added_text}.png')
 
-def plot_u_pred_rd(Xu_certain_all, Xu_certain, Xf, Xu_noise, noise_std, Xu_pred, prior_var,assumption_sigma,k,max_samples,learning,num_chains,number_f,added_text):
-    x = jnp.linspace(-1, 1, 100)
-    t = jnp.linspace(0, 1, 100)
-    X, T = jnp.meshgrid(x, t)
-    X_plot = jnp.vstack([X.ravel(), T.ravel()]).T
-    u_values = u_xt(X_plot).reshape(X.shape)
+def plot_u_pred_rd(Xu_certain, Xf, Xu_noise, noise_std, Xu_pred, prior_var,assumption_sigma,k,max_samples,learning,num_chains,number_f,added_text, X_plot_prediction, data):
+    # x = jnp.linspace(0, 1, 100)
+    # t = jnp.linspace(0, 1, 100)
+    # X, T = jnp.meshgrid(x, t)
+    X_plot = X_plot_prediction
+    X = X_plot[:, 0]
+    T = X_plot[:, 1]
+    u_values = data
+
+    # X_plot = jnp.vstack([X.ravel(), T.ravel()]).T
+    # u_values = u_xt(X_plot).reshape(X.shape)
 
     fig, ax = plt.subplots(figsize=(8, 6), constrained_layout=True)
 
     # u(x, t) plot
-    c1 = ax.contourf(X, T, u_values, levels=50, cmap='plasma')
+    # c1 = ax.contourf(X, T, u_values, levels=50, cmap='plasma')
+    c1 =ax.imshow(data, extent=[-1,1,1,0])
     # c1 = ax.contour(X, T, u_values, levels=50, cmap='plasma', alpha=0.5)  # Using contour for line contours
     # ax.contourf(X, T, u_values, levels=50, cmap='plasma', alpha=0.3)  # Using contourf for filled contours
-    fig.colorbar(c1, ax=ax, orientation='vertical', label='u(x, t) value')
+    fig.colorbar(c1, ax=ax, orientation='vertical')
     #ax.scatter(Xu_certain_all[:, 0], Xu_certain_all[:, 1], color='black', label='GT', marker='o')
     ax.scatter(Xu_certain[:, 0], Xu_certain[:, 1], color='black', label='GT', marker='o')
     ax.scatter(Xu_noise[:, 0], Xu_noise[:, 1], color='tab:blue', label='Xu noise', marker='x')
@@ -311,7 +489,7 @@ def plot_u_pred_rd(Xu_certain_all, Xu_certain, Xf, Xu_noise, noise_std, Xu_pred,
     ax.grid(True, linestyle='--', alpha=0.6)
 
     current_time = datetime.datetime.now().strftime("%M%S")
-    plt.savefig(f'contourf_{added_text}.png')
+    plt.savefig(f'rd_contourf_{added_text}.png')
 
 def get_u_training_data_2d(key_x_u, key_x_u_init, key_t_u_low, key_t_u_high, key_x_noise, key_t_noise, sample_num,
                            init_num, bnum, noise_std) -> (jnp.ndarray, jnp.ndarray, jnp.ndarray, jnp.ndarray, jnp.ndarray,
@@ -348,7 +526,7 @@ def get_u_training_data_2d(key_x_u, key_x_u_init, key_t_u_low, key_t_u_high, key
 
 
 def get_u_training_data_2d_qmc(key_x_u, key_x_u_init, key_t_u_low, key_t_u_high, key_x_noise, key_t_noise, sample_num,
-                           init_num, bnum, noise_std, number_u_only_x) -> (jnp.ndarray, jnp.ndarray, jnp.ndarray, jnp.ndarray, jnp.ndarray,
+                           init_num, init_b_num, bnum, noise_std, number_u_only_x) -> (jnp.ndarray, jnp.ndarray, jnp.ndarray, jnp.ndarray, jnp.ndarray,
                                               jnp.ndarray, jnp.ndarray, jnp.ndarray, jnp.ndarray):
     qMCsampler = qmc.Sobol(d=2, seed=0)
     sample_num_total = sample_num + number_u_only_x
@@ -365,6 +543,10 @@ def get_u_training_data_2d_qmc(key_x_u, key_x_u_init, key_t_u_low, key_t_u_high,
 
     xu_noise = xu + noise_std * jax.random.normal(key_x_noise, shape=xu.shape)
     tu_with_noise = tu[:sample_num] + noise_std * jax.random.normal(key_t_noise, shape=tu[:sample_num].shape)
+
+    # xu_noise = xu + noise_std * jax.random.randint(key_x_noise, shape=xu.shape, minval=-3, maxval=3)
+    # tu_with_noise = tu[:sample_num] + noise_std * jax.random.randint(key_t_noise, shape=tu[:sample_num].shape, minval=-3, maxval=3)
+
     tu_noise = jnp.concatenate([tu_with_noise, tu[sample_num:]])
     Xu_noise = jnp.concatenate([xu_noise, tu_noise], axis=1)
     Xu_noise = jnp.maximum(0, jnp.minimum(1, Xu_noise))
@@ -375,23 +557,6 @@ def get_u_training_data_2d_qmc(key_x_u, key_x_u_init, key_t_u_low, key_t_u_high,
     print("xu_noise: ", xu_noise)
     print("xu: ", xu)
 
-    # init + boundary
-    # qmc_sampler_init = qmc.Sobol(d=1, seed=1)
-    # qmc_sampler_bound_low = qmc.Sobol(d=1, seed=2)
-    # qmc_sampler_bound_high = qmc.Sobol(d=1, seed=3)
-    # xu_init = jnp.array(qmc_sampler_init.random_base2(m=int(jnp.log2(init_num))))
-    # init_num = xu_init.shape[0]
-    # tu_init = jnp.zeros(shape=(init_num, 1))
-    #
-    # tu_bound_low = jnp.array(qmc_sampler_bound_low.random_base2(m=int(jnp.log2(bnum))))
-    # tu_bound_high = jnp.array(qmc_sampler_bound_high.random_base2(m=int(jnp.log2(bnum))))
-    # bnum = tu_bound_low.shape[0]
-    # xu_bound_low = jnp.zeros(shape=(bnum, 1))
-    # xu_bound_high = jnp.ones(shape=(bnum, 1))
-    #
-    # xu_fixed = jnp.concatenate((xu_bound_low, xu_init, xu_bound_high))
-    # tu_fixed = jnp.concatenate((tu_bound_low, tu_init, tu_bound_high))
-    # Xu_fixed = jnp.concatenate([xu_fixed, tu_fixed], axis=1)
     xu_init = ((jnp.cos(jnp.arange(init_num + 1) * jnp.pi / init_num)) + 1) / 2
     xu_init = xu_init[1:-1, ]
     xu_init = jnp.expand_dims(xu_init, axis=-1)
@@ -410,14 +575,31 @@ def get_u_training_data_2d_qmc(key_x_u, key_x_u_init, key_t_u_low, key_t_u_high,
     xu_bound_low = jnp.zeros(shape=(bnum, 1))
     xu_bound_high = jnp.ones(shape=(bnum, 1))
 
-    xu_fixed = jnp.concatenate((xu_bound_low, xu_init, xu_bound_high))
+    # xu_fixed = (jnp.cos((((2 * jnp.arange(init_b_num)) + 1) / (2 * (init_b_num))) * jnp.pi) + 1) / 2
+    # tu_fixed = xu_fixed
+    # X_u_inner, T_u_inner = jnp.meshgrid(xu_fixed, tu_fixed)
+    # Xu_fixed = jnp.vstack([X_u_inner.ravel(), T_u_inner.ravel()]).T
+
+
+    xu_fixed = jnp.concatenate((xu_bound_low, xu_init, xu_bound_high,))
     tu_fixed = jnp.concatenate((tu_bound_low, tu_init, tu_bound_high))
     Xu_fixed = jnp.concatenate([xu_fixed, tu_fixed], axis=1)
 
-    print("Xu_fixed: ", Xu_fixed)
+    #Xu_fixed = jax.random.uniform(key_x_u, shape=(sample_num, 2), dtype=jnp.float64)
+    # #### fixed qmc
+    # qMCsampler = qmc.Sobol(d=2, seed=4)
+    # qMCsample = qMCsampler.random_base2(m=int(jnp.log2(init_b_num)))
+    # if qMCsample.shape[0] > init_b_num:
+    #     qMCsample = qMCsample[:init_b_num]
+    # Xu_fixed = jnp.array(qMCsample)
+    # #
+    # xu_fixed, tu_fixed = Xu_fixed[:, :1], Xu_fixed[:, -1:]
+    #
+    # print("Xu_fixed: ", Xu_fixed)
     Yu_fixed = u_xt(Xu_fixed)
 
-    return Xu_certain, yu_certain, xu_noise, tu_noise, Xu_noise, xu_fixed, tu_fixed, Xu_fixed, Yu_fixed, init_num, bnum
+
+    return Xu_certain, yu_certain, xu_noise, tu_noise, Xu_noise, xu_fixed, tu_fixed, Xu_fixed, Yu_fixed, init_num, init_b_num, bnum
 
 
 def get_f_training_data_2d(key_x_f, sample_num) -> (jnp.ndarray, jnp.ndarray, jnp.ndarray, jnp.ndarray):
@@ -430,7 +612,8 @@ def get_f_training_data_2d(key_x_f, sample_num) -> (jnp.ndarray, jnp.ndarray, jn
     #
     # xf, tf = Xf[:, :1], Xf[:, -1:]
 
-    xf =((jnp.cos(jnp.arange(sample_num+1) * jnp.pi /sample_num))+1 )/ 2
+    # xf =((jnp.cos(jnp.arange(sample_num+1) * jnp.pi /sample_num))+1 )/ 2
+    xf = (jnp.cos((((2 * jnp.arange(sample_num)) + 1) / (2 * (sample_num))) * jnp.pi) + 1) / 2
     tf = xf
     Xf, Tf = jnp.meshgrid(xf, tf)
     X_f = jnp.vstack([Xf.ravel(), Tf.ravel()]).T

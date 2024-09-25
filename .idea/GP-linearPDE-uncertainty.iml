@@ -42,6 +42,33 @@
       <excludeFolder url="file://$MODULE_DIR$/results/log/0731" />
       <excludeFolder url="file://$MODULE_DIR$/results/log/0801" />
       <excludeFolder url="file://$MODULE_DIR$/results/log/1018" />
+      <excludeFolder url="file://$MODULE_DIR$/results/datas/trained_params/0813" />
+      <excludeFolder url="file://$MODULE_DIR$/results/datas/trained_params/0814" />
+      <excludeFolder url="file://$MODULE_DIR$/results/datas/trained_params/0815" />
+      <excludeFolder url="file://$MODULE_DIR$/results/datas/trained_params/0816" />
+      <excludeFolder url="file://$MODULE_DIR$/results/datas/trained_params/0817" />
+      <excludeFolder url="file://$MODULE_DIR$/results/datas/trained_params/0818" />
+      <excludeFolder url="file://$MODULE_DIR$/results/datas/trained_params/0819" />
+      <excludeFolder url="file://$MODULE_DIR$/results/datas/trained_params/0820" />
+      <excludeFolder url="file://$MODULE_DIR$/results/datas/trained_params/0821" />
+      <excludeFolder url="file://$MODULE_DIR$/results/figures/0813" />
+      <excludeFolder url="file://$MODULE_DIR$/results/figures/0814" />
+      <excludeFolder url="file://$MODULE_DIR$/results/figures/0815" />
+      <excludeFolder url="file://$MODULE_DIR$/results/figures/0816" />
+      <excludeFolder url="file://$MODULE_DIR$/results/figures/0817" />
+      <excludeFolder url="file://$MODULE_DIR$/results/figures/0818" />
+      <excludeFolder url="file://$MODULE_DIR$/results/figures/0819" />
+      <excludeFolder url="file://$MODULE_DIR$/results/figures/0820" />
+      <excludeFolder url="file://$MODULE_DIR$/results/figures/0821" />
+      <excludeFolder url="file://$MODULE_DIR$/results/log/0813" />
+      <excludeFolder url="file://$MODULE_DIR$/results/log/0814" />
+      <excludeFolder url="file://$MODULE_DIR$/results/log/0815" />
+      <excludeFolder url="file://$MODULE_DIR$/results/log/0816" />
+      <excludeFolder url="file://$MODULE_DIR$/results/log/0817" />
+      <excludeFolder url="file://$MODULE_DIR$/results/log/0818" />
+      <excludeFolder url="file://$MODULE_DIR$/results/log/0819" />
+      <excludeFolder url="file://$MODULE_DIR$/results/log/0820" />
+      <excludeFolder url="file://$MODULE_DIR$/results/log/0821" />
     </content>
     <orderEntry type="jdk" jdkName="Remote Python 3.9.12 (sftp://yanw@hpc-head2.ewi.utwente.nl:22/deepstore/software/anaconda3/2022.05/bin/python)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
