@@ -53,32 +53,32 @@ class GaussianProcess:
 
 
 def check_hyperparamters(init, param_iter, f_xt, Xu_fixed, Yu_fixed, Xf, yf):
-    # x_test = Xu_fixed
-    # y_test = Yu_fixed
-    # gp_init = GaussianProcess(init)
-    # Y_train = jnp.concatenate((Yu_fixed, yf))
-    # gp_init.fit(Xu_fixed, Xf)
-    # y_pred_init, y_cov_init = gp_init.predict_u(x_test, Y_train)
-    #
-    # gp = GaussianProcess(param_iter)
-    # Y_train = jnp.concatenate((Yu_fixed, yf))
-    # gp.fit(Xu_fixed, Xf)
-    # y_pred, y_cov = gp.predict_u(x_test, Y_train)
-
-    key_test = jax.random.PRNGKey(10)
-    Xf_test = jax.random.uniform(key_test, shape=(30, 2), dtype=jnp.float64)
-    yf_test = f_xt(Xf_test)
-    x_test = Xf_test
-    y_test = yf_test
+    x_test = Xu_fixed
+    y_test = Yu_fixed
     gp_init = GaussianProcess(init)
     Y_train = jnp.concatenate((Yu_fixed, yf))
     gp_init.fit(Xu_fixed, Xf)
-    y_pred_init, y_cov_init = gp_init.predict_f(x_test, Y_train)
+    y_pred_init, y_cov_init = gp_init.predict_u(x_test, Y_train)
 
     gp = GaussianProcess(param_iter)
     Y_train = jnp.concatenate((Yu_fixed, yf))
     gp.fit(Xu_fixed, Xf)
-    y_pred, y_cov = gp.predict_f(x_test, Y_train)
+    y_pred, y_cov = gp.predict_u(x_test, Y_train)
+
+    # key_test = jax.random.PRNGKey(10)
+    # Xf_test = jax.random.uniform(key_test, shape=(30, 2), dtype=jnp.float64)
+    # yf_test = f_xt(Xf_test)
+    # x_test = Xf_test
+    # y_test = yf_test
+    # gp_init = GaussianProcess(init)
+    # Y_train = jnp.concatenate((Yu_fixed, yf))
+    # gp_init.fit(Xu_fixed, Xf)
+    # y_pred_init, y_cov_init = gp_init.predict_f(x_test, Y_train)
+    #
+    # gp = GaussianProcess(param_iter)
+    # Y_train = jnp.concatenate((Yu_fixed, yf))
+    # gp.fit(Xu_fixed, Xf)
+    # y_pred, y_cov = gp.predict_f(x_test, Y_train)
 
     errors = (y_test - y_pred) ** 2
     errors_init = (y_test - y_pred_init) ** 2

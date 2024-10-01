@@ -17,7 +17,7 @@ def prediction_variance(ypred_list, yvar_diag):
 
 def plot_heatmap(ax, data, title, cmap, vmin, vmax):
     im = ax.imshow(data, cmap=cmap, origin='lower', vmin=vmin, vmax=vmax, extent=[0, 1, 0, 1])
-    ax.set_title(title, fontsize=20)
+    ax.set_title(title, fontsize=16)
     ax.set_xlabel('x', fontsize=18)
     ax.set_ylabel('t', fontsize=18)
     ax.tick_params(axis='both', which='major', labelsize=16)
@@ -34,6 +34,8 @@ def save_individual_plot(data, title, cmap, vmin, vmax, filename):
     plt.close()
 
 def plot_and_save_prediction_results(u_values_gt,
+                                     gp_mean_prior,
+                                     abs_diff_prior,
                                     gp_mean_posterior,
                                     abs_diff_gt_gp,
                                     var_prior,
@@ -41,16 +43,22 @@ def plot_and_save_prediction_results(u_values_gt,
                                     abs_var_diff, added_text):
 
     plot_titles = [
-        'Ground Truth',
-        'GP Mean Prediction (Posterior)',
-        'Absolute Difference (GT vs GP Mean)',
-        'Variance with Prior',
-        'Variance with Posterior',
-        'Absolute Variance Difference'
+        'Ground truth',
+        'GP prediction mean (prior)',
+        'Absolute error (prior)',
+        'Ground truth',
+        'GP prediction mean (posterior)',
+        'Absolute error (posterior)',
+        'GP variance (prior)',
+        'GP variance (posterior)',
+        'Absolute variance difference'
     ]
-    cmap1 = 'GnBu'
-    cmap2 = 'PuRd'
+    cmap1 = 'plasma'
+    cmap2 = 'inferno'
     plot_data = [
+        (u_values_gt, cmap1),
+        (gp_mean_prior, cmap1),
+        (abs_diff_prior, cmap1),
         (u_values_gt, cmap1),
         (gp_mean_posterior, cmap1),
         (abs_diff_gt_gp, cmap1),
@@ -65,24 +73,31 @@ def plot_and_save_prediction_results(u_values_gt,
     row2_min = min(jnp.min(plot_data[3][0]), jnp.min(plot_data[4][0]), jnp.min(plot_data[5][0]))
     row2_max = max(jnp.max(plot_data[3][0]), jnp.max(plot_data[4][0]), jnp.max(plot_data[5][0]))
 
+    row3_min = min(jnp.min(plot_data[6][0]), jnp.min(plot_data[7][0]), jnp.min(plot_data[8][0]))
+    row3_max = max(jnp.max(plot_data[6][0]), jnp.max(plot_data[7][0]), jnp.max(plot_data[8][0]))
+
     current_time = datetime.datetime.now().strftime("%M%S")
     filenames = [
-        f"ground_truth_{added_text}{current_time}.png",
+        f"ground_truth_{added_text}_{current_time}.png",
+        f"gp_mean_prior_{added_text}_{current_time}.png",
+        f"abs_diff_prior_{added_text}_{current_time}.png",
+        f"ground_truth_posterior_{added_text}_{current_time}.png",
         f"gp_mean_posterior_{added_text}_{current_time}.png",
-        f"abs_diff_gt_gp_{added_text}_{current_time}.png",
-        f"var_priorv_{added_text}_{current_time}.png",
+        f"abs_diff_posterior_{added_text}_{current_time}.png",
+        f"var_prior_{added_text}_{current_time}.png",
         f"var_posterior_{added_text}_{current_time}.png",
         f"abs_var_diff_{added_text}_{current_time}.png"
     ]
 
-    for i in range(3):
+    for i in range(9):
         data, cmap = plot_data[i]
-        save_individual_plot(data, plot_titles[i], cmap, row1_min, row1_max, filenames[i])
-
-    for i in range(3):
-        data, cmap = plot_data[i + 3]
-        save_individual_plot(data, plot_titles[i + 3], cmap, row2_min, row2_max, filenames[i + 3])
-
+        if i < 3:
+            vmin, vmax = row1_min, row1_max
+        elif i < 6:
+            vmin, vmax = row2_min, row2_max
+        else:
+            vmin, vmax = row3_min, row3_max
+        save_individual_plot(data, plot_titles[i], cmap, vmin, vmax, filenames[i])
 
 
 def plot_and_save_prediction_results_combine(u_values_gt,
@@ -94,10 +109,10 @@ def plot_and_save_prediction_results_combine(u_values_gt,
 
     plot_titles = [
         'Ground Truth',
-        'GP Mean Prediction (Posterior)',
+        'GP Mean Prediction (posterior)',
         'Absolute Difference (GT vs GP Mean)',
-        'Variance with Prior',
-        'Variance with Posterior',
+        'GP variance (prior)',
+        'GP variance (posterior)',
         'Absolute Variance Difference'
     ]
     cmap1 = 'GnBu'
@@ -117,7 +132,7 @@ def plot_and_save_prediction_results_combine(u_values_gt,
     row2_min = min(jnp.min(plot_data[3][0]), jnp.min(plot_data[4][0]), jnp.min(plot_data[5][0]))
     row2_max = max(jnp.max(plot_data[3][0]), jnp.max(plot_data[4][0]), jnp.max(plot_data[5][0]))
 
-    fig, axs = plt.subplots(2, 3, figsize=(18, 12))
+    fig, axs = plt.subplots(2, 3, figsize=(18, 10))
 
     for i in range(3):
         data, cmap = plot_data[i]

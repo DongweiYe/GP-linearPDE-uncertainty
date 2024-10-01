@@ -15,6 +15,7 @@ import os
 from test_f_infer_function import plot_f_inference
 os.environ["JAX_PLATFORM_NAME"] = "gpu"
 jax.config.update("jax_enable_x64", True)
+from include.config import key_num
 
 ## modified
 # 1: generate data through QMC
@@ -48,16 +49,19 @@ jax.config.update("jax_enable_x64", True)
 # figure 3 - 1st row: ground truth vs gp prediction mean with uncertain points (prior) vs absolute error 2nd row: ground truth vs gp prediction mean with uncertain points (posterior) vs absolute error figure 4 - GP variance (with prior) vs GP variance (with posterior) vs absolute difference
 
 # %%
-noise_std = 0.02
-prior_std = 0.06
+noise_std = 0.04
+prior_std = 0.04
 prior_var = prior_std**2# prior variance
-max_samples = 10000
-assumption_sigma = 0.2 # step size
-k = 0.7
+max_samples = 500
+assumption_sigma = 0.02 # step size
+k = 0.6
 num_chains = 1
 
-learning_rate = 4e-2
-epochs =1000
+learning_rate = 0.08
+# learning_rate1 = 0.1
+# learning_rate2 = 0.001
+
+epochs = 1000
 
 learning_rate_pred = 0.01
 epoch_pred= 100
@@ -76,8 +80,8 @@ number_f_real = (number_f)**2
 
 param_text = "para"
 optimizer_in_use = optax.adam
-learning = f'{learning_rate}&{epochs}'
-added_text = f'number_f_real_{number_f_real}_nu{number_u}&{number_u_only_x}&fnumber{number_f}&innerb{number_inner_b}&b{number_bound}&init{number_init}{learning}&{noise_std}'
+learning = f'learning_rate1{learning_rate}&{epochs}'
+added_text = f'keynum{key_num}_number_f_real_{number_f_real}_nu{number_u}&{number_u_only_x}&fnumber{number_f}&innerb{number_inner_b}&b{number_bound}&init{number_init}{learning}&{noise_std}'
 weight_decay = 1e-5
 mcmc_text = f"inneru{number_inner_b}noise{noise_std}_prior{prior_std}_maxsamples{max_samples}_assumption{assumption_sigma}_k{k}"
 pred_mesh = 200
@@ -85,6 +89,7 @@ pred_mesh = 200
 
 # %%
 if __name__ == '__main__':
+    print("key_num:", key_num, "\n")
     print("noise_std:", noise_std, "\n")
     print("prior_var:", prior_var, "\n")
     print("number_u:", number_u, "\n")
@@ -99,7 +104,8 @@ if __name__ == '__main__':
     print("optimizer_in_use:", optimizer_in_use, "\n")
     print("epochs:", epochs, "\n")
     print("added_text:", added_text, "\n")
-    print("learning_rate:", learning_rate, "\n")
+    print("learning_rate1:", learning_rate, "\n")
+    # print("learning_rate2:", learning_rate2, "\n")
     print("weight_decay:", weight_decay, "\n")
 
 
@@ -168,6 +174,11 @@ if __name__ == '__main__':
     # init = (((jnp.array([0.1], dtype=jnp.float32),
     #           jnp.array([0.01, 1.0], dtype=jnp.float32))),)
     # print("init:", init)
+    print("train init params:", init)
+
+    # init = (((jnp.array([1], dtype=jnp.float32),
+    #           jnp.array([0.1, 0.1], dtype=jnp.float32))),)
+    print("init params:", init)
     param_iter, optimizer_text, lr_text, epoch_text = train_heat_equation_model_2d(init,
                                                                                    Xu_noise,
                                                                                    Xu_fixed,
@@ -175,18 +186,21 @@ if __name__ == '__main__':
                                                                                    number_Y,
                                                                                    Y, epochs,
                                                                                    learning_rate,
-                                                                                   optimizer_in_use,mcmc_text
+                                                                                   optimizer_in_use,
+                                                                                   mcmc_text
                                                                                    )
 
-    print("init params:", init)
+
     print("param_iter:", param_iter)
-    #plot_f_inference(pred_mesh, param_iter, Xu_fixed, Yu_fixed, Xf, yf, added_text)
+    plot_f_inference(pred_mesh, param_iter, Xu_fixed, Yu_fixed, Xf, yf, added_text)
+
 
 # %%
     print('start inference')
     def generate_prior_samples(rng_key, num_samples, prior_mean, prior_cov):
         prior_samples = random.multivariate_normal(rng_key, mean=prior_mean.ravel(), cov=prior_cov,
                                                    shape=(num_samples,))
+        prior_samples  = jnp.maximum(jnp.minimum(1, prior_samples ), 0)
         return prior_samples
 
 
@@ -275,9 +289,10 @@ if __name__ == '__main__':
 
     plot_u_pred(Xu_without_noise, Xu_certain, Xf, Xu_noise, noise_std, Xu_pred_mean, prior_var,assumption_sigma,k,max_samples,learning,num_chains,number_f,added_text)
 
+
     plot_dist(Xu_without_noise, Xu_certain, Xf, Xu_noise, noise_std, Xu_pred_mean, prior_var,assumption_sigma,k,max_samples,learning,num_chains,number_f,posterior_samples_list,
-              prior_samples_list,number_u,added_text)
-    plot_with_noise(number_u, number_u_only_x, posterior_samples_list, prior_samples_list, Xu_certain, Xu_noise, bw,added_text)
+              prior_samples,number_u,added_text)
+    plot_with_noise(number_u, number_u_only_x, posterior_samples_list, prior_samples, Xu_certain, Xu_noise, bw,added_text)
 
 
     save_variables(added_text, Xu_without_noise=Xu_without_noise, Xu_certain=Xu_certain, Xf=Xf, Xu_noise=Xu_noise,
@@ -287,5 +302,9 @@ if __name__ == '__main__':
                    param_iter=param_iter, Xu_fixed=Xu_fixed, epochs=epochs,
                    learning_rate=learning_rate,
                    optimizer_in_use=optimizer_in_use,number_u_only_x=number_u_only_x,prior_std=prior_std,number_init=number_inner_b, number_bound=number_bound)
+
 """
 """
+
+
+

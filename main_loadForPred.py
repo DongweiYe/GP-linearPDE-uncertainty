@@ -23,14 +23,14 @@ os.environ["JAX_PLATFORM_NAME"] = "gpu"
 jax.config.update("jax_enable_x64", True)
 
 bw = 1
-num_prior_samples = 500
+num_prior_samples = 100
 current_time = datetime.datetime.now().strftime("%m%d")
-learning_rate_pred = 0.04
-epoch_pred = 500
-pred_mesh = 200
+learning_rate_pred = 0.004
+epoch_pred = 100
+pred_mesh = 100
 
-text = "chains1_f1024_k0.5_assumption0.07_prior0.04_noise0.04_maxsamples3000_numpriorsamples_400_5541.pkl"
-load_path = f"results/datas/trained_params/0914"
+text = "chains1_f256_k0.5_assumption0.02_prior0.04_noise0.04_maxsamples500_numpriorsamples_400_0404.pkl"
+load_path = f"results/datas/trained_params/1001"
 
 
 # %%
@@ -455,6 +455,8 @@ if __name__ == '__main__':
 
     gp_mean_posterior = prediction_mean(y_final_mean_list_posterior).reshape(pred_mesh, pred_mesh)
     u_values_gt = u_values_gt.reshape(pred_mesh, pred_mesh)
+    gp_mean_prior = prediction_mean(y_final_mean_list_prior).reshape(pred_mesh, pred_mesh)
+    abs_diff_prior = jnp.abs(u_values_gt - gp_mean_prior)
     abs_diff_gt_gp = jnp.abs(u_values_gt - gp_mean_posterior)
     var_prior = prediction_variance(y_final_mean_list_prior, y_final_var_list_prior).reshape(pred_mesh, pred_mesh)
     var_posterior = prediction_variance(y_final_mean_list_posterior, y_final_var_list_posterior).reshape(pred_mesh,
@@ -462,6 +464,8 @@ if __name__ == '__main__':
     abs_var_diff = jnp.abs(var_prior - var_posterior)
 
     save_variables(added_text, u_values_gt=u_values_gt,
+                   gp_mean_prior=gp_mean_prior,
+                   abs_diff_prior=abs_diff_prior,
                    gp_mean_posterior=gp_mean_posterior,
                    abs_diff_gt_gp=abs_diff_gt_gp,
                    var_prior=var_prior,
@@ -470,6 +474,8 @@ if __name__ == '__main__':
 
 
     plot_and_save_prediction_results(u_values_gt,
+                                     gp_mean_prior,
+                                     abs_diff_prior,
                                     gp_mean_posterior,
                                     abs_diff_gt_gp,
                                     var_prior,

@@ -30,10 +30,10 @@ jax.config.update("jax_enable_x64", True)
 learning_rate_pred = 0.01
 epoch_pred = 100
 
-noise_std = 0.02
-prior_std = 0.06
+noise_std = 0.04
+prior_std = 0.04
 prior_var = prior_std ** 2  # prior variance
-max_samples = 9000
+max_samples = 1000
 assumption_sigma = 0.1 # step size
 k = 0.7
 num_chains = 1
@@ -45,7 +45,7 @@ test_num = 2 ** 4
 number_u = 2 ** 2  # xt
 number_init = 2 ** 4
 number_bound = 2 ** 4
-number_u_c_for_f = 2 ** 5
+number_u_c_for_f = 2 ** 4
 
 number_u_c_for_f_real = (number_u_c_for_f)**2
 number_init_real = number_init-1
@@ -56,10 +56,13 @@ init_num = number_init
 bnum = number_bound
 
 optimizer_in_use = optax.adam
-learning_rate = 7e-2
-epochs = 3000
+
+learning_rate = 0.1
+# learning_rate2 = 0.01
+epochs = 1000
+
 added_text = f'{number_u}&{number_u_c_for_f_real}&{number_f}&{number_init}&{number_bound}&{epochs}&{noise_std}'
-learning = f'{learning_rate}&{epochs}'
+learning = f'learning_rate1{learning_rate}&{epochs}'
 mcmc_text = f"number_u_c_for_f{number_u_c_for_f}noise{noise_std}_prior{prior_std}_maxsamples{max_samples}_assumption{assumption_sigma}_k{k}"
 
 
@@ -77,7 +80,8 @@ if __name__ == '__main__':
     print("optimizer_in_use:", optimizer_in_use, "\n")
     print("epochs:", epochs, "\n")
     print("added_text:", added_text, "\n")
-    print("learning_rate:", learning_rate, "\n")
+    print("learning_rate1:", learning_rate, "\n")
+
 
     model = Model("k * (dxxT) - 5*T**3 + 5*T", "T(x)", parameters="k", boundary_conditions="periodic", backend='numpy')
     x = jnp.linspace(-1, 1, 500)
@@ -143,7 +147,7 @@ if __name__ == '__main__':
     print("num_sample num after", num_sample)
     U_inner_all = jnp.vstack([Xu_inner_all, Tu_inner_all]).T
 
-    key_u_rd = random.PRNGKey(3)
+    key_u_rd = random.PRNGKey(42)
     random_time_indices_internal = random.randint(key_u_rd, (number_u,), 1, timesteps - 1)
     random_space_indices_internal = random.randint(key_u_rd, (number_u,), 0, spatial_points)
     x_u = x_grid[random_space_indices_internal]
@@ -246,10 +250,10 @@ if __name__ == '__main__':
     print(f"new_sigma_init_yu: {sigma_init_yu}", f"new_sigma_init_yf: {new_sigma_init_yf}",
           f"new_sigma_init: {new_sigma_init}", sep='\t')
 
-    init = initialize_params_2d(sigma_init_yu, lengthscale_init)
+    # init = initialize_params_2d(sigma_init_yu, lengthscale_init)
 
-
-
+    init = (((jnp.array([0.5], dtype=jnp.float32),
+                               jnp.array([0.01, 0.2], dtype=jnp.float32))),)
     param_iter, optimizer_text, lr_text, epoch_text = train_heat_equation_model_2d(init,
                                                                                    Xu_noise,
                                                                                    Xu_fixed,
@@ -261,11 +265,19 @@ if __name__ == '__main__':
                                                                                    )
 
     print("init params:", init)
+#nit params:
+    # ((Array([0.64007214], dtype=float64),
+    # Array([0.80459709, 0.40410401], dtype=float64)),)
+    # param_iter = (((jnp.array([0.60191826], dtype=jnp.float32),
+    #              jnp.array([0.36601679, 0.05], dtype=jnp.float32))),)
     print("param_iter:", param_iter)
-
+    # init = (((jnp.array([0.1], dtype=jnp.float32),
+    #           jnp.array([0.01, 1.0], dtype=jnp.float32))),)
+    # print("init:", init)((Array([0.43762741], dtype=float64), Array([0.16809054, 0.00820585], dtype=float64)),)
+    #0.60191826], dtype=float64), Array([0.36601679
     X_plot_prediction = jnp.vstack([x_grid_mesh.ravel(), time_grid_mesh.ravel()]).T
     plot_f_inference_rd(param_iter, Xu_fixed, yu_fixed, Xf, yf, added_text, X_plot_prediction, data, learning)
-
+""" 
     # %%
     print('start inference')
 
@@ -295,6 +307,7 @@ if __name__ == '__main__':
 
         prior_samples = random.multivariate_normal(rng_key, mean=prior_mean.ravel(), cov=prior_cov,
                                                    shape=(num_samples,))
+        # prior_samples  = jnp.maximum(jnp.minimum(1, prior_samples ), 0)
 
         return prior_samples
 
@@ -379,6 +392,6 @@ if __name__ == '__main__':
                    optimizer_in_use=optimizer_in_use, number_u_c_for_f=number_u_c_for_f, prior_std=prior_std,
                    number_init=number_init, number_bound=number_bound, data=data, X_plot_prediction=X_plot_prediction,
                    prior_samples_list=prior_samples_list,mcmc_text=mcmc_text,x_grid_mesh_shape=x_grid_mesh_shape)
-
+"""
 """
 """

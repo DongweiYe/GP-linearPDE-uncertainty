@@ -443,7 +443,8 @@ def plot_u_pred(Xu_certain_all, Xu_certain, Xf, Xu_noise, noise_std, Xu_pred, pr
     fig.colorbar(c1, ax=ax, orientation='vertical', label='u(x, t) value')
     #ax.scatter(Xu_certain_all[:, 0], Xu_certain_all[:, 1], color='black', label='GT', marker='o')
     ax.scatter(Xu_certain[:, 0], Xu_certain[:, 1], color='black', label='GT', marker='o')
-    ax.scatter(Xu_noise[:, 0], Xu_noise[:, 1], color='tab:blue', label='Xu noise', marker='x')
+    ax.scatter(Xu_noise[0:4, 0], Xu_noise[0:4, 1], color='tab:blue', label='Xu noise inner', marker='x')
+    ax.scatter(Xu_noise[4:, 0], Xu_noise[4:, 1], color='tab:orange', label='Xu noise t', marker='x')
     ax.scatter(Xu_pred[:, 0], Xu_pred[:, 1], color='tab:red', label='Posterior', marker='o')
     ax.set_title('u(x, t)', fontsize=16)
     ax.set_xlabel('x', fontsize=14)
@@ -528,19 +529,21 @@ def get_u_training_data_2d(key_x_u, key_x_u_init, key_t_u_low, key_t_u_high, key
 def get_u_training_data_2d_qmc(key_x_u, key_x_u_init, key_t_u_low, key_t_u_high, key_x_noise, key_t_noise, sample_num,
                            init_num, init_b_num, bnum, noise_std, number_u_only_x) -> (jnp.ndarray, jnp.ndarray, jnp.ndarray, jnp.ndarray, jnp.ndarray,
                                               jnp.ndarray, jnp.ndarray, jnp.ndarray, jnp.ndarray):
-    qMCsampler = qmc.Sobol(d=2, seed=0)
+    # qMCsampler = qmc.Sobol(d=2, seed=0)
     sample_num_total = sample_num + number_u_only_x
-    qMCsample = qMCsampler.random_base2(m=int(jnp.round(jnp.log2(sample_num_total))))
-    if qMCsample.shape[0] > sample_num_total:
-        qMCsample = qMCsample[:sample_num_total]
+    # qMCsample = qMCsampler.random_base2(m=int(jnp.round(jnp.log2(sample_num_total))))
+    # if qMCsample.shape[0] > sample_num_total:
+    #     qMCsample = qMCsample[:sample_num_total]
+    #
+    # Xu_certain = jnp.array(qMCsample)
 
-    Xu_certain = jnp.array(qMCsample)
-    print("qMCsample: ", qMCsample)
-    print("number of xu_certain: ", Xu_certain.shape[0])
-    yu_certain = u_xt(Xu_certain)
-    # yu_noise = u_xt_noise(Xu_certain)
+    Xu_certain = jax.random.uniform(key_x_u, shape=(sample_num_total, 2), dtype=jnp.float64)
+    Xu_certain = jnp.maximum(0, jnp.minimum(1, Xu_certain))
     xu, tu = Xu_certain[:, :1], Xu_certain[:, -1:]
+    yu_certain = u_xt(Xu_certain)
 
+
+    # key_x_noise, key_t_noise = jax.random.split(key)
     xu_noise = xu + noise_std * jax.random.normal(key_x_noise, shape=xu.shape)
     tu_with_noise = tu[:sample_num] + noise_std * jax.random.normal(key_t_noise, shape=tu[:sample_num].shape)
 

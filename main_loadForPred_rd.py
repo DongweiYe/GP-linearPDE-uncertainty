@@ -459,11 +459,15 @@ if __name__ == '__main__':
 
     gp_mean_posterior = prediction_mean(y_final_mean_list_posterior).reshape(x_grid_mesh_shape)
     abs_diff_gt_gp = jnp.abs(u_values_gt - gp_mean_posterior)
+    gp_mean_prior = prediction_mean(y_final_mean_list_prior).reshape(x_grid_mesh_shape)
+    abs_diff_prior = jnp.abs(u_values_gt - gp_mean_prior)
     var_prior = prediction_variance(y_final_mean_list_prior, y_final_var_list_prior).reshape(x_grid_mesh_shape)
     var_posterior = prediction_variance(y_final_mean_list_posterior, y_final_var_list_posterior).reshape(x_grid_mesh_shape)
     abs_var_diff = jnp.abs(var_prior - var_posterior)
 
     save_variables(added_text, u_values_gt=u_values_gt,
+                   gp_mean_prior=gp_mean_prior,
+                   abs_diff_prior=abs_diff_prior,
                    gp_mean_posterior=gp_mean_posterior,
                    abs_diff_gt_gp=abs_diff_gt_gp,
                    var_prior=var_prior,
@@ -472,6 +476,8 @@ if __name__ == '__main__':
 
 
     plot_and_save_prediction_results(u_values_gt,
+                                     gp_mean_prior,
+                                     abs_diff_prior,
                                     gp_mean_posterior,
                                     abs_diff_gt_gp,
                                     var_prior,
