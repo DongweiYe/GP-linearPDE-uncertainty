@@ -38,9 +38,19 @@ def u_xt(Xu_fixed) -> jnp.ndarray:
 @jit
 def deep_rbf_kernel(x1: ArrayLike, x2: ArrayLike, initial_theta) -> jnp.ndarray:
     lengthscale = initial_theta['lengthscale']
+    # lengthscale_x = initial_theta[0][1][0].item()
+    # lengthscale_t = initial_theta[0][1][1].item()
     sigma = initial_theta['sigma']
+    # t1 = x1[:, -1]
+    # t2 = x2[:, -1]
+    # x1_spatial = x1[:, :-1]
+    # x2_spatial = x2[:, :-1]
+
     square_distances = jnp.sum((x1[:, jnp.newaxis, :] - x2[jnp.newaxis, :, :]) ** 2 / lengthscale ** 2,
                                axis=-1)
+    # term1 =  jnp.sum((x1_spatial[:, None] - x2_spatial[None, :]) ** 2, axis=-1) / lengthscale_x ** 2
+    # term2 = jnp.sum((t1[:, None] - t2[None, :]) ** 2, axis=-1) / lengthscale_t ** 2
+    # square_distances = (term1+term2)
     rbf = sigma ** 2 * jnp.exp(-0.5 * square_distances)
     return rbf
 
@@ -207,64 +217,18 @@ def compute_kff_rd(x1: jnp.ndarray, x2: jnp.ndarray, initial_theta, lengthscale_
 
 
 ################################################# nlml ##########################################################
-def heat_equation_nlml_loss_2d(heat_params, Xuz, Xfz, Xfg, number_Y, Y) -> float:
-    init = heat_params
-    params =  heat_params
-    params_kuu = {'sigma': init[-1][0], 'lengthscale': init[-1][1]}
-    lengthscale_x = params[0][1][0].item()
-    lengthscale_t = params[0][1][1].item()
-
-    zz_uu = compute_kuu(Xuz, Xuz, params_kuu)
-    zz_uf = compute_kuu(Xuz, Xfz, params_kuu)
-    zg_uf = compute_kuf(Xuz, Xfg, params, lengthscale_x, lengthscale_t)
-    zz_fu = compute_kuu(Xfz, Xuz, params_kuu)
-    zz_ff = compute_kuu(Xfz, Xfz, params_kuu)
-    zg_ff = compute_kuf(Xfz, Xfg, params, lengthscale_x, lengthscale_t)
-    gz_fu = compute_kfu(Xfg, Xuz, params, lengthscale_x, lengthscale_t)
-    gz_ff = compute_kfu(Xfg, Xfz, params, lengthscale_x, lengthscale_t)
-    gg_ff = compute_kff(Xfg, Xfg, params, lengthscale_x, lengthscale_t)
-    # print("zz_uu: ", zz_uu)
-    # print("zz_uf: ", zz_uf)
-    # print("zg_uf: ", zg_uf)
-    # print("zz_fu: ", zz_fu)
-    # print("zz_ff: ", zz_ff)
-    # print("zg_ff: ", zg_ff)
-    # print("gz_fu: ", gz_fu)
-    # print("gz_ff: ", gz_ff)
-    # print("gg_ff: ", gg_ff)
-
-    K = jnp.block([[zz_uu, zz_uf, zg_uf], [zz_fu, zz_ff, zg_ff], [gz_fu, gz_ff, gg_ff]])
-    # jitter = 1e-7
-    # K_jittered = K + jitter * jnp.eye(K.shape[0])
-    # K  = K_jittered
-    # print("########################jittered########################", jitter)
-    sign, logdet = jnp.linalg.slogdet(K)
-    K_inv_Y = jnp.linalg.solve(K, Y)
-    signed_logdet = sign * logdet
-    K_inv_Y_product = Y.T @ K_inv_Y
-    scalar_result = jnp.squeeze(K_inv_Y_product)
-    nlml = (1 / 2 * signed_logdet) + (1 / 2 * scalar_result) + ((number_Y / 2) * jnp.log(2 * jnp.pi))
-
-    # print("K: ", K)
-    # print("K.shape: ", K.shape)
-    # print("logdet: ", logdet)
-    # print("K_inv_Y: ", K_inv_Y)
-    # print("signed_logdet: ", signed_logdet)
-    # print("Y.T @ K_inv_Y: ", Y.T @ K_inv_Y)
-    # print("Y.T @ K_inv_Y shape: ", (Y.T @ K_inv_Y).shape)
-    # print("scalar_result: ", scalar_result)
-    # print("scalar_result.shape: ", scalar_result.shape)
-    # print("nlml: ", nlml)
-    # print("nlml.shape: ", nlml.shape)
-    return  nlml
-
-
 def heat_equation_nlml_loss_2d_rd(heat_params, Xuz, Xfz, Xfg, number_Y, Y) -> float:
+    # heat_params = exp_nested_tuple(heat_params)
     init = heat_params
     params =  heat_params
     params_kuu = {'sigma': init[-1][0], 'lengthscale': init[-1][1]}
     lengthscale_x = params[0][1][0].item()
     lengthscale_t = params[0][1][1].item()
+
+    # log_lx = params[0][1][0].item()
+    # log_lt = params[0][1][1].item()
+    # lengthscale_x = jnp.exp(log_lx)
+    # lengthscale_t = jnp.exp(log_lt)
 
     zz_uu = compute_kuu_rd(Xuz, Xuz, params_kuu)
     zz_uf = compute_kuu_rd(Xuz, Xfz, params_kuu)
@@ -287,9 +251,16 @@ def heat_equation_nlml_loss_2d_rd(heat_params, Xuz, Xfz, Xfg, number_Y, Y) -> fl
 
     return  nlml
 
-
+def exp_nested_tuple(nested_tuple):
+    if isinstance(nested_tuple, tuple):
+        return tuple(exp_nested_tuple(elem) for elem in nested_tuple)
+    elif isinstance(nested_tuple, jnp.ndarray):
+        return jnp.exp(nested_tuple)
+    else:
+        return nested_tuple
 
 def heat_equation_nlml_loss_2d(heat_params, Xuz, Xfz, Xfg, number_Y, Y) -> float:
+    # heat_params = exp_nested_tuple(heat_params)
     init = heat_params
     params =  heat_params
     params_kuu = {'sigma': init[-1][0], 'lengthscale': init[-1][1]}
@@ -305,21 +276,9 @@ def heat_equation_nlml_loss_2d(heat_params, Xuz, Xfz, Xfg, number_Y, Y) -> float
     gz_fu = compute_kfu(Xfg, Xuz, params, lengthscale_x, lengthscale_t)
     gz_ff = compute_kfu(Xfg, Xfz, params, lengthscale_x, lengthscale_t)
     gg_ff = compute_kff(Xfg, Xfg, params, lengthscale_x, lengthscale_t)
-    # print("zz_uu: ", zz_uu)
-    # print("zz_uf: ", zz_uf)
-    # print("zg_uf: ", zg_uf)
-    # print("zz_fu: ", zz_fu)
-    # print("zz_ff: ", zz_ff)
-    # print("zg_ff: ", zg_ff)
-    # print("gz_fu: ", gz_fu)
-    # print("gz_ff: ", gz_ff)
-    # print("gg_ff: ", gg_ff)
 
     K = jnp.block([[zz_uu, zz_uf, zg_uf], [zz_fu, zz_ff, zg_ff], [gz_fu, gz_ff, gg_ff]])
-    # jitter = 1e-7
-    # K_jittered = K + jitter * jnp.eye(K.shape[0])
-    # K  = K_jittered
-    # print("########################jittered########################", jitter)
+
     sign, logdet = jnp.linalg.slogdet(K)
     K_inv_Y = jnp.linalg.solve(K, Y)
     signed_logdet = sign * logdet
@@ -327,17 +286,6 @@ def heat_equation_nlml_loss_2d(heat_params, Xuz, Xfz, Xfg, number_Y, Y) -> float
     scalar_result = jnp.squeeze(K_inv_Y_product)
     nlml = (1 / 2 * signed_logdet) + (1 / 2 * scalar_result) + ((number_Y / 2) * jnp.log(2 * jnp.pi))
 
-    # print("K: ", K)
-    # print("K.shape: ", K.shape)
-    # print("logdet: ", logdet)
-    # print("K_inv_Y: ", K_inv_Y)
-    # print("signed_logdet: ", signed_logdet)
-    # print("Y.T @ K_inv_Y: ", Y.T @ K_inv_Y)
-    # print("Y.T @ K_inv_Y shape: ", (Y.T @ K_inv_Y).shape)
-    # print("scalar_result: ", scalar_result)
-    # print("scalar_result.shape: ", scalar_result.shape)
-    # print("nlml: ", nlml)
-    # print("nlml.shape: ", nlml.shape)
     return  nlml
 
 ################################################ plot ############################################################
@@ -527,23 +475,25 @@ def get_u_training_data_2d(key_x_u, key_x_u_init, key_t_u_low, key_t_u_high, key
 
 
 def get_u_training_data_2d_qmc(key_x_u, key_x_u_init, key_t_u_low, key_t_u_high, key_x_noise, key_t_noise, sample_num,
-                           init_num, init_b_num, bnum, noise_std, number_u_only_x) -> (jnp.ndarray, jnp.ndarray, jnp.ndarray, jnp.ndarray, jnp.ndarray,
+                           init_num, bnum, noise_std, number_u_only_x) -> (jnp.ndarray, jnp.ndarray, jnp.ndarray, jnp.ndarray, jnp.ndarray,
                                               jnp.ndarray, jnp.ndarray, jnp.ndarray, jnp.ndarray):
     # qMCsampler = qmc.Sobol(d=2, seed=0)
-    sample_num_total = sample_num + number_u_only_x
-    # qMCsample = qMCsampler.random_base2(m=int(jnp.round(jnp.log2(sample_num_total))))
-    # if qMCsample.shape[0] > sample_num_total:
-    #     qMCsample = qMCsample[:sample_num_total]
-    #
-    # Xu_certain = jnp.array(qMCsample)
+    # qMCsample = qMCsampler.random_base2(m=int(jnp.round(jnp.log2(sample_num))))
+    # if qMCsample.shape[0] > sample_num:
+    #     qMCsample = qMCsample[:sample_num]
+    # Xu_certain_xt = jnp.array(qMCsample)
 
+    # Xu_certain_xt = jax.random.uniform(key_x_u, shape=(sample_num, 2), dtype=jnp.float64)
+    # Xu_u_only = jax.random.uniform(key_x_u_init, shape=(number_u_only_x, 2), dtype=jnp.float64)
+    # Xu_certain = jnp.vstack([Xu_certain_xt, Xu_u_only])
+
+    sample_num_total = sample_num + number_u_only_x
     Xu_certain = jax.random.uniform(key_x_u, shape=(sample_num_total, 2), dtype=jnp.float64)
+
     Xu_certain = jnp.maximum(0, jnp.minimum(1, Xu_certain))
     xu, tu = Xu_certain[:, :1], Xu_certain[:, -1:]
     yu_certain = u_xt(Xu_certain)
 
-
-    # key_x_noise, key_t_noise = jax.random.split(key)
     xu_noise = xu + noise_std * jax.random.normal(key_x_noise, shape=xu.shape)
     tu_with_noise = tu[:sample_num] + noise_std * jax.random.normal(key_t_noise, shape=tu[:sample_num].shape)
 
@@ -602,7 +552,7 @@ def get_u_training_data_2d_qmc(key_x_u, key_x_u_init, key_t_u_low, key_t_u_high,
     Yu_fixed = u_xt(Xu_fixed)
 
 
-    return Xu_certain, yu_certain, xu_noise, tu_noise, Xu_noise, xu_fixed, tu_fixed, Xu_fixed, Yu_fixed, init_num, init_b_num, bnum
+    return Xu_certain, yu_certain, xu_noise, tu_noise, Xu_noise, xu_fixed, tu_fixed, Xu_fixed, Yu_fixed, init_num, bnum
 
 
 def get_f_training_data_2d(key_x_f, sample_num) -> (jnp.ndarray, jnp.ndarray, jnp.ndarray, jnp.ndarray):

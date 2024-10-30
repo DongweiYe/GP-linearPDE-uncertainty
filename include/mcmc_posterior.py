@@ -142,9 +142,15 @@ def single_component_metropolis_hasting(rng_key, max_samples, assumption_sigma, 
             p_y_likelihood_current_log = dist.MultivariateNormal(jnp.zeros(Y_ravel.shape),
                                                                  covariance_matrix=cov_current).log_prob(Y_ravel)
             # p(X^u)p(y^u,y^f|X^u)
+            print("p_x_prior_new_log:", p_x_prior_new_log)
+            print("p_x_prior_current_log:", p_x_prior_current_log)
+            print("p_y_likelihood_new_log:", p_y_likelihood_new_log)
+            print("p_y_likelihood_current_log:", p_y_likelihood_current_log)
             p_x_new_log = p_x_prior_new_log + p_y_likelihood_new_log
             p_x_current_log = p_x_prior_current_log + p_y_likelihood_current_log
 
+            print("p_x_new_log:", p_x_new_log)
+            print("p_x_current_log:", p_x_current_log)
             accept_ratio_init = jnp.exp(p_x_new_log - p_x_current_log)
             accept_ratio = jnp.minimum(accept_ratio_init, 1)
             print("-----------------------------------------------------------------------")

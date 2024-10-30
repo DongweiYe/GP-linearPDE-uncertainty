@@ -36,6 +36,9 @@ def normalize_y(y):
 
     return y_normalized
 
+
+
+
 def train_heat_equation_model_2d(heat_params_init, Xuz, Xfz, Xfg, number_Y, Y, num_epochs, learning_rate,
                                  optimizer_in_use,mcmc_text):
     fig = plt.figure()
@@ -84,6 +87,10 @@ def train_heat_equation_model_2d(heat_params_init, Xuz, Xfz, Xfg, number_Y, Y, n
     # scheduler_constant = optax.constant_schedule(value=learning_rate)
     # final_scheduler = scheduler_constant
 
+    # mask_fn_for_param1 = (((True, False)),)
+    #
+    # mask_fn_for_param2 = (((False, True)),)
+
     def train_step(inner_params, inner_opt_state):
         grad = grad_fn(inner_params)
         updates, inner_opt_state = opt.update(grad, inner_opt_state, params=inner_params)
@@ -105,20 +112,18 @@ def train_heat_equation_model_2d(heat_params_init, Xuz, Xfz, Xfg, number_Y, Y, n
 
     optimizer_in_use = optimizer_in_use
     optimizer_in_use_name = getattr(optimizer_in_use, '__name__')
+
+
     opt = optax.chain(
         optax.clip(1.0),
-        optax.scale_by_schedule(final_scheduler),
+        # optax.scale_by_schedule(final_scheduler),
         optimizer_in_use(learning_rate=learning_rate)
     )
 
     opt_state = opt.init(param_iter)
-    learning_rates = []
     losses = []
 
     for epoch in range(num_epochs):
-        current_learning_rate = final_scheduler(epoch)
-        # print(f"Step {epoch}: Learning rate = {current_learning_rate:.6f}")
-        learning_rates.append(current_learning_rate)
         param_iter, opt_state = train_step(param_iter, opt_state)
         loss = loss_fn(param_iter)
         y_loss = loss
@@ -132,7 +137,7 @@ def train_heat_equation_model_2d(heat_params_init, Xuz, Xfz, Xfg, number_Y, Y, n
     ax.plot(losses, 'bo-', label='train')
     plt.xlabel(f"loss = {loss}")
     # print_optimizer_info(fig)
-    lr_text = f"{learning_rate:.6f}"
+    lr_text = f"1{learning_rate:.6f}"
     optimizer_text = f"{optimizer_in_use_name}"
     epoch_text = f"{num_epochs}"
     current_time = datetime.datetime.now().strftime("%m%d_%H%M%S")
@@ -141,6 +146,63 @@ def train_heat_equation_model_2d(heat_params_init, Xuz, Xfz, Xfg, number_Y, Y, n
     print(f"Final loss: {loss}")
     plt.close(fig)
     return param_iter, optimizer_text, lr_text, epoch_text
+
+#
+# def train_heat_equation_model_2d_bfgs(heat_params_init, Xuz, Xfz, Xfg, number_Y, Y, num_epochs, mcmc_text):
+#     # Initialize the figure for plotting
+#     fig = plt.figure()
+#     ax = fig.add_subplot(111, title="Training")
+#     plt.ylabel("nlml loss")
+#
+#     # Define the loss function and gradient function
+#     loss_fn = partial(heat_equation_nlml_loss_2d, Xuz=Xuz, Xfz=Xfz, Xfg=Xfg, number_Y=number_Y, Y=Y)
+#     grad_fn = jax.grad(loss_fn)  # Compute the gradient of the loss function
+#
+#     # Initialize the L-BFGS optimizer without learning rate
+#     opt = optax.lbfgs(
+#         max_iter=num_epochs,  # Set maximum number of iterations equal to num_epochs
+#         tol=1e-6,  # Tolerance for stopping criterion
+#         linesearch=optax.scale_by_zoom_linesearch(max_linesearch_steps=20, verbose=True)  # Line search step
+#     )
+#
+#     # Initialize the optimizer state and initial parameters
+#     opt_state = opt.init(heat_params_init)
+#     param_iter = heat_params_init
+#
+#     # Initial loss
+#     init_loss = loss_fn(param_iter)
+#
+#     losses = []  # Track losses
+#
+#     # Optimization loop for L-BFGS as a solver
+#     for epoch in range(num_epochs):
+#         loss, grad = jax.value_and_grad(loss_fn)(param_iter)  # Compute loss and gradient
+#         updates, opt_state = opt.update(grad, opt_state, param_iter)  # Apply L-BFGS update
+#         param_iter = optax.apply_updates(param_iter, updates)  # Update parameters
+#
+#         # Track and print the loss
+#         print(f"Epoch {epoch + 1} Loss: {loss}")
+#         losses.append(loss)
+#         ax.plot(epoch, loss, 'bo-', label='train')
+#
+#     # Plot loss evolution
+#     plt.ylim(-5000, 4000)
+#     ax.plot(losses, 'bo-', label='train')
+#     plt.xlabel(f"loss = {loss}")
+#
+#     # Generate a file name and save the figure
+#     current_time = datetime.datetime.now().strftime("%m%d_%H%M%S")
+#     plt.savefig(f"train_bfgs_{num_epochs}_{mcmc_text}_{current_time}.pdf", format='pdf')
+#
+#     # Print initial and final loss
+#     print(f"Initial loss: {init_loss}")
+#     print(f"Final loss: {loss}")
+#
+#     # Close the plot
+#     plt.close(fig)
+#
+#     # Return the final parameters and summary info
+#     return param_iter, 'L-BFGS', "n/a", f"{num_epochs}"
 
 
 def train_heat_equation_model_2d_rd(heat_params_init, Xuz, Xfz, Xfg, number_Y, Y, num_epochs, learning_rate,
@@ -222,11 +284,20 @@ def train_heat_equation_model_2d_rd(heat_params_init, Xuz, Xfz, Xfg, number_Y, Y
     learning_rates = []
     losses = []
 
+    def non_negative_projection(params):
+        return jax.tree_map(lambda p: jnp.maximum(p, 0.0), params)
+
+    def set_params_non_negative(params):
+        return jax.tree_map(lambda x: jnp.maximum(x, 0.0), params)
+
+
     for epoch in range(num_epochs):
         current_learning_rate = final_scheduler(epoch)
         # print(f"Step {epoch}: Learning rate = {current_learning_rate:.6f}")
         learning_rates.append(current_learning_rate)
         param_iter, opt_state = train_step(param_iter, opt_state)
+        #param_iter = optax.apply_updates(param_iter, opt_state)
+        # param_iter = set_params_non_negative(param_iter)
         loss = loss_fn(param_iter)
         y_loss = loss
         print(f"Epoch {epoch+1} Loss: {loss}")

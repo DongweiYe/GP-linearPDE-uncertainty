@@ -17,11 +17,11 @@ def initialize_params_2d(sigma_init, lengthscale_init):
 
 
 class ModelInitializer_2d:
-    def __init__(self, number_u, number_f, number_inner_b, number_init, number_bound, noise_std, number_u_only_x):
+    def __init__(self, number_u, number_f, number_init, number_bound, noise_std, number_u_only_x):
         self.number_u = number_u
         self.number_f = number_f
         self.number_init = number_init
-        self.number_inner_b = number_inner_b
+        # self.number_inner_b = number_inner_b
         self.number_bound = number_bound
         self.noise_std = noise_std
         self.number_u_only_x = number_u_only_x
@@ -29,8 +29,8 @@ class ModelInitializer_2d:
 
         # Initialize data
         self.Xu_certain, self.yu_certain, self.xu_noise, self.tu_noise, self.Xu_noise, self.xu_fixed, self.tu_fixed, \
-        self.Xu_fixed, self.Yu_fixed, self.number_init, self.number_inner_b, self.number_bound = get_u_training_data_2d_qmc(key_x_u, key_x_u_init, key_t_u_low, key_t_u_high,
-                                                              key_x_noise, key_t_noise, self.number_u, self.number_init, self.number_inner_b,
+        self.Xu_fixed, self.Yu_fixed, self.number_init, self.number_bound = get_u_training_data_2d_qmc(key_x_u, key_x_u_init, key_t_u_low, key_t_u_high,
+                                                              key_x_noise, key_t_noise, self.number_u, self.number_init,
                                                               self.number_bound, self.noise_std, self.number_u_only_x)
         self.xf, self.tf, self.Xf, self.yf = get_f_training_data_2d(key_x_f, self.number_f)
 

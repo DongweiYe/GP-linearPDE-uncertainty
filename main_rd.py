@@ -1,12 +1,14 @@
 import jax
 import datetime
 import optax
+
+from include.config import key_num
 from include.heat2d import plot_u_pred, plot_u_pred_rd
 from include.init import initialize_params_2d
 from include.mcmc_posterior import *
 
 from include.plot_dist import plot_dist, plot_with_noise, plot_and_save_kde_histograms, plot_dist_rd, plot_with_noise_rd
-from include.train import train_heat_equation_model_2d
+from include.train import train_heat_equation_model_2d, train_heat_equation_model_2d_rd
 from scipy.stats import gaussian_kde
 import pickle
 import os
@@ -27,25 +29,25 @@ jax.config.update("jax_enable_x64", True)
 
 
 # %%
-learning_rate_pred = 0.01
-epoch_pred = 100
+learning_rate = 0.1
+epochs = 600 #1000
 
 noise_std = 0.04
 prior_std = 0.04
 prior_var = prior_std ** 2  # prior variance
 max_samples = 1000
-assumption_sigma = 0.1 # step size
-k = 0.7
+assumption_sigma = 0.01 #0.01 # step size
+k = 0.8
 num_chains = 1
 
 bw = 2
-num_prior_samples = 400
+num_prior_samples = 200
 
 test_num = 2 ** 4
-number_u = 2 ** 2  # xt
-number_init = 2 ** 4
-number_bound = 2 ** 4
-number_u_c_for_f = 2 ** 4
+number_u = 2 ** 2  # xtxx
+number_init = 2 ** 5
+number_bound = 2 ** 5
+number_u_c_for_f = 2 ** 3
 
 number_u_c_for_f_real = (number_u_c_for_f)**2
 number_init_real = number_init-1
@@ -54,16 +56,13 @@ number_f = number_u_c_for_f_real+number_init_real+number_bound_real
 
 init_num = number_init
 bnum = number_bound
-
+keynum = 50
 optimizer_in_use = optax.adam
-
-learning_rate = 0.1
-# learning_rate2 = 0.01
-epochs = 1000
-
-added_text = f'{number_u}&{number_u_c_for_f_real}&{number_f}&{number_init}&{number_bound}&{epochs}&{noise_std}'
-learning = f'learning_rate1{learning_rate}&{epochs}'
-mcmc_text = f"number_u_c_for_f{number_u_c_for_f}noise{noise_std}_prior{prior_std}_maxsamples{max_samples}_assumption{assumption_sigma}_k{k}"
+learning_rate_pred = 0.01
+epoch_pred = 100
+added_text = f'key{keynum}_{number_u}&{number_u_c_for_f_real}&{number_f}&{number_init}&{number_bound}&{epochs}&{noise_std}'
+learning = f'lr{learning_rate}&{epochs}'
+mcmc_text = f"key{keynum}_number_u_c_for_f{number_u_c_for_f}noise{noise_std}_prior{prior_std}_maxsamples{max_samples}_assumption{assumption_sigma}_k{k}"
 
 
 # %%
@@ -80,13 +79,13 @@ if __name__ == '__main__':
     print("optimizer_in_use:", optimizer_in_use, "\n")
     print("epochs:", epochs, "\n")
     print("added_text:", added_text, "\n")
-    print("learning_rate1:", learning_rate, "\n")
+    print("learning_rate:", learning_rate, "\n")
 
 
-    model = Model("k * (dxxT) - 5*T**3 + 5*T", "T(x)", parameters="k", boundary_conditions="periodic", backend='numpy')
+    model = Model("k * (dxxT) - 3*T**3 + 3*T", "T(x)", parameters="k", boundary_conditions="periodic", backend='numpy')
     x = jnp.linspace(-1, 1, 500)
     T = x * x * jnp.cos(jnp.pi * x)
-    initial_fields = model.Fields(x=x, T=T, k=0.01)
+    initial_fields = model.Fields(x=x, T=T, k=0.05)
 
     simulation = Simulation(model, initial_fields, dt=0.002, tmax=1, scheme="theta")
 
@@ -147,7 +146,9 @@ if __name__ == '__main__':
     print("num_sample num after", num_sample)
     U_inner_all = jnp.vstack([Xu_inner_all, Tu_inner_all]).T
 
-    key_u_rd = random.PRNGKey(42)
+
+    key_u_rd = random.PRNGKey(keynum)
+    print("keynum:", keynum)
     random_time_indices_internal = random.randint(key_u_rd, (number_u,), 1, timesteps - 1)
     random_space_indices_internal = random.randint(key_u_rd, (number_u,), 0, spatial_points)
     x_u = x_grid[random_space_indices_internal]
@@ -211,7 +212,7 @@ if __name__ == '__main__':
     print("Yu:", Yu)
 
     # -Lu = R(u)
-    beta = 5
+    beta = 3
     R_u = beta * (yu_fixed**3 - yu_fixed)
     Lu_data = -R_u
 
@@ -240,9 +241,9 @@ if __name__ == '__main__':
     kernel_params_only_u = initialize_params_2d(sigma_init_yu, lengthscale_init)
     lengthscale_x = kernel_params_only_u[0][1][0].item()
     lengthscale_t = kernel_params_only_u[0][1][1].item()
-    k_ff = compute_kff(Xf, Xf, kernel_params_only_u, lengthscale_x, lengthscale_t)
+    k_ff = compute_kff_rd(Xf, Xf, kernel_params_only_u, lengthscale_x, lengthscale_t)
     k_ff_inv_yf: jnp.ndarray = jnp.linalg.solve(k_ff, yf)
-    yf_u = compute_kuf(Xf, Xf, kernel_params_only_u, lengthscale_x, lengthscale_t) @ k_ff_inv_yf
+    yf_u = compute_kuf_rd(Xf, Xf, kernel_params_only_u, lengthscale_x, lengthscale_t) @ k_ff_inv_yf
 
     new_Y = jnp.concatenate((yu_certain, yf_u))
     new_sigma_init = jnp.std(new_Y)
@@ -252,9 +253,20 @@ if __name__ == '__main__':
 
     # init = initialize_params_2d(sigma_init_yu, lengthscale_init)
 
-    init = (((jnp.array([0.5], dtype=jnp.float32),
-                               jnp.array([0.01, 0.2], dtype=jnp.float32))),)
-    param_iter, optimizer_text, lr_text, epoch_text = train_heat_equation_model_2d(init,
+    # init = (((jnp.array([0.5], dtype=jnp.float32),
+    #                            jnp.array([0.01, 0.08], dtype=jnp.float32))),)
+
+    # log_sigma_init = jnp.log(0.5)
+    # log_lx_init = jnp.log(0.01)
+    # log_lt_init = jnp.log(0.08)
+    # init = (((jnp.array([log_sigma_init], dtype=jnp.float64),
+    #           jnp.array([log_lx_init, log_lt_init], dtype=jnp.float64))),)
+
+    init = (((jnp.array([0.5], dtype=jnp.float64),
+              jnp.array([0.01, 0.08], dtype=jnp.float64))),)
+
+    print("init:", init)
+    param_iter, optimizer_text, lr_text, epoch_text = train_heat_equation_model_2d_rd(init,
                                                                                    Xu_noise,
                                                                                    Xu_fixed,
                                                                                    Xf,
@@ -277,7 +289,8 @@ if __name__ == '__main__':
     #0.60191826], dtype=float64), Array([0.36601679
     X_plot_prediction = jnp.vstack([x_grid_mesh.ravel(), time_grid_mesh.ravel()]).T
     plot_f_inference_rd(param_iter, Xu_fixed, yu_fixed, Xf, yf, added_text, X_plot_prediction, data, learning)
-""" 
+
+
     # %%
     print('start inference')
 
@@ -307,7 +320,15 @@ if __name__ == '__main__':
 
         prior_samples = random.multivariate_normal(rng_key, mean=prior_mean.ravel(), cov=prior_cov,
                                                    shape=(num_samples,))
-        # prior_samples  = jnp.maximum(jnp.minimum(1, prior_samples ), 0)
+        return prior_samples
+
+
+    def generate_prior_samples_2(rng_key, num_samples, prior_mean, prior_cov):
+        prior_samples = random.multivariate_normal(rng_key, mean=prior_mean.ravel(), cov=prior_cov,
+                                                   shape=(num_samples,))
+        prior_samples_x = jnp.maximum(jnp.minimum(1, prior_samples[:, 0]), -1)
+        prior_samples_t = jnp.maximum(jnp.minimum(1, prior_samples[:, 1]), 0)
+        prior_samples = jnp.column_stack((prior_samples_x, prior_samples_t))
 
         return prior_samples
 
@@ -339,7 +360,7 @@ if __name__ == '__main__':
             pickle.dump(variables, f)
         print(f"Variables saved to {file_path}")
 
-    prior_rng_key, prior_key = random.split(random.PRNGKey(69))
+    prior_rng_key, prior_key = random.split(random.PRNGKey(49))
     prior_cov_flat = jnp.kron(jnp.eye(2) * prior_var, jnp.eye(Xu_noise.shape[0]))
     prior_samples_list = generate_prior_samples(prior_key, num_prior_samples, Xu_noise, prior_cov_flat)
     prior_samples = prior_samples_list.reshape(-1, *Xu_noise.shape)
@@ -347,7 +368,7 @@ if __name__ == '__main__':
     print("prior_samples shape:", prior_samples.shape)
 
     print(f"assumption_sigma={assumption_sigma}")
-    rng_key = jax.random.PRNGKey(44)
+    rng_key = jax.random.PRNGKey(422)
     all_chains_samples = []
 
     for chain_id in range(num_chains):
@@ -368,7 +389,7 @@ if __name__ == '__main__':
     print("Xu_certain:", Xu_certain)
     print("Xu_noise:", Xu_noise)
     current_time = datetime.datetime.now().strftime("%M%S")
-    added_text = f"REACT_f{number_f}_chains{num_chains}_k{k}_assumption{assumption_sigma}_prior_std{prior_std}_noisestd{noise_std}_init{number_init}_b{number_bound}_{prior_var}_k{k}_{max_samples}_{current_time}"
+    added_text = f"REACT_f{number_f}_chains{num_chains}_k{k}_assumption{assumption_sigma}_prior_std{prior_std}_noisestd{noise_std}_init{number_init}_b{number_bound}_{prior_var}_k{k}_{max_samples}_learn{learning}_{current_time}"
 
 
     Xu_pred_mean = jnp.mean(posterior_samples_list, axis=0)
@@ -392,6 +413,8 @@ if __name__ == '__main__':
                    optimizer_in_use=optimizer_in_use, number_u_c_for_f=number_u_c_for_f, prior_std=prior_std,
                    number_init=number_init, number_bound=number_bound, data=data, X_plot_prediction=X_plot_prediction,
                    prior_samples_list=prior_samples_list,mcmc_text=mcmc_text,x_grid_mesh_shape=x_grid_mesh_shape)
+
+
 """
 """
-"""
+# %%

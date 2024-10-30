@@ -52,38 +52,33 @@ from include.config import key_num
 noise_std = 0.04
 prior_std = 0.04
 prior_var = prior_std**2# prior variance
-max_samples = 500
-assumption_sigma = 0.02 # step size
-k = 0.6
+max_samples = 2000#2000
+assumption_sigma = 0.001#0.001 # step size
+k = 0.8#0.5
 num_chains = 1
+learning_rate = 0.08#0.08
+epochs = 1000 #1000
 
-learning_rate = 0.08
-# learning_rate1 = 0.1
-# learning_rate2 = 0.001
 
-epochs = 1000
-
-learning_rate_pred = 0.01
+learning_rate_pred = 0.001
 epoch_pred= 100
-
 bw=2
-num_prior_samples = 400
+num_prior_samples = 200
 test_num = 2**4
 number_u = 2**2 # xt
-number_u_only_x = 2**2
+number_u_only_x = 4
 number_f = 2**4
 number_init = 2**3
-number_inner_b = 2**3
 number_bound = 2**3
 number_f_real = (number_f)**2
 
 
 param_text = "para"
 optimizer_in_use = optax.adam
-learning = f'learning_rate1{learning_rate}&{epochs}'
-added_text = f'keynum{key_num}_number_f_real_{number_f_real}_nu{number_u}&{number_u_only_x}&fnumber{number_f}&innerb{number_inner_b}&b{number_bound}&init{number_init}{learning}&{noise_std}'
+learning = f'lr{learning_rate}&{epochs}'
+added_text = f'keynum{key_num}_number_f_real_{number_f_real}_nu{number_u}&{number_u_only_x}&fnumber{number_f}&&b{number_bound}&init{number_init}{learning}&{noise_std}'
 weight_decay = 1e-5
-mcmc_text = f"inneru{number_inner_b}noise{noise_std}_prior{prior_std}_maxsamples{max_samples}_assumption{assumption_sigma}_k{k}"
+mcmc_text = f"noise{noise_std}_prior{prior_std}_maxsamples{max_samples}_assumption{assumption_sigma}_k{k}"
 pred_mesh = 200
 
 
@@ -94,7 +89,6 @@ if __name__ == '__main__':
     print("prior_var:", prior_var, "\n")
     print("number_u:", number_u, "\n")
     print("number_f:", number_f, "\n")
-    print("number_inner_b:", number_inner_b, "\n")
     print("number_init:", number_init, "\n")
     print("number_bound:", number_bound, "\n")
     print("max_samples:", max_samples, "\n")
@@ -110,7 +104,7 @@ if __name__ == '__main__':
 
 
     model_initializer = ModelInitializer_2d(number_u=number_u, number_f=number_f,
-                                            number_inner_b=number_inner_b, number_init=number_init, number_bound=number_bound, noise_std=noise_std, number_u_only_x=number_u_only_x)
+                                            number_init=number_init, number_bound=number_bound, noise_std=noise_std, number_u_only_x=number_u_only_x)
     Xu_certain = model_initializer.Xu_certain
     Xu_noise = model_initializer.Xu_noise
     yu_certain = model_initializer.yu_certain
@@ -176,8 +170,15 @@ if __name__ == '__main__':
     # print("init:", init)
     print("train init params:", init)
 
-    # init = (((jnp.array([1], dtype=jnp.float32),
-    #           jnp.array([0.1, 0.1], dtype=jnp.float32))),)
+    # log_sigma_init = jnp.log(50)
+    # log_lx_init = jnp.log(0.12)
+    # log_lt_init = jnp.log(0.5)
+    # init = (((jnp.array([log_sigma_init], dtype=jnp.float64),
+    #             jnp.array([log_lx_init, log_lt_init], dtype=jnp.float64))),)
+
+    init = (((jnp.array([50], dtype=jnp.float64),
+              jnp.array([0.12, 0.5], dtype=jnp.float64))),)
+
     print("init params:", init)
     param_iter, optimizer_text, lr_text, epoch_text = train_heat_equation_model_2d(init,
                                                                                    Xu_noise,
@@ -189,7 +190,16 @@ if __name__ == '__main__':
                                                                                    optimizer_in_use,
                                                                                    mcmc_text
                                                                                    )
+    # param_iter = init
 
+    # max_iter = 100
+    # tol = 1e-6
+    # param_iter, optimizer_text, lr_text, epoch_text = train_heat_equation_model_2d_bfgs(init,
+    #                                                                                Xu_noise,
+    #                                                                                Xu_fixed,
+    #                                                                                Xf,
+    #                                                                                number_Y,
+    #                                                                                Y, max_iter, tol, mcmc_text)
 
     print("param_iter:", param_iter)
     plot_f_inference(pred_mesh, param_iter, Xu_fixed, Yu_fixed, Xf, yf, added_text)
@@ -283,7 +293,7 @@ if __name__ == '__main__':
     print("Xu_certain:", Xu_certain)
     print("Xu_noise:", Xu_noise)
     current_time = datetime.datetime.now().strftime("%M%S")
-    added_text =  f"chains{num_chains}_f{number_f_real}_k{k}_assumption{assumption_sigma}_prior{prior_std}_noise{noise_std}_maxsamples{max_samples}_numpriorsamples_{num_prior_samples}_{current_time}"
+    added_text =  f"chains{num_chains}_f{number_f_real}_k{k}_assumption{assumption_sigma}_prior{prior_std}_noise{noise_std}_maxsamples{max_samples}_numpriorsamples_{num_prior_samples}_learn{learning}_{current_time}"
 
     Xu_pred_mean = jnp.mean(posterior_samples_list, axis=0)
 
@@ -301,10 +311,12 @@ if __name__ == '__main__':
                    posterior_samples_list=posterior_samples_list, prior_samples=prior_samples, Y=Y,
                    param_iter=param_iter, Xu_fixed=Xu_fixed, epochs=epochs,
                    learning_rate=learning_rate,
-                   optimizer_in_use=optimizer_in_use,number_u_only_x=number_u_only_x,prior_std=prior_std,number_init=number_inner_b, number_bound=number_bound)
+                   optimizer_in_use=optimizer_in_use,number_u_only_x=number_u_only_x,prior_std=prior_std,number_bound=number_bound)
+"""
+"""
 
-"""
-"""
+
+
 
 
 

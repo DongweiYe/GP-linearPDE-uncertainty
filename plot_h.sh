@@ -1,13 +1,13 @@
 #!/bin/bash
-#SBATCH --job-name=uncertain
+#SBATCH --job-name=plot_h
 #SBATCH -p mia,mia-pof,am
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=16
 #SBATCH --mem-per-cpu=200G
 #SBATCH --gres=gpu:1
-#SBATCH --time=24:03:00
-#SBATCH --output=uncertain_%j.log
+#SBATCH --time=64:03:00
+#SBATCH --output=plot_h_%j.log
 #SBATCH --error=err_%j.log
 #SBATCH --exclude=hpc-node05,hpc-node06
 
@@ -58,7 +58,7 @@ echo "Starting worker: "
 export JAX_PLATFORM_NAME=gpu
 export JAX_TRACEBACK_FILTERING=off
 export XLA_PYTHON_CLIENT_PREALLOCATE=false
-mpirun -np 1 python main.py
+mpirun -np 1 python main_plot_h.py
 # -----------------end--------------------------------
 
 

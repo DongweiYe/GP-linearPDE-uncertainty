@@ -6,7 +6,7 @@
 #SBATCH --cpus-per-task=16
 #SBATCH --mem-per-cpu=200G
 #SBATCH --gres=gpu:1
-#SBATCH --time=64:03:00
+#SBATCH --time=24:50:00
 #SBATCH --output=pred_h_%j.log
 #SBATCH --error=err_%j.log
 #SBATCH --exclude=hpc-node05

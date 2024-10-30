@@ -205,7 +205,7 @@ def plot_f_inference(pred_mesh, param_iter, Xu_fixed, Yu_fixed, Xf, yf, added_te
         plot_data = [
             (u_values_gt, cmap1),
             (gp_mean_posterior, cmap1),
-            (jnp.abs(u_values_gt - gp_mean_posterior), cmap1),  # 计算绝对误差
+            (jnp.abs(u_values_gt - gp_mean_posterior), cmap1),  # 绝对误差
 
         ]
 
