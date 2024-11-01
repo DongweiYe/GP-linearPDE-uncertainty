@@ -311,7 +311,7 @@ if __name__ == '__main__':
                    posterior_samples_list=posterior_samples_list, prior_samples=prior_samples, Y=Y,
                    param_iter=param_iter, Xu_fixed=Xu_fixed, epochs=epochs,
                    learning_rate=learning_rate,
-                   optimizer_in_use=optimizer_in_use,number_u_only_x=number_u_only_x,prior_std=prior_std,number_bound=number_bound)
+                   optimizer_in_use=optimizer_in_use,number_u=number_u, number_u_only_x=number_u_only_x,prior_std=prior_std,number_bound=number_bound)
 """
 """
 

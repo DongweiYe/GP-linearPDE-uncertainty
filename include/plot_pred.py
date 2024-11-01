@@ -17,9 +17,9 @@ def prediction_variance(ypred_list, yvar_diag):
 
 def plot_heatmap(ax, data, title, cmap, vmin, vmax):
     im = ax.imshow(data, cmap=cmap, vmin=vmin, vmax=vmax, extent=[0, 1, 0, 1])
-    ax.set_title(title, fontsize=16)
-    ax.set_xlabel('x', fontsize=18)
-    ax.set_ylabel('t', fontsize=18)
+    # ax.set_title(title, fontsize=16)
+    # ax.set_xlabel('x', fontsize=18)
+    # ax.set_ylabel('t', fontsize=18)
     ax.tick_params(axis='both', which='major', labelsize=16)
     divider = make_axes_locatable(ax)
     cax = divider.append_axes("right", size="5%", pad=0.05)
@@ -53,7 +53,7 @@ def plot_and_save_prediction_results(u_values_gt,
         'GP variance (posterior)',
         'Absolute Difference'
     ]
-    cmap1 = 'PuBuGn'
+    cmap1 = 'viridis'
     cmap2 = 'plasma_r'
     plot_data = [
         (u_values_gt, cmap1),
@@ -116,9 +116,9 @@ def plot_and_save_prediction_results(u_values_gt,
 
 def plot_heatmap_rd(ax, data, title, cmap, vmin, vmax):
     im = ax.imshow(data, cmap=cmap,  vmin=vmin, vmax=vmax, extent=[-1,1,1,0])
-    ax.set_title(title, fontsize=16)
-    ax.set_xlabel('x', fontsize=18)
-    ax.set_ylabel('t', fontsize=18)
+    # ax.set_title(title, fontsize=16)
+    # ax.set_xlabel('x', fontsize=18)
+    # ax.set_ylabel('t', fontsize=18)
     ax.tick_params(axis='both', which='major', labelsize=16)
     divider = make_axes_locatable(ax)
     cax = divider.append_axes("right", size="5%", pad=0.05)
@@ -152,7 +152,7 @@ def plot_and_save_prediction_results_rd(u_values_gt,
         'GP variance (posterior)',
         'Absolute Difference'
     ]
-    cmap1 = 'PuBuGn'
+    cmap1 = 'viridis'
     cmap2 = 'plasma_r'
     plot_data = [
         (u_values_gt, cmap1),
@@ -366,7 +366,7 @@ def plot_and_save_prediction_results_combine(u_values_gt,
         'GP variance (posterior)',
         'Absolute Difference'
     ]
-    cmap1 = 'PuBuGn'
+    cmap1 = 'viridis'
     cmap2 = 'plasma_r'
     plot_data = [
         (u_values_gt, cmap1),
@@ -396,26 +396,26 @@ def plot_and_save_prediction_results_combine(u_values_gt,
     for i in range(2):
         data, cmap = plot_data[i]
         im = axs1[0, i].imshow(data, cmap=cmap, vmin=row1_min, vmax=row1_max, extent = [0, 1, 0, 1])
-        axs1[0, i].set_title(plot_titles[i], fontsize=title_size)
+        # axs1[0, i].set_title(plot_titles[i], fontsize=title_size)
         axs1[0, i].tick_params(axis='both', labelsize=label_size)
         fig1.colorbar(im, ax=axs1[0, i]).ax.tick_params(labelsize=cbar_size)
 
     data2, cmap2 = plot_data[2]
     im2 = axs1[0, 2].imshow(data2, cmap=cmap2, extent = [0, 1, 0, 1])
-    axs1[0, 2].set_title(plot_titles[2], fontsize=title_size)
+    # axs1[0, 2].set_title(plot_titles[2], fontsize=title_size)
     axs1[0, 2].tick_params(axis='both', labelsize=label_size)
     fig1.colorbar(im2, ax=axs1[0, 2]).ax.tick_params(labelsize=cbar_size)
 
     for i in range(2):
         data, cmap = plot_data[i + 3]
         im = axs1[1, i].imshow(data, cmap=cmap, vmin=row2_min, vmax=row2_max, extent = [0, 1, 0, 1])
-        axs1[1, i].set_title(plot_titles[i + 3], fontsize=title_size)
+        # axs1[1, i].set_title(plot_titles[i + 3], fontsize=title_size)
         axs1[1, i].tick_params(axis='both', labelsize=label_size)
         fig1.colorbar(im, ax=axs1[1, i]).ax.tick_params(labelsize=cbar_size)
 
     data5, cmap5 = plot_data[5]
     im5 = axs1[1, 2].imshow(data5, cmap=cmap5, extent = [0, 1, 0, 1])
-    axs1[1, 2].set_title(plot_titles[5], fontsize=title_size)
+    # axs1[1, 2].set_title(plot_titles[5], fontsize=title_size)
     axs1[1, 2].tick_params(axis='both', labelsize=label_size)
     fig1.colorbar(im5, ax=axs1[1, 2]).ax.tick_params(labelsize=cbar_size)
 
@@ -428,13 +428,13 @@ def plot_and_save_prediction_results_combine(u_values_gt,
     for i in range(2):
         data, cmap = plot_data[i + 6]
         im = axs2[i].imshow(data, cmap=cmap, vmin=row3_min, vmax=row3_max, extent = [0, 1, 0, 1])
-        axs2[i].set_title(plot_titles[i + 6], fontsize=title_size)
+        # axs2[i].set_title(plot_titles[i + 6], fontsize=title_size)
         axs2[i].tick_params(axis='both', labelsize=label_size)
         fig2.colorbar(im, ax=axs2[i]).ax.tick_params(labelsize=cbar_size)
 
     data8, cmap8 = plot_data[8]
     im8 = axs2[2].imshow(data8, cmap=cmap8, extent = [0, 1, 0, 1])
-    axs2[2].set_title(plot_titles[8], fontsize=title_size)
+    # axs2[2].set_title(plot_titles[8], fontsize=title_size)
     axs2[2].tick_params(axis='both', labelsize=label_size)
     fig2.colorbar(im8, ax=axs2[2]).ax.tick_params(labelsize=cbar_size)
 
@@ -462,7 +462,7 @@ def plot_and_save_prediction_results_combine_rd(u_values_gt,
         'GP variance (posterior)',
         'Absolute Difference'
     ]
-    cmap1 = 'PuBuGn'
+    cmap1 = 'viridis'
     cmap2 = 'plasma_r'
     plot_data = [
         (u_values_gt, cmap1),
@@ -492,26 +492,26 @@ def plot_and_save_prediction_results_combine_rd(u_values_gt,
     for i in range(2):
         data, cmap = plot_data[i]
         im = axs1[0, i].imshow(data, cmap=cmap, vmin=row1_min, vmax=row1_max, extent=[-1,1,1,0])
-        axs1[0, i].set_title(plot_titles[i], fontsize=title_size)
+        # axs1[0, i].set_title(plot_titles[i], fontsize=title_size)
         axs1[0, i].tick_params(axis='both', labelsize=label_size)
         fig1.colorbar(im, ax=axs1[0, i]).ax.tick_params(labelsize=cbar_size)
 
     data2, cmap2 = plot_data[2]
     im2 = axs1[0, 2].imshow(data2, cmap=cmap2, extent=[-1,1,1,0])
-    axs1[0, 2].set_title(plot_titles[2], fontsize=title_size)
+    # axs1[0, 2].set_title(plot_titles[2], fontsize=title_size)
     axs1[0, 2].tick_params(axis='both', labelsize=label_size)
     fig1.colorbar(im2, ax=axs1[0, 2]).ax.tick_params(labelsize=cbar_size)
 
     for i in range(2):
         data, cmap = plot_data[i + 3]
         im = axs1[1, i].imshow(data, cmap=cmap, vmin=row2_min, vmax=row2_max, extent=[-1,1,1,0])
-        axs1[1, i].set_title(plot_titles[i + 3], fontsize=title_size)
+        # axs1[1, i].set_title(plot_titles[i + 3], fontsize=title_size)
         axs1[1, i].tick_params(axis='both', labelsize=label_size)
         fig1.colorbar(im, ax=axs1[1, i]).ax.tick_params(labelsize=cbar_size)
 
     data5, cmap5 = plot_data[5]
     im5 = axs1[1, 2].imshow(data5, cmap=cmap5, extent=[-1,1,1,0])
-    axs1[1, 2].set_title(plot_titles[5], fontsize=title_size)
+    # axs1[1, 2].set_title(plot_titles[5], fontsize=title_size)
     axs1[1, 2].tick_params(axis='both', labelsize=label_size)
     fig1.colorbar(im5, ax=axs1[1, 2]).ax.tick_params(labelsize=cbar_size)
 
@@ -524,13 +524,13 @@ def plot_and_save_prediction_results_combine_rd(u_values_gt,
     for i in range(2):
         data, cmap = plot_data[i + 6]
         im = axs2[i].imshow(data, cmap=cmap, vmin=row3_min, vmax=row3_max, extent=[-1,1,1,0])
-        axs2[i].set_title(plot_titles[i + 6], fontsize=title_size)
+        # axs2[i].set_title(plot_titles[i + 6], fontsize=title_size)
         axs2[i].tick_params(axis='both', labelsize=label_size)
         fig2.colorbar(im, ax=axs2[i]).ax.tick_params(labelsize=cbar_size)
 
     data8, cmap8 = plot_data[8]
     im8 = axs2[2].imshow(data8, cmap=cmap8, extent=[-1,1,1,0])
-    axs2[2].set_title(plot_titles[8], fontsize=title_size)
+    # axs2[2].set_title(plot_titles[8], fontsize=title_size)
     axs2[2].tick_params(axis='both', labelsize=label_size)
     fig2.colorbar(im8, ax=axs2[2]).ax.tick_params(labelsize=cbar_size)
 

@@ -29,8 +29,8 @@ learning_rate_pred = 0.004
 epoch_pred = 100
 pred_mesh = 150
 
-text = "chains1_f256_k0.8_assumption0.001_prior0.04_noise0.04_maxsamples2000_numpriorsamples_200_learnlr0.08&1000_3955.pkl"
-load_path = f"results/datas/trained_params/1028"
+text = "chains1_f256_k0.8_assumption0.001_prior0.04_noise0.04_maxsamples2000_numpriorsamples_200_learnlr0.08&1000_0843.pkl"
+load_path = f"results/datas/trained_params/1031"
 
 
 # %%
@@ -95,7 +95,8 @@ if __name__ == '__main__':
     posterior_samples_list = variables['posterior_samples_list']
     prior_samples = variables['prior_samples']
     Y = variables['Y']
-    number_u = Xu_noise.shape[0]
+    number_u_total = Xu_noise.shape[0]
+    number_u = variables['number_u']
     param_iter = variables['param_iter']
     Xu_fixed = variables['Xu_fixed']
     epochs = variables['epochs']
@@ -119,6 +120,7 @@ if __name__ == '__main__':
     # #                              num_chains, k, assumption_sigma, prior_std, noise_std, number_init, number_bound,
     # #                              prior_var, max_samples, bw, added_text)
     # print('end inference')
+
 
 # %%
 # # %%

@@ -9,7 +9,8 @@
 #SBATCH --time=24:36:00
 #SBATCH --output=rd_%j.log
 #SBATCH --error=err_%j.log
-#SBATCH --exclude=hpc-node05
+#SBATCH --nodelist=hpc-node06
+
 
 
 hostname

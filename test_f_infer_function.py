@@ -275,11 +275,11 @@ def plot_f_inference_rd(param_iter, Xu_fixed, Yu_fixed, Xf, yf, added_text,  X_p
         # zz_uc = compute_kuu(Xuz, Xcz, params_kuu)
         # zg_uc = compute_kuf(Xuz, Xcg, params, lengthscale_x, lengthscale_t)
         # zz_cu = compute_kuu(Xcz, Xuz, params_kuu)
-        zz_cc = compute_kuu(Xcz, Xcz, params_kuu)
-        zg_cc = compute_kuf(Xcz, Xcg, params, lengthscale_x, lengthscale_t)
+        zz_cc = compute_kuu_rd(Xcz, Xcz, params_kuu)
+        zg_cc = compute_kuf_rd(Xcz, Xcg, params, lengthscale_x, lengthscale_t)
         # gz_cu = compute_kfu(Xcg, Xuz, params, lengthscale_x, lengthscale_t)
-        gz_cc = compute_kfu(Xcg, Xcz, params, lengthscale_x, lengthscale_t)
-        gg_cc = compute_kff(Xcg, Xcg, params, lengthscale_x, lengthscale_t)
+        gz_cc = compute_kfu_rd(Xcg, Xcz, params, lengthscale_x, lengthscale_t)
+        gg_cc = compute_kff_rd(Xcg, Xcg, params, lengthscale_x, lengthscale_t)
         K = jnp.block([[zz_cc, zg_cc], [gz_cc, gg_cc]])
         return K
 
@@ -353,14 +353,14 @@ def plot_f_inference_rd(param_iter, Xu_fixed, Yu_fixed, Xf, yf, added_text,  X_p
             x_star_batch = x_star[i:i + batch_size]
 
             # k_zz_u_star = compute_kuu(z_prior, x_star_batch, params_kuu)
-            k_zz_c_star = compute_kuu(Xcz, x_star_batch, params_kuu)
-            k_gz_c_star = compute_kfu(Xcg, x_star_batch, params, params[0][1][0].item(), params[0][1][1].item())
+            k_zz_c_star = compute_kuu_rd(Xcz, x_star_batch, params_kuu)
+            k_gz_c_star = compute_kfu_rd(Xcg, x_star_batch, params, params[0][1][0].item(), params[0][1][1].item())
 
             k_x_star_batch = jnp.vstack((k_zz_c_star, k_gz_c_star))
             mu_star_batch = jnp.dot(k_x_star_batch.T, K_inv_y)
 
             K_inv_k_x_star_batch = la.solve(K, k_x_star_batch, assume_a='pos')
-            sigma_star_batch = compute_kuu(x_star_batch, x_star_batch, params_kuu) - jnp.dot(k_x_star_batch.T,
+            sigma_star_batch = compute_kuu_rd(x_star_batch, x_star_batch, params_kuu) - jnp.dot(k_x_star_batch.T,
                                                                                              K_inv_k_x_star_batch)
             sigma_star_batch_diag = sigma_star_batch.diagonal()
 

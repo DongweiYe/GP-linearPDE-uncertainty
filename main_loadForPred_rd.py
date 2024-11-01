@@ -12,7 +12,7 @@ import os
 import jax.scipy.linalg as la
 import gc
 import jaxlib
-from include.mcmc_posterior import compute_K
+from include.mcmc_posterior import compute_K, compute_K_rd
 from include.plot_dist import plot_dist, plot_with_noise, plot_and_save_kde_histograms, plot_dist_rd, plot_with_noise_rd
 from include.plot_pred import plot_and_save_prediction_results, prediction_mean, prediction_variance, \
     plot_and_save_prediction_results_combine, plot_and_save_prediction_results_combine_rd, \
@@ -30,8 +30,8 @@ current_time = datetime.datetime.now().strftime("%m%d")
 # epoch_pred = 500
 # pred_mesh = 200
 
-text = "REACT_f353_chains1_k0.9_assumption0.01_prior_std0.04_noisestd0.04_init32_b32_0.0016_k0.9_3000_learnlr0.1&600_4553.pkl"
-load_path = f"results/datas/trained_params/1029"
+text = "REACT_f353_chains1_k0.8_assumption0.01_prior_std0.04_noisestd0.04_init32_b32_0.0016_k0.8_1000_learnlr0.01&500_0349.pkl"
+load_path = f"results/datas/trained_params/1031"
 
 
 # %%
@@ -322,6 +322,45 @@ if __name__ == '__main__':
         print("Starting gp_predict_diagonal_batch function")
         params_kuu = {'sigma': init[-1][0], 'lengthscale': init[-1][1]}
         params = init
+        K = compute_K_rd(init, z_prior, Xcz, Xcg)
+        print("Computed K matrix")
+
+        K_inv_y = la.solve(K, y, assume_a='pos')
+
+        mu_star = []
+        sigma_star_diag = []
+
+        for i in range(0, x_star.shape[0], batch_size):
+            x_star_batch = x_star[i:i + batch_size]
+
+            k_zz_u_star = compute_kuu_rd(z_prior, x_star_batch, params_kuu)
+            k_zz_c_star = compute_kuu_rd(Xcz, x_star_batch, params_kuu)
+            k_gz_c_star = compute_kfu_rd(Xcg, x_star_batch, params, params[0][1][0].item(), params[0][1][1].item())
+            k_x_star_batch = jnp.vstack((k_zz_u_star, k_zz_c_star, k_gz_c_star))
+            mu_star_batch = jnp.dot(k_x_star_batch.T, K_inv_y)
+            # k_x_star_batch = jnp.vstack((k_zz_c_star, k_gz_c_star))
+            # mu_star_batch = jnp.dot(k_x_star_batch.T, K_inv_y)
+
+            K_inv_k_x_star_batch = la.solve(K, k_x_star_batch, assume_a='pos')
+            sigma_star_batch = compute_kuu_rd(x_star_batch, x_star_batch, params_kuu) - jnp.dot(k_x_star_batch.T,
+                                                                                             K_inv_k_x_star_batch)
+            sigma_star_batch_diag = sigma_star_batch.diagonal()
+
+            mu_star.append(mu_star_batch)
+            sigma_star_diag.append(sigma_star_batch_diag)
+
+        mu_star = jnp.concatenate(mu_star, axis=0)
+        sigma_star_diag = jnp.concatenate(sigma_star_diag, axis=0).flatten()
+
+        del K_inv_y, K, k_zz_c_star, k_gz_c_star, k_x_star_batch, K_inv_k_x_star_batch
+        gc.collect()
+        return mu_star.flatten(), sigma_star_diag
+
+
+    def gp_predict_diagonal_batch2(init, z_prior, Xcz, Xcg, y, x_star, batch_size=2000):
+        print("Starting gp_predict_diagonal_batch function")
+        params_kuu = {'sigma': init[-1][0], 'lengthscale': init[-1][1]}
+        params = init
         # K = compute_K(init, z_prior, Xcz, Xcg)
         Xuc = jnp.concatenate((z_prior, Xcz))
         K = compute_K_no(init, Xuc, Xcg)
@@ -440,7 +479,7 @@ if __name__ == '__main__':
 
     print("prior_samples_reshaped: ", prior_samples_reshaped)
     print("posterior_samples_list: ", posterior_samples_list)
-    print("difference between prior and posterior samples: ", prior_samples_reshaped - posterior_samples_list)
+
     #gpu
     # y_final_mean_list_posterior = jnp.array(y_final_mean_list_posterior)
     # y_final_var_list_posterior = jnp.array(y_final_var_list_posterior)

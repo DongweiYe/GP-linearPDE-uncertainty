@@ -30,7 +30,7 @@ jax.config.update("jax_enable_x64", True)
 
 # %%
 learning_rate = 0.1
-epochs = 600 #1000
+epochs = 1000 #1000
 
 noise_std = 0.04
 prior_std = 0.04
@@ -47,7 +47,7 @@ test_num = 2 ** 4
 number_u = 2 ** 2  # xtxx
 number_init = 2 ** 5
 number_bound = 2 ** 5
-number_u_c_for_f = 2 ** 3
+number_u_c_for_f = 2 ** 4
 
 number_u_c_for_f_real = (number_u_c_for_f)**2
 number_init_real = number_init-1
