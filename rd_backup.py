@@ -7,10 +7,8 @@ from include.heat2d import plot_u_pred, plot_u_pred_rd
 from include.init import initialize_params_2d
 from include.mcmc_posterior import *
 
-from include.plot_dist import plot_dist, plot_with_noise, plot_and_save_kde_histograms, plot_dist_rd, \
-    plot_with_noise_rd, plot_dist_rd_2
-from include.train import train_heat_equation_model_2d, train_heat_equation_model_2d_rd, \
-    train_heat_equation_model_2d_rd_no
+from include.plot_dist import plot_dist, plot_with_noise, plot_and_save_kde_histograms, plot_dist_rd, plot_with_noise_rd
+from include.train import train_heat_equation_model_2d, train_heat_equation_model_2d_rd
 from scipy.stats import gaussian_kde
 import pickle
 import os
@@ -24,32 +22,32 @@ from scipy.interpolate import CubicSpline
 from scipy.interpolate import RBFInterpolator
 from scipy.interpolate import griddata
 
-from test_f_infer_function import plot_f_inference_rd, plot_f_inference_rd_init
+from test_f_infer_function import plot_f_inference_rd
 
 os.environ["JAX_PLATFORM_NAME"] = "gpu"
 jax.config.update("jax_enable_x64", True)
 
-#prior std, assumption sigma, max samples.
+
 # %%
-learning_rate = 0.1
-epochs = 800 #1000
+learning_rate = 0.04
+epochs = 1000 #1000
 
 noise_std = 0.04
-prior_std = 0.06
+prior_std = 0.04
 prior_var = prior_std ** 2  # prior variance
 max_samples = 1000
-assumption_sigma = 0.03#0.01 # step size
-k = 0.5
+assumption_sigma = 0.01 #0.01 # step size
+k = 0.8
 num_chains = 1
 
 bw = 2
 num_prior_samples = 200
 
 test_num = 2 ** 4
-number_u = 2 ** 3 # xtxx
+number_u = 2 ** 2  # xtxx
 number_init = 2 ** 5
 number_bound = 2 ** 5
-number_u_c_for_f = 19
+number_u_c_for_f = 2 ** 4
 
 number_u_c_for_f_real = (number_u_c_for_f)**2
 number_init_real = number_init-1
@@ -58,10 +56,10 @@ number_f = number_u_c_for_f_real+number_init_real+number_bound_real
 
 init_num = number_init
 bnum = number_bound
-keynum = 1000
+keynum = 50
 optimizer_in_use = optax.adam
 learning_rate_pred = 0.01
-epoch_pred = 700
+epoch_pred = 100
 added_text = f'key{keynum}_{number_u}&{number_u_c_for_f_real}&{number_f}&{number_init}&{number_bound}&{epochs}&{noise_std}'
 learning = f'lr{learning_rate}&{epochs}'
 mcmc_text = f"key{keynum}_number_u_c_for_f{number_u_c_for_f}noise{noise_std}_prior{prior_std}_maxsamples{max_samples}_assumption{assumption_sigma}_k{k}"
@@ -83,13 +81,12 @@ if __name__ == '__main__':
     print("added_text:", added_text, "\n")
     print("learning_rate:", learning_rate, "\n")
 
-    model = Model("k * (dxxT) - 5*T**3 + 5*T", "T(x)", parameters="k", boundary_conditions="periodic", backend='numpy')
-    # model = Model("k * (dxxT) - 3*T**3 + 3*T", "T(x)", parameters="k", boundary_conditions="periodic", backend='numpy')
+
+    model = Model("k * (dxxT) - 3*T**3 + 3*T", "T(x)", parameters="k", boundary_conditions="periodic", backend='numpy')
     # model = Model("k * (dxxT) - 3*T**3", "T(x)", parameters="k", boundary_conditions="periodic", backend='numpy')
     x = jnp.linspace(-1, 1, 500)
     T = x * x * jnp.cos(jnp.pi * x)
-    # initial_fields = model.Fields(x=x, T=T, k=0.05)
-    initial_fields = model.Fields(x=x, T=T, k=0.01)
+    initial_fields = model.Fields(x=x, T=T, k=0.05)
 
     simulation = Simulation(model, initial_fields, dt=0.002, tmax=1, scheme="theta")
 
@@ -140,15 +137,15 @@ if __name__ == '__main__':
     # Xu_bound_high = jnp.hstack([xu_bound_high, tu_bound_high])
     # print("before num_samples", num_samples)
 
-    # xu_all = jnp.cos((((2 * jnp.arange(num_samples)) + 1) / (2 * (num_samples))) * jnp.pi)
-    # tu_all = (jnp.cos((((2 * jnp.arange(num_samples)) + 1) / (2 * (num_samples))) * jnp.pi) + 1) / 2
+    xu_all = jnp.cos((((2 * jnp.arange(num_samples)) + 1) / (2 * (num_samples))) * jnp.pi)
+    tu_all = (jnp.cos((((2 * jnp.arange(num_samples)) + 1) / (2 * (num_samples))) * jnp.pi) + 1) / 2
 
     # xu_all = jax.random.uniform(key_x_rd, shape=(num_samples, 1), dtype=jnp.float64)
     # tu_all = jax.random.uniform(key_t_rd, shape=(num_samples, 1), dtype=jnp.float64)
 
-    epsilon = 1e-6
-    xu_all = jnp.linspace(-1 + epsilon, 1 - epsilon, num_samples, dtype=jnp.float64)
-    tu_all = jnp.linspace(0 + epsilon, 1 - epsilon, num_samples, dtype=jnp.float64)
+    # epsilon = 1e-6
+    # xu_all = jnp.linspace(-1 + epsilon, 1 - epsilon, num_samples, dtype=jnp.float64)
+    # tu_all = jnp.linspace(0 + epsilon, 1 - epsilon, num_samples, dtype=jnp.float64)
 
     Xu_all = jnp.vstack([xu_all, tu_all]).T
     Xu_mesh_all, Tu_mesh_all = jnp.meshgrid(xu_all, tu_all)
@@ -206,10 +203,7 @@ if __name__ == '__main__':
     key_x_noise, key_t_noise = random.split(key_u_rd)
     xu_noise = x_u + noise_std * jax.random.normal(key_x_noise, shape=x_u.shape)
     tu_noise = t_u + noise_std * jax.random.normal(key_t_noise, shape=t_u.shape)
-    xu_noise = jnp.maximum(jnp.minimum(1, xu_noise), -1)
-    tu_noise = jnp.maximum(jnp.minimum(1, tu_noise), 0)
     Xu_noise = jnp.vstack([xu_noise, tu_noise]).T
-
 
     print("Xu_certain:", Xu_certain)
     print("Xu_noise:", Xu_noise)
@@ -227,8 +221,7 @@ if __name__ == '__main__':
     print("Yu:", Yu)
 
     # -Lu = R(u)
-    # beta = 3
-    beta = 5
+    beta = 3
     R_u = beta * (yu_fixed**3 - yu_fixed)
     # R_u = beta * (yu_fixed**3)
     Lu_data = -R_u
@@ -281,36 +274,32 @@ if __name__ == '__main__':
     # init = (((jnp.array([log_sigma_init], dtype=jnp.float64),
     #           jnp.array([log_lx_init, log_lt_init], dtype=jnp.float64))),)
 
-    # # init = (((jnp.array([0.5], dtype=jnp.float64),
-    # #           jnp.array([0.05, 0.05], dtype=jnp.float64))),)
-    # # init = (((jnp.array([0.5], dtype=jnp.float64),
-    # #           jnp.array([0.1, 0.08], dtype=jnp.float64))),)
-    # init = (((jnp.array([0.5], dtype=jnp.float32),
-    #           jnp.array([0.01, 0.08], dtype=jnp.float32))),)
+    # init = (((jnp.array([0.5], dtype=jnp.float64),
+    #           jnp.array([0.05, 0.05], dtype=jnp.float64))),)
     init = (((jnp.array([0.5], dtype=jnp.float32),
-              jnp.array([0.06, 0.1], dtype=jnp.float32))),)
+                jnp.array([0.01, 0.08], dtype=jnp.float32))),)
+    # init = (((jnp.array([0.5], dtype=jnp.float64),
+    #           jnp.array([0.1, 0.08], dtype=jnp.float64))),)
 
-    # print("init:", init)
+    print("init:", init)
+    param_iter, optimizer_text, lr_text, epoch_text = train_heat_equation_model_2d_rd(init,
+                                                                                   Xu_noise,
+                                                                                   Xu_fixed,
+                                                                                   Xf,
+                                                                                   number_Y,
+                                                                                   Y, epochs,
+                                                                                   learning_rate,
+                                                                                   optimizer_in_use,mcmc_text
+                                                                                   )
+
     # param_iter, optimizer_text, lr_text, epoch_text = train_heat_equation_model_2d_rd(init,
-    #                                                                                Xu_noise,
-    #                                                                                Xu_fixed,
-    #                                                                                Xf,
-    #                                                                                number_Y,
-    #                                                                                Y, epochs,
-    #                                                                                learning_rate,
-    #                                                                                optimizer_in_use,mcmc_text
-    #                                                                                )
-    # print("original train_heat_equation_model_2d_rd")
-
-    param_iter, optimizer_text, lr_text, epoch_text = train_heat_equation_model_2d_rd_no(init,
-                                                                                      Xu_fixed,
-                                                                                      Xf,
-                                                                                      number_Y_certain,
-                                                                                      Y_certain, epochs,
-                                                                                      learning_rate,
-                                                                                      optimizer_in_use, mcmc_text
-                                                                                      )
-    print("param_iter, optimizer_text, lr_text, epoch_text = train_heat_equation_model_2d_rd_no(")
+    #                                                                                   Xu_fixed,
+    #                                                                                   Xf,
+    #                                                                                   number_Y_certain,
+    #                                                                                   Y_certain, epochs,
+    #                                                                                   learning_rate,
+    #                                                                                   optimizer_in_use, mcmc_text
+    #                                                                                   )
 
     print("init params:", init)
     # param_iter = init
@@ -325,9 +314,8 @@ if __name__ == '__main__':
     # print("init:", init)((Array([0.43762741], dtype=float64), Array([0.16809054, 0.00820585], dtype=float64)),)
     #0.60191826], dtype=float64), Array([0.36601679
     X_plot_prediction = jnp.vstack([x_grid_mesh.ravel(), time_grid_mesh.ravel()]).T
-    #plot_f_inference_rd(param_iter, Xu_fixed, yu_fixed, Xf, yf, added_text, X_plot_prediction, data, learning)
-    plot_f_inference_rd_init(param_iter, Xu_fixed, yu_fixed, Xf, yf, added_text, X_plot_prediction, data, learning,init)
-
+    plot_f_inference_rd(param_iter, Xu_fixed, yu_fixed, Xf, yf, added_text, X_plot_prediction, data, learning)
+"""
     # %%
     print('start inference')
 
@@ -431,7 +419,7 @@ if __name__ == '__main__':
 
     Xu_pred_mean = jnp.mean(posterior_samples_list, axis=0)
     plot_u_pred_rd(Xu_certain, Xf, Xu_noise, noise_std, Xu_pred_mean, prior_var,assumption_sigma,k,max_samples,learning,num_chains,number_f,added_text, X_plot_prediction, data)
-    plot_dist_rd_2(Xu_certain,
+    plot_dist_rd(Xu_certain,
                  Xu_noise,
                  Xu_pred_mean,
                  posterior_samples_list,
@@ -451,7 +439,6 @@ if __name__ == '__main__':
                    number_init=number_init, number_bound=number_bound, data=data, X_plot_prediction=X_plot_prediction,
                    prior_samples_list=prior_samples_list,mcmc_text=mcmc_text,x_grid_mesh_shape=x_grid_mesh_shape)
 
-
-
+"""
 
 # %%

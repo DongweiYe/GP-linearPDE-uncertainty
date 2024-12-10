@@ -36,6 +36,10 @@ import numpy as np
 #     # gg_ff = heat_equation_kff(Xfg, Xfg, params)
 #     K = jnp.block([[zz_uu, zz_uf, zg_uf], [zz_fu, zz_ff, zg_ff], [gz_fu, gz_ff, gg_ff]])
 #     return K
+def add_jitter(matrix, jitter=1e-2):
+    jitter_matrix = matrix + jitter * jnp.eye(matrix.shape[0])
+    print("jitter nmuber is:", jitter)
+    return jitter_matrix
 
 def compute_K(init, z_prior, Xcz, Xcg):
     Xuz = z_prior
@@ -44,6 +48,7 @@ def compute_K(init, z_prior, Xcz, Xcg):
     lengthscale_x = params[0][1][0].item()
     lengthscale_t = params[0][1][1].item()
     zz_uu = compute_kuu(Xuz, Xuz, params_kuu)
+    zz_uu = add_jitter(zz_uu)
     zz_uc = compute_kuu(Xuz, Xcz, params_kuu)
     zg_uc = compute_kuf(Xuz, Xcg, params, lengthscale_x, lengthscale_t)
     zz_cu = compute_kuu(Xcz, Xuz, params_kuu)

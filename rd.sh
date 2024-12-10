@@ -6,12 +6,9 @@
 #SBATCH --cpus-per-task=16
 #SBATCH --mem-per-cpu=200G
 #SBATCH --gres=gpu:1
-#SBATCH --time=24:36:00
+#SBATCH --time=4:00:00
 #SBATCH --output=rd_%j.log
 #SBATCH --error=err_%j.log
-#SBATCH --nodelist=hpc-node06
-
-
 
 hostname
 start_time=$(date +%s)
@@ -35,6 +32,7 @@ module load nvidia/nvhpc/23.3
 module load nvidia/nvtop
 
 #pip install -U jax[cuda11_cudnn86] -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
+#SBATCH --nodelist=hpc-node06
 # -----------------Print node info--------------------------------
 nvidia-smi            # log GPU info
 echo "Date              = $(date)"

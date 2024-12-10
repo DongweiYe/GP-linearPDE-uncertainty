@@ -215,6 +215,27 @@ def compute_kff_rd(x1: jnp.ndarray, x2: jnp.ndarray, initial_theta, lengthscale_
 
     return total_expression
 
+def add_jitter(matrix, jitter=1e-6):
+    jitter_matrix = matrix + jitter * jnp.eye(matrix.shape[0])
+    return jitter_matrix
+
+def is_symmetric(matrix, tol=1e-8):
+    return jnp.allclose(matrix, matrix.T, atol=tol)
+
+
+def compute_condition_number(matrix):
+    singular_values = jnp.linalg.svd(matrix, compute_uv=False)
+    cond_number = singular_values.max() / singular_values.min()
+    return cond_number
+
+
+def is_positive_definite(matrix):
+    try:
+        jnp.linalg.cholesky(matrix)
+        return True
+    except jnp.linalg.LinAlgError:
+        return False
+
 
 ################################################# nlml ##########################################################
 def heat_equation_nlml_loss_2d_rd(heat_params, Xuz, Xfz, Xfg, number_Y, Y) -> float:
@@ -230,17 +251,74 @@ def heat_equation_nlml_loss_2d_rd(heat_params, Xuz, Xfz, Xfg, number_Y, Y) -> fl
     # lengthscale_x = jnp.exp(log_lx)
     # lengthscale_t = jnp.exp(log_lt)
 
+    # jitter = 1e-4
+    # print("Jitter: ", jitter)
+    # print("Jitter: ", jitter)
+
     zz_uu = compute_kuu_rd(Xuz, Xuz, params_kuu)
+
     zz_uf = compute_kuu_rd(Xuz, Xfz, params_kuu)
     zg_uf = compute_kuf_rd(Xuz, Xfg, params, lengthscale_x, lengthscale_t)
     zz_fu = compute_kuu_rd(Xfz, Xuz, params_kuu)
+
     zz_ff = compute_kuu_rd(Xfz, Xfz, params_kuu)
+    # zz_ff = add_jitter(zz_ff, jitter)
+
     zg_ff = compute_kuf_rd(Xfz, Xfg, params, lengthscale_x, lengthscale_t)
     gz_fu = compute_kfu_rd(Xfg, Xuz, params, lengthscale_x, lengthscale_t)
     gz_ff = compute_kfu_rd(Xfg, Xfz, params, lengthscale_x, lengthscale_t)
     gg_ff = compute_kff_rd(Xfg, Xfg, params, lengthscale_x, lengthscale_t)
 
+
     K = jnp.block([[zz_uu, zz_uf, zg_uf], [zz_fu, zz_ff, zg_ff], [gz_fu, gz_ff, gg_ff]])
+
+    # jitter_values = [1e-8, 1e-6, 1e-4, 1e-2]
+    # for jitter in jitter_values:
+    #     K_jittered = add_jitter(K, jitter)
+    #     pos_def = is_positive_definite(K_jittered)
+    #     cond_number = compute_condition_number(K_jittered)
+    #     print(f"Jitter: {jitter} | Positive Definite: {pos_def} | Condition Number: {cond_number}")
+    #     if pos_def and cond_number < 1e6:
+    #         break
+
+    # jitter = 1e-6
+    # print("Jitter: ", jitter)
+    # print("Jitter: ", jitter)
+    # print("Jitter: ", jitter)
+    # K_jittered = add_jitter(K, jitter)
+    # K = K_jittered
+    sign, logdet = jnp.linalg.slogdet(K)
+    K_inv_Y = jnp.linalg.solve(K, Y)
+    signed_logdet = sign * logdet
+    K_inv_Y_product = Y.T @ K_inv_Y
+    scalar_result = jnp.squeeze(K_inv_Y_product)
+    nlml = (1 / 2 * signed_logdet) + (1 / 2 * scalar_result) + ((number_Y / 2) * jnp.log(2 * jnp.pi))
+
+    return  nlml
+
+
+def heat_equation_nlml_loss_2d_rd_no(heat_params, Xfz, Xfg, number_Y, Y) -> float:
+    init = heat_params
+    params =  heat_params
+    params_kuu = {'sigma': init[-1][0], 'lengthscale': init[-1][1]}
+    lengthscale_x = params[0][1][0].item()
+    lengthscale_t = params[0][1][1].item()
+
+    # zz_uu = compute_kuu_rd(Xuz, Xuz, params_kuu)
+    #
+    # zz_uf = compute_kuu_rd(Xuz, Xfz, params_kuu)
+    # zg_uf = compute_kuf_rd(Xuz, Xfg, params, lengthscale_x, lengthscale_t)
+    # zz_fu = compute_kuu_rd(Xfz, Xuz, params_kuu)
+
+    zz_ff = compute_kuu_rd(Xfz, Xfz, params_kuu)
+    # zz_ff = add_jitter(zz_ff, jitter)
+    zg_ff = compute_kuf_rd(Xfz, Xfg, params, lengthscale_x, lengthscale_t)
+    # gz_fu = compute_kfu_rd(Xfg, Xuz, params, lengthscale_x, lengthscale_t)
+    gz_ff = compute_kfu_rd(Xfg, Xfz, params, lengthscale_x, lengthscale_t)
+    gg_ff = compute_kff_rd(Xfg, Xfg, params, lengthscale_x, lengthscale_t)
+
+
+    K = jnp.block([[zz_ff, zg_ff], [gz_ff, gg_ff]])
 
     sign, logdet = jnp.linalg.slogdet(K)
     K_inv_Y = jnp.linalg.solve(K, Y)
@@ -433,7 +511,7 @@ def plot_u_pred_rd(Xu_certain, Xf, Xu_noise, noise_std, Xu_pred, prior_var,assum
     ax.set_xlabel('x', fontsize=14)
     ax.set_ylabel('t', fontsize=14)
     ax.tick_params(axis='both', which='major', labelsize=12)
-    #ax.legend(loc='upper right', fontsize=12)
+    ax.legend(loc='best', fontsize=12)
     ax.set_aspect('auto')
     ax.grid(True, linestyle='--', alpha=0.6)
 

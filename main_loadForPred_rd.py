@@ -30,11 +30,11 @@ current_time = datetime.datetime.now().strftime("%m%d")
 # epoch_pred = 500
 # pred_mesh = 200
 
-text = "REACT_f353_chains1_k0.8_assumption0.01_prior_std0.04_noisestd0.04_init32_b32_0.0016_k0.8_1000_learnlr0.01&500_0349.pkl"
-load_path = f"results/datas/trained_params/1031"
+text = "REACT_f458_chains1_k0.5_assumption0.02_prior_std0.06_noisestd0.04_init32_b32_0.0036_k0.5_1000_learnlr0.1&800_2114.pkl"
+load_path = f"results/datas/trained_params/1209"
 
 
-# %%
+# %%s
 
 if __name__ == '__main__':
     # %%
