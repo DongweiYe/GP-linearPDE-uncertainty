@@ -1,8 +1,8 @@
 import jax.numpy as jnp
 from jax import jvp, jit
 
-from include.kernels import rbf_kernel, matern_kernel_3_2, matern_kernel_5_2, rational_quadratic_kernel, spectral_mixture_kernel
-
+from include.kernels import rbf_kernel, matern_kernel_3_2, matern_kernel_5_2, rational_quadratic_kernel, \
+    spectral_mixture_kernel
 
 
 @jit
@@ -250,6 +250,7 @@ def first_order_x2(x1, x2, params, init_d):
     _, jvp_fn = jvp(kernel_fn, (x2[:, d],), (v,))
     return jvp_fn
 
+
 @jit
 def first_order_x2_t_kuu(x1, x2, params):
     return first_order_x2(x1, x2, params, -1)
@@ -284,5 +285,3 @@ def second_order_x2(x1, x2, params, init_d):
 
     _, jvp_fn = jvp(extract_fn, (x2[:, d],), (v,))
     return jvp_fn
-
-

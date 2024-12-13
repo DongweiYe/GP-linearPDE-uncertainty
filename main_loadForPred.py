@@ -1,32 +1,36 @@
-# %%
-import jax
+
 import datetime
-from include.heat2d import u_xt, compute_kuu, compute_kfu, compute_kuf, compute_kff
-import jax.numpy as jnp
-import pickle
-import os
-import jax.scipy.linalg as la
 import gc
+import os
+import pickle
+
+import jax
+import jax.numpy as jnp
+import jax.scipy.linalg as la
+
+from include.heat2d import u_xt, compute_kuu, compute_kfu, compute_kuf, compute_kff
 from include.mcmc_posterior import compute_K
 from include.plot_pred import plot_and_save_prediction_results, prediction_mean, prediction_variance, \
     plot_and_save_prediction_results_combine
 
 os.environ["JAX_PLATFORM_NAME"] = "gpu"
 jax.config.update("jax_enable_x64", True)
+
 current_time = datetime.datetime.now().strftime("%m%d")
 learning_rate_pred = 0.004
 epoch_pred = 100
 pred_mesh = 150
+
 text = "chains1_f256_k0.8_assumption0.001_prior0.04_noise0.04_maxsamples2000_numpriorsamples_200_learnlr0.08&1000_0843.pkl"
 load_path = f"results/datas/trained_params/1031"
 
 
-# %%
 if __name__ == '__main__':
-    # %%
+
     print('start inference')
     print("pred_mesh:", pred_mesh, "\n")
     print("text:", text, "\n")
+
     def load_variables(text, load_path):
         print(f"Loading data from {load_path}")
         filename = f"{text}"
@@ -42,6 +46,7 @@ if __name__ == '__main__':
 
 
     variables = load_variables(text, load_path)
+
     Xu_without_noise = variables['Xu_without_noise']
     Xu_certain = variables['Xu_certain']
     Xf = variables['Xf']
@@ -67,19 +72,27 @@ if __name__ == '__main__':
     optimizer_in_use = variables['optimizer_in_use']
     number_u_only_x = variables['number_u_only_x']
     prior_std = variables['prior_std']
+
     number_bound = variables['number_bound']
+
     added_text = f"heat_Predction_f{number_f}_chains{num_chains}_k{k}_assumption{assumption_sigma}_noisestd{noise_std}_{prior_var}_k{k}_{max_samples}_{current_time}"
+
     Xu_pred_mean = jnp.mean(posterior_samples_list, axis=0)
+
 
 # %%
 # # %%
     print("start prediction")
     x_prediction = jnp.linspace(0, 1, pred_mesh)
     t_prediction = jnp.linspace(0, 1, pred_mesh)
+
     X_prediction, T_prediction = jnp.meshgrid(x_prediction, t_prediction)
+
     X_plot_prediction = jnp.vstack([X_prediction.ravel(), T_prediction.ravel()]).T
+
     y_final_mean_list_posterior = []
     y_final_var_list_posterior = []
+
     y_final_mean_list_prior = []
     y_final_var_list_prior = []
 
@@ -91,14 +104,18 @@ if __name__ == '__main__':
         K = compute_K(init, z_prior, Xcz, Xcg)
         lengthscale_x = params[0][1][0].item()
         lengthscale_t = params[0][1][1].item()
+
         k_zz_u_star = compute_kuu(Xuz, x_star, params_kuu)
         k_zz_c_star = compute_kuu(Xcz, x_star, params_kuu)
         k_gz_c_star = compute_kfu(Xcg, x_star, params, lengthscale_x, lengthscale_t)
-        k_x_star = jnp.vstack((k_zz_u_star, k_zz_c_star, k_gz_c_star))
-        k_x_star_x_star = compute_kuu(x_star, x_star, params_kuu)
-        joint_K = jnp.block([[K, k_x_star], [k_x_star.T, k_x_star_x_star]])
-        return joint_K
 
+        k_x_star = jnp.vstack((k_zz_u_star, k_zz_c_star, k_gz_c_star))
+
+        k_x_star_x_star = compute_kuu(x_star, x_star, params_kuu)
+
+        joint_K = jnp.block([[K, k_x_star], [k_x_star.T, k_x_star_x_star]])
+
+        return joint_K
 
     def blockwise_matrix_multiply(A, B, block_size):
         M, N = A.shape
@@ -112,10 +129,12 @@ if __name__ == '__main__':
 
     def gp_predict(init, z_prior, Xcz, Xcg, y, x_star):
         print("Starting gp_predict function")
+
         params_kuu = {'sigma': init[-1][0], 'lengthscale': init[-1][1]}
         params = init
         K = compute_K(init, z_prior, Xcz, Xcg)
         print("Computed K matrix")
+
         lengthscale_x = params[0][1][0].item()
         lengthscale_t = params[0][1][1].item()
 
@@ -182,13 +201,14 @@ if __name__ == '__main__':
         params_kuu = {'sigma': init[-1][0], 'lengthscale': init[-1][1]}
         lengthscale_x = params[0][1][0].item()
         lengthscale_t = params[0][1][1].item()
+
         zz_cc = compute_kuu(Xcz, Xcz, params_kuu)
         zg_cc = compute_kuf(Xcz, Xcg, params, lengthscale_x, lengthscale_t)
+
         gz_cc = compute_kfu(Xcg, Xcz, params, lengthscale_x, lengthscale_t)
         gg_cc = compute_kff(Xcg, Xcg, params, lengthscale_x, lengthscale_t)
         K = jnp.block([[zz_cc, zg_cc], [gz_cc, gg_cc]])
         return K
-
 
     def gp_predict_diagonal_batch(init, z_prior, Xcz, Xcg, y, x_star, batch_size=2000):
         print("Starting gp_predict_diagonal_batch function")
@@ -213,12 +233,15 @@ if __name__ == '__main__':
 
             k_zz_c_star = compute_kuu(Xz, x_star_batch, params_kuu)
             k_gz_c_star = compute_kfu(Xcg, x_star_batch, params, params[0][1][0].item(), params[0][1][1].item())
+
             k_x_star_batch = jnp.vstack((k_zz_c_star, k_gz_c_star))
             mu_star_batch = jnp.dot(k_x_star_batch.T, K_inv_y)
+
             K_inv_k_x_star_batch = la.solve(K, k_x_star_batch, assume_a='pos')
             sigma_star_batch = compute_kuu(x_star_batch, x_star_batch, params_kuu) - jnp.dot(k_x_star_batch.T,
                                                                                              K_inv_k_x_star_batch)
             sigma_star_batch_diag = sigma_star_batch.diagonal()
+
             mu_star.append(mu_star_batch)
             sigma_star_diag.append(sigma_star_batch_diag)
 
@@ -235,6 +258,7 @@ if __name__ == '__main__':
         Xu_sample = posterior_samples_list[i, :, :]
         print("Xu_sample.shape", Xu_sample.shape)
         mcmc_text = f"mcmc"
+
         lengthscale = param_iter[-1][1]
         sigma = param_iter[-1][0]
 
@@ -257,6 +281,7 @@ if __name__ == '__main__':
     for i in range(prior_samples_reshaped.shape[0]):
         Xu_sample_prior = prior_samples_reshaped[i, :, :]
         mcmc_text = f"mcmc"
+
         lengthscale = param_iter[-1][1]
         sigma = param_iter[-1][0]
 
@@ -264,6 +289,7 @@ if __name__ == '__main__':
                                                            X_plot_prediction)
         print("prior Prediction mean shape: ", y_final_mean_prior.shape)
         print("prior Prediction variance shape: ", y_final_var_prior.shape)
+
         y_final_mean_list_prior.append(y_final_mean_prior.T)
         y_final_var_list_prior.append(y_final_var_prior.T)
 
@@ -284,6 +310,7 @@ if __name__ == '__main__':
         with open(file_path, 'wb') as f:
             pickle.dump(variables, f)
         print(f"Variables saved to {file_path}")
+
 
     y_final_mean_list_posterior = jnp.array(y_final_mean_list_posterior)
     y_final_var_list_posterior = jnp.array(y_final_var_list_posterior)
@@ -356,6 +383,7 @@ if __name__ == '__main__':
                    var_posterior=var_posterior,
                    abs_var_diff=abs_var_diff,
                    add_text=added_text)
+
     plot_and_save_prediction_results(u_values_gt,
                                      gp_mean_prior,
                                      abs_diff_prior,

@@ -1,29 +1,33 @@
-# %%
-import jax
+
 import datetime
-from include.heat2d import compute_kuu_rd, compute_kuf_rd, compute_kfu_rd, compute_kff_rd
-import jax.numpy as jnp
-import pickle
-import os
-import jax.scipy.linalg as la
 import gc
-import jaxlib
+import os
+import pickle
+
+import jax
+import jax.numpy as jnp
+import jax.scipy.linalg as la
+
+from include.heat2d import compute_kuu_rd, compute_kuf_rd, compute_kfu_rd, compute_kff_rd
 from include.mcmc_posterior import compute_K_rd
 from include.plot_pred import prediction_mean, prediction_variance, \
     plot_and_save_prediction_results_combine_rd, \
     plot_and_save_prediction_results_rd
+
 os.environ["JAX_PLATFORM_NAME"] = "gpu"
 jax.config.update("jax_enable_x64", True)
 
+
 current_time = datetime.datetime.now().strftime("%m%d")
 
-text = "REACT_f458_chains1_k0.6_assumption0.01_prior_std0.06_noisestd0.04_init32_b32_0.0036_k0.6_1000_learnlr0.1&800_4355.pkl"
-load_path = f"results/datas/trained_params/1213"
-# %%s
+text = "REACT_f458_chains1_k0.5_assumption0.02_prior_std0.06_noisestd0.04_init32_b32_0.0036_k0.5_1000_learnlr0.1&800_2114.pkl"
+load_path = f"results/datas/trained_params/1209"
 
 if __name__ == '__main__':
-    # %%
-    print('start')
+
+    print('start inference')
+
+
     def load_variables(text, load_path):
         print(f"Loading data from {load_path}")
         filename = f"{text}"
@@ -39,6 +43,7 @@ if __name__ == '__main__':
 
 
     variables = load_variables(text, load_path)
+
     Xu_certain = variables['Xu_certain']
     Xf = variables['Xf']
     Xu_noise = variables['Xu_noise']
@@ -73,8 +78,6 @@ if __name__ == '__main__':
 
     Xu_pred_mean = jnp.mean(posterior_samples_list, axis=0)
 
-    print("Xu_noise:", Xu_noise)
-    print("number_u:", number_u)
     print('end inference')
 
 # %%
@@ -88,6 +91,7 @@ if __name__ == '__main__':
     y_final_mean_list_prior = []
     y_final_var_list_prior = []
 
+
     def compute_K_no(init, Xcz, Xcg):
         params = init
         params_kuu = {'sigma': init[-1][0], 'lengthscale': init[-1][1]}
@@ -98,7 +102,6 @@ if __name__ == '__main__':
         gz_cc = compute_kfu_rd(Xcg, Xcz, params, lengthscale_x, lengthscale_t)
         gg_cc = compute_kff_rd(Xcg, Xcg, params, lengthscale_x, lengthscale_t)
         K = jnp.block([[zz_cc, zg_cc], [gz_cc, gg_cc]])
-        print("Computed K matrix shape compute K _ no ", K.shape)
         return K
 
     def gp_predict_diagonal_batch(init, z_prior, Xcz, Xcg, y, x_star, batch_size=2000):
@@ -129,10 +132,6 @@ if __name__ == '__main__':
 
             mu_star.append(mu_star_batch)
             sigma_star_diag.append(sigma_star_batch_diag)
-            print("k_x_star_batch shape:", k_x_star_batch.shape)
-            print("K_inv_y shape:", K_inv_y.shape)
-            print("mu_star_batch shape:", mu_star_batch.shape)
-            print("sigma_star_batch_diag shape:", sigma_star_batch_diag.shape)
 
         mu_star = jnp.concatenate(mu_star, axis=0)
         sigma_star_diag = jnp.concatenate(sigma_star_diag, axis=0).flatten()
@@ -146,6 +145,7 @@ if __name__ == '__main__':
         print("Starting gp_predict_diagonal_batch function")
         params_kuu = {'sigma': init[-1][0], 'lengthscale': init[-1][1]}
         params = init
+
         Xuc = jnp.concatenate((z_prior, Xcz))
         K = compute_K_no(init, Xuc, Xcg)
         print("Computed K matrix")
@@ -157,9 +157,11 @@ if __name__ == '__main__':
 
         for i in range(0, x_star.shape[0], batch_size):
             x_star_batch = x_star[i:i + batch_size]
+
             Xz = jnp.concatenate((z_prior, Xcz))
             k_zz_c_star = compute_kuu_rd(Xz, x_star_batch, params_kuu)
             k_gz_c_star = compute_kfu_rd(Xcg, x_star_batch, params, params[0][1][0].item(), params[0][1][1].item())
+
             k_x_star_batch = jnp.vstack((k_zz_c_star, k_gz_c_star))
             mu_star_batch = jnp.dot(k_x_star_batch.T, K_inv_y)
 
@@ -183,6 +185,7 @@ if __name__ == '__main__':
     for i in range(posterior_samples_list.shape[0]):
         Xu_sample = posterior_samples_list[i, :, :]
         mcmc_text=f"mcmc"
+
         lengthscale = param_iter[-1][1]
         sigma = param_iter[-1][0]
 
@@ -210,6 +213,7 @@ if __name__ == '__main__':
                                                            X_plot_prediction)
         print("prior Prediction mean shape: ", y_final_mean_prior.shape)
         print("prior Prediction variance shape: ", y_final_var_prior.shape)
+
         y_final_mean_list_prior.append(y_final_mean_prior.T)
         y_final_var_list_prior.append(y_final_var_prior.T)
 
@@ -234,6 +238,7 @@ if __name__ == '__main__':
 
     print("prior_samples_reshaped: ", prior_samples_reshaped)
     print("posterior_samples_list: ", posterior_samples_list)
+
     y_final_mean_list_posterior = jnp.array(y_final_mean_list_posterior)
     y_final_var_list_posterior = jnp.array(y_final_var_list_posterior)
 
@@ -289,6 +294,7 @@ if __name__ == '__main__':
                    var_posterior=var_posterior,
                    abs_var_diff=abs_var_diff,
                    add_text=added_text)
+
     plot_and_save_prediction_results_rd(u_values_gt,
                                      gp_mean_prior,
                                      abs_diff_prior,
@@ -297,6 +303,7 @@ if __name__ == '__main__':
                                     var_prior,
                                     var_posterior,
                                     abs_var_diff, added_text)
+
     plot_and_save_prediction_results_combine_rd(u_values_gt,
                                              gp_mean_prior,
                                              abs_diff_prior,
@@ -305,4 +312,3 @@ if __name__ == '__main__':
                                              var_prior,
                                              var_posterior,
                                              abs_var_diff, added_text)
-

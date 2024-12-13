@@ -4,21 +4,7 @@ from jax import jit
 
 @jit
 def rbf_kernel(x1, x2, initial_theta):
-    """Computes the Gaussian RBF ARD kernel for inputs x1 and x2.
 
-    Args:
-        x1: An array of shape (N1, D) where N1 is the number of data points in x1
-            and D is the number of dimensions.
-        x2: An array of shape (N2, D) where N2 is the number of data points in x2
-            and D is the number of dimensions.
-        length_scale: A scalar or array of shape (D,) representing the length scale
-            for each dimension.
-        sigma_f: A scalar representing the standard deviation of the Gaussian RBF.
-
-    Returns:
-        A matrix of shape (N1, N2) representing the Gaussian RBF ARD kernel
-        between x1 and x2.
-    """
     square_distances = jnp.sum((x1[:, jnp.newaxis, :] - x2[jnp.newaxis, :, :]) ** 2 / initial_theta['lengthscale'] ** 2,
                                axis=-1)
     return initial_theta['sigma'] ** 2 * jnp.exp(-0.5 * square_distances)

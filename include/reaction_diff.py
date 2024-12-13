@@ -1,8 +1,7 @@
 import jax.numpy as jnp
 import numpy as np
-from jax.typing import ArrayLike
 from jax import jit
-import jax
+from jax.typing import ArrayLike
 
 from include.heat2d import deep_rbf_kernel
 
@@ -19,10 +18,12 @@ def f_rd(Xf):
 
     return term1 * term2 * (term3 + term4 + term5) + term6
 
+
 def u_rd(Xu_fixed):
     x = Xu_fixed[:, :1]
     t = Xu_fixed[:, -1:]
     return jnp.exp(t) * (jnp.sin(4 * np.pi * x) + 5 * x)
+
 
 @jit
 def react_diffs_high_d_kuu(x1: ArrayLike, x2: ArrayLike, params) -> jnp.ndarray:
@@ -48,7 +49,7 @@ def react_diffs_high_d_kff(x1: ArrayLike, x2: ArrayLike, initial_theta) -> jnp.n
     linear_term = kuu_term
 
     return (first_order_term_x1 - total_sum_second_order_x1_x_kuu + nonlinear_term - linear_term) * \
-           (first_order_term_x2 - total_sum_second_order_x2_x_kuu + nonlinear_term - linear_term)
+        (first_order_term_x2 - total_sum_second_order_x2_x_kuu + nonlinear_term - linear_term)
 
 
 @jit
@@ -96,7 +97,8 @@ def deep_second_order_x_x_kuu(x1: ArrayLike, x2: ArrayLike, initial_theta, idx: 
     lengthscale = initial_theta['lengthscale']
     sigma = initial_theta['sigma']
     diff = x1[:, idx] - x2[:, idx]
-    return (sigma ** 2 / lengthscale ** 4 * diff ** 2 - sigma ** 2 / lengthscale ** 2) * deep_rbf_kernel(x1, x2, initial_theta)
+    return (sigma ** 2 / lengthscale ** 4 * diff ** 2 - sigma ** 2 / lengthscale ** 2) * deep_rbf_kernel(x1, x2,
+                                                                                                         initial_theta)
 
 
 @jit
@@ -114,6 +116,3 @@ def deep_second_order_x_x_kuu(x1: ArrayLike, x2: ArrayLike, initial_theta, idx: 
     diff = x1[:, idx] - x2[:, idx]
     return (sigma ** 2 / lengthscale ** 4 * diff ** 2 - sigma ** 2 / lengthscale ** 2) * deep_rbf_kernel(x1, x2,
                                                                                                          initial_theta)
-
-
-

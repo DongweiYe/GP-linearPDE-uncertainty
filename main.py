@@ -17,27 +17,30 @@ os.environ["JAX_PLATFORM_NAME"] = "gpu"
 jax.config.update("jax_enable_x64", True)
 from include.config import key_num
 
-# %%
 noise_std = 0.04
 prior_std = 0.04
-prior_var = prior_std**2
-max_samples = 2000
-assumption_sigma = 0.001
-k = 0.8
+prior_var = prior_std**2# prior variance
+max_samples = 2000#2000
+assumption_sigma = 0.001#0.001 # step size
+k = 0.8#0.5
 num_chains = 1
-learning_rate = 0.08
-epochs = 1000
+learning_rate = 0.08#0.08
+epochs = 1000 #1000
+
+
 learning_rate_pred = 0.001
 epoch_pred= 100
 bw=2
 num_prior_samples = 200
 test_num = 2**4
-number_u = 2**2
+number_u = 2**2 # xt
 number_u_only_x = 4
 number_f = 2**4
 number_init = 2**3
 number_bound = 2**3
 number_f_real = (number_f)**2
+
+
 param_text = "para"
 optimizer_in_use = optax.adam
 learning = f'lr{learning_rate}&{epochs}'
@@ -46,8 +49,6 @@ weight_decay = 1e-5
 mcmc_text = f"noise{noise_std}_prior{prior_std}_maxsamples{max_samples}_assumption{assumption_sigma}_k{k}"
 pred_mesh = 200
 
-
-# %%
 if __name__ == '__main__':
     print("key_num:", key_num, "\n")
     print("noise_std:", noise_std, "\n")
@@ -64,7 +65,10 @@ if __name__ == '__main__':
     print("epochs:", epochs, "\n")
     print("added_text:", added_text, "\n")
     print("learning_rate1:", learning_rate, "\n")
+
     print("weight_decay:", weight_decay, "\n")
+
+
     model_initializer = ModelInitializer_2d(number_u=number_u, number_f=number_f,
                                             number_init=number_init, number_bound=number_bound, noise_std=noise_std, number_u_only_x=number_u_only_x)
     Xu_certain = model_initializer.Xu_certain
@@ -73,6 +77,7 @@ if __name__ == '__main__':
     print("Xu_certain:", Xu_certain)
     print("Xu_noise:", Xu_noise)
     print("yu_certain:", yu_certain)
+
     Xu_fixed = model_initializer.Xu_fixed
     Yu_fixed = model_initializer.Yu_fixed
     print("Xu_fixed:", Xu_fixed)
@@ -87,6 +92,7 @@ if __name__ == '__main__':
         plt.title("Xu")
         current_time = datetime.datetime.now().strftime("%M%S")
         plt.savefig(f"Xu_{current_time}.png")
+
 
     Xu_with_noise = model_initializer.Xu_with_noise
     Xu_without_noise = model_initializer.Xu_without_noise
@@ -108,18 +114,33 @@ if __name__ == '__main__':
         current_time = datetime.datetime.now().strftime("%M%S")
         fig1.savefig(f"Xf_{current_time}.png")
 
+
     Y = model_initializer.Y
     X_with_noise = model_initializer.X_with_noise
+
     X_without_noise = model_initializer.X_without_noise
     print("Y:", Y)
     print("X:", X_with_noise)
+
     number_Y = Y.shape[0]
+
     init = model_initializer.heat_params_init
     print("Xu_certain:", Xu_certain)
     print("Xu_noise:", Xu_noise)
+
+
+
+
     print("train init params:", init)
+
+
+
+
+
+
     init = (((jnp.array([50], dtype=jnp.float64),
               jnp.array([0.12, 0.5], dtype=jnp.float64))),)
+
     print("init params:", init)
     param_iter, optimizer_text, lr_text, epoch_text = train_heat_equation_model_2d(init,
                                                                                    Xu_noise,
@@ -131,17 +152,19 @@ if __name__ == '__main__':
                                                                                    optimizer_in_use,
                                                                                    mcmc_text
                                                                                    )
+
+
+
     print("param_iter:", param_iter)
     plot_f_inference(pred_mesh, param_iter, Xu_fixed, Yu_fixed, Xf, yf, added_text)
 
-
-# %%
     print('start inference')
     def generate_prior_samples(rng_key, num_samples, prior_mean, prior_cov):
         prior_samples = random.multivariate_normal(rng_key, mean=prior_mean.ravel(), cov=prior_cov,
                                                    shape=(num_samples,))
         prior_samples  = jnp.maximum(jnp.minimum(1, prior_samples ), 0)
         return prior_samples
+
 
 
     def find_kde_peak(data):
@@ -151,6 +174,7 @@ if __name__ == '__main__':
         peak_idx = jnp.argmax(kde_vals)
         peak = x_vals[peak_idx]
         return peak
+
 
     def find_closest_to_gt(gt, values, labels):
         distances = jnp.abs(jnp.array(values) - gt)
@@ -176,11 +200,12 @@ if __name__ == '__main__':
     prior_cov_flat = jnp.kron(jnp.eye(2) * prior_var, jnp.eye(Xu_noise.shape[0]))
     prior_samples_list = generate_prior_samples(prior_key, num_prior_samples, Xu_noise, prior_cov_flat)
     prior_samples = prior_samples_list.reshape(-1, *Xu_noise.shape)
-
     print("prior_samples list shape:", prior_samples_list.shape)
     print("prior_samples shape:", prior_samples.shape)
-    print(f"assumption_sigma={assumption_sigma}")
 
+
+
+    print(f"assumption_sigma={assumption_sigma}")
     rng_key_chain = jax.random.PRNGKey(422)
     all_chains_samples = []
 
@@ -193,24 +218,28 @@ if __name__ == '__main__':
     all_chains_samples = jnp.array(all_chains_samples)
     num_samples = Xu_noise.shape[0]
     z_uncertain_means = []
+
     posterior_samples = jnp.concatenate(all_chains_samples, axis=0)
     posterior_samples_list = posterior_samples.reshape(-1, *Xu_noise.shape)
+
 
     print("posterior_samples_list shape:", posterior_samples_list.shape)
     print("posterior_samples_list:", posterior_samples_list)
     print("Xu_certain:", Xu_certain)
     print("Xu_noise:", Xu_noise)
-
     current_time = datetime.datetime.now().strftime("%M%S")
     added_text =  f"chains{num_chains}_f{number_f_real}_k{k}_assumption{assumption_sigma}_prior{prior_std}_noise{noise_std}_maxsamples{max_samples}_numpriorsamples_{num_prior_samples}_learn{learning}_{current_time}"
 
     Xu_pred_mean = jnp.mean(posterior_samples_list, axis=0)
 
-    # %% plotting
     plot_u_pred(Xu_without_noise, Xu_certain, Xf, Xu_noise, noise_std, Xu_pred_mean, prior_var,assumption_sigma,k,max_samples,learning,num_chains,number_f,added_text)
+
+
     plot_dist(Xu_without_noise, Xu_certain, Xf, Xu_noise, noise_std, Xu_pred_mean, prior_var,assumption_sigma,k,max_samples,learning,num_chains,number_f,posterior_samples_list,
               prior_samples,number_u,added_text)
     plot_with_noise(number_u, number_u_only_x, posterior_samples_list, prior_samples, Xu_certain, Xu_noise, bw,added_text)
+
+
     save_variables(added_text, Xu_without_noise=Xu_without_noise, Xu_certain=Xu_certain, Xf=Xf, Xu_noise=Xu_noise,
                    noise_std=noise_std, Xu_pred=Xu_pred_mean, prior_var=prior_var, assumption_sigma=assumption_sigma,
                    k=k, max_samples=max_samples, learning=learning, num_chains=num_chains, number_f=number_f,
