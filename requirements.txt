@@ -1,9 +1,10 @@
 numpy
-#GPy
 scipy
 #jax
 #jaxlib
 #jaxopt
+#pip install jaxlib==0.4.25+cuda11.cudnn86 -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
+#pip install jax==0.4.25
 matplotlib==3.7.1
 plotly==5.14.1
 optax
@@ -11,13 +12,8 @@ scikit-learn
 seaborn
 psutil
 flake8
-#tqdm~=4.65.0
-#cmocean
-#wandb
-#pymc
 numpyro
 arviz
 scikit-fdiff
-#pip install jaxlib==0.4.25+cuda11.cudnn86 -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
-#pip install jax==0.4.25
+
 

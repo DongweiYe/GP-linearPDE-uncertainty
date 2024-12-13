@@ -17,62 +17,27 @@ os.environ["JAX_PLATFORM_NAME"] = "gpu"
 jax.config.update("jax_enable_x64", True)
 from include.config import key_num
 
-## modified
-# 1: generate data through QMC
-# 2: rewrite metropolis hasting with adaptive warmup
-# 3: rewrite mcmc in JAX
-# 4: solution to of sine over x
-# 5: change noise data
-# 6: mcmc adapted with two types of noise
-# 7: plot the distribution of the posterior
-# 8: prediction
-# 9: plot the prediction
-# 10: solved the memory issue
-# 11: rewrite the derivative of the kernel
-# 12: save all the results in a pickle file and enable the user to load the results
-# 13: reaction_diffusion
-# 14: change to cheybshev sampling
-
-#
-# Heat eq, Chebyshev $\mathrm{f}(\mathrm{x})+$ only with bc/ic
-# Figure 1 - FDM ground truth vs gp prediction without uncertain points vs absolute error
-# Note:
-# 1. three rows with different number of training points
-# 2. Ground truth (展示chebyshev点位置), GP prediction (不要展示chebyshev点位置), absolute error (不要展示 chebyshev点位整)
-# figure 2 - 4 contour distribution plots for uncertain points with both $x$ and $t$ having uncertainties
-# figure 3 - 4 distribution plots for uncertain points with only $x$ having uncertainties (solid line for distribution and dash line for points)
-# figure 4 - 1st row: ground truth vs gp prediction mean with uncertain points (prior) vs absolute error 2nd row: ground truth vs gp prediction mean with uncertain points (posterior) vs absolute error
-# figure 5 - GP variance (with prior) vs GP variance (with posterior) vs absolute difference
-# RD eq: Chebyshev $f(x)+b c / i c+u(x)$ with same $x$ from $f(x)$
-# figure 1 - same as previous example
-# figure 2 - 4 contour distribution plots for uncertain points with both $x$ and $t$ having uncertainties
-# figure 3 - 1st row: ground truth vs gp prediction mean with uncertain points (prior) vs absolute error 2nd row: ground truth vs gp prediction mean with uncertain points (posterior) vs absolute error figure 4 - GP variance (with prior) vs GP variance (with posterior) vs absolute difference
-
 # %%
 noise_std = 0.04
 prior_std = 0.04
-prior_var = prior_std**2# prior variance
-max_samples = 2000#2000
-assumption_sigma = 0.001#0.001 # step size
-k = 0.8#0.5
+prior_var = prior_std**2
+max_samples = 2000
+assumption_sigma = 0.001
+k = 0.8
 num_chains = 1
-learning_rate = 0.08#0.08
-epochs = 1000 #1000
-
-
+learning_rate = 0.08
+epochs = 1000
 learning_rate_pred = 0.001
 epoch_pred= 100
 bw=2
 num_prior_samples = 200
 test_num = 2**4
-number_u = 2**2 # xt
+number_u = 2**2
 number_u_only_x = 4
 number_f = 2**4
 number_init = 2**3
 number_bound = 2**3
 number_f_real = (number_f)**2
-
-
 param_text = "para"
 optimizer_in_use = optax.adam
 learning = f'lr{learning_rate}&{epochs}'
@@ -99,10 +64,7 @@ if __name__ == '__main__':
     print("epochs:", epochs, "\n")
     print("added_text:", added_text, "\n")
     print("learning_rate1:", learning_rate, "\n")
-    # print("learning_rate2:", learning_rate2, "\n")
     print("weight_decay:", weight_decay, "\n")
-
-
     model_initializer = ModelInitializer_2d(number_u=number_u, number_f=number_f,
                                             number_init=number_init, number_bound=number_bound, noise_std=noise_std, number_u_only_x=number_u_only_x)
     Xu_certain = model_initializer.Xu_certain
@@ -111,7 +73,6 @@ if __name__ == '__main__':
     print("Xu_certain:", Xu_certain)
     print("Xu_noise:", Xu_noise)
     print("yu_certain:", yu_certain)
-
     Xu_fixed = model_initializer.Xu_fixed
     Yu_fixed = model_initializer.Yu_fixed
     print("Xu_fixed:", Xu_fixed)
@@ -126,8 +87,6 @@ if __name__ == '__main__':
         plt.title("Xu")
         current_time = datetime.datetime.now().strftime("%M%S")
         plt.savefig(f"Xu_{current_time}.png")
-
-    # plot_points_u(Xu_certain, Xu_noise, Xu_fixed)
 
     Xu_with_noise = model_initializer.Xu_with_noise
     Xu_without_noise = model_initializer.Xu_without_noise
@@ -149,36 +108,18 @@ if __name__ == '__main__':
         current_time = datetime.datetime.now().strftime("%M%S")
         fig1.savefig(f"Xf_{current_time}.png")
 
-
-    # plot_points_f(Xf)
-
     Y = model_initializer.Y
     X_with_noise = model_initializer.X_with_noise
-
     X_without_noise = model_initializer.X_without_noise
     print("Y:", Y)
     print("X:", X_with_noise)
-
     number_Y = Y.shape[0]
-
     init = model_initializer.heat_params_init
     print("Xu_certain:", Xu_certain)
     print("Xu_noise:", Xu_noise)
-    # plot_u_f(Xu_without_noise, Xf, Xu_noise, noise_std)
-    # init = (((jnp.array([0.1], dtype=jnp.float32),
-    #           jnp.array([0.01, 1.0], dtype=jnp.float32))),)
-    # print("init:", init)
     print("train init params:", init)
-
-    # log_sigma_init = jnp.log(50)
-    # log_lx_init = jnp.log(0.12)
-    # log_lt_init = jnp.log(0.5)
-    # init = (((jnp.array([log_sigma_init], dtype=jnp.float64),
-    #             jnp.array([log_lx_init, log_lt_init], dtype=jnp.float64))),)
-
     init = (((jnp.array([50], dtype=jnp.float64),
               jnp.array([0.12, 0.5], dtype=jnp.float64))),)
-
     print("init params:", init)
     param_iter, optimizer_text, lr_text, epoch_text = train_heat_equation_model_2d(init,
                                                                                    Xu_noise,
@@ -190,17 +131,6 @@ if __name__ == '__main__':
                                                                                    optimizer_in_use,
                                                                                    mcmc_text
                                                                                    )
-    # param_iter = init
-
-    # max_iter = 100
-    # tol = 1e-6
-    # param_iter, optimizer_text, lr_text, epoch_text = train_heat_equation_model_2d_bfgs(init,
-    #                                                                                Xu_noise,
-    #                                                                                Xu_fixed,
-    #                                                                                Xf,
-    #                                                                                number_Y,
-    #                                                                                Y, max_iter, tol, mcmc_text)
-
     print("param_iter:", param_iter)
     plot_f_inference(pred_mesh, param_iter, Xu_fixed, Yu_fixed, Xf, yf, added_text)
 
@@ -214,7 +144,6 @@ if __name__ == '__main__':
         return prior_samples
 
 
-
     def find_kde_peak(data):
         kde = gaussian_kde(data)
         x_vals = jnp.linspace(jnp.min(data), jnp.max(data), 1000)
@@ -222,7 +151,6 @@ if __name__ == '__main__':
         peak_idx = jnp.argmax(kde_vals)
         peak = x_vals[peak_idx]
         return peak
-
 
     def find_closest_to_gt(gt, values, labels):
         distances = jnp.abs(jnp.array(values) - gt)
@@ -248,18 +176,11 @@ if __name__ == '__main__':
     prior_cov_flat = jnp.kron(jnp.eye(2) * prior_var, jnp.eye(Xu_noise.shape[0]))
     prior_samples_list = generate_prior_samples(prior_key, num_prior_samples, Xu_noise, prior_cov_flat)
     prior_samples = prior_samples_list.reshape(-1, *Xu_noise.shape)
+
     print("prior_samples list shape:", prior_samples_list.shape)
     print("prior_samples shape:", prior_samples.shape)
-
-    # fig3, ax3 = plt.subplots(1, 1)
-    # ax3.scatter(prior_samples[:, 0:1, 0], prior_samples[:, 0:1, 1], alpha=0.5, s=5)
-    # ax3.set_title('Generated Prior Samples')
-    # ax3.set_xlabel('x')
-    # ax3.set_ylabel('t')
-    # ax3.grid(True)
-    # fig3.savefig(f"prior_samples_{added_text}.png")
-
     print(f"assumption_sigma={assumption_sigma}")
+
     rng_key_chain = jax.random.PRNGKey(422)
     all_chains_samples = []
 
@@ -272,39 +193,24 @@ if __name__ == '__main__':
     all_chains_samples = jnp.array(all_chains_samples)
     num_samples = Xu_noise.shape[0]
     z_uncertain_means = []
-
     posterior_samples = jnp.concatenate(all_chains_samples, axis=0)
     posterior_samples_list = posterior_samples.reshape(-1, *Xu_noise.shape)
 
-    # fig4, ax4 = plt.subplots(1, 1)
-    # ax4.scatter(posterior_samples_list[:, 0:1, 0], posterior_samples_list[:, 0:1, 1], alpha=0.5, s=5)
-    # ax4.set_title('Generated Posterior Samples')
-    # ax4.set_xlabel('x')
-    # ax4.set_ylabel('t')
-    # ax4.grid(True)
-    # fig4.savefig(f"posterior_samples_{added_text}.png")
-
-    
-    #posterior_samples_list = posterior_samples.reshape(-1, *Xu_noise.shape)
-    # print("posterior_samples.shape:", posterior_samples.shape)
-    # print("posterior_samples:", posterior_samples)
     print("posterior_samples_list shape:", posterior_samples_list.shape)
     print("posterior_samples_list:", posterior_samples_list)
     print("Xu_certain:", Xu_certain)
     print("Xu_noise:", Xu_noise)
+
     current_time = datetime.datetime.now().strftime("%M%S")
     added_text =  f"chains{num_chains}_f{number_f_real}_k{k}_assumption{assumption_sigma}_prior{prior_std}_noise{noise_std}_maxsamples{max_samples}_numpriorsamples_{num_prior_samples}_learn{learning}_{current_time}"
 
     Xu_pred_mean = jnp.mean(posterior_samples_list, axis=0)
 
+    # %% plotting
     plot_u_pred(Xu_without_noise, Xu_certain, Xf, Xu_noise, noise_std, Xu_pred_mean, prior_var,assumption_sigma,k,max_samples,learning,num_chains,number_f,added_text)
-
-
     plot_dist(Xu_without_noise, Xu_certain, Xf, Xu_noise, noise_std, Xu_pred_mean, prior_var,assumption_sigma,k,max_samples,learning,num_chains,number_f,posterior_samples_list,
               prior_samples,number_u,added_text)
     plot_with_noise(number_u, number_u_only_x, posterior_samples_list, prior_samples, Xu_certain, Xu_noise, bw,added_text)
-
-
     save_variables(added_text, Xu_without_noise=Xu_without_noise, Xu_certain=Xu_certain, Xf=Xf, Xu_noise=Xu_noise,
                    noise_std=noise_std, Xu_pred=Xu_pred_mean, prior_var=prior_var, assumption_sigma=assumption_sigma,
                    k=k, max_samples=max_samples, learning=learning, num_chains=num_chains, number_f=number_f,
@@ -312,8 +218,7 @@ if __name__ == '__main__':
                    param_iter=param_iter, Xu_fixed=Xu_fixed, epochs=epochs,
                    learning_rate=learning_rate,
                    optimizer_in_use=optimizer_in_use,number_u=number_u, number_u_only_x=number_u_only_x,prior_std=prior_std,number_bound=number_bound)
-"""
-"""
+
 
 
 

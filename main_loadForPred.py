@@ -1,68 +1,32 @@
-
+# %%
 import jax
 import datetime
-from include.heat2d import plot_u_pred, u_xt, compute_kuu, compute_kfu, compute_kuf, compute_kff
-import matplotlib.pyplot as plt
-import seaborn as sns
+from include.heat2d import u_xt, compute_kuu, compute_kfu, compute_kuf, compute_kff
 import jax.numpy as jnp
-from jax import random
-from scipy.stats import gaussian_kde
 import pickle
 import os
 import jax.scipy.linalg as la
 import gc
-import jaxlib
 from include.mcmc_posterior import compute_K
-from include.plot_dist import plot_dist, plot_with_noise, plot_and_save_kde_histograms
 from include.plot_pred import plot_and_save_prediction_results, prediction_mean, prediction_variance, \
     plot_and_save_prediction_results_combine
-from include.plot_pred_test import plot_prediction_results_test
-from include.train import train_heat_equation_model_2d
 
 os.environ["JAX_PLATFORM_NAME"] = "gpu"
 jax.config.update("jax_enable_x64", True)
-
-# bw = 1
-# num_prior_samples = 100
 current_time = datetime.datetime.now().strftime("%m%d")
 learning_rate_pred = 0.004
 epoch_pred = 100
 pred_mesh = 150
-
 text = "chains1_f256_k0.8_assumption0.001_prior0.04_noise0.04_maxsamples2000_numpriorsamples_200_learnlr0.08&1000_0843.pkl"
 load_path = f"results/datas/trained_params/1031"
 
 
 # %%
-
 if __name__ == '__main__':
     # %%
     print('start inference')
     print("pred_mesh:", pred_mesh, "\n")
     print("text:", text, "\n")
-
-    # def generate_prior_samples(rng_key, num_samples, prior_mean, prior_cov):
-    #     prior_samples = random.multivariate_normal(rng_key, mean=prior_mean.ravel(), cov=prior_cov,
-    #                                                shape=(num_samples,))
-    #     prior_samples = jnp.maximum(jnp.minimum(1, prior_samples), 0)
-    #     return prior_samples
-
-
-    # def find_kde_peak(data):
-    #     kde = gaussian_kde(data)
-    #     x_vals = jnp.linspace(jnp.min(data), jnp.max(data), 1000)
-    #     kde_vals = kde(x_vals)
-    #     peak_idx = jnp.argmax(kde_vals)
-    #     peak = x_vals[peak_idx]
-    #     return peak
-
-    #
-    # def find_closest_to_gt(gt, values, labels):
-    #     distances = jnp.abs(jnp.array(values) - gt)
-    #     closest_idx = jnp.argmin(distances)
-    #     closest_label = labels[closest_idx]
-    #     return closest_label, distances
-
     def load_variables(text, load_path):
         print(f"Loading data from {load_path}")
         filename = f"{text}"
@@ -78,7 +42,6 @@ if __name__ == '__main__':
 
 
     variables = load_variables(text, load_path)
-
     Xu_without_noise = variables['Xu_without_noise']
     Xu_certain = variables['Xu_certain']
     Xf = variables['Xf']
@@ -104,43 +67,19 @@ if __name__ == '__main__':
     optimizer_in_use = variables['optimizer_in_use']
     number_u_only_x = variables['number_u_only_x']
     prior_std = variables['prior_std']
-    # number_init = variables['number_init']
     number_bound = variables['number_bound']
-
     added_text = f"heat_Predction_f{number_f}_chains{num_chains}_k{k}_assumption{assumption_sigma}_noisestd{noise_std}_{prior_var}_k{k}_{max_samples}_{current_time}"
-
     Xu_pred_mean = jnp.mean(posterior_samples_list, axis=0)
-
-    # plot_u_pred(Xu_without_noise, Xu_certain, Xf, Xu_noise, noise_std, Xu_pred_mean, prior_var, assumption_sigma, k,
-    #             max_samples, learning, num_chains, number_f, added_text)
-    # plot_dist(Xu_without_noise, Xu_certain, Xf, Xu_noise, noise_std, Xu_pred_mean, prior_var, assumption_sigma, k,
-    #           max_samples, learning, num_chains, number_f, posterior_samples_list, prior_samples,number_u, added_text)
-    # plot_with_noise(number_u, number_u_only_x, posterior_samples_list, prior_samples, Xu_certain, Xu_noise, bw, added_text)
-    # # plot_and_save_kde_histograms(posterior_samples_list, prior_samples, Xu_certain, Xu_noise, number_u, number_f,
-    # #                              num_chains, k, assumption_sigma, prior_std, noise_std, number_init, number_bound,
-    # #                              prior_var, max_samples, bw, added_text)
-    # print('end inference')
-
 
 # %%
 # # %%
     print("start prediction")
     x_prediction = jnp.linspace(0, 1, pred_mesh)
     t_prediction = jnp.linspace(0, 1, pred_mesh)
-
     X_prediction, T_prediction = jnp.meshgrid(x_prediction, t_prediction)
-
     X_plot_prediction = jnp.vstack([X_prediction.ravel(), T_prediction.ravel()]).T
-
-    # y_final_mean_list_posterior = jnp.empty((0, X_plot_prediction.shape[0]))
-    # y_final_var_list_posterior = jnp.empty((0, X_plot_prediction.shape[0]))
-    #
-    # y_final_mean_list_prior = jnp.empty((0, X_plot_prediction.shape[0]))
-    # y_final_var_list_prior = jnp.empty((0, X_plot_prediction.shape[0]))
-
     y_final_mean_list_posterior = []
     y_final_var_list_posterior = []
-
     y_final_mean_list_prior = []
     y_final_var_list_prior = []
 
@@ -152,41 +91,15 @@ if __name__ == '__main__':
         K = compute_K(init, z_prior, Xcz, Xcg)
         lengthscale_x = params[0][1][0].item()
         lengthscale_t = params[0][1][1].item()
-
         k_zz_u_star = compute_kuu(Xuz, x_star, params_kuu)
         k_zz_c_star = compute_kuu(Xcz, x_star, params_kuu)
         k_gz_c_star = compute_kfu(Xcg, x_star, params, lengthscale_x, lengthscale_t)
-
         k_x_star = jnp.vstack((k_zz_u_star, k_zz_c_star, k_gz_c_star))
-
         k_x_star_x_star = compute_kuu(x_star, x_star, params_kuu)
-
         joint_K = jnp.block([[K, k_x_star], [k_x_star.T, k_x_star_x_star]])
-
         return joint_K
 
 
-    # def gp_predict(init, z_prior, Xcz, Xcg, y, x_star):
-    #     params = {'sigma': init[-1][0], 'lengthscale': init[-1][1]}
-    #
-    #     K = compute_K(init, z_prior, Xcz, Xcg)
-    #
-    #     k_zz_u_star = heat_equation_kuu(z_prior, x_star, params)
-    #     k_zz_c_star = heat_equation_kuu(Xcz, x_star, params)
-    #     k_gz_c_star = heat_equation_kfu(Xcg, x_star, params)
-    #
-    #     k_x_star = jnp.vstack((k_zz_u_star, k_zz_c_star, k_gz_c_star))
-    #
-    #     k_x_star_x_star = heat_equation_kuu(x_star, x_star, params)
-    #
-    #     K_inv_y = la.solve(K + 1e-6 * jnp.eye(K.shape[0]), y.reshape(-1, 1), assume_a='pos')
-    #     K_inv_k_x_star = la.solve(K + 1e-6 * jnp.eye(K.shape[0]), k_x_star, assume_a='pos')
-    #
-    #     mu_star = jnp.dot(k_x_star.T, K_inv_y)
-    #
-    #     sigma_star = k_x_star_x_star - jnp.einsum('ij,ij->i', k_x_star.T, K_inv_k_x_star.T).reshape(-1, 1)
-    #
-    #     return mu_star.flatten(), sigma_star
     def blockwise_matrix_multiply(A, B, block_size):
         M, N = A.shape
         _, P = B.shape
@@ -199,12 +112,10 @@ if __name__ == '__main__':
 
     def gp_predict(init, z_prior, Xcz, Xcg, y, x_star):
         print("Starting gp_predict function")
-
         params_kuu = {'sigma': init[-1][0], 'lengthscale': init[-1][1]}
         params = init
         K = compute_K(init, z_prior, Xcz, Xcg)
         print("Computed K matrix")
-
         lengthscale_x = params[0][1][0].item()
         lengthscale_t = params[0][1][1].item()
 
@@ -264,31 +175,6 @@ if __name__ == '__main__':
         del K_inv_y, K, mu_star_i, sigma_star_i, k_zz_u_star, k_zz_c_star, k_gz_c_star, k_x_star_i, K_inv_k_x_star_i
         gc.collect()
         return mu_star.flatten(), sigma_star_diag
-        # # CPU
-        # K_cpu = jax.device_put(K + 1e-6 * jnp.eye(K.shape[0]), device=jax.devices("cpu")[0])
-        # y_cpu = jax.device_put(y.reshape(-1, 1), device=jax.devices("cpu")[0])
-        # k_x_star_cpu = jax.device_put(k_x_star, device=jax.devices("cpu")[0])
-        # print("Moved data to CPU")
-        # K_inv_y = la.solve(K_cpu, y_cpu, assume_a='pos')
-        # K_inv_k_x_star = la.solve(K_cpu, k_x_star_cpu, assume_a='pos')
-        # mu_star_cpu = jnp.dot(k_x_star_cpu.T, K_inv_y)
-        # sigma_star_cpu = k_x_star_x_star - jnp.einsum('ij,ij->i', k_x_star_cpu.T, K_inv_k_x_star.T).reshape(-1, 1)
-        # ## GPU
-        # mu_star_gpu = jax.device_put(mu_star_cpu, device=jax.devices("gpu")[0])
-        # sigma_star_gpu = jax.device_put(sigma_star_cpu, device=jax.devices("gpu")[0])
-        # print("Moved results back to GPU")
-        # # try:
-        # #     sigma_star_gpu = jax.device_put(sigma_star_cpu, device=jax.devices("gpu")[0])
-        # # except jaxlib.xla_extension.XlaRuntimeError:
-        # #     print("GPU lack of memory")
-        # #     raise
-        # del K_cpu, y_cpu, k_x_star_cpu, K_inv_y, K_inv_k_x_star, mu_star_cpu, sigma_star_cpu
-        #
-        ## block_size = 100
-        # block_result = blockwise_matrix_multiply(k_x_star_T, K_inv_k_x_star, block_size=block_size)
-        # del k_x_star_T, K_inv_k_x_star
-        # sigma_star_gpu = k_x_star_x_star - block_result
-        # print("block_size=", block_size)
 
 
     def compute_K_no(init, Xcz, Xcg):
@@ -296,17 +182,13 @@ if __name__ == '__main__':
         params_kuu = {'sigma': init[-1][0], 'lengthscale': init[-1][1]}
         lengthscale_x = params[0][1][0].item()
         lengthscale_t = params[0][1][1].item()
-        # zz_uu = compute_kuu(Xuz, Xuz, params_kuu)
-        # zz_uc = compute_kuu(Xuz, Xcz, params_kuu)
-        # zg_uc = compute_kuf(Xuz, Xcg, params, lengthscale_x, lengthscale_t)
-        # zz_cu = compute_kuu(Xcz, Xuz, params_kuu)
         zz_cc = compute_kuu(Xcz, Xcz, params_kuu)
         zg_cc = compute_kuf(Xcz, Xcg, params, lengthscale_x, lengthscale_t)
-        # gz_cu = compute_kfu(Xcg, Xuz, params, lengthscale_x, lengthscale_t)
         gz_cc = compute_kfu(Xcg, Xcz, params, lengthscale_x, lengthscale_t)
         gg_cc = compute_kff(Xcg, Xcg, params, lengthscale_x, lengthscale_t)
         K = jnp.block([[zz_cc, zg_cc], [gz_cc, gg_cc]])
         return K
+
 
     def gp_predict_diagonal_batch(init, z_prior, Xcz, Xcg, y, x_star, batch_size=2000):
         print("Starting gp_predict_diagonal_batch function")
@@ -328,22 +210,15 @@ if __name__ == '__main__':
             x_star_batch = x_star[i:i + batch_size]
 
             Xz = jnp.concatenate((z_prior, Xcz))
-            # Xz =Xcz
+
             k_zz_c_star = compute_kuu(Xz, x_star_batch, params_kuu)
             k_gz_c_star = compute_kfu(Xcg, x_star_batch, params, params[0][1][0].item(), params[0][1][1].item())
-            # k_zz_u_star = compute_kuu(z_prior, x_star_batch, params_kuu)
-            # k_zz_c_star = compute_kuu(Xcz, x_star_batch, params_kuu)
-            # k_gz_c_star = compute_kfu(Xcg, x_star_batch, params, params[0][1][0].item(), params[0][1][1].item())
-            # k_x_star_batch = jnp.vstack((k_zz_u_star, k_zz_c_star, k_gz_c_star))
-            # mu_star_batch = jnp.dot(k_x_star_batch.T, K_inv_y)
             k_x_star_batch = jnp.vstack((k_zz_c_star, k_gz_c_star))
             mu_star_batch = jnp.dot(k_x_star_batch.T, K_inv_y)
-
             K_inv_k_x_star_batch = la.solve(K, k_x_star_batch, assume_a='pos')
             sigma_star_batch = compute_kuu(x_star_batch, x_star_batch, params_kuu) - jnp.dot(k_x_star_batch.T,
                                                                                              K_inv_k_x_star_batch)
             sigma_star_batch_diag = sigma_star_batch.diagonal()
-
             mu_star.append(mu_star_batch)
             sigma_star_diag.append(sigma_star_batch_diag)
 
@@ -360,15 +235,6 @@ if __name__ == '__main__':
         Xu_sample = posterior_samples_list[i, :, :]
         print("Xu_sample.shape", Xu_sample.shape)
         mcmc_text = f"mcmc"
-        # param_iter, _, _, _ = train_heat_equation_model_2d(param_iter,
-        #                                                    Xu_sample,
-        #                                                    Xu_fixed,
-        #                                                    Xf,
-        #                                                    Y.shape[0],
-        #                                                    Y, epoch_pred,
-        #                                                    learning_rate_pred,
-        #                                                    optimizer_in_use, mcmc_text)
-
         lengthscale = param_iter[-1][1]
         sigma = param_iter[-1][0]
 
@@ -376,8 +242,6 @@ if __name__ == '__main__':
         print("Prediction mean shape: ", y_final_mean.shape)
         print("Prediction variance shape: ", y_final_var.shape)
 
-        # y_final_mean_list_posterior = jnp.vstack((y_final_mean_list_posterior, y_final_mean.T))
-        # y_final_var_list_posterior = jnp.vstack((y_final_var_list_posterior, y_final_var.T))
         y_final_mean_list_posterior.append(y_final_mean.T)
         y_final_var_list_posterior.append(y_final_var.T)
 
@@ -387,22 +251,12 @@ if __name__ == '__main__':
         jax.clear_caches()
         print("posterior memory cleaned up after iteration", i)
 
-    # prior_samples_reshaped = prior_samples.reshape(prior_samples.shape[0], -1, 2)
     prior_samples_reshaped = prior_samples
     print("prior_samples_reshaped shape: ", prior_samples_reshaped.shape)
     print("prior_samples_reshaped: ", prior_samples_reshaped)
     for i in range(prior_samples_reshaped.shape[0]):
         Xu_sample_prior = prior_samples_reshaped[i, :, :]
         mcmc_text = f"mcmc"
-        # param_iter, _, _, _ = train_heat_equation_model_2d(param_iter,
-        #                                                    Xu_sample_prior,
-        #                                                    Xu_fixed,
-        #                                                    Xf,
-        #                                                    Y.shape[0],
-        #                                                    Y, epoch_pred,
-        #                                                    learning_rate_pred,
-        #                                                    optimizer_in_use, mcmc_text)
-
         lengthscale = param_iter[-1][1]
         sigma = param_iter[-1][0]
 
@@ -410,8 +264,6 @@ if __name__ == '__main__':
                                                            X_plot_prediction)
         print("prior Prediction mean shape: ", y_final_mean_prior.shape)
         print("prior Prediction variance shape: ", y_final_var_prior.shape)
-        # y_final_mean_list_prior = jnp.vstack((y_final_mean_list_prior, y_final_mean_prior.reshape(1, -1)))
-        # y_final_var_list_prior = jnp.vstack((y_final_var_list_prior, y_final_var_prior.reshape(1, -1)))
         y_final_mean_list_prior.append(y_final_mean_prior.T)
         y_final_var_list_prior.append(y_final_var_prior.T)
 
@@ -433,31 +285,12 @@ if __name__ == '__main__':
             pickle.dump(variables, f)
         print(f"Variables saved to {file_path}")
 
-    #gpu
-    # y_final_mean_list_posterior = jnp.array(y_final_mean_list_posterior)
-    # y_final_var_list_posterior = jnp.array(y_final_var_list_posterior)
-    #
-    # print("posterior Prediction mean shape: ", y_final_mean_list_posterior.shape)
-    # print("posterior Prediction variance shape: ", y_final_var_list_posterior.shape)
-    #
-    # y_final_mean_list_prior = jnp.array(y_final_mean_list_prior)
-    # y_final_var_list_prior = jnp.array(y_final_var_list_prior)
-    #
-    # print("prior Prediction mean shape: ", y_final_mean_list_prior.shape)
-    # print("prior Prediction variance shape: ", y_final_var_list_prior.shape)
-
-    # CPU
-    # y_final_mean_list_posterior = jax.device_put(y_final_mean_list_posterior, device=jax.devices("cpu")[0])
-    # y_final_var_list_posterior = jax.device_put(y_final_var_list_posterior, device=jax.devices("cpu")[0])
-
     y_final_mean_list_posterior = jnp.array(y_final_mean_list_posterior)
     y_final_var_list_posterior = jnp.array(y_final_var_list_posterior)
 
     print("posterior Prediction mean shape: ", y_final_mean_list_posterior.shape)
     print("posterior Prediction variance shape: ", y_final_var_list_posterior.shape)
 
-    # y_final_mean_list_prior = jax.device_put(y_final_mean_list_prior, device=jax.devices("cpu")[0])
-    # y_final_var_list_prior = jax.device_put(y_final_var_list_prior, device=jax.devices("cpu")[0])
     y_final_mean_list_prior = jnp.array(y_final_mean_list_prior)
     y_final_var_list_prior = jnp.array(y_final_var_list_prior)
     print("prior Prediction mean shape: ", y_final_mean_list_prior.shape)
@@ -465,11 +298,9 @@ if __name__ == '__main__':
 
     y_final_mean_posterior = prediction_mean(y_final_mean_list_posterior)
 
-    #y_final_var_list_posterior_diag = jnp.diagonal(y_final_var_list_posterior, axis1=1, axis2=2)
     y_final_var_posterior = prediction_variance(y_final_mean_list_posterior, y_final_var_list_posterior)
     y_final_mean_prior = prediction_mean(y_final_mean_list_prior)
 
-    #y_final_var_list_prior_diag = jnp.diagonal(y_final_var_list_prior, axis1=1, axis2=2)
     y_final_var_prior = prediction_variance(y_final_mean_list_prior, y_final_var_list_prior)
     print("final posterior Prediction mean shape: ", y_final_mean_posterior.shape)
     print("final posterior Prediction variance shape: ", y_final_var_posterior.shape)
@@ -525,8 +356,6 @@ if __name__ == '__main__':
                    var_posterior=var_posterior,
                    abs_var_diff=abs_var_diff,
                    add_text=added_text)
-
-
     plot_and_save_prediction_results(u_values_gt,
                                      gp_mean_prior,
                                      abs_diff_prior,
@@ -543,25 +372,3 @@ if __name__ == '__main__':
                                              var_prior,
                                              var_posterior,
                                              abs_var_diff, added_text)
-
-
-
-    # # %%
-    # u_values_gt = u_xt(X_plot_prediction)
-    #
-    # print("start plotting prediction results and saving as one image")
-    #
-    # plot_prediction_results_test(X_plot_prediction, u_values_gt, y_final_mean_list_prior, y_final_var_list_prior,
-    #                         y_final_mean_list_posterior, y_final_var_list_posterior)
-    # print("end plotting prediction results and saving as one image")
-    # # %%
-    #
-    #
-    #
-    # # %%
-    # print("start plotting prediction results and saving as single image")
-    # plot_and_save_prediction_results(X_plot_prediction, u_values_gt, y_final_mean_list_prior, y_final_var_list_prior,
-    #                                  y_final_mean_list_posterior, y_final_var_list_posterior)
-    #
-    # print("end plotting prediction results and saving as single image")
-    # # %%
