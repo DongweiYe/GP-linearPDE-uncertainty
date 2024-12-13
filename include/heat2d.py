@@ -12,9 +12,14 @@ from scipy.stats import truncnorm
 from jax.typing import ArrayLike
 from jax import jit, jvp
 from typing import Any, Dict
+import numpy as np
+from scipy.interpolate import RegularGridInterpolator
+import matplotlib.patches as mpatches
 
 plt.rcParams.update({"figure.figsize": (12, 6)})
 plt.rcParams.update({'font.size': 22})
+
+
 
 ################################################# functions ##########################################################
 def f_xt(Xf) -> jnp.ndarray:
@@ -483,27 +488,29 @@ def plot_u_pred(Xu_certain_all, Xu_certain, Xf, Xu_noise, noise_std, Xu_pred, pr
     current_time = datetime.datetime.now().strftime("%M%S")
     plt.savefig(f'contourf_{added_text}.png')
 
+def get_u_value_from_data(x, t, data):
+    Ny, Nx = data.shape
+    x_idx = int(round((x + 1) / 2 * (Nx - 1)))
+    x_idx = jnp.clip(x_idx, 0, Nx-1)
+
+    t_idx = int(round((1 - t) * (Ny - 1)))
+    t_idx = jnp.clip(t_idx, 0, Ny-1)
+
+    return data[t_idx, x_idx]
+
+
 def plot_u_pred_rd(Xu_certain, Xf, Xu_noise, noise_std, Xu_pred, prior_var,assumption_sigma,k,max_samples,learning,num_chains,number_f,added_text, X_plot_prediction, data):
-    # x = jnp.linspace(0, 1, 100)
-    # t = jnp.linspace(0, 1, 100)
-    # X, T = jnp.meshgrid(x, t)
     X_plot = X_plot_prediction
     X = X_plot[:, 0]
     T = X_plot[:, 1]
     u_values = data
 
-    # X_plot = jnp.vstack([X.ravel(), T.ravel()]).T
-    # u_values = u_xt(X_plot).reshape(X.shape)
-
     fig, ax = plt.subplots(figsize=(8, 6), constrained_layout=True)
 
-    # u(x, t) plot
-    # c1 = ax.contourf(X, T, u_values, levels=50, cmap='plasma')
     c1 =ax.imshow(data, extent=[-1,1,1,0])
-    # c1 = ax.contour(X, T, u_values, levels=50, cmap='plasma', alpha=0.5)  # Using contour for line contours
-    # ax.contourf(X, T, u_values, levels=50, cmap='plasma', alpha=0.3)  # Using contourf for filled contours
+
     fig.colorbar(c1, ax=ax, orientation='vertical')
-    #ax.scatter(Xu_certain_all[:, 0], Xu_certain_all[:, 1], color='black', label='GT', marker='o')
+
     ax.scatter(Xu_certain[:, 0], Xu_certain[:, 1], color='black', label='GT', marker='o')
     ax.scatter(Xu_noise[:, 0], Xu_noise[:, 1], color='tab:blue', label='Xu noise', marker='x')
     ax.scatter(Xu_pred[:, 0], Xu_pred[:, 1], color='tab:red', label='Posterior', marker='o')
@@ -517,6 +524,218 @@ def plot_u_pred_rd(Xu_certain, Xf, Xu_noise, noise_std, Xu_pred, prior_var,assum
 
     current_time = datetime.datetime.now().strftime("%M%S")
     plt.savefig(f'rd_contourf_{added_text}.png')
+
+
+def plot_u_pred_rd_value(Xu_certain, Xf, Xu_noise, noise_std, Xu_pred, prior_var,
+                   assumption_sigma, k, max_samples, learning, num_chains,
+                   number_f, added_text, X_plot_prediction, data):
+    X_plot = X_plot_prediction
+    X = X_plot[:, 0]
+    T = X_plot[:, 1]
+    u_values = data
+
+    fig, ax = plt.subplots(figsize=(8, 6), constrained_layout=True)
+
+
+    c1 = ax.imshow(data, extent=[-1,1,1,0])
+    fig.colorbar(c1, ax=ax, orientation='vertical')
+
+    ratios = []
+    for (x_pred, t_pred), (x_gt, t_gt) in zip(Xu_pred, Xu_certain):
+        u_pred_val = get_u_value_from_data(x_pred, t_pred, data)
+        u_gt_val = get_u_value_from_data(x_gt, t_gt, data)
+        dist = np.sqrt((x_pred - x_gt) ** 2 + (t_pred - t_gt) ** 2)
+        if dist == 0:
+            ratio = 0.0
+        else:
+            ratio = abs(u_pred_val - u_gt_val) / dist
+        ratios.append(ratio)
+
+    ratios = jnp.array(ratios)
+    norm = plt.Normalize(vmin=ratios.min(), vmax=ratios.max())
+    cmap = plt.cm.Reds
+
+    for i, (x_pred, t_pred) in enumerate(Xu_pred):
+        ax.annotate(f"{ratios[i]:.2f}",
+                    xy=(x_pred, t_pred), xycoords='data',
+                    xytext=(x_pred + 0.04, t_pred + 0.04), textcoords='data',
+                    arrowprops=dict(arrowstyle="->", color='black'),
+                    bbox=dict(boxstyle='round,pad=0.2', fc='white', alpha=0.8))
+        # color = cmap(norm(ratios[i]))
+        # ax.text(x_pred + 0.01, t_pred + 0.01, f"{ratios[i]:.2f}",
+        #         fontsize=8, ha='center', va='center',
+        #         bbox=dict(boxstyle='square,pad=0.2', facecolor=color, edgecolor='none', alpha=0.7))
+
+
+    ax.scatter(Xu_certain[:, 0], Xu_certain[:, 1], color='black', label='GT', marker='o')
+    ax.scatter(Xu_noise[:, 0], Xu_noise[:, 1], color='tab:blue', label='Xu noise', marker='x')
+    ax.scatter(Xu_pred[:, 0], Xu_pred[:, 1], color='tab:red', label='Posterior', marker='o')
+
+    ax.set_title('u(x, t)', fontsize=16)
+    ax.set_xlabel('x', fontsize=14)
+    ax.set_ylabel('t', fontsize=14)
+    ax.tick_params(axis='both', which='major', labelsize=12)
+    # ax.legend(loc='best', fontsize=12)
+    ratio_label = mpatches.Patch(color='white', alpha=0.8, label='ratio')
+    handles, labels = ax.get_legend_handles_labels()
+    handles.append(ratio_label)
+    labels.append("ratio")
+    ax.legend(handles=handles, labels=labels, loc='best')
+    ax.set_aspect('auto')
+    ax.grid(True, linestyle='--', alpha=0.6)
+
+
+
+    current_time = datetime.datetime.now().strftime("%M%S")
+    plt.savefig(f'rd_contourf_value_{added_text}.png')
+
+
+def plot_u_pred_rd_value_2(Xu_certain, Xf, Xu_noise, noise_std, Xu_pred, prior_var,
+                   assumption_sigma, k, max_samples, learning, num_chains,
+                   number_f, added_text, X_plot_prediction, data):
+    Ny, Nx = data.shape
+    t_array = jnp.linspace(0, 1, Ny)
+    x_array = jnp.linspace(-1, 1, Nx)
+    data_flip = jnp.flipud(data)
+
+    interp_func = RegularGridInterpolator((t_array, x_array), data_flip, bounds_error=False, fill_value=None)
+
+
+    def get_u_value_from_data(x, t):
+
+        t_new = 1 - t
+
+        return interp_func((t_new, x))
+
+    X_plot = X_plot_prediction
+    X = X_plot[:, 0]
+    T = X_plot[:, 1]
+    u_values = data
+
+    fig, ax = plt.subplots(figsize=(8, 6), constrained_layout=True)
+
+    c1 = ax.imshow(data, extent=[-1, 1, 1, 0])
+    fig.colorbar(c1, ax=ax, orientation='vertical')
+
+    ratios = []
+    for (x_pred, t_pred), (x_gt, t_gt) in zip(Xu_pred, Xu_certain):
+        u_pred_val = get_u_value_from_data(x_pred, t_pred)
+        u_gt_val = get_u_value_from_data(x_gt, t_gt)
+        dist = jnp.sqrt((x_pred - x_gt) ** 2 + (t_pred - t_gt) ** 2)
+        if dist == 0:
+            ratio = 0.0
+        else:
+            ratio = abs(u_pred_val - u_gt_val) / dist
+        ratios.append(ratio)
+
+    ratios = jnp.array(ratios)
+    norm = plt.Normalize(vmin=ratios.min(), vmax=ratios.max())
+    cmap = plt.cm.Reds
+
+    for i, (x_pred, t_pred) in enumerate(Xu_pred):
+        color = cmap(norm(ratios[i]))
+        ax.text(x_pred + 0.1, t_pred + 0.01, f"{ratios[i]:.2f}",
+                fontsize=8, ha='center', va='center',
+                bbox=dict(boxstyle='square,pad=0.2', facecolor=color, edgecolor='none', alpha=0.7), zorder=1)
+        # ax.annotate(f"{ratios[i]:.2f}",
+        #             xy=(x_pred, t_pred), xycoords='data',
+        #             xytext=(x_pred + 0.03, t_pred + 0.03), textcoords='data',
+        #             arrowprops=dict(arrowstyle="->", color='red'),
+        #             bbox=dict(boxstyle='round,pad=0.2', fc='white', alpha=0.8))
+
+
+
+    ax.scatter(Xu_certain[:, 0], Xu_certain[:, 1], color='black', label='GT', marker='o', zorder=2)
+    ax.scatter(Xu_noise[:, 0], Xu_noise[:, 1], color='tab:blue', label='Xu noise', marker='x', linewidths=2, zorder=3)
+    ax.scatter(Xu_pred[:, 0], Xu_pred[:, 1], color='tab:red', label='Posterior', marker='o', zorder=4)
+
+    ax.set_title('u(x, t)', fontsize=16)
+    ax.set_xlabel('x', fontsize=14)
+    ax.set_ylabel('t', fontsize=14)
+    ax.tick_params(axis='both', which='major', labelsize=12)
+    # ax.legend(loc='best', fontsize=12)
+    ratio_label = mpatches.Patch(color='white', alpha=0.8, label='ratio')
+    handles, labels = ax.get_legend_handles_labels()
+    handles.append(ratio_label)
+    labels.append("ratio")
+    ax.legend(handles=handles, labels=labels, loc='best')
+    ax.set_aspect('auto')
+    ax.grid(True, linestyle='--', alpha=0.6)
+
+    current_time = datetime.datetime.now().strftime("%M%S")
+    plt.savefig(f'rd_contourf_value2_{added_text}.png')
+
+
+
+def plot_u_pred_rd_value_3(Xu_certain, Xf, Xu_noise, noise_std, Xu_pred, prior_var,
+                   assumption_sigma, k, max_samples, learning, num_chains,
+                   number_f, added_text, X_plot_prediction, data):
+    Ny, Nx = data.shape
+    t_array = jnp.linspace(0, 1, Ny)
+    x_array = jnp.linspace(-1, 1, Nx)
+    data_flip = jnp.flipud(data)
+
+    interp_func = RegularGridInterpolator((t_array, x_array), data_flip, bounds_error=False, fill_value=None)
+
+
+    def get_u_value_from_data(x, t):
+
+        t_new = 1 - t
+
+        return interp_func((t_new, x))
+
+    X_plot = X_plot_prediction
+    X = X_plot[:, 0]
+    T = X_plot[:, 1]
+    u_values = data
+
+    fig, ax = plt.subplots(figsize=(8, 6), constrained_layout=True)
+
+    c1 = ax.imshow(data, extent=[-1, 1, 1, 0])
+    fig.colorbar(c1, ax=ax, orientation='vertical')
+
+    ratios = []
+    for (x_prior, t_prior), (x_gt, t_gt) in zip(Xu_noise, Xu_certain):
+        u_prior_val = get_u_value_from_data(x_prior, t_prior)
+        u_gt_val = get_u_value_from_data(x_gt, t_gt)
+        dist = jnp.sqrt((x_prior - x_gt) ** 2 + (t_prior - t_gt) ** 2)
+        if dist == 0:
+            ratio = 0.0
+        else:
+            ratio = abs(u_prior_val - u_gt_val) / dist
+        ratios.append(ratio)
+
+    ratios = jnp.array(ratios)
+    norm = plt.Normalize(vmin=ratios.min(), vmax=ratios.max())
+    cmap = plt.cm.Reds
+
+    for i, (x_prior, t_prior) in enumerate(Xu_noise):
+        color = cmap(norm(ratios[i]))
+        ax.text(x_prior + 0.1, t_prior + 0.01, f"{ratios[i]:.2f}",
+                fontsize=8, ha='center', va='center',
+                bbox=dict(boxstyle='square,pad=0.2', facecolor=color, edgecolor='none', alpha=0.7), zorder=1)
+
+
+    ax.scatter(Xu_certain[:, 0], Xu_certain[:, 1], color='black', label='GT', marker='o', zorder=2)
+    ax.scatter(Xu_noise[:, 0], Xu_noise[:, 1], color='tab:blue', label='Xu noise', marker='x', linewidths=2, zorder=3)
+    ax.scatter(Xu_pred[:, 0], Xu_pred[:, 1], color='tab:red', label='Posterior', marker='o', zorder=4)
+
+    ax.set_title('u(x, t)', fontsize=16)
+    ax.set_xlabel('x', fontsize=14)
+    ax.set_ylabel('t', fontsize=14)
+    ax.tick_params(axis='both', which='major', labelsize=12)
+    # ax.legend(loc='best', fontsize=12)
+    ratio_label = mpatches.Patch(color='white', alpha=0.8, label='ratio')
+    handles, labels = ax.get_legend_handles_labels()
+    handles.append(ratio_label)
+    labels.append("ratio")
+    ax.legend(handles=handles, labels=labels, loc='best')
+    ax.set_aspect('auto')
+    ax.grid(True, linestyle='--', alpha=0.6)
+
+    current_time = datetime.datetime.now().strftime("%M%S")
+    plt.savefig(f'rd_contourf_value3_{added_text}.png')
+
 
 def get_u_training_data_2d(key_x_u, key_x_u_init, key_t_u_low, key_t_u_high, key_x_noise, key_t_noise, sample_num,
                            init_num, bnum, noise_std) -> (jnp.ndarray, jnp.ndarray, jnp.ndarray, jnp.ndarray, jnp.ndarray,

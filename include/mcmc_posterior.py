@@ -36,19 +36,22 @@ import numpy as np
 #     # gg_ff = heat_equation_kff(Xfg, Xfg, params)
 #     K = jnp.block([[zz_uu, zz_uf, zg_uf], [zz_fu, zz_ff, zg_ff], [gz_fu, gz_ff, gg_ff]])
 #     return K
+
 def add_jitter(matrix, jitter=1e-2):
     jitter_matrix = matrix + jitter * jnp.eye(matrix.shape[0])
     print("jitter nmuber is:", jitter)
     return jitter_matrix
 
+
 def compute_K(init, z_prior, Xcz, Xcg):
     Xuz = z_prior
     params = init
+    jitter_u = 1e-9
     params_kuu = {'sigma': init[-1][0], 'lengthscale': init[-1][1]}
     lengthscale_x = params[0][1][0].item()
     lengthscale_t = params[0][1][1].item()
     zz_uu = compute_kuu(Xuz, Xuz, params_kuu)
-    zz_uu = add_jitter(zz_uu)
+    zz_uu = add_jitter(zz_uu, jitter_u)
     zz_uc = compute_kuu(Xuz, Xcz, params_kuu)
     zg_uc = compute_kuf(Xuz, Xcg, params, lengthscale_x, lengthscale_t)
     zz_cu = compute_kuu(Xcz, Xuz, params_kuu)
@@ -68,6 +71,8 @@ def compute_K_rd(init, z_prior, Xcz, Xcg):
     lengthscale_x = params[0][1][0].item()
     lengthscale_t = params[0][1][1].item()
     zz_uu = compute_kuu_rd(Xuz, Xuz, params_kuu)
+    jitter_f = 1e-4 #1e-7
+    zz_uu = add_jitter(zz_uu, jitter_f)
     zz_uc = compute_kuu_rd(Xuz, Xcz, params_kuu)
     zg_uc = compute_kuf_rd(Xuz, Xcg, params, lengthscale_x, lengthscale_t)
     zz_cu = compute_kuu_rd(Xcz, Xuz, params_kuu)
@@ -77,6 +82,7 @@ def compute_K_rd(init, z_prior, Xcz, Xcg):
     gz_cc = compute_kfu_rd(Xcg, Xcz, params, lengthscale_x, lengthscale_t)
     gg_cc = compute_kff_rd(Xcg, Xcg, params, lengthscale_x, lengthscale_t)
     K = jnp.block([[zz_uu, zz_uc, zg_uc], [zz_cu, zz_cc, zg_cc], [gz_cu, gz_cc, gg_cc]])
+    print("compute_K_rd shape:", K.shape)
     return K
 
 def log_prior(x, mean, cov):
@@ -237,8 +243,8 @@ def single_component_metropolis_hasting_rd(rng_key, max_samples, assumption_sigm
                 x_new)
             p_x_prior_current_log = dist.MultivariateNormal(prior_mean_flat, covariance_matrix=prior_cov_flat).log_prob(
                 xvague_sample_current)
-            cov_current = compute_K(init, xvague_sample_current_reshape, Xfz, Xfg)
-            cov_new = compute_K(init, x_new_reshape, Xfz, Xfg)
+            cov_current = compute_K_rd(init, xvague_sample_current_reshape, Xfz, Xfg)
+            cov_new = compute_K_rd(init, x_new_reshape, Xfz, Xfg)
 
             if jnp.isnan(cov_new).any() or jnp.isnan(cov_current).any():
                 print("Covariance matrix has NaN values!")

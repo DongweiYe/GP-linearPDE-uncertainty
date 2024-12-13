@@ -345,11 +345,12 @@ def plot_with_noise_rd(number_u, number_u_only_x, posterior_samples_list, prior_
 
     fig1, axes1 = plt.subplots(1, number_u, figsize=(20, 5))
     fig1.subplots_adjust(hspace=0.4, wspace=0.4, top=0.85)
+
     for vague_points in range(number_u):
         ax = axes1[vague_points]
 
         data = posterior_samples_list[:, vague_points, 0]
-        prior_data = prior_samples[:, vague_points * 2]
+        prior_data = prior_samples[:, vague_points, 0]
 
         ax.axvline(Xu_certain[vague_points, 0], color='black', label='ground truth', linestyle='--', linewidth=2.1)
         #ax.axvline(Xu_noise[vague_points, 0], color='seagreen', label='x noised', linestyle='-', linewidth=2)
@@ -379,7 +380,7 @@ def plot_with_noise_rd(number_u, number_u_only_x, posterior_samples_list, prior_
     for vague_points in range(number_u):
         ax2 = axes2[vague_points]
         data1 = posterior_samples_list[:, vague_points, 1]
-        prior_data1 = prior_samples[:, vague_points * 2 + 1]
+        prior_data1 = prior_samples[:, vague_points, 1]
         ax2.axvline(Xu_certain[vague_points, 1],  color='black', label='ground truth', linestyle='--', linewidth=2.1)
        # ax2.axvline(Xu_noise[vague_points, 1], color='seagreen', label='t noised', linestyle='-', linewidth=2)
         sns.kdeplot(data1, ax=ax2,color="tab:blue", fill=True, alpha=.3, linewidth=0, label='posterior', bw_adjust=bw)
@@ -432,6 +433,75 @@ def plot_with_noise_rd(number_u, number_u_only_x, posterior_samples_list, prior_
 
     # current_time = datetime.datetime.now().strftime("%M%S")
     # fig3.savefig(f"kdeplot_x_only_{added_text}.png", bbox_inches='tight')
+
+def plot_with_noise_rd_2(number_u, number_u_only_x, posterior_samples_list, prior_samples, Xu_certain, Xu_noise, bw, added_text):
+    plt.rcParams.update({
+        'font.size': 16,
+        'axes.titlesize': 14,
+        'axes.labelsize': 18,
+        'xtick.labelsize': 18,
+        'ytick.labelsize': 18,
+        'legend.fontsize': 18,
+        'figure.figsize': (20, 5),
+        'text.usetex': False,
+    })
+    fig1, axes1 = plt.subplots(2, 4, figsize=(20, 10))
+    # fig1.subplots_adjust(hspace=0.4, wspace=0.4, top=0.85)
+    u_t_index = jnp.argsort(Xu_certain[:, 1])
+    axes1 = axes1.flatten()
+    for vague_points in range(number_u):
+        ax = axes1[vague_points]
+        data = posterior_samples_list[:, u_t_index[vague_points], 0]
+        prior_data = prior_samples[:, u_t_index[vague_points], 0]
+
+        ax.axvline(Xu_certain[u_t_index[vague_points], 0], color='black', label='ground truth', linestyle='--', linewidth=2.1)
+        sns.kdeplot(data, ax=ax, color="tab:blue", label='posterior', bw_adjust=bw, fill=True, alpha=.3, linewidth=0)
+        sns.kdeplot(prior_data, ax=ax, color='tab:orange', label='prior', fill=True, alpha=.3, linewidth=0)
+
+        posterior_mean = jnp.mean(data)
+        ax.axvline(posterior_mean, color="tab:blue", linestyle='--', linewidth=2.2, label='posterior mean')
+
+        ax.tick_params(axis='both', which='major')
+
+    handles, labels = [], []
+    for ax in axes1[:number_u]:
+        for handle, label in zip(*ax.get_legend_handles_labels()):
+            if label not in labels:
+                handles.append(handle)
+                labels.append(label)
+    fig1.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 0.95), ncol=len(labels))
+
+    fig1.savefig(f"rd_kdeplot_x_{added_text}.png", bbox_inches='tight')
+
+
+    fig2, axes2 = plt.subplots(2, 4, figsize=(20, 10))
+    # fig2.subplots_adjust(hspace=0.4, wspace=0.4, top=0.85)
+    u_t_index2 = jnp.argsort(Xu_certain[:, 1])
+    axes2 = axes2.flatten()
+    for vague_points in range(number_u):
+        ax2 = axes2[vague_points]
+        data1 = posterior_samples_list[:, u_t_index2[vague_points], 1]
+        prior_data1 = prior_samples[:, u_t_index2[vague_points], 1]
+
+        ax2.axvline(Xu_certain[u_t_index2[vague_points], 1], color='black', label='ground truth', linestyle='--', linewidth=2.1)
+        sns.kdeplot(data1, ax=ax2, color="tab:blue", fill=True, alpha=.3, linewidth=0, label='posterior', bw_adjust=bw)
+        sns.kdeplot(prior_data1, ax=ax2, color='tab:orange', fill=True, alpha=.3, linewidth=0, label='prior')
+
+        posterior_mean1 = jnp.mean(data1)
+        ax2.axvline(posterior_mean1, color="tab:blue", linestyle='--', linewidth=2.2, label='posterior mean')
+
+        ax2.tick_params(axis='both', which='major')
+
+    handles, labels = [], []
+    for ax2 in axes2[:number_u]:
+        for handle, label in zip(*ax2.get_legend_handles_labels()):
+            if label not in labels:
+                handles.append(handle)
+                labels.append(label)
+    fig2.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 0.95), ncol=len(labels))
+
+    fig2.savefig(f"rd_kdeplot_t_{added_text}.png", bbox_inches='tight')
+
 
 def plot_and_save_kde_histograms(posterior_samples_list, prior_samples, Xu_certain, Xu_noise, number_u, number_f, num_chains, k, assumption_sigma, prior_std, noise_std, number_init, number_bound, prior_var, max_samples, bw, added_text):
     plt.rcParams["figure.figsize"] = (40, 10)

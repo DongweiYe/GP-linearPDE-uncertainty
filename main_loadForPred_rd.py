@@ -30,8 +30,8 @@ current_time = datetime.datetime.now().strftime("%m%d")
 # epoch_pred = 500
 # pred_mesh = 200
 
-text = "REACT_f458_chains1_k0.5_assumption0.02_prior_std0.06_noisestd0.04_init32_b32_0.0036_k0.5_1000_learnlr0.1&800_2114.pkl"
-load_path = f"results/datas/trained_params/1209"
+text = "REACT_f458_chains1_k0.6_assumption0.01_prior_std0.06_noisestd0.04_init32_b32_0.0036_k0.6_1000_learnlr0.1&800_4355.pkl"
+load_path = f"results/datas/trained_params/1213"
 
 
 # %%s
@@ -119,6 +119,8 @@ if __name__ == '__main__':
 
     Xu_pred_mean = jnp.mean(posterior_samples_list, axis=0)
 
+    print("Xu_noise:", Xu_noise)
+    print("number_u:", number_u)
     # plot_u_pred_rd(Xu_certain, Xf, Xu_noise, noise_std, Xu_pred_mean, prior_var,assumption_sigma,k,max_samples,learning,num_chains,number_f,added_text, X_plot_prediction, data)
     # plot_dist_rd(Xu_certain,
     #              Xu_noise,
@@ -316,6 +318,7 @@ if __name__ == '__main__':
         gz_cc = compute_kfu_rd(Xcg, Xcz, params, lengthscale_x, lengthscale_t)
         gg_cc = compute_kff_rd(Xcg, Xcg, params, lengthscale_x, lengthscale_t)
         K = jnp.block([[zz_cc, zg_cc], [gz_cc, gg_cc]])
+        print("Computed K matrix shape compute K _ no ", K.shape)
         return K
 
     def gp_predict_diagonal_batch(init, z_prior, Xcz, Xcg, y, x_star, batch_size=2000):
@@ -348,6 +351,10 @@ if __name__ == '__main__':
 
             mu_star.append(mu_star_batch)
             sigma_star_diag.append(sigma_star_batch_diag)
+            print("k_x_star_batch shape:", k_x_star_batch.shape)
+            print("K_inv_y shape:", K_inv_y.shape)
+            print("mu_star_batch shape:", mu_star_batch.shape)
+            print("sigma_star_batch_diag shape:", sigma_star_batch_diag.shape)
 
         mu_star = jnp.concatenate(mu_star, axis=0)
         sigma_star_diag = jnp.concatenate(sigma_star_diag, axis=0).flatten()

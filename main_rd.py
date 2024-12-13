@@ -3,12 +3,13 @@ import datetime
 import optax
 from include.config import key_x_rd, key_t_rd
 from include.config import key_num
-from include.heat2d import plot_u_pred, plot_u_pred_rd
+from include.heat2d import plot_u_pred, plot_u_pred_rd, plot_u_pred_rd_value, plot_u_pred_rd_value_2, \
+    plot_u_pred_rd_value_3
 from include.init import initialize_params_2d
 from include.mcmc_posterior import *
 
 from include.plot_dist import plot_dist, plot_with_noise, plot_and_save_kde_histograms, plot_dist_rd, \
-    plot_with_noise_rd, plot_dist_rd_2
+    plot_with_noise_rd, plot_dist_rd_2, plot_with_noise_rd_2
 from include.train import train_heat_equation_model_2d, train_heat_equation_model_2d_rd, \
     train_heat_equation_model_2d_rd_no
 from scipy.stats import gaussian_kde
@@ -38,8 +39,8 @@ noise_std = 0.04
 prior_std = 0.06
 prior_var = prior_std ** 2  # prior variance
 max_samples = 1000
-assumption_sigma = 0.03#0.01 # step size
-k = 0.5
+assumption_sigma = 0.01#0.01 # step size
+k = 0.6
 num_chains = 1
 
 bw = 2
@@ -49,7 +50,7 @@ test_num = 2 ** 4
 number_u = 2 ** 3 # xtxx
 number_init = 2 ** 5
 number_bound = 2 ** 5
-number_u_c_for_f = 19
+number_u_c_for_f = 19  #19
 
 number_u_c_for_f_real = (number_u_c_for_f)**2
 number_init_real = number_init-1
@@ -107,7 +108,7 @@ if __name__ == '__main__':
 
     num_initial_samples = number_init
     num_boundary_samples = number_bound
-    num_samples = number_u_c_for_f
+    num_samples_f = number_u_c_for_f
 
     # xu_init = (jnp.cos(jnp.arange(init_num + 1) * jnp.pi / init_num))
     # xu_init = xu_init[1:-1, ]
@@ -147,17 +148,17 @@ if __name__ == '__main__':
     # tu_all = jax.random.uniform(key_t_rd, shape=(num_samples, 1), dtype=jnp.float64)
 
     epsilon = 1e-6
-    xu_all = jnp.linspace(-1 + epsilon, 1 - epsilon, num_samples, dtype=jnp.float64)
-    tu_all = jnp.linspace(0 + epsilon, 1 - epsilon, num_samples, dtype=jnp.float64)
+    xu_all = jnp.linspace(-1 + epsilon, 1 - epsilon, num_samples_f, dtype=jnp.float64)
+    tu_all = jnp.linspace(0 + epsilon, 1 - epsilon, num_samples_f, dtype=jnp.float64)
 
     Xu_all = jnp.vstack([xu_all, tu_all]).T
     Xu_mesh_all, Tu_mesh_all = jnp.meshgrid(xu_all, tu_all)
     Xu_inner_all = Xu_mesh_all.ravel()
     Tu_inner_all = Tu_mesh_all.ravel()
-    num_sample = Xu_inner_all.shape
-    print("num_sample num after", num_sample)
-    U_inner_all = jnp.vstack([Xu_inner_all, Tu_inner_all]).T
+    num_f = Xu_inner_all.shape
+    print("num_f num after", num_f)
 
+    U_inner_all = jnp.vstack([Xu_inner_all, Tu_inner_all]).T
 
     key_u_rd = random.PRNGKey(keynum)
     print("keynum:", keynum)
@@ -353,16 +354,16 @@ if __name__ == '__main__':
     #     return prior_samples, prior_mean_normalized
 
 
-    def generate_prior_samples(rng_key, num_samples, prior_mean, prior_cov):
+    def generate_prior_samples(rng_key, prior_samples, prior_mean, prior_cov):
 
         prior_samples = random.multivariate_normal(rng_key, mean=prior_mean.ravel(), cov=prior_cov,
-                                                   shape=(num_samples,))
+                                                   shape=(prior_samples,))
         return prior_samples
 
 
-    def generate_prior_samples_2(rng_key, num_samples, prior_mean, prior_cov):
+    def generate_prior_samples_2(rng_key, prior_samples_2, prior_mean, prior_cov):
         prior_samples = random.multivariate_normal(rng_key, mean=prior_mean.ravel(), cov=prior_cov,
-                                                   shape=(num_samples,))
+                                                   shape=(prior_samples_2,))
         prior_samples_x = jnp.maximum(jnp.minimum(1, prior_samples[:, 0]), -1)
         prior_samples_t = jnp.maximum(jnp.minimum(1, prior_samples[:, 1]), 0)
         prior_samples = jnp.column_stack((prior_samples_x, prior_samples_t))
@@ -430,13 +431,21 @@ if __name__ == '__main__':
 
 
     Xu_pred_mean = jnp.mean(posterior_samples_list, axis=0)
-    plot_u_pred_rd(Xu_certain, Xf, Xu_noise, noise_std, Xu_pred_mean, prior_var,assumption_sigma,k,max_samples,learning,num_chains,number_f,added_text, X_plot_prediction, data)
+    print(" ########################################3")
+    print("Xu_pred_mean:", Xu_pred_mean)
+    print(" ########################################3")
+    plot_u_pred_rd(Xu_certain, Xf, Xu_noise, noise_std, Xu_pred_mean, prior_var, assumption_sigma, k, max_samples,
+                   learning, num_chains, number_f, added_text, X_plot_prediction, data)
+
     plot_dist_rd_2(Xu_certain,
                  Xu_noise,
                  Xu_pred_mean,
                  posterior_samples_list,
                  prior_samples_list, number_u, added_text, prior_samples)
-    plot_with_noise_rd(number_u, 0, posterior_samples_list, prior_samples_list, Xu_certain, Xu_noise, bw,added_text)
+    #plot_with_noise_rd(number_u, 0, posterior_samples_list, prior_samples_list, Xu_certain, Xu_noise, bw, added_text)
+    plot_u_pred_rd_value(Xu_certain, Xf, Xu_noise, noise_std, Xu_pred_mean, prior_var, assumption_sigma, k, max_samples,
+                   learning, num_chains, number_f, added_text, X_plot_prediction, data)
+    plot_with_noise_rd_2(number_u, 0, posterior_samples_list, prior_samples, Xu_certain, Xu_noise, bw,added_text)
     # plot_and_save_kde_histograms(posterior_samples_list, prior_samples, Xu_certain, Xu_noise, number_u, number_f,
     #                              num_chains, k, assumption_sigma, prior_std, noise_std, number_init, number_bound,
     #                              prior_var, max_samples, added_text)
@@ -451,7 +460,9 @@ if __name__ == '__main__':
                    number_init=number_init, number_bound=number_bound, data=data, X_plot_prediction=X_plot_prediction,
                    prior_samples_list=prior_samples_list,mcmc_text=mcmc_text,x_grid_mesh_shape=x_grid_mesh_shape)
 
-
-
+    plot_u_pred_rd_value_2(Xu_certain, Xf, Xu_noise, noise_std, Xu_pred_mean, prior_var, assumption_sigma, k, max_samples,
+                       learning, num_chains, number_f, added_text, X_plot_prediction, data)
+    plot_u_pred_rd_value_3(Xu_certain, Xf, Xu_noise, noise_std, Xu_pred_mean, prior_var, assumption_sigma, k, max_samples,
+                           learning, num_chains, number_f, added_text, X_plot_prediction, data)
 
 # %%
