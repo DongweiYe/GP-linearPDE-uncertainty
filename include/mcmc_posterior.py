@@ -46,7 +46,7 @@ def add_jitter(matrix, jitter=1e-2):
 def compute_K(init, z_prior, Xcz, Xcg):
     Xuz = z_prior
     params = init
-    jitter_u = 1e-9
+    jitter_u = 1e-8
     params_kuu = {'sigma': init[-1][0], 'lengthscale': init[-1][1]}
     lengthscale_x = params[0][1][0].item()
     lengthscale_t = params[0][1][1].item()

@@ -541,7 +541,7 @@ def plot_u_pred_rd_value(Xu_certain, Xf, Xu_noise, noise_std, Xu_pred, prior_var
     fig.colorbar(c1, ax=ax, orientation='vertical')
 
     ratios = []
-    for (x_pred, t_pred), (x_gt, t_gt) in zip(Xu_pred, Xu_certain):
+    for (x_pred, t_pred), (x_gt, t_gt) in zip(Xu_noise, Xu_certain):
         u_pred_val = get_u_value_from_data(x_pred, t_pred, data)
         u_gt_val = get_u_value_from_data(x_gt, t_gt, data)
         dist = np.sqrt((x_pred - x_gt) ** 2 + (t_pred - t_gt) ** 2)
@@ -555,7 +555,7 @@ def plot_u_pred_rd_value(Xu_certain, Xf, Xu_noise, noise_std, Xu_pred, prior_var
     norm = plt.Normalize(vmin=ratios.min(), vmax=ratios.max())
     cmap = plt.cm.Reds
 
-    for i, (x_pred, t_pred) in enumerate(Xu_pred):
+    for i, (x_pred, t_pred) in enumerate(Xu_noise):
         ax.annotate(f"{ratios[i]:.2f}",
                     xy=(x_pred, t_pred), xycoords='data',
                     xytext=(x_pred + 0.04, t_pred + 0.04), textcoords='data',
