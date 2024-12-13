@@ -434,38 +434,3 @@ def neg_log_posterior(params_flat, Xfz, Xfg, Y_data, prior_mean, prior_cov, init
 
     return neg_log_prior + neg_log_likelihood
 
-
-"""
-def model(Xfz, Xfg, Y_data, prior_mean, prior_cov, init_params):
-    prior_mean = jnp.array(prior_mean)
-    prior_cov = jnp.array(prior_cov)
-    z_uncertain_list = []
-    print("prior_mean shape:", prior_mean.shape[0])
-    for num_sample in range(prior_mean.shape[0]):
-        z_uncertain = numpyro.sample('z_uncertain' + str(num_sample),
-                                     dist.MultivariateNormal(prior_mean[num_sample, :], covariance_matrix=prior_cov))
-        z_uncertain_list.append(z_uncertain)
-
-    z_uncertain = jnp.stack(z_uncertain_list)
-    print("#############################################")
-    print("z_uncertain_list shape", z_uncertain.shape)
-    print("z_uncertain_list", z_uncertain_list)
-    print("#############################################")
-    K = compute_K(init_params, z_uncertain, Xfz, Xfg)
-    print("#############################################")
-    print("#############################################")
-    print("K shape:", K.shape)
-    print("K:", K)
-    print("#############################################")
-    K = jnp.array(K)
-    numpyro.sample('z_obs', dist.MultivariateNormal(jnp.zeros(K.shape[0]), covariance_matrix=K), obs=jnp.array(Y_data))
-
-def run_mcmc(Xfz, Xfg, Y_data, prior_mean, prior_cov, init_params, num_samples=5, num_warmup=10):
-    rng_key = random.PRNGKey(42)
-
-    kernel = NUTS(model)
-    mcmc = MCMC(kernel, num_warmup=num_warmup, num_samples=num_samples)
-    mcmc.run(rng_key, Xfz, Xfg, Y_data, prior_mean, prior_cov, init_params)
-    mcmc.print_summary()
-    return mcmc
-"""

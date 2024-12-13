@@ -1,3 +1,4 @@
+# %%
 import jax
 import datetime
 import optax
@@ -202,8 +203,6 @@ if __name__ == '__main__':
     prior_samples = prior_samples_list.reshape(-1, *Xu_noise.shape)
     print("prior_samples list shape:", prior_samples_list.shape)
     print("prior_samples shape:", prior_samples.shape)
-
-
 
     print(f"assumption_sigma={assumption_sigma}")
     rng_key_chain = jax.random.PRNGKey(422)
