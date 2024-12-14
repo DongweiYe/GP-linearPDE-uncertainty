@@ -141,6 +141,67 @@ def plot_dist_rd(Xu_certain,
         f'rd_dist_{added_text}.png')
 
 
+def plot_dist_rd_2(Xu_certain,
+              Xu_noise,
+              Xu_pred,
+              posterior_samples_list, prior_samples, number_u, added_text, prior_samples_list):
+    plt.rcParams.update({
+        'font.size': 16,
+        'axes.titlesize': 14,
+        'axes.labelsize': 18,
+        'xtick.labelsize': 18,
+        'ytick.labelsize': 18,
+        'legend.fontsize': 18,
+        'figure.figsize': (20, 12),
+        'text.usetex': False,
+    })
+    # num_points = Xu_certain.shape[0]
+    num_points = number_u
+    fig, axes = plt.subplots(2, 4, figsize=(20, 10))
+    # fig.subplots_adjust(top=0.8, wspace=0.4)
+
+    u_t_index = jnp.argsort(Xu_certain[:, 1])
+    for i in range(num_points):
+        row = i // 4
+        col = i % 4
+        ax = axes[row, col]
+
+        posterior_data = posterior_samples_list[:, u_t_index[i], :]
+        prior_data = prior_samples_list[:, u_t_index[i], :]
+        kde_prior = sns.kdeplot(x=prior_data[:, 0], y=prior_data[:, 1], ax=ax, cmap='Oranges', alpha=1, bw_adjust=1.5,
+                                zorder=1)
+        kde_posterior = sns.kdeplot(x=posterior_data[:, 0], y=posterior_data[:, 1], ax=ax, cmap='Blues', alpha=1,
+                                    bw_adjust=1.5, zorder=2)
+
+        ax.scatter(Xu_certain[u_t_index[i], 0], Xu_certain[u_t_index[i], 1], color='black', edgecolor='black',
+                   label='ground truth', marker='o', s=110, linewidths=2, zorder=3)
+        ax.scatter(Xu_pred[u_t_index[i], 0], Xu_pred[u_t_index[i], 1], color='blue', edgecolor='blue',
+                   label='posterior mean', marker='*', s=150, linewidths=2, zorder=5)
+        ax.scatter(Xu_noise[u_t_index[i], 0], Xu_noise[u_t_index[i], 1], color='darkorange', edgecolor='darkorange',
+                   label='prior mean', marker='s', s=80, linewidths=2, zorder=4)
+
+        ax.tick_params(axis='both', which='major')
+        ax.grid(True, linestyle='--', linewidth=0.3, alpha=0.3, color='gray')
+
+    handles, labels = [], []
+    for ax_row in axes:
+        for ax in ax_row:
+            for handle, label in zip(*ax.get_legend_handles_labels()):
+                if label not in labels:
+                    handles.append(handle)
+                    labels.append(label)
+    handles.append(plt.Line2D([0], [0], color='orange', lw=4, label='prior distribution'))
+    labels.append('prior distribution')
+    handles.append(plt.Line2D([0], [0], color='darkblue', lw=4, label='posterior distribution'))
+    labels.append('posterior distribution')
+
+    fig.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 1.01), fontsize=16, ncol=len(labels))
+
+    current_time = datetime.datetime.now().strftime("%M%S")
+    fig.savefig(
+        f'rd_dist_{added_text}.png')
+
+
 def plot_with_noise(number_u, number_u_only_x, posterior_samples_list, prior_samples, Xu_certain, Xu_noise, bw, added_text):
     plt.rcParams.update({
         'font.size': 16,

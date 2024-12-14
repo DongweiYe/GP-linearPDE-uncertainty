@@ -24,14 +24,14 @@ jax.config.update("jax_enable_x64", True)
 
 
 learning_rate = 0.1
-epochs = 800  # 1000
+epochs = 800
 
 noise_std = 0.04
 prior_std = 0.06
-prior_var = prior_std ** 2  # prior variance
+prior_var = prior_std ** 2
 max_samples = 1000
-assumption_sigma = 0.03  # 0.01 # step size
-k = 0.5
+assumption_sigma = 0.01
+k = 0.6
 num_chains = 1
 
 bw = 2
