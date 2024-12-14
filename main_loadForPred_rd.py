@@ -20,8 +20,8 @@ jax.config.update("jax_enable_x64", True)
 
 current_time = datetime.datetime.now().strftime("%m%d")
 
-text = "REACT_f458_chains1_k0.5_assumption0.02_prior_std0.06_noisestd0.04_init32_b32_0.0036_k0.5_1000_learnlr0.1&800_2114.pkl"
-load_path = f"results/datas/trained_params/1209"
+text = "REACT_f458_chains1_k0.6_assumption0.01_prior_std0.06_noisestd0.04_init32_b32_0.0036_k0.6_1000_learnlr0.1&800_1934.pkl"
+load_path = f"results/datas/trained_params/1214"
 
 if __name__ == '__main__':
 
