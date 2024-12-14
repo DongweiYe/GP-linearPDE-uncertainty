@@ -331,7 +331,7 @@ if __name__ == '__main__':
                  Xu_pred_mean,
                  posterior_samples_list,
                  prior_samples_list, number_u, added_text, prior_samples)
-    plot_with_noise_rd(number_u, 0, posterior_samples_list, prior_samples_list, Xu_certain, Xu_noise, bw, added_text)
+    plot_with_noise_rd(number_u, 0, posterior_samples_list, prior_samples, Xu_certain, Xu_noise, bw, added_text)
 
     save_variables(added_text, Xu_all_without_noise=Xu_all_without_noise, Xu_certain=Xu_certain, Xf=Xf, Xu_noise=Xu_noise,
                    noise_std=noise_std, Xu_pred=Xu_pred_mean, prior_var=prior_var, assumption_sigma=assumption_sigma,

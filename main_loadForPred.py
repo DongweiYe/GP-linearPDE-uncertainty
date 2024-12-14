@@ -21,8 +21,8 @@ learning_rate_pred = 0.004
 epoch_pred = 100
 pred_mesh = 150
 
-text = "chains1_f256_k0.8_assumption0.001_prior0.04_noise0.04_maxsamples2000_numpriorsamples_200_learnlr0.08&1000_0843.pkl"
-load_path = f"results/datas/trained_params/1031"
+text = "chains1_f256_k0.8_assumption0.001_prior0.04_noise0.04_maxsamples2000_numpriorsamples_200_learnlr0.08&1000_5836.pkl"
+load_path = f"results/datas/trained_params/1214"
 
 
 if __name__ == '__main__':
