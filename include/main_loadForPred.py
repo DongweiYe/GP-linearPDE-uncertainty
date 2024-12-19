@@ -9,6 +9,7 @@ import jax.numpy as jnp
 import jax.scipy.linalg as la
 
 from include.heat2d import u_xt, compute_kuu, compute_kfu, compute_kuf, compute_kff
+from include.main_loadForPred_rd import main_loadForPred_rd
 from include.mcmc_posterior import compute_K
 from include.plot_pred import plot_and_save_prediction_results, prediction_mean, prediction_variance, \
     plot_and_save_prediction_results_combine
@@ -17,15 +18,12 @@ os.environ["JAX_PLATFORM_NAME"] = "gpu"
 jax.config.update("jax_enable_x64", True)
 
 current_time = datetime.datetime.now().strftime("%m%d")
-learning_rate_pred = 0.004
-epoch_pred = 100
-pred_mesh = 150
-
-text = "chains1_f256_k0.8_assumption0.001_prior0.04_noise0.04_maxsamples2000_numpriorsamples_200_learnlr0.08&1000_5836.pkl"
-load_path = f"results/datas/trained_params/1214"
 
 
-if __name__ == '__main__':
+def main_loadForPred():
+    pred_mesh = 150
+    text = "chains1_f256_k0.8_assumption0.001_prior0.04_noise0.04_maxsamples2000_numpriorsamples_200_learnlr0.08&1000_5836.pkl"
+    load_path = f"../../results/datas/trained_params/1214"
 
     print('start inference')
     print("pred_mesh:", pred_mesh, "\n")
@@ -400,3 +398,6 @@ if __name__ == '__main__':
                                              var_prior,
                                              var_posterior,
                                              abs_var_diff, added_text)
+
+if __name__ == '__main__':
+    main_loadForPred()

@@ -19,7 +19,7 @@ def add_jitter(matrix, jitter=1e-2):
 def compute_K(init, z_prior, Xcz, Xcg):
     Xuz = z_prior
     params = init
-    jitter_u = 1e-8
+    jitter_u = 1e-6
     params_kuu = {'sigma': init[-1][0], 'lengthscale': init[-1][1]}
     lengthscale_x = params[0][1][0].item()
     lengthscale_t = params[0][1][1].item()
@@ -44,7 +44,7 @@ def compute_K_rd(init, z_prior, Xcz, Xcg):
     lengthscale_x = params[0][1][0].item()
     lengthscale_t = params[0][1][1].item()
     zz_uu = compute_kuu_rd(Xuz, Xuz, params_kuu)
-    jitter_f = 1e-4 #1e-7
+    jitter_f = 1e-4
     zz_uu = add_jitter(zz_uu, jitter_f)
     zz_uc = compute_kuu_rd(Xuz, Xcz, params_kuu)
     zg_uc = compute_kuf_rd(Xuz, Xcg, params, lengthscale_x, lengthscale_t)
@@ -120,6 +120,9 @@ def single_component_metropolis_hasting(rng_key, max_samples, assumption_sigma, 
                 xvague_sample_current)
             cov_current = compute_K(init, xvague_sample_current_reshape, Xfz, Xfg)
             cov_new = compute_K(init, x_new_reshape, Xfz, Xfg)
+
+            if jnp.isnan(cov_new).any() or jnp.isnan(cov_current).any():
+                print("Covariance matrix has NaN values!")
 
             Y_ravel = Y.ravel()
             p_y_likelihood_new_log = dist.MultivariateNormal(jnp.zeros(Y_ravel.shape),

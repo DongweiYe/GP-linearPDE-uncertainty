@@ -17,17 +17,14 @@ from include.plot_pred import prediction_mean, prediction_variance, \
 os.environ["JAX_PLATFORM_NAME"] = "gpu"
 jax.config.update("jax_enable_x64", True)
 
-
 current_time = datetime.datetime.now().strftime("%m%d")
 
-text = "REACT_f458_chains1_k0.5_assumption0.01_prior_std0.06_noisestd0.04_init32_b32_0.0036_k0.5_1000_learnlr0.1&800_2322.pkl"
-load_path = f"results/datas/trained_params/1214"
 
-if __name__ == '__main__':
+def main_loadForPred_rd():
+    text = "REACT_f458_chains1_k0.5_assumption0.01_prior_std0.06_noisestd0.04_init32_b32_0.0036_k0.5_1000_learnlr0.1&800_2322.pkl"
+    load_path = f"../../results/datas/trained_params/1214"
 
     print('start inference')
-
-
     def load_variables(text, load_path):
         print(f"Loading data from {load_path}")
         filename = f"{text}"
@@ -312,3 +309,6 @@ if __name__ == '__main__':
                                              var_prior,
                                              var_posterior,
                                              abs_var_diff, added_text)
+
+if __name__ == '__main__':
+    main_loadForPred_rd()

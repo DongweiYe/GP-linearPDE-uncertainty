@@ -250,6 +250,7 @@ def exp_nested_tuple(nested_tuple):
     else:
         return nested_tuple
 
+
 def heat_equation_nlml_loss_2d(heat_params, Xuz, Xfz, Xfg, number_Y, Y) -> float:
 
     init = heat_params
@@ -278,6 +279,31 @@ def heat_equation_nlml_loss_2d(heat_params, Xuz, Xfz, Xfg, number_Y, Y) -> float
     nlml = (1 / 2 * signed_logdet) + (1 / 2 * scalar_result) + ((number_Y / 2) * jnp.log(2 * jnp.pi))
 
     return  nlml
+
+
+def heat_equation_nlml_loss_2d_no(heat_params, Xfz, Xfg, number_Y, Y) -> float:
+    init = heat_params
+    params =  heat_params
+    params_kuu = {'sigma': init[-1][0], 'lengthscale': init[-1][1]}
+    lengthscale_x = params[0][1][0].item()
+    lengthscale_t = params[0][1][1].item()
+
+    zz_ff = compute_kuu(Xfz, Xfz, params_kuu)
+    zg_ff = compute_kuf(Xfz, Xfg, params, lengthscale_x, lengthscale_t)
+    gz_ff = compute_kfu(Xfg, Xfz, params, lengthscale_x, lengthscale_t)
+    gg_ff = compute_kff(Xfg, Xfg, params, lengthscale_x, lengthscale_t)
+
+    K = jnp.block([[zz_ff, zg_ff], [gz_ff, gg_ff]])
+
+    sign, logdet = jnp.linalg.slogdet(K)
+    K_inv_Y = jnp.linalg.solve(K, Y)
+    signed_logdet = sign * logdet
+    K_inv_Y_product = Y.T @ K_inv_Y
+    scalar_result = jnp.squeeze(K_inv_Y_product)
+    nlml = (1 / 2 * signed_logdet) + (1 / 2 * scalar_result) + ((number_Y / 2) * jnp.log(2 * jnp.pi))
+
+    return  nlml
+
 
 def plot_u_f(Xu_certain_all, Xf, Xu_noise, noise_std):
     x = jnp.linspace(0, 1, 100)

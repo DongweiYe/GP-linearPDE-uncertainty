@@ -16,44 +16,45 @@ import jax.random as random
 import matplotlib.pyplot as plt
 from skfdiff import Model, Simulation
 from scipy.interpolate import griddata
-from test_f_infer_function import plot_f_inference_rd_init
+from include.test_f_infer_function import plot_f_inference_rd_init
 
 os.environ["JAX_PLATFORM_NAME"] = "gpu"
 jax.config.update("jax_enable_x64", True)
 
 # %%
-learning_rate = 0.1
-epochs = 800
-noise_std = 0.04
-prior_std = 0.06
-prior_var = prior_std ** 2
-max_samples = 1000
-assumption_sigma = 0.01
-k = 0.9
-num_chains = 1
-bw = 2
-num_prior_samples = 200
-test_num = 2 ** 4
-number_u = 2 ** 3
-number_init = 2 ** 5
-number_bound = 2 ** 5
-number_u_c_for_f = 19
-number_u_c_for_f_real = (number_u_c_for_f)**2
-number_init_real = number_init-1
-number_bound_real = (number_bound+1)*2
-number_f = number_u_c_for_f_real+number_init_real+number_bound_real
-init_num = number_init
-bnum = number_bound
-keynum = 1000
-optimizer_in_use = optax.adam
-learning_rate_pred = 0.01
-epoch_pred = 700
-added_text = f'key{keynum}_{number_u}&{number_u_c_for_f_real}&{number_f}&{number_init}&{number_bound}&{epochs}&{noise_std}'
-learning = f'lr{learning_rate}&{epochs}'
-mcmc_text = f"key{keynum}_number_u_c_for_f{number_u_c_for_f}noise{noise_std}_prior{prior_std}_maxsamples{max_samples}_assumption{assumption_sigma}_k{k}"
 
-# %%
-if __name__ == '__main__':
+def main_rd():
+    learning_rate = 0.1
+    epochs = 800
+    noise_std = 0.04
+    prior_std = 0.06
+    prior_var = prior_std ** 2
+    max_samples = 1000
+    assumption_sigma = 0.01
+    k = 0.9
+    num_chains = 1
+    bw = 2
+    num_prior_samples = 200
+    test_num = 2 ** 4
+    number_u = 2 ** 3
+    number_init = 2 ** 5
+    number_bound = 2 ** 5
+    number_u_c_for_f = 19
+    number_u_c_for_f_real = (number_u_c_for_f)**2
+    number_init_real = number_init-1
+    number_bound_real = (number_bound+1)*2
+    number_f = number_u_c_for_f_real+number_init_real+number_bound_real
+    init_num = number_init
+    bnum = number_bound
+    keynum = 1000
+    optimizer_in_use = optax.adam
+    learning_rate_pred = 0.01
+    epoch_pred = 700
+    added_text = f'key{keynum}_{number_u}&{number_u_c_for_f_real}&{number_f}&{number_init}&{number_bound}&{epochs}&{noise_std}'
+    learning = f'lr{learning_rate}&{epochs}'
+    mcmc_text = f"key{keynum}_number_u_c_for_f{number_u_c_for_f}noise{noise_std}_prior{prior_std}_maxsamples{max_samples}_assumption{assumption_sigma}_k{k}"
+
+    # %%
     print("noise_std:", noise_std, "\n")
     print("prior_var:", prior_var, "\n")
     print("number_u:", number_u, "\n")
@@ -313,18 +314,41 @@ if __name__ == '__main__':
     plot_u_pred_rd_value(Xu_certain, Xf, Xu_noise, noise_std, Xu_pred_mean, prior_var, assumption_sigma, k, max_samples,
                    learning, num_chains, number_f, added_text, X_plot_prediction, data)
     plot_with_noise_rd_2(number_u, 0, posterior_samples_list, prior_samples, Xu_certain, Xu_noise, bw,added_text)
-    save_variables(added_text, Xu_all_without_noise=Xu_all_without_noise, Xu_certain=Xu_certain, Xf=Xf, Xu_noise=Xu_noise,
-                   noise_std=noise_std, Xu_pred=Xu_pred_mean, prior_var=prior_var, assumption_sigma=assumption_sigma,
-                   k=k, max_samples=max_samples, learning=learning, num_chains=num_chains, number_f=number_f,
-                   posterior_samples_list=posterior_samples_list, prior_samples=prior_samples, Y=Y,
-                   param_iter=param_iter, Xu_fixed=Xu_fixed, epochs=epochs,
+    save_variables(added_text,
+                   Xu_all_without_noise=Xu_all_without_noise,
+                   Xu_certain=Xu_certain,
+                   Xf=Xf,
+                   Xu_noise=Xu_noise,
+                   noise_std=noise_std,
+                   Xu_pred=Xu_pred_mean,
+                   prior_var=prior_var,
+                   assumption_sigma=assumption_sigma,
+                   k=k,
+                   max_samples=max_samples,
+                   learning=learning,
+                   num_chains=num_chains,
+                   number_f=number_f,
+                   posterior_samples_list=posterior_samples_list,
+                   prior_samples=prior_samples, Y=Y,
+                   param_iter=param_iter,
+                   Xu_fixed=Xu_fixed,
+                   epochs=epochs,
                    learning_rate=learning_rate,
-                   optimizer_in_use=optimizer_in_use, number_u_c_for_f=number_u_c_for_f, prior_std=prior_std,
-                   number_init=number_init, number_bound=number_bound, data=data, X_plot_prediction=X_plot_prediction,
-                   prior_samples_list=prior_samples_list,mcmc_text=mcmc_text,x_grid_mesh_shape=x_grid_mesh_shape)
+                   optimizer_in_use=optimizer_in_use,
+                   number_u_c_for_f=number_u_c_for_f,
+                   prior_std=prior_std,
+                   number_init=number_init,
+                   number_bound=number_bound,
+                   data=data,
+                   X_plot_prediction=X_plot_prediction,
+                   prior_samples_list=prior_samples_list,
+                   mcmc_text=mcmc_text,
+                   x_grid_mesh_shape=x_grid_mesh_shape)
     plot_u_pred_rd_value_2(Xu_certain, Xf, Xu_noise, noise_std, Xu_pred_mean, prior_var, assumption_sigma, k, max_samples,
                        learning, num_chains, number_f, added_text, X_plot_prediction, data)
     plot_u_pred_rd_value_3(Xu_certain, Xf, Xu_noise, noise_std, Xu_pred_mean, prior_var, assumption_sigma, k, max_samples,
                            learning, num_chains, number_f, added_text, X_plot_prediction, data)
 
 # %%
+if __name__ == '__main__':
+    main_rd()

@@ -45,6 +45,7 @@ class ModelInitializer_2d:
         self.X_with_noise = jnp.concatenate((self.Xu_noise, self.Xu_fixed, self.Xf))
         self.X_without_noise = jnp.concatenate((self.Xu_certain, self.Xu_fixed, self.Xf))
         self.Y = jnp.concatenate((self.yu_certain, self.Yu_fixed, self.yf))
+        self.Y_certain = jnp.concatenate((self.Yu_fixed, self.yf))
         self.number_Y = self.Y.shape[0]
         self.Yu = jnp.concatenate((self.yu_certain, self.Yu_fixed))
         self.Xu_with_noise = jnp.concatenate((self.Xu_noise, self.Xu_fixed))
