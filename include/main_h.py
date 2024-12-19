@@ -25,11 +25,11 @@ def main_h():
     prior_std = 0.04
     prior_var = prior_std**2# prior variance
 
-    max_samples = 1000#2000
+    max_samples = 2600#2000
     assumption_sigma = 0.001#0.001 # step size
     k = 0.8#0.5
 
-    learning_rate = 0.08#0.08
+    learning_rate = 0.001#0.08
     epochs = 1000 #1000
 
     bw=2
@@ -66,9 +66,7 @@ def main_h():
     print("epochs:", epochs, "\n")
     print("added_text:", added_text, "\n")
     print("learning_rate1:", learning_rate, "\n")
-
     print("weight_decay:", weight_decay, "\n")
-
 
     model_initializer = ModelInitializer_2d(number_u=number_u, number_f=number_f,
                                             number_init=number_init, number_bound=number_bound, noise_std=noise_std, number_u_only_x=number_u_only_x)
@@ -131,9 +129,9 @@ def main_h():
     print("Xu_certain:", Xu_certain)
     print("Xu_noise:", Xu_noise)
     print("train init params:", init)
-
-    init = (((jnp.array([1], dtype=jnp.float64),
-              jnp.array([0.1, 0.1], dtype=jnp.float64))),)
+    #
+    init = (((jnp.array([50], dtype=jnp.float64),
+              jnp.array([0.12, 0.5], dtype=jnp.float64))),)
 
     print("init params:", init)
     param_iter, optimizer_text, lr_text, epoch_text = train_heat_equation_model_2d_no(init,
@@ -160,7 +158,7 @@ def main_h():
 
     print("param_iter:", param_iter)
     plot_f_inference(pred_mesh, param_iter, Xu_fixed, Yu_fixed, Xf, yf, added_text)
-
+"""
     print('start inference')
     def generate_prior_samples(rng_key, num_samples, prior_mean, prior_cov):
         prior_samples = random.multivariate_normal(rng_key, mean=prior_mean.ravel(), cov=prior_cov,
@@ -245,7 +243,7 @@ def main_h():
                    param_iter=param_iter, Xu_fixed=Xu_fixed, epochs=epochs,
                    learning_rate=learning_rate,
                    optimizer_in_use=optimizer_in_use,number_u=number_u, number_u_only_x=number_u_only_x,prior_std=prior_std,number_bound=number_bound)
-
+"""
 
 # %%
 if __name__ == '__main__':

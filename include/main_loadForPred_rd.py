@@ -21,8 +21,10 @@ current_time = datetime.datetime.now().strftime("%m%d")
 
 
 def main_loadForPred_rd():
-    text = "REACT_f458_chains1_k0.5_assumption0.01_prior_std0.06_noisestd0.04_init32_b32_0.0036_k0.5_1000_learnlr0.1&800_2322.pkl"
-    load_path = f"../../results/datas/trained_params/1214"
+    text = "rd.pkl"
+    load_path = f"./results/load_data"
+    # text = "REACT_f458_chains1_k0.5_assumption0.01_prior_std0.06_noisestd0.04_init32_b32_0.0036_k0.5_1000_learnlr0.1&800_2322.pkl"
+    # load_path = f"./results/datas/trained_params/1214"
 
     print('start inference')
     def load_variables(text, load_path):

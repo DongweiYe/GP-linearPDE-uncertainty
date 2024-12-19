@@ -24,7 +24,7 @@ main_funcs = {
 
 # %%
 if __name__ == "__main__":
-    main_h()
-    # main_rd()
+    # main_h()
+    main_rd()
     # main_loadForPred()
     # main_loadForPred_rd()

@@ -7,6 +7,7 @@ import pickle
 import jax
 import jax.numpy as jnp
 import jax.scipy.linalg as la
+from jax.scipy import linalg
 
 from include.heat2d import u_xt, compute_kuu, compute_kfu, compute_kuf, compute_kff
 from include.main_loadForPred_rd import main_loadForPred_rd
@@ -22,8 +23,8 @@ current_time = datetime.datetime.now().strftime("%m%d")
 
 def main_loadForPred():
     pred_mesh = 150
-    text = "chains1_f256_k0.8_assumption0.001_prior0.04_noise0.04_maxsamples2000_numpriorsamples_200_learnlr0.08&1000_5836.pkl"
-    load_path = f"../../results/datas/trained_params/1214"
+    text = "chains1_f256_k0.8_assumption0.001_prior0.04_noise0.04_maxsamples2600_numpriorsamples_200_learnlr0.001&1000_0815.pkl"
+    load_path = f"./results/datas/trained_params/1219"
 
     print('start inference')
     print("pred_mesh:", pred_mesh, "\n")
@@ -44,38 +45,20 @@ def main_loadForPred():
 
 
     variables = load_variables(text, load_path)
-
-    Xu_without_noise = variables['Xu_without_noise']
-    Xu_certain = variables['Xu_certain']
     Xf = variables['Xf']
-    Xu_noise = variables['Xu_noise']
     noise_std = variables['noise_std']
-    Xu_pred = variables['Xu_pred']
     prior_var = variables['prior_var']
     assumption_sigma = variables['assumption_sigma']
     k = variables['k']
     max_samples = variables['max_samples']
-    learning = variables['learning']
     num_chains = variables['num_chains']
     number_f = variables['number_f']
     posterior_samples_list = variables['posterior_samples_list']
     prior_samples = variables['prior_samples']
     Y = variables['Y']
-    number_u_total = Xu_noise.shape[0]
-    number_u = variables['number_u']
     param_iter = variables['param_iter']
     Xu_fixed = variables['Xu_fixed']
-    epochs = variables['epochs']
-    learning_rate = variables['learning_rate']
-    optimizer_in_use = variables['optimizer_in_use']
-    number_u_only_x = variables['number_u_only_x']
-    prior_std = variables['prior_std']
-
-    number_bound = variables['number_bound']
-
     added_text = f"heat_Predction_f{number_f}_chains{num_chains}_k{k}_assumption{assumption_sigma}_noisestd{noise_std}_{prior_var}_k{k}_{max_samples}_{current_time}"
-
-    Xu_pred_mean = jnp.mean(posterior_samples_list, axis=0)
 
 
 # %%
@@ -95,105 +78,6 @@ def main_loadForPred():
     y_final_var_list_prior = []
 
 
-    def compute_joint_K(init, z_prior, Xcz, Xcg, x_star):
-        Xuz = z_prior
-        params_kuu = {'sigma': init[-1][0], 'lengthscale': init[-1][1]}
-        params = init
-        K = compute_K(init, z_prior, Xcz, Xcg)
-        lengthscale_x = params[0][1][0].item()
-        lengthscale_t = params[0][1][1].item()
-
-        k_zz_u_star = compute_kuu(Xuz, x_star, params_kuu)
-        k_zz_c_star = compute_kuu(Xcz, x_star, params_kuu)
-        k_gz_c_star = compute_kfu(Xcg, x_star, params, lengthscale_x, lengthscale_t)
-
-        k_x_star = jnp.vstack((k_zz_u_star, k_zz_c_star, k_gz_c_star))
-
-        k_x_star_x_star = compute_kuu(x_star, x_star, params_kuu)
-
-        joint_K = jnp.block([[K, k_x_star], [k_x_star.T, k_x_star_x_star]])
-
-        return joint_K
-
-    def blockwise_matrix_multiply(A, B, block_size):
-        M, N = A.shape
-        _, P = B.shape
-        C = jnp.zeros((M, P))
-        for i in range(0, M, block_size):
-            for j in range(0, P, block_size):
-                C = C.at[i:i + block_size, j:j + block_size].add(
-                    jnp.dot(A[i:i + block_size, :], B[:, j:j + block_size]))
-        return C
-
-    def gp_predict(init, z_prior, Xcz, Xcg, y, x_star):
-        print("Starting gp_predict function")
-
-        params_kuu = {'sigma': init[-1][0], 'lengthscale': init[-1][1]}
-        params = init
-        K = compute_K(init, z_prior, Xcz, Xcg)
-        print("Computed K matrix")
-
-        lengthscale_x = params[0][1][0].item()
-        lengthscale_t = params[0][1][1].item()
-
-        k_zz_u_star = compute_kuu(z_prior, x_star, params_kuu)
-        k_zz_c_star = compute_kuu(Xcz, x_star, params_kuu)
-        k_gz_c_star = compute_kfu(Xcg, x_star, params, lengthscale_x, lengthscale_t)
-
-        k_x_star = jnp.vstack((k_zz_u_star, k_zz_c_star, k_gz_c_star))
-        k_x_star_x_star = compute_kuu(x_star, x_star, params_kuu)
-        del k_zz_u_star, k_zz_c_star, k_gz_c_star, params_kuu, params
-
-        K_inv_y = la.solve(K, y, assume_a='pos')
-        K_inv_k_x_star = la.solve(K, k_x_star, assume_a='pos')
-        mu_star_gpu = jnp.dot(k_x_star.T, K_inv_y)
-        del K, K_inv_y
-        k_x_star_T = k_x_star.T
-        del k_x_star
-        k_x_star_T_K_inv_k_x_star = k_x_star_T@K_inv_k_x_star
-        del k_x_star_T, K_inv_k_x_star
-        sigma_star_gpu = k_x_star_x_star - k_x_star_T_K_inv_k_x_star
-
-        del k_x_star_x_star
-        gc.collect()
-        return mu_star_gpu.flatten(), sigma_star_gpu
-
-    def gp_predict_diagonal(init, z_prior, Xcz, Xcg, y, x_star):
-        print("Starting gp_predict_diagonal function")
-        params_kuu = {'sigma': init[-1][0], 'lengthscale': init[-1][1]}
-        params = init
-        K = compute_K(init, z_prior, Xcz, Xcg)
-        print("Computed K matrix")
-
-        K_inv_y = la.solve(K, y, assume_a='pos')
-
-        mu_star = []
-        sigma_star_diag = []
-
-        for i in range(x_star.shape[0]):
-            x_star_i = x_star[i:i + 1]
-
-            k_zz_u_star = compute_kuu(z_prior, x_star_i, params_kuu)
-            k_zz_c_star = compute_kuu(Xcz, x_star_i, params_kuu)
-            k_gz_c_star = compute_kfu(Xcg, x_star_i, params, params[0][1][0].item(), params[0][1][1].item())
-
-            k_x_star_i = jnp.vstack((k_zz_u_star, k_zz_c_star, k_gz_c_star))
-            mu_star_i = jnp.dot(k_x_star_i.T, K_inv_y)
-
-            K_inv_k_x_star_i = la.solve(K, k_x_star_i, assume_a='pos')
-            sigma_star_i = compute_kuu(x_star_i, x_star_i, params_kuu) - jnp.dot(k_x_star_i.T, K_inv_k_x_star_i)
-
-            mu_star.append(mu_star_i)
-            sigma_star_diag.append(sigma_star_i)
-
-        mu_star = jnp.concatenate(mu_star, axis=0)
-        sigma_star_diag = jnp.concatenate(sigma_star_diag, axis=0).flatten()
-
-        del K_inv_y, K, mu_star_i, sigma_star_i, k_zz_u_star, k_zz_c_star, k_gz_c_star, k_x_star_i, K_inv_k_x_star_i
-        gc.collect()
-        return mu_star.flatten(), sigma_star_diag
-
-
     def compute_K_no(init, Xcz, Xcg):
         params = init
         params_kuu = {'sigma': init[-1][0], 'lengthscale': init[-1][1]}
@@ -208,6 +92,26 @@ def main_loadForPred():
         K = jnp.block([[zz_cc, zg_cc], [gz_cc, gg_cc]])
         return K
 
+    def compute_condition_number(matrix):
+        singular_values = jnp.linalg.svd(matrix, compute_uv=False)
+        cond_number = singular_values.max() / singular_values.min()
+        return cond_number
+
+    def is_positive_definite(matrix):
+        try:
+            jnp.linalg.cholesky(matrix)
+            return True
+        except jnp.linalg.LinAlgError:
+            return False
+
+    def add_jitter(matrix, jitter=1e-6):
+        jitter_matrix = matrix + jitter * jnp.eye(matrix.shape[0])
+        return jitter_matrix
+
+    def is_symmetric(matrix, tol=1e-8):
+        return jnp.allclose(matrix, matrix.T, atol=tol)
+
+
     def gp_predict_diagonal_batch(init, z_prior, Xcz, Xcg, y, x_star, batch_size=2000):
         print("Starting gp_predict_diagonal_batch function")
         params_kuu = {'sigma': init[-1][0], 'lengthscale': init[-1][1]}
@@ -218,11 +122,38 @@ def main_loadForPred():
 
         K = compute_K_no(init, Xuc, Xcg)
         print("Computed K matrix")
+        print("K", K)
 
-        K_inv_y = la.solve(K, y, assume_a='pos')
+        # K_inv_y = la.solve(K, y, assume_a='pos')
+
+        jitter_values = [1e-8, 1e-6, 1e-5, 1e-4, 1e-3]
+        for jitter in jitter_values:
+            K_jittered = add_jitter(K, jitter)
+            pos_def = is_positive_definite(K_jittered)
+            cond_number = compute_condition_number(K_jittered)
+            print(f"Jitter: {jitter} | Positive Definite: {pos_def} | Condition Number: {cond_number}")
+            if pos_def and cond_number < 1e10:
+                break
 
         mu_star = []
         sigma_star_diag = []
+        try:
+            K_inv_y = linalg.solve(K_jittered, y, assume_a='pos')
+            print("Solved K_inv_y successfully.")
+        except Exception as e:
+            print(f"Error in solving linear system: {e}")
+
+        if jnp.isnan(K_inv_y).any() or jnp.isinf(K_inv_y).any():
+            print("Result contains NaN or Inf values.")
+        else:
+            print("Result is valid.")
+        symmetric = is_symmetric(K)
+        print(f"Is K symmetric? {symmetric}")
+        cond_number = compute_condition_number(K)
+        print(f"Condition number of K: {cond_number}")
+
+        pos_def = is_positive_definite(K)
+        print(f"Is K positive definite? {pos_def}")
 
         for i in range(0, x_star.shape[0], batch_size):
             x_star_batch = x_star[i:i + batch_size]

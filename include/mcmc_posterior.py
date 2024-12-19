@@ -120,15 +120,40 @@ def single_component_metropolis_hasting(rng_key, max_samples, assumption_sigma, 
                 xvague_sample_current)
             cov_current = compute_K(init, xvague_sample_current_reshape, Xfz, Xfg)
             cov_new = compute_K(init, x_new_reshape, Xfz, Xfg)
-
+            # cov_new = add_jitter(cov_new, 1e-4)
+            # cov_current = add_jitter(cov_current, 1e-6)
             if jnp.isnan(cov_new).any() or jnp.isnan(cov_current).any():
                 print("Covariance matrix has NaN values!")
 
             Y_ravel = Y.ravel()
-            p_y_likelihood_new_log = dist.MultivariateNormal(jnp.zeros(Y_ravel.shape),
-                                                             covariance_matrix=cov_new).log_prob(Y_ravel)
-            p_y_likelihood_current_log = dist.MultivariateNormal(jnp.zeros(Y_ravel.shape),
-                                                                 covariance_matrix=cov_current).log_prob(Y_ravel)
+            # p_y_likelihood_new_log = dist.MultivariateNormal(jnp.zeros(Y_ravel.shape),
+            #                                                  covariance_matrix=cov_new).log_prob(Y_ravel)
+            # p_y_likelihood_current_log = dist.MultivariateNormal(jnp.zeros(Y_ravel.shape),
+            #                                                      covariance_matrix=cov_current).log_prob(Y_ravel)
+
+            p_y_likelihood_new_log = dist.MultivariateNormal(
+                loc=jnp.zeros(Y_ravel.shape),
+                covariance_matrix=cov_new
+            ).log_prob(Y_ravel)
+            if jnp.isnan(p_y_likelihood_new_log):
+                epsilon = 1e-6
+                cov_new = cov_new + epsilon * jnp.eye(cov_new.shape[0])
+                p_y_likelihood_new_log = dist.MultivariateNormal(
+                    loc=jnp.zeros(Y_ravel.shape),
+                    covariance_matrix=cov_new
+                ).log_prob(Y_ravel)
+
+            p_y_likelihood_current_log = dist.MultivariateNormal(
+                loc=jnp.zeros(Y_ravel.shape),
+                covariance_matrix=cov_current
+            ).log_prob(Y_ravel)
+            if jnp.isnan(p_y_likelihood_current_log):
+                epsilon = 1e-6
+                cov_current = cov_current + epsilon * jnp.eye(cov_current.shape[0])
+                p_y_likelihood_current_log = dist.MultivariateNormal(
+                    loc=jnp.zeros(Y_ravel.shape),
+                    covariance_matrix=cov_current
+                ).log_prob(Y_ravel)
 
             print("p_x_prior_new_log:", p_x_prior_new_log)
             print("p_x_prior_current_log:", p_x_prior_current_log)
