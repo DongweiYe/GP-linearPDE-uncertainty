@@ -136,10 +136,11 @@ def main_loadForPred():
             print(f"Jitter: {jitter} | Positive Definite: {pos_def} | Condition Number: {cond_number}")
             if pos_def and cond_number < 1e10:
                 print("1e3")
-                print("Jittered matrix is positive definite, condition number is acceptable less then 1e15.")
+                print("Jittered matrix is positive definite, condition number is acceptable less then 1e10.")
                 break
         mu_star = []
         sigma_star_diag = []
+
         try:
             K_inv_y = linalg.solve(K_jittered, y, assume_a='pos')
             print("Solved K_inv_y successfully.")
