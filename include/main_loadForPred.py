@@ -23,8 +23,10 @@ current_time = datetime.datetime.now().strftime("%m%d")
 
 def main_loadForPred():
     pred_mesh = 150
-    text = "chains1_f256_k0.8_assumption0.001_prior0.04_noise0.04_maxsamples2600_numpriorsamples_200_learnlr0.001&1000_0815.pkl"
-    load_path = f"./results/datas/trained_params/1219"
+    text = "h.pkl"
+    load_path = f"./results/load_data"
+    # text = "chains1_f256_k0.8_assumption0.001_prior0.04_noise0.04_maxsamples2600_numpriorsamples_200_learnlr0.001&1000_0815.pkl"
+    # load_path = f"./results/datas/trained_params/1219"
 
     print('start inference')
     print("pred_mesh:", pred_mesh, "\n")
@@ -133,8 +135,9 @@ def main_loadForPred():
             cond_number = compute_condition_number(K_jittered)
             print(f"Jitter: {jitter} | Positive Definite: {pos_def} | Condition Number: {cond_number}")
             if pos_def and cond_number < 1e10:
+                print("1e3")
+                print("Jittered matrix is positive definite, condition number is acceptable less then 1e15.")
                 break
-
         mu_star = []
         sigma_star_diag = []
         try:
@@ -166,16 +169,17 @@ def main_loadForPred():
             k_x_star_batch = jnp.vstack((k_zz_c_star, k_gz_c_star))
             mu_star_batch = jnp.dot(k_x_star_batch.T, K_inv_y)
 
-            K_inv_k_x_star_batch = la.solve(K, k_x_star_batch, assume_a='pos')
+            K_inv_k_x_star_batch = la.solve(K_jittered, k_x_star_batch, assume_a='pos')
             sigma_star_batch = compute_kuu(x_star_batch, x_star_batch, params_kuu) - jnp.dot(k_x_star_batch.T,
                                                                                              K_inv_k_x_star_batch)
             sigma_star_batch_diag = sigma_star_batch.diagonal()
-
+            print("sigma_star_batch_diag: ", sigma_star_batch_diag)
             mu_star.append(mu_star_batch)
             sigma_star_diag.append(sigma_star_batch_diag)
 
         mu_star = jnp.concatenate(mu_star, axis=0)
         sigma_star_diag = jnp.concatenate(sigma_star_diag, axis=0).flatten()
+        print("sigma_star_diag: ", sigma_star_diag)
 
         del K_inv_y, K, k_zz_c_star, k_gz_c_star, k_x_star_batch, K_inv_k_x_star_batch
         gc.collect()
@@ -186,10 +190,6 @@ def main_loadForPred():
     for i in range(posterior_samples_list.shape[0]):
         Xu_sample = posterior_samples_list[i, :, :]
         print("Xu_sample.shape", Xu_sample.shape)
-        mcmc_text = f"mcmc"
-
-        lengthscale = param_iter[-1][1]
-        sigma = param_iter[-1][0]
 
         y_final_mean, y_final_var = gp_predict_diagonal_batch(param_iter, Xu_sample, Xu_fixed, Xf, Y, X_plot_prediction)
         print("Prediction mean shape: ", y_final_mean.shape)
@@ -207,12 +207,9 @@ def main_loadForPred():
     prior_samples_reshaped = prior_samples
     print("prior_samples_reshaped shape: ", prior_samples_reshaped.shape)
     print("prior_samples_reshaped: ", prior_samples_reshaped)
+
     for i in range(prior_samples_reshaped.shape[0]):
         Xu_sample_prior = prior_samples_reshaped[i, :, :]
-        mcmc_text = f"mcmc"
-
-        lengthscale = param_iter[-1][1]
-        sigma = param_iter[-1][0]
 
         y_final_mean_prior, y_final_var_prior = gp_predict_diagonal_batch(param_iter, Xu_sample_prior, Xu_fixed, Xf, Y,
                                                            X_plot_prediction)
@@ -290,6 +287,9 @@ def main_loadForPred():
 
     var_prior = prediction_variance(y_final_mean_list_prior, y_final_var_list_prior)
     print("var_prior shape: ", var_prior.shape)
+    print("y_final_mean_list_prior: ", y_final_mean_list_prior)
+    print("y_final_var_list_prior: ", y_final_var_list_prior)
+    print("var_prior: ", var_prior)
     var_prior = var_prior.reshape(pred_mesh, pred_mesh)
     print("var_prior: ", var_prior)
 
@@ -303,6 +303,10 @@ def main_loadForPred():
     print("abs_var_diff: ", abs_var_diff)
     print("abs_var_diff shape: ", abs_var_diff.shape)
 
+    print("y_final_mean_list_prior has NaN: ", jnp.isnan(y_final_mean_list_prior).any())
+    print("y_final_var_list_prior has NaN: ", jnp.isnan(y_final_var_list_prior).any())
+    print("y_final_mean_list_posterior has NaN: ", jnp.isnan(y_final_mean_list_posterior).any())
+    print("y_final_var_list_posterior has NaN: ", jnp.isnan(y_final_var_list_posterior).any())
     save_variables(added_text, u_values_gt=u_values_gt,
                    gp_mean_prior=gp_mean_prior,
                    abs_diff_prior=abs_diff_prior,

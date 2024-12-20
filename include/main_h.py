@@ -158,7 +158,7 @@ def main_h():
 
     print("param_iter:", param_iter)
     plot_f_inference(pred_mesh, param_iter, Xu_fixed, Yu_fixed, Xf, yf, added_text)
-"""
+
     print('start inference')
     def generate_prior_samples(rng_key, num_samples, prior_mean, prior_cov):
         prior_samples = random.multivariate_normal(rng_key, mean=prior_mean.ravel(), cov=prior_cov,
@@ -243,7 +243,7 @@ def main_h():
                    param_iter=param_iter, Xu_fixed=Xu_fixed, epochs=epochs,
                    learning_rate=learning_rate,
                    optimizer_in_use=optimizer_in_use,number_u=number_u, number_u_only_x=number_u_only_x,prior_std=prior_std,number_bound=number_bound)
-"""
+
 
 # %%
 if __name__ == '__main__':

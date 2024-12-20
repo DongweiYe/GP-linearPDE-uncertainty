@@ -202,8 +202,8 @@ def main_rd():
     new_Y = jnp.concatenate((yu_certain, yf_u))
     new_sigma_init = jnp.std(new_Y)
     new_sigma_init_yf = jnp.std(yf_u)
-    print(f"new_sigma_init_yu: {sigma_init_yu}", f"new_sigma_init_yf: {new_sigma_init_yf}",
-          f"new_sigma_init: {new_sigma_init}", sep='\t')
+    # print(f"new_sigma_init_yu: {sigma_init_yu}", f"new_sigma_init_yf: {new_sigma_init_yf}",
+    #       f"new_sigma_init: {new_sigma_init}", sep='\t')
     init = (((jnp.array([0.5], dtype=jnp.float32),
               jnp.array([0.06, 0.1], dtype=jnp.float32))),)
     param_iter, optimizer_text, lr_text, epoch_text = train_heat_equation_model_2d_rd_no(init,

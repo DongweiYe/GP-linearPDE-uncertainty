@@ -73,12 +73,8 @@ class ModelInitializer_2d:
         new_Y = jnp.concatenate((self.yu_certain, yf_u))
         new_sigma_init = jnp.std(new_Y)
         new_sigma_init_yf = jnp.std(yf_u)
-        print(f"new_sigma_init_yu: {sigma_init_yu}", f"new_sigma_init_yf: {new_sigma_init_yf}",
-              f"new_sigma_init: {new_sigma_init}", sep='\t')
-
+        # print(f"new_sigma_init_yu: {sigma_init_yu}", f"new_sigma_init_yf: {new_sigma_init_yf}",
+        #       f"new_sigma_init: {new_sigma_init}", sep='\t')
         self.heat_params_init = initialize_params_2d(new_sigma_init, lengthscale_init)
-
-        print("use %%%new_sigma_init%%%% for kernel_params")
-
     def initialize(self):
         return self.heat_params_init

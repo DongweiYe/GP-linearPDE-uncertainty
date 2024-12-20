@@ -9,12 +9,35 @@ def prediction_mean(ypred_list):
     return jnp.mean(ypred_list, axis=0)
 
 
-def prediction_variance(ypred_list, yvar_diag):
-    ymean_var = jnp.var(ypred_list, axis=0)
+# def prediction_variance(ypred_list, yvar_diag):
+#     ymean_var = jnp.var(ypred_list, axis=0)
+#
+#     yvar_mean = jnp.mean(yvar_diag, axis=0)
+#
+#     print("Check ypred_list NaN:", jnp.isnan(ypred_list).any(), "Inf:", jnp.isinf(ypred_list).any())
+#     print("Check yvar_diag NaN:", jnp.isnan(yvar_diag).any(), "Inf:", jnp.isinf(yvar_diag).any())
+#
+#     return ymean_var + yvar_mean
 
+def prediction_variance(ypred_list, yvar_diag):
+    if jnp.isnan(ypred_list).any() or jnp.isinf(ypred_list).any():
+        print("ypred_list contains NaN or Inf")
+    if jnp.isnan(yvar_diag).any() or jnp.isinf(yvar_diag).any():
+        print("yvar_diag contains NaN or Inf")
+
+    ymean_var = jnp.var(ypred_list, axis=0)
     yvar_mean = jnp.mean(yvar_diag, axis=0)
 
-    return ymean_var + yvar_mean
+    if jnp.isnan(ymean_var).any() or jnp.isinf(ymean_var).any():
+        print("ymean_var is NaN or Inf")
+    if jnp.isnan(yvar_mean).any() or jnp.isinf(yvar_mean).any():
+        print("yvar_mean is NaN or Inf")
+
+    result = ymean_var + yvar_mean
+    if jnp.isnan(result).any() or jnp.isinf(result).any():
+        print("result is NaN or Inf")
+
+    return result
 
 
 def plot_heatmap(ax, data, title, cmap, vmin, vmax):
