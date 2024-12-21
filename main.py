@@ -1,6 +1,9 @@
 # %%
 from include import *
 import sys
+# %%
+from include import *
+import sys
 
 # %%
 def main():
