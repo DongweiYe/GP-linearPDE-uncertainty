@@ -125,15 +125,13 @@ def main_loadForPred():
         K = compute_K_no(init, Xuc, Xcg)
         print("Computed K matrix")
 
-        jitter_values = [1e-6]
+        jitter_values = [1e-5]
         for jitter in jitter_values:
             K_jittered = add_jitter(K, jitter)
             pos_def = is_positive_definite(K_jittered)
             cond_number = compute_condition_number(K_jittered)
             print(f"Jitter: {jitter} | Positive Definite: {pos_def} | Condition Number: {cond_number}")
-            if pos_def and cond_number < 1e12:
-                print("1e-6")
-                print("Jittered matrix is positive definite, condition number is acceptable less then 1e12.")
+            if pos_def and cond_number < 1e7:
                 break
         mu_star = []
         sigma_star_diag = []
@@ -166,7 +164,7 @@ def main_loadForPred():
 
             k_x_star_batch = jnp.vstack((k_zz_c_star, k_gz_c_star))
             mu_star_batch = jnp.dot(k_x_star_batch.T, K_inv_y)
-            jitter = 1e-6
+            jitter = 1e-5
             K_jitter = add_jitter(K, jitter)
             K_inv_k_x_star_batch = la.solve(K_jitter, k_x_star_batch, assume_a='pos')
             sigma_star_batch = compute_kuu(x_star_batch, x_star_batch, params_kuu) - jnp.dot(k_x_star_batch.T,

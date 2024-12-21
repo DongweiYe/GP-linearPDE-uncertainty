@@ -3,3 +3,5 @@
 /results/figures/
 __pycache__/
 *.pyc
+/uncertain_gpu.sh
+

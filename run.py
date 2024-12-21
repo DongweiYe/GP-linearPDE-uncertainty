@@ -13,18 +13,18 @@ main_funcs = {
     "loadForPred_rd": main_loadForPred_rd
 }
 
-if __name__ == "__main__":
-    func_key = sys.argv[1] if len(sys.argv) > 1 else "h"
-    main_func = main_funcs.get(func_key)
-    if main_func:
-        main_func()
-    else:
-        print("Function key not recognized.")
+# if __name__ == "__main__":
+#     func_key = sys.argv[1] if len(sys.argv) > 1 else "h"
+#     main_func = main_funcs.get(func_key)
+#     if main_func:
+#         main_func()
+#     else:
+#         print("Function key not recognized.")
 
 
 # %%
-# if __name__ == "__main__":
-#     # main_h()
-#     # main_rd()
-#     main_loadForPred()
-#     # main_loadForPred_rd()
+if __name__ == "__main__":
+    # main_h()
+    # main_rd()
+    main_loadForPred()
+    # main_loadForPred_rd()
