@@ -125,7 +125,7 @@ def main_loadForPred():
         K = compute_K_no(init, Xuc, Xcg)
         print("Computed K matrix")
 
-        jitter_values = [1e-5]
+        jitter_values = [1e-6]
         for jitter in jitter_values:
             K_jittered = add_jitter(K, jitter)
             pos_def = is_positive_definite(K_jittered)
@@ -164,7 +164,7 @@ def main_loadForPred():
 
             k_x_star_batch = jnp.vstack((k_zz_c_star, k_gz_c_star))
             mu_star_batch = jnp.dot(k_x_star_batch.T, K_inv_y)
-            jitter = 1e-5
+            jitter = 1e-6
             K_jitter = add_jitter(K, jitter)
             K_inv_k_x_star_batch = la.solve(K_jitter, k_x_star_batch, assume_a='pos')
             sigma_star_batch = compute_kuu(x_star_batch, x_star_batch, params_kuu) - jnp.dot(k_x_star_batch.T,
