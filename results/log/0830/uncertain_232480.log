@@ -1,109 +1,0 @@
-ctit091
-Collecting package metadata (current_repodata.json): ...working... done
-Solving environment: ...working... done
-
-# All requested packages already installed.
-
-Collecting package metadata (current_repodata.json): ...working... done
-Solving environment: ...working... failed with initial frozen solve. Retrying with flexible solve.
-Solving environment: ...working... failed with repodata from current_repodata.json, will retry with next repodata source.
-Collecting package metadata (repodata.json): ...working... done
-Solving environment: ...working... done
-
-## Package Plan ##
-
-  environment location: /home/yanw/.conda/envs/noise
-
-  added / updated specs:
-    - cuda-nvcc
-    - jax
-    - jaxlib[build=*cuda*]
-
-
-The following packages will be downloaded:
-
-    package                    |            build
-    ---------------------------|-----------------
-    cuda-nvcc-12.2.140         |                0        56.1 MB  nvidia
-    cuda-version-11.8          |       h70ddcb2_2          20 KB  conda-forge
-    cudatoolkit-11.8.0         |      h4ba93d1_12       682.8 MB  conda-forge
-    cudnn-8.8.0.121            |       h838ba91_2       456.4 MB  conda-forge
-    jaxlib-0.4.14              |cuda112py310h8c6a9b4_201        69.4 MB  conda-forge
-    nccl-2.18.5.1              |       h0800d71_0        90.5 MB  conda-forge
-    ------------------------------------------------------------
-                                           Total:        1.32 GB
-
-The following NEW packages will be INSTALLED:
-
-  cuda-nvcc          nvidia/linux-64::cuda-nvcc-12.2.140-0
-  cuda-version       conda-forge/noarch::cuda-version-11.8-h70ddcb2_2
-  cudatoolkit        conda-forge/linux-64::cudatoolkit-11.8.0-h4ba93d1_12
-  cudnn              conda-forge/linux-64::cudnn-8.8.0.121-h838ba91_2
-  nccl               conda-forge/linux-64::nccl-2.18.5.1-h0800d71_0
-
-The following packages will be UPDATED:
-
-  jaxlib                         0.4.14-cpu_py310h46886e1_1 --> 0.4.14-cuda112py310h8c6a9b4_201
-
-
-Proceed ([y]/n)? 
-
-Downloading and Extracting Packages
-cudnn-8.8.0.121      | 456.4 MB  |            |   0% cudnn-8.8.0.121      | 456.4 MB  |            |   0% cudnn-8.8.0.121      | 456.4 MB  | 2          |   2% cudnn-8.8.0.121      | 456.4 MB  | 4          |   4% cudnn-8.8.0.121      | 456.4 MB  | 6          |   6% cudnn-8.8.0.121      | 456.4 MB  | 8          |   8% cudnn-8.8.0.121      | 456.4 MB  | 9          |  10% cudnn-8.8.0.121      | 456.4 MB  | #1         |  12% cudnn-8.8.0.121      | 456.4 MB  | #4         |  14% cudnn-8.8.0.121      | 456.4 MB  | #6         |  16% cudnn-8.8.0.121      | 456.4 MB  | #8         |  18% cudnn-8.8.0.121      | 456.4 MB  | ##         |  20% cudnn-8.8.0.121      | 456.4 MB  | ##2        |  22% cudnn-8.8.0.121      | 456.4 MB  | ##4        |  25% cudnn-8.8.0.121      | 456.4 MB  | ##6        |  27% cudnn-8.8.0.121      | 456.4 MB  | ##9        |  29% cudnn-8.8.0.121      | 456.4 MB  | ###1       |  32% cudnn-8.8.0.121      | 456.4 MB  | ###3       |  34% cudnn-8.8.0.121      | 456.4 MB  | ###6       |  36% cudnn-8.8.0.121      | 456.4 MB  | ###8       |  38% cudnn-8.8.0.121      | 456.4 MB  | ####       |  41% cudnn-8.8.0.121      | 456.4 MB  | ####3      |  43% cudnn-8.8.0.121      | 456.4 MB  | ####5      |  46% cudnn-8.8.0.121      | 456.4 MB  | ####8      |  48% cudnn-8.8.0.121      | 456.4 MB  | #####      |  50% cudnn-8.8.0.121      | 456.4 MB  | #####2     |  53% cudnn-8.8.0.121      | 456.4 MB  | #####5     |  55% cudnn-8.8.0.121      | 456.4 MB  | #####7     |  57% cudnn-8.8.0.121      | 456.4 MB  | #####9     |  59% cudnn-8.8.0.121      | 456.4 MB  | ######1    |  61% cudnn-8.8.0.121      | 456.4 MB  | ######2    |  63% cudnn-8.8.0.121      | 456.4 MB  | ######4    |  64% cudnn-8.8.0.121      | 456.4 MB  | ######6    |  66% cudnn-8.8.0.121      | 456.4 MB  | ######8    |  68% cudnn-8.8.0.121      | 456.4 MB  | #######    |  70% cudnn-8.8.0.121      | 456.4 MB  | #######1   |  72% cudnn-8.8.0.121      | 456.4 MB  | #######3   |  73% cudnn-8.8.0.121      | 456.4 MB  | #######4   |  75% cudnn-8.8.0.121      | 456.4 MB  | #######6   |  76% cudnn-8.8.0.121      | 456.4 MB  | #######7   |  78% cudnn-8.8.0.121      | 456.4 MB  | #######9   |  80% cudnn-8.8.0.121      | 456.4 MB  | ########2  |  82% cudnn-8.8.0.121      | 456.4 MB  | ########4  |  85% cudnn-8.8.0.121      | 456.4 MB  | ########6  |  87% cudnn-8.8.0.121      | 456.4 MB  | ########9  |  89% cudnn-8.8.0.121      | 456.4 MB  | #########1 |  91% cudnn-8.8.0.121      | 456.4 MB  | #########3 |  94% cudnn-8.8.0.121      | 456.4 MB  | #########5 |  96% cudnn-8.8.0.121      | 456.4 MB  | #########8 |  98% cudnn-8.8.0.121      | 456.4 MB  | ########## | 100% 
-nccl-2.18.5.1        | 90.5 MB   |            |   0% nccl-2.18.5.1        | 90.5 MB   | 3          |   3% nccl-2.18.5.1        | 90.5 MB   | #3         |  14% nccl-2.18.5.1        | 90.5 MB   | ##2        |  23% nccl-2.18.5.1        | 90.5 MB   | ###1       |  31% nccl-2.18.5.1        | 90.5 MB   | ####1      |  41% nccl-2.18.5.1        | 90.5 MB   | #####      |  51% nccl-2.18.5.1        | 90.5 MB   | ######1    |  62% nccl-2.18.5.1        | 90.5 MB   | #######3   |  73% nccl-2.18.5.1        | 90.5 MB   | ########3  |  84% nccl-2.18.5.1        | 90.5 MB   | #########4 |  95% nccl-2.18.5.1        | 90.5 MB   | ########## | 100% 
-cuda-nvcc-12.2.140   | 56.1 MB   |            |   0% cuda-nvcc-12.2.140   | 56.1 MB   | 1          |   2% cuda-nvcc-12.2.140   | 56.1 MB   | #2         |  13% cuda-nvcc-12.2.140   | 56.1 MB   | ##         |  20% cuda-nvcc-12.2.140   | 56.1 MB   | ###2       |  32% cuda-nvcc-12.2.140   | 56.1 MB   | ####1      |  42% cuda-nvcc-12.2.140   | 56.1 MB   | #####9     |  60% cuda-nvcc-12.2.140   | 56.1 MB   | #######2   |  72% cuda-nvcc-12.2.140   | 56.1 MB   | ########8  |  89% cuda-nvcc-12.2.140   | 56.1 MB   | ########## | 100% 
-cuda-version-11.8    | 20 KB     |            |   0% cuda-version-11.8    | 20 KB     | ########## | 100% cuda-version-11.8    | 20 KB     | ########## | 100% 
-cudatoolkit-11.8.0   | 682.8 MB  |            |   0% cudatoolkit-11.8.0   | 682.8 MB  |            |   1% cudatoolkit-11.8.0   | 682.8 MB  | 1          |   2% cudatoolkit-11.8.0   | 682.8 MB  | 3          |   3% cudatoolkit-11.8.0   | 682.8 MB  | 4          |   4% cudatoolkit-11.8.0   | 682.8 MB  | 5          |   6% cudatoolkit-11.8.0   | 682.8 MB  | 7          |   7% cudatoolkit-11.8.0   | 682.8 MB  | 8          |   9% cudatoolkit-11.8.0   | 682.8 MB  | 9          |  10% cudatoolkit-11.8.0   | 682.8 MB  | #1         |  11% cudatoolkit-11.8.0   | 682.8 MB  | #2         |  12% cudatoolkit-11.8.0   | 682.8 MB  | #3         |  13% cudatoolkit-11.8.0   | 682.8 MB  | #4         |  15% cudatoolkit-11.8.0   | 682.8 MB  | #6         |  16% cudatoolkit-11.8.0   | 682.8 MB  | #7         |  18% cudatoolkit-11.8.0   | 682.8 MB  | #8         |  19% cudatoolkit-11.8.0   | 682.8 MB  | ##         |  20% cudatoolkit-11.8.0   | 682.8 MB  | ##1        |  21% cudatoolkit-11.8.0   | 682.8 MB  | ##2        |  22% cudatoolkit-11.8.0   | 682.8 MB  | ##3        |  23% cudatoolkit-11.8.0   | 682.8 MB  | ##4        |  24% cudatoolkit-11.8.0   | 682.8 MB  | ##5        |  26% cudatoolkit-11.8.0   | 682.8 MB  | ##6        |  27% cudatoolkit-11.8.0   | 682.8 MB  | ##7        |  28% cudatoolkit-11.8.0   | 682.8 MB  | ##9        |  29% cudatoolkit-11.8.0   | 682.8 MB  | ###        |  31% cudatoolkit-11.8.0   | 682.8 MB  | ###1       |  32% cudatoolkit-11.8.0   | 682.8 MB  | ###2       |  33% cudatoolkit-11.8.0   | 682.8 MB  | ###4       |  34% cudatoolkit-11.8.0   | 682.8 MB  | ###5       |  36% cudatoolkit-11.8.0   | 682.8 MB  | ###7       |  37% cudatoolkit-11.8.0   | 682.8 MB  | ###8       |  39% cudatoolkit-11.8.0   | 682.8 MB  | ####       |  40% cudatoolkit-11.8.0   | 682.8 MB  | ####1      |  42% cudatoolkit-11.8.0   | 682.8 MB  | ####3      |  43% cudatoolkit-11.8.0   | 682.8 MB  | ####4      |  45% cudatoolkit-11.8.0   | 682.8 MB  | ####6      |  46% cudatoolkit-11.8.0   | 682.8 MB  | ####7      |  48% cudatoolkit-11.8.0   | 682.8 MB  | ####9      |  49% cudatoolkit-11.8.0   | 682.8 MB  | #####      |  51% cudatoolkit-11.8.0   | 682.8 MB  | #####2     |  52% cudatoolkit-11.8.0   | 682.8 MB  | #####3     |  54% cudatoolkit-11.8.0   | 682.8 MB  | #####5     |  55% cudatoolkit-11.8.0   | 682.8 MB  | #####6     |  57% cudatoolkit-11.8.0   | 682.8 MB  | #####8     |  58% cudatoolkit-11.8.0   | 682.8 MB  | #####9     |  60% cudatoolkit-11.8.0   | 682.8 MB  | ######1    |  61% cudatoolkit-11.8.0   | 682.8 MB  | ######2    |  63% cudatoolkit-11.8.0   | 682.8 MB  | ######4    |  64% cudatoolkit-11.8.0   | 682.8 MB  | ######5    |  66% cudatoolkit-11.8.0   | 682.8 MB  | ######7    |  67% cudatoolkit-11.8.0   | 682.8 MB  | ######9    |  69% cudatoolkit-11.8.0   | 682.8 MB  | #######    |  71% cudatoolkit-11.8.0   | 682.8 MB  | #######2   |  72% cudatoolkit-11.8.0   | 682.8 MB  | #######3   |  74% cudatoolkit-11.8.0   | 682.8 MB  | #######5   |  75% cudatoolkit-11.8.0   | 682.8 MB  | #######6   |  77% cudatoolkit-11.8.0   | 682.8 MB  | #######7   |  78% cudatoolkit-11.8.0   | 682.8 MB  | #######9   |  79% cudatoolkit-11.8.0   | 682.8 MB  | ########   |  81% cudatoolkit-11.8.0   | 682.8 MB  | ########2  |  82% cudatoolkit-11.8.0   | 682.8 MB  | ########3  |  84% cudatoolkit-11.8.0   | 682.8 MB  | ########5  |  85% cudatoolkit-11.8.0   | 682.8 MB  | ########6  |  86% cudatoolkit-11.8.0   | 682.8 MB  | ########7  |  88% cudatoolkit-11.8.0   | 682.8 MB  | ########8  |  89% cudatoolkit-11.8.0   | 682.8 MB  | #########  |  90% cudatoolkit-11.8.0   | 682.8 MB  | #########1 |  92% cudatoolkit-11.8.0   | 682.8 MB  | #########3 |  93% cudatoolkit-11.8.0   | 682.8 MB  | #########4 |  95% cudatoolkit-11.8.0   | 682.8 MB  | #########5 |  96% cudatoolkit-11.8.0   | 682.8 MB  | #########7 |  98% cudatoolkit-11.8.0   | 682.8 MB  | #########9 |  99% cudatoolkit-11.8.0   | 682.8 MB  | ########## | 100% 
-jaxlib-0.4.14        | 69.4 MB   |            |   0% jaxlib-0.4.14        | 69.4 MB   |            |   0% jaxlib-0.4.14        | 69.4 MB   | 1          |   2% jaxlib-0.4.14        | 69.4 MB   | 5          |   5% jaxlib-0.4.14        | 69.4 MB   | #          |  11% jaxlib-0.4.14        | 69.4 MB   | ##         |  21% jaxlib-0.4.14        | 69.4 MB   | ##8        |  28% jaxlib-0.4.14        | 69.4 MB   | ###6       |  36% jaxlib-0.4.14        | 69.4 MB   | ####2      |  42% jaxlib-0.4.14        | 69.4 MB   | ####8      |  48% jaxlib-0.4.14        | 69.4 MB   | #####4     |  55% jaxlib-0.4.14        | 69.4 MB   | ######2    |  63% jaxlib-0.4.14        | 69.4 MB   | #######7   |  77% jaxlib-0.4.14        | 69.4 MB   | ########7  |  87% jaxlib-0.4.14        | 69.4 MB   | ########## | 100% jaxlib-0.4.14        | 69.4 MB   | ########## | 100% 
-Preparing transaction: ...working... done
-Verifying transaction: ...working... done
-Executing transaction: ...working... By downloading and using the CUDA Toolkit conda packages, you accept the terms and conditions of the CUDA End User License Agreement (EULA): https://docs.nvidia.com/cuda/eula/index.html
-
-By downloading and using the cuDNN conda packages, you accept the terms and conditions of the NVIDIA cuDNN EULA -
-  https://docs.nvidia.com/deeplearning/cudnn/sla/index.html
-
-done
-Wed Aug 30 16:56:36 2023       
-+-----------------------------------------------------------------------------+
-| NVIDIA-SMI 515.86.01    Driver Version: 515.86.01    CUDA Version: 11.7     |
-|-------------------------------+----------------------+----------------------+
-| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
-| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
-|                               |                      |               MIG M. |
-|===============================+======================+======================|
-|   0  NVIDIA A40          On   | 00000000:3B:00.0 Off |                    0 |
-|  0%   44C    P8    37W / 300W |      0MiB / 46068MiB |      0%      Default |
-|                               |                      |                  N/A |
-+-------------------------------+----------------------+----------------------+
-|   1  NVIDIA A40          On   | 00000000:5E:00.0 Off |                    0 |
-|  0%   45C    P8    39W / 300W |      0MiB / 46068MiB |      0%      Default |
-|                               |                      |                  N/A |
-+-------------------------------+----------------------+----------------------+
-|   2  NVIDIA A40          On   | 00000000:B1:00.0 Off |                    0 |
-|  0%   46C    P8    39W / 300W |      0MiB / 46068MiB |      0%      Default |
-|                               |                      |                  N/A |
-+-------------------------------+----------------------+----------------------+
-|   3  NVIDIA A40          On   | 00000000:D9:00.0 Off |                    0 |
-|  0%   45C    P8    39W / 300W |      0MiB / 46068MiB |      0%      Default |
-|                               |                      |                  N/A |
-+-------------------------------+----------------------+----------------------+
-                                                                               
-+-----------------------------------------------------------------------------+
-| Processes:                                                                  |
-|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
-|        ID   ID                                                   Usage      |
-|=============================================================================|
-|  No running processes found                                                 |
-+-----------------------------------------------------------------------------+
-Date              = Wed Aug 30 16:56:37 CEST 2023
-Hostname          = ctit091
-Working Directory = /local/232480
-Number of nodes used        : 1
-Number of MPI tasks         : 1
-Number of threads           : 16
-Number of MPI tasks per node: 1
-Number of threads per core  : 
-Name of nodes used          : ctit091
-Gpu devices                 : 0
-Starting worker: 
-Script finished in 9 minutes and 49 seconds.

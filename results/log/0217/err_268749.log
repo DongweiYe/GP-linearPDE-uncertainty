@@ -1,23 +1,0 @@
-	Adding nVidia Cuda Toolkit 11.8
-	Adding nVidia cuDNN 8.6 (.0.163)
-WARNING (pytensor.tensor.blas): Using NumPy C-API based implementation for BLAS functions.
-  0%|          | 0/15 [00:00<?, ?it/s]warmup:   7%|▋         | 1/15 [00:07<01:44,  7.44s/it, 1 steps of size 2.34e+00. acc. prob=0.00]sample: 100%|██████████| 15/15 [00:07<00:00,  1.99it/s, 1 steps of size 9.76e-03. acc. prob=0.00]
-Traceback (most recent call last):
-  File "main.py", line 103, in <module>
-    num_samples = posterior_samples['z_uncertain'].shape[0]
-KeyError: 'z_uncertain'
---------------------------------------------------------------------------
-Primary job  terminated normally, but 1 process returned
-a non-zero exit code. Per user-direction, the job has been aborted.
---------------------------------------------------------------------------
---------------------------------------------------------------------------
-mpirun detected that one or more processes exited with non-zero status, thus causing
-the job to be terminated. The first process to do so was:
-
-  Process name: [[15550,1],0]
-  Exit code:    1
---------------------------------------------------------------------------
-cp: missing destination file operand after '*.png/home/yanw/uncertain/results/figures/0217'
-Try 'cp --help' for more information.
-cp: missing destination file operand after '/home/yanw/uncertain'
-Try 'cp --help' for more information.

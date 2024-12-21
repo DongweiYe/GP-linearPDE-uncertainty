@@ -1,4 +1,0 @@
-	Adding nVidia Cuda Toolkit 11.8
-	Adding nVidia cuDNN 8.6 (.0.163)
-mpirun: Forwarding signal 18 to job
-slurmstepd-ctit091: error: *** JOB 233991 ON ctit091 CANCELLED AT 2023-09-06T17:04:25 ***

@@ -1,48 +1,0 @@
-	Adding nVidia Cuda Toolkit 11.8
-	Adding nVidia cuDNN 8.6 (.0.163)
-
-CondaHTTPError: HTTP 000 CONNECTION FAILED for url <https://conda.anaconda.org/conda-forge/linux-64/current_repodata.json>
-Elapsed: -
-
-An HTTP error occurred when trying to retrieve this URL.
-HTTP errors are often intermittent, and a simple retry will get you on your way.
-'https://conda.anaconda.org/conda-forge/linux-64'
-
-
-WARNING (pytensor.tensor.blas): Using NumPy C-API based implementation for BLAS functions.
-  0%|          | 0/110 [00:00<?, ?it/s]warmup:   1%|          | 1/110 [00:31<57:37, 31.72s/it, 1 steps of size 2.34e+00. acc. prob=0.00]warmup:   5%|▍         | 5/110 [00:31<08:19,  4.76s/it, 15 steps of size 1.30e-03. acc. prob=0.20]warmup:   7%|▋         | 8/110 [00:32<04:15,  2.51s/it, 3 steps of size 1.86e-03. acc. prob=0.46] sample:  10%|█         | 11/110 [00:32<02:29,  1.51s/it, 3 steps of size 3.66e-03. acc. prob=0.02]sample:  14%|█▎        | 15/110 [00:32<01:21,  1.16it/s, 3 steps of size 3.66e-03. acc. prob=0.20]sample:  17%|█▋        | 19/110 [00:32<00:49,  1.84it/s, 3 steps of size 3.66e-03. acc. prob=0.15]sample:  21%|██        | 23/110 [00:32<00:31,  2.74it/s, 3 steps of size 3.66e-03. acc. prob=0.11]sample:  25%|██▍       | 27/110 [00:32<00:20,  3.98it/s, 2 steps of size 3.66e-03. acc. prob=0.08]sample:  28%|██▊       | 31/110 [00:32<00:14,  5.60it/s, 3 steps of size 3.66e-03. acc. prob=0.07]sample:  32%|███▏      | 35/110 [00:32<00:09,  7.58it/s, 3 steps of size 3.66e-03. acc. prob=0.06]sample:  35%|███▌      | 39/110 [00:32<00:07, 10.02it/s, 3 steps of size 3.66e-03. acc. prob=0.05]sample:  40%|████      | 44/110 [00:33<00:04, 13.51it/s, 3 steps of size 3.66e-03. acc. prob=0.04]sample:  44%|████▎     | 48/110 [00:33<00:03, 16.40it/s, 2 steps of size 3.66e-03. acc. prob=0.04]sample:  47%|████▋     | 52/110 [00:33<00:02, 19.48it/s, 3 steps of size 3.66e-03. acc. prob=0.04]sample:  51%|█████     | 56/110 [00:33<00:02, 22.32it/s, 3 steps of size 3.66e-03. acc. prob=0.03]sample:  55%|█████▍    | 60/110 [00:33<00:01, 25.09it/s, 2 steps of size 3.66e-03. acc. prob=0.03]sample:  58%|█████▊    | 64/110 [00:33<00:01, 27.71it/s, 2 steps of size 3.66e-03. acc. prob=0.03]sample:  62%|██████▏   | 68/110 [00:33<00:01, 28.56it/s, 3 steps of size 3.66e-03. acc. prob=0.03]sample:  65%|██████▌   | 72/110 [00:33<00:01, 30.68it/s, 3 steps of size 3.66e-03. acc. prob=0.03]sample:  69%|██████▉   | 76/110 [00:34<00:01, 31.42it/s, 2 steps of size 3.66e-03. acc. prob=0.02]sample:  73%|███████▎  | 80/110 [00:34<00:00, 33.24it/s, 2 steps of size 3.66e-03. acc. prob=0.02]sample:  76%|███████▋  | 84/110 [00:34<00:00, 32.26it/s, 3 steps of size 3.66e-03. acc. prob=0.02]sample:  80%|████████  | 88/110 [00:34<00:00, 33.56it/s, 2 steps of size 3.66e-03. acc. prob=0.02]sample:  84%|████████▎ | 92/110 [00:34<00:00, 32.87it/s, 3 steps of size 3.66e-03. acc. prob=0.02]sample:  87%|████████▋ | 96/110 [00:34<00:00, 33.60it/s, 3 steps of size 3.66e-03. acc. prob=0.02]sample:  91%|█████████ | 100/110 [00:34<00:00, 34.64it/s, 3 steps of size 3.66e-03. acc. prob=0.02]sample:  95%|█████████▍| 104/110 [00:34<00:00, 33.54it/s, 3 steps of size 3.66e-03. acc. prob=0.02]sample:  98%|█████████▊| 108/110 [00:34<00:00, 33.84it/s, 3 steps of size 3.66e-03. acc. prob=0.02]sample: 100%|██████████| 110/110 [00:35<00:00,  3.14it/s, 3 steps of size 3.66e-03. acc. prob=0.02]
-/tmp/slurmd/job269396/slurm_script: line 57: /home/yanw/uncertain/results/log/0220/269396_version.log: No such file or directory
-/tmp/slurmd/job269396/slurm_script: line 58: /home/yanw/uncertain/results/log/0220/269396_version.log: No such file or directory
-ERROR: Pipe to stdout was broken
-Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
-BrokenPipeError: [Errno 32] Broken pipe
-/tmp/slurmd/job269396/slurm_script: line 57: /home/yanw/uncertain/results/log/0220/269396_version.log: No such file or directory
-/tmp/slurmd/job269396/slurm_script: line 58: /home/yanw/uncertain/results/log/0220/269396_version.log: No such file or directory
-ERROR: Pipe to stdout was broken
-Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
-BrokenPipeError: [Errno 32] Broken pipe
-/tmp/slurmd/job269396/slurm_script: line 57: /home/yanw/uncertain/results/log/0220/269396_version.log: No such file or directory
-/tmp/slurmd/job269396/slurm_script: line 58: /home/yanw/uncertain/results/log/0220/269396_version.log: No such file or directory
-ERROR: Pipe to stdout was broken
-Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
-BrokenPipeError: [Errno 32] Broken pipe
-/tmp/slurmd/job269396/slurm_script: line 57: /home/yanw/uncertain/results/log/0220/269396_version.log: No such file or directory
-/tmp/slurmd/job269396/slurm_script: line 58: /home/yanw/uncertain/results/log/0220/269396_version.log: No such file or directory
-ERROR: Pipe to stdout was broken
-Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
-BrokenPipeError: [Errno 32] Broken pipe
-/tmp/slurmd/job269396/slurm_script: line 57: /home/yanw/uncertain/results/log/0220/269396_version.log: No such file or directory
-/tmp/slurmd/job269396/slurm_script: line 58: /home/yanw/uncertain/results/log/0220/269396_version.log: No such file or directory
-ERROR: Pipe to stdout was broken
-Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
-BrokenPipeError: [Errno 32] Broken pipe
-/tmp/slurmd/job269396/slurm_script: line 57: /home/yanw/uncertain/results/log/0220/269396_version.log: No such file or directory
-/tmp/slurmd/job269396/slurm_script: line 58: /home/yanw/uncertain/results/log/0220/269396_version.log: No such file or directory
-ERROR: Pipe to stdout was broken
-Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
-BrokenPipeError: [Errno 32] Broken pipe
-/tmp/slurmd/job269396/slurm_script: line 67: /home/yanw/uncertain/results/log/0220/269396_version.log: No such file or directory
-cp: missing destination file operand after '*.png/home/yanw/uncertain/results/figures/0220'
-Try 'cp --help' for more information.
-cp: missing destination file operand after '/home/yanw/uncertain'
-Try 'cp --help' for more information.

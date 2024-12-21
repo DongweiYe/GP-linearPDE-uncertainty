@@ -1,76 +1,0 @@
-ctit094
-Wed Sep 20 14:33:39 2023       
-+-----------------------------------------------------------------------------+
-| NVIDIA-SMI 515.86.01    Driver Version: 515.86.01    CUDA Version: 11.7     |
-|-------------------------------+----------------------+----------------------+
-| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
-| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
-|                               |                      |               MIG M. |
-|===============================+======================+======================|
-|   0  NVIDIA A40          On   | 00000000:17:00.0 Off |                    0 |
-|  0%   59C    P0   205W / 300W |   6697MiB / 46068MiB |    100%      Default |
-|                               |                      |                  N/A |
-+-------------------------------+----------------------+----------------------+
-|   1  NVIDIA A40          On   | 00000000:65:00.0 Off |                    0 |
-|  0%   32C    P8    33W / 300W |      0MiB / 46068MiB |      0%      Default |
-|                               |                      |                  N/A |
-+-------------------------------+----------------------+----------------------+
-|   2  NVIDIA A40          On   | 00000000:CA:00.0 Off |                    0 |
-|  0%   69C    P0   207W / 300W |  29715MiB / 46068MiB |    100%      Default |
-|                               |                      |                  N/A |
-+-------------------------------+----------------------+----------------------+
-|   3  NVIDIA A40          On   | 00000000:E3:00.0 Off |                    0 |
-|  0%   30C    P8    33W / 300W |      0MiB / 46068MiB |      0%      Default |
-|                               |                      |                  N/A |
-+-------------------------------+----------------------+----------------------+
-                                                                               
-+-----------------------------------------------------------------------------+
-| Processes:                                                                  |
-|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
-|        ID   ID                                                   Usage      |
-|=============================================================================|
-|    0   N/A  N/A   3276382      C   python                           6695MiB |
-|    2   N/A  N/A   3260473      C   python3                         29713MiB |
-+-----------------------------------------------------------------------------+
-Date              = Wed Sep 20 14:33:40 CEST 2023
-Hostname          = ctit094
-Working Directory = /local/236252
-Number of nodes used        : 1
-Number of MPI tasks         : 1
-Number of threads           : 16
-Number of MPI tasks per node: 1
-Number of threads per core  : 
-Name of nodes used          : ctit094
-Gpu devices                 : 1
-Starting worker: 
-GPU memory used: 7271.4375 MB
-GPU memory used: 7.10101318359375 GB
-sigma_init_yu: 0.4124124058070794	sigma_init_yf: 16.88708019124114	sigma_init: 8.26348917090675
-new_sigma_init_yu: 0.4124124058070794	new_sigma_init_yf: 0.8717052165589062	new_sigma_init: 0.6445101765174205
-Xu_noise: [[0.86041803 0.407946  ]
- [0.47981698 0.37768862]
- [0.31407172 0.29118561]
- [0.89966496 0.84905457]
- [0.27952723 0.09003273]
- [0.83715097 0.70901247]
- [0.61831648 0.46794143]
- [0.2443358  0.75718614]
- [0.91768526 0.77823912]
- [0.73000551 0.18512075]
- [0.93061297 0.40110551]
- [0.1385972  0.43996769]
- [0.44841027 0.20167252]
- [0.45244136 0.81725298]
- [0.31548548 0.66127418]
- [0.49726064 0.45523565]
- [0.14274667 0.24981709]
- [0.97079493 0.26795404]
- [0.12630104 0.84255312]
- [0.02519675 0.86264226]]
-Xu_noise shape: (20, 2)
-adamw
-0.001000
-1000
-Initial loss: 2853.3947343709087
-Final loss: 69.43686995481623
-█ || 0.00% [0/6000 00:00<? Sampling 4 chains, 0 divergences] || 0.02% [1/6000 00:00<17:22 Sampling 4 chains, 0 divergences] || 0.03% [2/6000 00:00<10:38 Sampling 4 chains, 0 divergences] || 0.05% [3/6000 00:00<07:59 Sampling 4 chains, 0 divergences] || 0.07% [4/6000 00:00<06:18 Sampling 4 chains, 0 divergences] || 0.08% [5/6000 00:00<05:28 Sampling 4 chains, 0 divergences] || 0.13% [8/6000 00:00<03:55 Sampling 4 chains, 0 divergences] || 0.22% [13/6000 00:00<02:42 Sampling 4 chains, 0 divergences] || 0.33% [20/6000 00:00<02:00 Sampling 4 chains, 0 divergences] || 0.48% [29/6000 00:00<01:35 Sampling 4 chains, 0 divergences] || 0.68% [41/6000 00:00<01:14 Sampling 4 chains, 0 divergences] || 0.93% [56/6000 00:00<01:03 Sampling 4 chains, 0 divergences] || 1.23% [74/6000 00:00<00:53 Sampling 4 chains, 0 divergences] || 1.58% [95/6000 00:00<00:48 Sampling 4 chains, 0 divergences] || 1.98% [119/6000 00:00<00:43 Sampling 4 chains, 0 divergences] || 2.43% [146/6000 00:00<00:39 Sampling 4 chains, 0 divergences] || 2.92% [175/6000 00:01<00:37 Sampling 4 chains, 0 divergences] || 3.43% [206/6000 00:01<00:34 Sampling 4 chains, 0 divergences] || 3.98% [239/6000 00:01<00:33 Sampling 4 chains, 0 divergences] || 4.55% [273/6000 00:01<00:31 Sampling 4 chains, 0 divergences] || 5.15% [309/6000 00:01<00:30 Sampling 4 chains, 0 divergences] || 5.77% [346/6000 00:01<00:29 Sampling 4 chains, 0 divergences] || 6.40% [384/6000 00:01<00:28 Sampling 4 chains, 0 divergences] || 7.07% [424/6000 00:02<00:27 Sampling 4 chains, 0 divergences] || 7.73% [464/6000 00:02<00:26 Sampling 4 chains, 0 divergences] || 8.42% [505/6000 00:02<00:25 Sampling 4 chains, 0 divergences] || 9.12% [547/6000 00:02<00:25 Sampling 4 chains, 0 divergences] || 9.83% [590/6000 00:02<00:24 Sampling 4 chains, 0 divergences] || 10.55% [633/6000 00:02<00:24 Sampling 4 chains, 0 divergences] || 11.28% [677/6000 00:03<00:23 Sampling 4 chains, 0 divergences] || 12.02% [721/6000 00:03<00:23 Sampling 4 chains, 0 divergences] || 12.77% [766/6000 00:03<00:22 Sampling 4 chains, 0 divergences] || 13.52% [811/6000 00:03<00:22 Sampling 4 chains, 0 divergences] || 14.28% [857/6000 00:03<00:22 Sampling 4 chains, 0 divergences] || 15.05% [903/6000 00:03<00:21 Sampling 4 chains, 0 divergences] || 15.82% [949/6000 00:04<00:21 Sampling 4 chains, 0 divergences] || 16.60% [996/6000 00:04<00:20 Sampling 4 chains, 0 divergences] || 17.38% [1043/6000 00:04<00:20 Sampling 4 chains, 0 divergences] || 18.18% [1091/6000 00:04<00:20 Sampling 4 chains, 0 divergences] || 18.98% [1139/6000 00:04<00:19 Sampling 4 chains, 0 divergences] || 19.78% [1187/6000 00:04<00:19 Sampling 4 chains, 0 divergences] || 20.60% [1236/6000 00:04<00:19 Sampling 4 chains, 0 divergences] || 21.42% [1285/6000 00:05<00:18 Sampling 4 chains, 0 divergences] || 22.23% [1334/6000 00:05<00:18 Sampling 4 chains, 0 divergences] || 23.07% [1384/6000 00:05<00:18 Sampling 4 chains, 0 divergences] || 23.90% [1434/6000 00:05<00:18 Sampling 4 chains, 0 divergences] || 24.73% [1484/6000 00:05<00:17 Sampling 4 chains, 0 divergences] || 25.57% [1534/6000 00:06<00:17 Sampling 4 chains, 0 divergences] || 26.40% [1584/6000 00:06<00:17 Sampling 4 chains, 0 divergences] || 27.25% [1635/6000 00:06<00:17 Sampling 4 chains, 0 divergences] || 28.10% [1686/6000 00:06<00:16 Sampling 4 chains, 0 divergences] || 28.95% [1737/6000 00:06<00:16 Sampling 4 chains, 0 divergences] || 29.80% [1788/6000 00:06<00:16 Sampling 4 chains, 0 divergences] || 30.65% [1839/6000 00:07<00:16 Sampling 4 chains, 0 divergences] || 31.52% [1891/6000 00:07<00:15 Sampling 4 chains, 0 divergences] || 32.37% [1942/6000 00:07<00:15 Sampling 4 chains, 0 divergences] || 33.23% [1994/6000 00:07<00:15 Sampling 4 chains, 0 divergences] || 34.10% [2046/6000 00:07<00:15 Sampling 4 chains, 0 divergences] || 34.97% [2098/6000 00:07<00:14 Sampling 4 chains, 0 divergences] || 35.83% [2150/6000 00:08<00:14 Sampling 4 chains, 0 divergences] || 36.70% [2202/6000 00:08<00:14 Sampling 4 chains, 0 divergences] || 37.57% [2254/6000 00:08<00:14 Sampling 4 chains, 0 divergences] || 38.43% [2306/6000 00:08<00:13 Sampling 4 chains, 0 divergences] || 39.30% [2358/6000 00:08<00:13 Sampling 4 chains, 0 divergences] || 40.17% [2410/6000 00:09<00:13 Sampling 4 chains, 0 divergences] || 41.03% [2462/6000 00:09<00:13 Sampling 4 chains, 0 divergences] || 41.92% [2515/6000 00:09<00:13 Sampling 4 chains, 0 divergences] || 42.80% [2568/6000 00:09<00:12 Sampling 4 chains, 0 divergences] || 43.68% [2621/6000 00:09<00:12 Sampling 4 chains, 0 divergences] || 44.57% [2674/6000 00:10<00:12 Sampling 4 chains, 0 divergences] || 45.45% [2727/6000 00:10<00:12 Sampling 4 chains, 0 divergences] || 46.33% [2780/6000 00:10<00:12 Sampling 4 chains, 0 divergences] || 47.22% [2833/6000 00:10<00:11 Sampling 4 chains, 0 divergences] || 48.10% [2886/6000 00:10<00:11 Sampling 4 chains, 0 divergences] || 48.98% [2939/6000 00:10<00:11 Sampling 4 chains, 0 divergences] || 49.87% [2992/6000 00:11<00:11 Sampling 4 chains, 0 divergences] || 50.75% [3045/6000 00:11<00:10 Sampling 4 chains, 0 divergences] || 51.63% [3098/6000 00:11<00:10 Sampling 4 chains, 0 divergences] || 52.52% [3151/6000 00:11<00:10 Sampling 4 chains, 0 divergences] || 53.40% [3204/6000 00:11<00:10 Sampling 4 chains, 0 divergences] || 54.28% [3257/6000 00:12<00:10 Sampling 4 chains, 0 divergences] || 55.17% [3310/6000 00:12<00:09 Sampling 4 chains, 0 divergences] || 56.07% [3364/6000 00:12<00:09 Sampling 4 chains, 0 divergences] || 56.97% [3418/6000 00:12<00:09 Sampling 4 chains, 0 divergences] || 57.87% [3472/6000 00:12<00:09 Sampling 4 chains, 0 divergences] || 58.77% [3526/6000 00:13<00:09 Sampling 4 chains, 0 divergences] || 59.67% [3580/6000 00:13<00:08 Sampling 4 chains, 0 divergences] || 60.57% [3634/6000 00:13<00:08 Sampling 4 chains, 0 divergences] || 61.47% [3688/6000 00:13<00:08 Sampling 4 chains, 0 divergences] || 62.37% [3742/6000 00:13<00:08 Sampling 4 chains, 0 divergences] || 63.27% [3796/6000 00:13<00:08 Sampling 4 chains, 0 divergences] || 64.17% [3850/6000 00:14<00:07 Sampling 4 chains, 0 divergences] || 65.07% [3904/6000 00:14<00:07 Sampling 4 chains, 0 divergences] || 65.97% [3958/6000 00:14<00:07 Sampling 4 chains, 0 divergences] || 66.87% [4012/6000 00:14<00:07 Sampling 4 chains, 0 divergences] || 67.77% [4066/6000 00:14<00:07 Sampling 4 chains, 0 divergences] || 68.67% [4120/6000 00:15<00:06 Sampling 4 chains, 0 divergences] || 69.57% [4174/6000 00:15<00:06 Sampling 4 chains, 0 divergences] || 70.47% [4228/6000 00:15<00:06 Sampling 4 chains, 0 divergences] || 71.37% [4282/6000 00:15<00:06 Sampling 4 chains, 0 divergences] || 72.27% [4336/6000 00:15<00:06 Sampling 4 chains, 0 divergences] || 73.17% [4390/6000 00:16<00:05 Sampling 4 chains, 0 divergences] || 74.07% [4444/6000 00:16<00:05 Sampling 4 chains, 0 divergences] || 74.97% [4498/6000 00:16<00:05 Sampling 4 chains, 0 divergences] || 75.87% [4552/6000 00:16<00:05 Sampling 4 chains, 0 divergences] || 76.77% [4606/6000 00:16<00:05 Sampling 4 chains, 0 divergences] || 77.67% [4660/6000 00:16<00:04 Sampling 4 chains, 0 divergences] || 78.58% [4715/6000 00:17<00:04 Sampling 4 chains, 0 divergences] || 79.50% [4770/6000 00:17<00:04 Sampling 4 chains, 0 divergences] || 80.42% [4825/6000 00:17<00:04 Sampling 4 chains, 0 divergences] || 81.33% [4880/6000 00:17<00:04 Sampling 4 chains, 0 divergences] || 82.25% [4935/6000 00:17<00:03 Sampling 4 chains, 0 divergences] || 83.17% [4990/6000 00:18<00:03 Sampling 4 chains, 0 divergences] || 84.08% [5045/6000 00:18<00:03 Sampling 4 chains, 0 divergences] || 85.00% [5100/6000 00:18<00:03 Sampling 4 chains, 0 divergences] || 85.92% [5155/6000 00:18<00:03 Sampling 4 chains, 0 divergences] || 86.83% [5210/6000 00:18<00:02 Sampling 4 chains, 0 divergences] || 87.75% [5265/6000 00:19<00:02 Sampling 4 chains, 0 divergences] || 88.67% [5320/6000 00:19<00:02 Sampling 4 chains, 0 divergences] || 89.58% [5375/6000 00:19<00:02 Sampling 4 chains, 0 divergences] || 90.50% [5430/6000 00:19<00:02 Sampling 4 chains, 0 divergences] || 91.42% [5485/6000 00:19<00:01 Sampling 4 chains, 0 divergences] || 92.33% [5540/6000 00:19<00:01 Sampling 4 chains, 0 divergences] || 93.25% [5595/6000 00:20<00:01 Sampling 4 chains, 0 divergences] || 94.17% [5650/6000 00:20<00:01 Sampling 4 chains, 0 divergences] || 95.08% [5705/6000 00:20<00:01 Sampling 4 chains, 0 divergences] || 96.00% [5760/6000 00:20<00:00 Sampling 4 chains, 0 divergences] || 96.92% [5815/6000 00:20<00:00 Sampling 4 chains, 0 divergences] || 97.83% [5870/6000 00:21<00:00 Sampling 4 chains, 0 divergences] || 98.75% [5925/6000 00:21<00:00 Sampling 4 chains, 0 divergences] || 99.67% [5980/6000 00:21<00:00 Sampling 4 chains, 0 divergences] || 100.00% [6000/6000 00:21<00:00 Sampling 4 chains, 0 divergences]Script finished in 2 minutes and 23 seconds.

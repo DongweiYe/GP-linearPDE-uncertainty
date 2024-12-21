@@ -1,5 +1,0 @@
-  0%|          | 0/210 [00:00<?, ?it/s]warmup:   0%|          | 1/210 [00:04<15:49,  4.54s/it, 1 steps of size 2.34e+00. acc. prob=0.00]sample:   5%|▌         | 11/210 [00:04<01:01,  3.26it/s, 1 steps of size 1.70e-02. acc. prob=0.58]sample:  21%|██▏       | 45/210 [00:04<00:09, 17.29it/s, 1 steps of size 1.70e-02. acc. prob=0.05]sample:  32%|███▏      | 68/210 [00:04<00:04, 29.19it/s, 1 steps of size 1.70e-02. acc. prob=0.03]sample:  43%|████▎     | 91/210 [00:04<00:02, 43.76it/s, 1 steps of size 1.70e-02. acc. prob=0.02]sample:  60%|██████    | 127/210 [00:05<00:01, 73.71it/s, 1 steps of size 1.70e-02. acc. prob=0.02]sample:  76%|███████▌  | 159/210 [00:05<00:00, 103.08it/s, 1 steps of size 1.70e-02. acc. prob=0.01]sample:  96%|█████████▌| 202/210 [00:05<00:00, 150.46it/s, 1 steps of size 1.70e-02. acc. prob=0.01]sample: 100%|██████████| 210/210 [00:05<00:00, 39.75it/s, 1 steps of size 1.70e-02. acc. prob=0.01] 
-cp: missing destination file operand after '*.png/home/yanw/uncertain/results/figures/0621'
-Try 'cp --help' for more information.
-cp: missing destination file operand after '/home/yanw/uncertain'
-Try 'cp --help' for more information.

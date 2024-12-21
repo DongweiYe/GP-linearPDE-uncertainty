@@ -1,18 +1,0 @@
-	Adding nVidia Cuda Toolkit 11.8
-	Adding nVidia cuDNN 8.6 (.0.163)
-
-CondaHTTPError: HTTP 000 CONNECTION FAILED for url <https://conda.anaconda.org/conda-forge/linux-64/current_repodata.json>
-Elapsed: -
-
-An HTTP error occurred when trying to retrieve this URL.
-HTTP errors are often intermittent, and a simple retry will get you on your way.
-'https://conda.anaconda.org/conda-forge/linux-64'
-
-
-WARNING (pytensor.tensor.blas): Using NumPy C-API based implementation for BLAS functions.
-  0%|          | 0/15 [00:00<?, ?it/s]warmup:   7%|▋         | 1/15 [00:16<03:45, 16.11s/it, 1 steps of size 2.34e+00. acc. prob=0.00]sample:  60%|██████    | 9/15 [00:16<00:07,  1.31s/it, 1 steps of size 9.76e-03. acc. prob=0.00]sample: 100%|██████████| 15/15 [00:16<00:00,  1.08s/it, 1 steps of size 9.76e-03. acc. prob=0.00]
-cp: missing destination file operand after '*.png/home/yanw/uncertain/results/figures/0219'
-Try 'cp --help' for more information.
-cp: missing destination file operand after '/home/yanw/uncertain'
-Try 'cp --help' for more information.
-mv: cannot stat '*.log': No such file or directory

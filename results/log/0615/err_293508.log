@@ -1,13 +1,0 @@
-  0%|          | 0/110 [00:00<?, ?it/s]warmup:   1%|          | 1/110 [00:02<04:14,  2.34s/it, 1 steps of size 2.34e+00. acc. prob=0.00]warmup:   8%|▊         | 9/110 [00:02<00:20,  4.89it/s, 63 steps of size 6.73e-05. acc. prob=0.38]sample:  12%|█▏        | 13/110 [00:02<00:16,  6.06it/s, 3 steps of size 1.05e-03. acc. prob=0.00]sample:  22%|██▏       | 24/110 [00:03<00:06, 14.19it/s, 31 steps of size 1.05e-03. acc. prob=0.00]sample:  35%|███▍      | 38/110 [00:03<00:02, 26.88it/s, 3 steps of size 1.05e-03. acc. prob=0.00] sample:  43%|████▎     | 47/110 [00:03<00:01, 32.17it/s, 3 steps of size 1.05e-03. acc. prob=0.00]sample:  51%|█████     | 56/110 [00:03<00:01, 39.90it/s, 15 steps of size 1.05e-03. acc. prob=0.00]sample:  59%|█████▉    | 65/110 [00:03<00:00, 46.78it/s, 31 steps of size 1.05e-03. acc. prob=0.00]sample:  71%|███████   | 78/110 [00:03<00:00, 62.37it/s, 3 steps of size 1.05e-03. acc. prob=0.00] sample:  80%|████████  | 88/110 [00:03<00:00, 65.59it/s, 1 steps of size 1.05e-03. acc. prob=0.00]sample:  88%|████████▊ | 97/110 [00:03<00:00, 70.32it/s, 3 steps of size 1.05e-03. acc. prob=0.00]sample:  96%|█████████▋| 106/110 [00:04<00:00, 63.31it/s, 3 steps of size 1.05e-03. acc. prob=0.00]sample: 100%|██████████| 110/110 [00:04<00:00, 26.83it/s, 31 steps of size 1.05e-03. acc. prob=0.00]
-/local/293508/main.py:152: UserWarning: Dataset has 0 variance; skipping density estimate. Pass `warn_singular=False` to disable this warning.
-  sns.kdeplot(data, ax=ax, color='tab:blue', label=f'z_uncertain{i}_0 Posterior')
-/local/293508/main.py:160: UserWarning: Tight layout not applied. tight_layout cannot make axes width small enough to accommodate all axes decorations
-  fig1.tight_layout()
-/local/293508/main.py:171: UserWarning: Dataset has 0 variance; skipping density estimate. Pass `warn_singular=False` to disable this warning.
-  sns.kdeplot(data, ax=ax, color='tab:blue', label=f'z_uncertain{i}_1 Posterior')
-/local/293508/main.py:171: UserWarning: Dataset has 0 variance; skipping density estimate. Pass `warn_singular=False` to disable this warning.
-  sns.kdeplot(data, ax=ax, color='tab:blue', label=f'z_uncertain{i}_1 Posterior')
-cp: missing destination file operand after '*.png/home/yanw/uncertain/results/figures/0615'
-Try 'cp --help' for more information.
-cp: missing destination file operand after '/home/yanw/uncertain'
-Try 'cp --help' for more information.

@@ -1,13 +1,0 @@
-  0%|          | 0/110 [00:00<?, ?it/s]warmup:   1%|          | 1/110 [00:02<04:11,  2.31s/it, 1 steps of size 2.34e+00. acc. prob=0.00]warmup:   8%|▊         | 9/110 [00:02<00:20,  5.03it/s, 31 steps of size 1.71e-04. acc. prob=0.41]sample:  13%|█▎        | 14/110 [00:02<00:12,  7.61it/s, 15 steps of size 1.51e-03. acc. prob=0.00]sample:  18%|█▊        | 20/110 [00:02<00:07, 12.25it/s, 7 steps of size 1.51e-03. acc. prob=0.00] sample:  25%|██▌       | 28/110 [00:02<00:04, 19.68it/s, 15 steps of size 1.51e-03. acc. prob=0.00]sample:  35%|███▍      | 38/110 [00:03<00:02, 29.94it/s, 39 steps of size 1.51e-03. acc. prob=0.00]sample:  43%|████▎     | 47/110 [00:03<00:01, 39.43it/s, 7 steps of size 1.51e-03. acc. prob=0.00] sample:  55%|█████▌    | 61/110 [00:03<00:00, 57.51it/s, 7 steps of size 1.51e-03. acc. prob=0.00]sample:  65%|██████▍   | 71/110 [00:03<00:00, 66.06it/s, 7 steps of size 1.51e-03. acc. prob=0.00]sample:  74%|███████▎  | 81/110 [00:03<00:00, 65.34it/s, 11 steps of size 1.51e-03. acc. prob=0.00]sample:  83%|████████▎ | 91/110 [00:03<00:00, 69.91it/s, 63 steps of size 1.51e-03. acc. prob=0.00]sample:  95%|█████████▍| 104/110 [00:03<00:00, 83.65it/s, 3 steps of size 1.51e-03. acc. prob=0.00]sample: 100%|██████████| 110/110 [00:03<00:00, 28.72it/s, 7 steps of size 1.51e-03. acc. prob=0.00]
-/local/293505/main.py:152: UserWarning: Dataset has 0 variance; skipping density estimate. Pass `warn_singular=False` to disable this warning.
-  sns.kdeplot(data, ax=ax, color='tab:blue', label=f'z_uncertain{i}_0 Posterior')
-/local/293505/main.py:152: UserWarning: Dataset has 0 variance; skipping density estimate. Pass `warn_singular=False` to disable this warning.
-  sns.kdeplot(data, ax=ax, color='tab:blue', label=f'z_uncertain{i}_0 Posterior')
-/local/293505/main.py:152: UserWarning: Dataset has 0 variance; skipping density estimate. Pass `warn_singular=False` to disable this warning.
-  sns.kdeplot(data, ax=ax, color='tab:blue', label=f'z_uncertain{i}_0 Posterior')
-/local/293505/main.py:179: UserWarning: Tight layout not applied. tight_layout cannot make axes width small enough to accommodate all axes decorations
-  fig2.tight_layout()
-cp: missing destination file operand after '*.png/home/yanw/uncertain/results/figures/0615'
-Try 'cp --help' for more information.
-cp: missing destination file operand after '/home/yanw/uncertain'
-Try 'cp --help' for more information.

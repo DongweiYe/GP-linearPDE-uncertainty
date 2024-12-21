@@ -1,8 +1,0 @@
-Traceback (most recent call last):
-  File "/local/232462/main.py", line 2, in <module>
-    import jax
-ModuleNotFoundError: No module named 'jax'
-cp: missing destination file operand after '*.png/home/yanw/uncertain/results/figures/0830'
-Try 'cp --help' for more information.
-cp: missing destination file operand after '/home/yanw/uncertain'
-Try 'cp --help' for more information.

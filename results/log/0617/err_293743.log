@@ -1,6 +1,0 @@
-cp: cannot create regular file '/home/yanw/uncertain/results/figures/0617/param_iter_u_5936.pdf': File exists
-cp: missing destination file operand after '*.png/home/yanw/uncertain/results/figures/0617'
-Try 'cp --help' for more information.
-cp: missing destination file operand after '/home/yanw/uncertain'
-Try 'cp --help' for more information.
-mv: cannot stat '*.log': No such file or directory

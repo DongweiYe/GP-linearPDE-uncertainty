@@ -1,7 +1,0 @@
-/local/295394/main.py:169: UserWarning: Dataset has 0 variance; skipping density estimate. Pass `warn_singular=False` to disable this warning.
-  sns.kdeplot(data, ax=ax, color='tab:blue', label=f'z_uncertain{i}_0 Posterior', fill=True)
-cp: missing destination file operand after '*.png/home/yanw/uncertain/results/figures/0624'
-Try 'cp --help' for more information.
-cp: missing destination file operand after '/home/yanw/uncertain'
-Try 'cp --help' for more information.
-mv: cannot stat '*.log': No such file or directory

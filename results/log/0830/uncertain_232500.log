@@ -1,108 +1,0 @@
-ctit091
-Looking in indexes: https://__token__:****@gitlab.utsp.utwente.nl/api/v4/groups/271/-/packages/pypi/simple
-Looking in links: https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
-Requirement already satisfied: jax[cuda11_cudnn82] in /home/yanw/.conda/envs/noise/lib/python3.10/site-packages (0.4.14)
-Requirement already satisfied: ml-dtypes>=0.2.0 in /home/yanw/.conda/envs/noise/lib/python3.10/site-packages (from jax[cuda11_cudnn82]) (0.2.0)
-Requirement already satisfied: numpy>=1.22 in /home/yanw/.conda/envs/noise/lib/python3.10/site-packages (from jax[cuda11_cudnn82]) (1.25.2)
-Requirement already satisfied: opt-einsum in /home/yanw/.local/lib/python3.10/site-packages (from jax[cuda11_cudnn82]) (3.3.0)
-Requirement already satisfied: scipy>=1.7 in /home/yanw/.conda/envs/noise/lib/python3.10/site-packages (from jax[cuda11_cudnn82]) (1.11.2)
-Collecting package metadata (current_repodata.json): ...working... done
-Solving environment: ...working... failed with initial frozen solve. Retrying with flexible solve.
-Collecting package metadata (repodata.json): ...working... done
-Solving environment: ...working... done
-
-## Package Plan ##
-
-  environment location: /home/yanw/.conda/envs/noise
-
-  added / updated specs:
-    - jax==0.4.7
-
-
-The following packages will be downloaded:
-
-    package                    |            build
-    ---------------------------|-----------------
-    dm-tree-0.1.7              |  py310h769672d_0         149 KB  conda-forge
-    jax-0.4.7                  |     pyhd8ed1ab_0         940 KB  conda-forge
-    jaxlib-0.4.7               |cuda112py310h1be305f_200        47.4 MB  conda-forge
-    libabseil-20230125.0       | cxx17_hcb278e6_1         1.2 MB  conda-forge
-    libgrpc-1.54.2             |       hcf146ea_0         5.5 MB  conda-forge
-    libprotobuf-3.21.12        |       hfc55251_1         2.1 MB  conda-forge
-    re2-2023.02.02             |       hcb278e6_0         197 KB  conda-forge
-    ------------------------------------------------------------
-                                           Total:        57.4 MB
-
-The following packages will be DOWNGRADED:
-
-  dm-tree                             0.1.8-py310hb875b13_0 --> 0.1.7-py310h769672d_0
-  jax                                   0.4.14-pyhd8ed1ab_1 --> 0.4.7-pyhd8ed1ab_0
-  jaxlib                    0.4.14-cuda112py310h8c6a9b4_201 --> 0.4.7-cuda112py310h1be305f_200
-  libabseil                     20230125.3-cxx17_h59595ed_0 --> 20230125.0-cxx17_hcb278e6_1
-  libgrpc                                 1.56.2-h3905398_1 --> 1.54.2-hcf146ea_0
-  libprotobuf                             4.23.3-hd1fb520_0 --> 3.21.12-hfc55251_1
-  re2                                 2023.03.02-h8c504da_0 --> 2023.02.02-hcb278e6_0
-
-
-Proceed ([y]/n)? 
-
-Downloading and Extracting Packages
-re2-2023.02.02       | 197 KB    |            |   0% re2-2023.02.02       | 197 KB    | 8          |   8% re2-2023.02.02       | 197 KB    | ########## | 100% re2-2023.02.02       | 197 KB    | ########## | 100% 
-libgrpc-1.54.2       | 5.5 MB    |            |   0% libgrpc-1.54.2       | 5.5 MB    | ###9       |  40% libgrpc-1.54.2       | 5.5 MB    | ########## | 100% libgrpc-1.54.2       | 5.5 MB    | ########## | 100% 
-jax-0.4.7            | 940 KB    |            |   0% jax-0.4.7            | 940 KB    | ########## | 100% jax-0.4.7            | 940 KB    | ########## | 100% 
-jaxlib-0.4.7         | 47.4 MB   |            |   0% jaxlib-0.4.7         | 47.4 MB   |            |   0% jaxlib-0.4.7         | 47.4 MB   | 1          |   1% jaxlib-0.4.7         | 47.4 MB   | 3          |   3% jaxlib-0.4.7         | 47.4 MB   | 7          |   8% jaxlib-0.4.7         | 47.4 MB   | #4         |  14% jaxlib-0.4.7         | 47.4 MB   | ##6        |  27% jaxlib-0.4.7         | 47.4 MB   | ####1      |  41% jaxlib-0.4.7         | 47.4 MB   | #####8     |  58% jaxlib-0.4.7         | 47.4 MB   | ########   |  81% jaxlib-0.4.7         | 47.4 MB   | ########## | 100% jaxlib-0.4.7         | 47.4 MB   | ########## | 100% 
-libabseil-20230125.0 | 1.2 MB    |            |   0% libabseil-20230125.0 | 1.2 MB    | ########## | 100% libabseil-20230125.0 | 1.2 MB    | ########## | 100% 
-libprotobuf-3.21.12  | 2.1 MB    |            |   0% libprotobuf-3.21.12  | 2.1 MB    | ########## | 100% libprotobuf-3.21.12  | 2.1 MB    | ########## | 100% 
-dm-tree-0.1.7        | 149 KB    |            |   0% dm-tree-0.1.7        | 149 KB    | ########## | 100% dm-tree-0.1.7        | 149 KB    | ########## | 100% 
-Preparing transaction: ...working... done
-Verifying transaction: ...working... done
-Executing transaction: ...working... done
-Collecting package metadata (current_repodata.json): ...working... done
-Solving environment: ...working... done
-
-# All requested packages already installed.
-
-Wed Aug 30 17:36:13 2023       
-+-----------------------------------------------------------------------------+
-| NVIDIA-SMI 515.86.01    Driver Version: 515.86.01    CUDA Version: 11.7     |
-|-------------------------------+----------------------+----------------------+
-| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
-| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
-|                               |                      |               MIG M. |
-|===============================+======================+======================|
-|   0  NVIDIA A40          On   | 00000000:3B:00.0 Off |                    0 |
-|  0%   43C    P8    36W / 300W |      0MiB / 46068MiB |      0%      Default |
-|                               |                      |                  N/A |
-+-------------------------------+----------------------+----------------------+
-|   1  NVIDIA A40          On   | 00000000:5E:00.0 Off |                    0 |
-|  0%   45C    P8    38W / 300W |      0MiB / 46068MiB |      0%      Default |
-|                               |                      |                  N/A |
-+-------------------------------+----------------------+----------------------+
-|   2  NVIDIA A40          On   | 00000000:B1:00.0 Off |                    0 |
-|  0%   46C    P8    38W / 300W |      0MiB / 46068MiB |      0%      Default |
-|                               |                      |                  N/A |
-+-------------------------------+----------------------+----------------------+
-|   3  NVIDIA A40          On   | 00000000:D9:00.0 Off |                    0 |
-|  0%   45C    P8    38W / 300W |      0MiB / 46068MiB |      0%      Default |
-|                               |                      |                  N/A |
-+-------------------------------+----------------------+----------------------+
-                                                                               
-+-----------------------------------------------------------------------------+
-| Processes:                                                                  |
-|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
-|        ID   ID                                                   Usage      |
-|=============================================================================|
-|  No running processes found                                                 |
-+-----------------------------------------------------------------------------+
-Date              = Wed Aug 30 17:36:14 CEST 2023
-Hostname          = ctit091
-Working Directory = /local/232500
-Number of nodes used        : 1
-Number of MPI tasks         : 1
-Number of threads           : 16
-Number of MPI tasks per node: 1
-Number of threads per core  : 
-Name of nodes used          : ctit091
-Gpu devices                 : 0
-Starting worker: 
-Script finished in 7 minutes and 12 seconds.
