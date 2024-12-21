@@ -23,10 +23,10 @@ Gaussian Process (GP) regression is a state-of-the-art method for data-driven mo
 
 ## **Usage**
 
-Run the main script with the appropriate function key to reproduce the results:
+Run the script with the appropriate function key to reproduce the results:
 
 ```
-python main.py <function_key>
+python run.py <function_key>
 ```
 
 ### **Available Function Keys**
@@ -39,12 +39,12 @@ python main.py <function_key>
 
 Run the heat equation experiment:
 ```
-python main.py h
+python run.py h
 ```
 
 Load reaction-diffusion data for predictive analysis:
 ```
-python main.py loadForPred_rd
+python run.py loadForPred_rd
 ```
 
 
