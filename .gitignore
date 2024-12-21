@@ -1,3 +1,5 @@
 /results/datas/
 /results/log/
 /results/figures/
+__pycache__/
+*.pyc
