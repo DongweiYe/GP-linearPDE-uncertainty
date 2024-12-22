@@ -125,7 +125,7 @@ def main_loadForPred():
         K = compute_K_no(init, Xuc, Xcg)
         print("Computed K matrix")
 
-        jitter_values = [1e-6]
+        jitter_values = [1e-10, 1e-9, 1e-8, 1e-7, 1e-6]
         for jitter in jitter_values:
             K_jittered = add_jitter(K, jitter)
             pos_def = is_positive_definite(K_jittered)
