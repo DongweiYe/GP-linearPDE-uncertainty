@@ -47,5 +47,11 @@ Load reaction-diffusion data for predictive analysis:
 python run.py loadForPred_rd
 ```
 
+### **Examples for 1D functions**
+All the codes related to the 1D-function examples are located in the folder `1Dfunction`. Run the experiments with:
+```
+python run.py
+```
+Different 1D functions can be chosen for the test. The complete list of available functions is demonstrated in `1Dfunction/include/func.py`
 
 
