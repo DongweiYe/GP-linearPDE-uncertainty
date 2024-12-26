@@ -35,7 +35,7 @@ python run.py <function_key>
 - **`loadForPred`**: Load heat inference data for predictive analysis.
 - **`loadForPred_rd`**: Load reaction-diffusion inference data for predictive analysis.
 
-### **Examples**
+### **Examples for PDEs**
 
 Run the heat equation experiment:
 ```
