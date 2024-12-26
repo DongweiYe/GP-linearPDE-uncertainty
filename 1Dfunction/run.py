@@ -57,7 +57,7 @@ estimated_noise = preGP.get_noise()
 print('Estimated noise: ', estimated_noise)
 
 # visual_GP(X,y,Xexact,yexact,Xvague_gt,Xvague_prior_mean,yvague_gt,y_pred,y_var,show=True,save=False)
-# figure1_standardGP(X,y,Xexact,yexact,Xvague_gt,Xvague_prior_mean,yvague_gt,y_pred,y_var,show=False,save=True)
+figure1_standardGP(X,y,Xexact,yexact,Xvague_gt,Xvague_prior_mean,yvague_gt,y_pred,y_var,show=False,save=True)
 
 
 
@@ -88,7 +88,7 @@ print(Xvague_posterior_variance)
 ### Visualization of prior, posterior(samples) and groundtruth
 # plot_distribution(Xvague_prior_mean,Xvague_prior_var,Xvague_posterior_samplelist,Xvague_gt)
 # vis_uncertain_input(X,y,Xvague_gt,Xvague_prior_mean,Xvague_posterior_mean,yvague_gt,show=True,save=False)
-# figure1_posterior(Xvague_prior_mean,Xvague_prior_var,Xvague_posterior_samplelist,Xvague_gt)
+figure1_posterior(Xvague_prior_mean,Xvague_prior_var,Xvague_posterior_samplelist,Xvague_gt)
 
 
 ### Derive marginalized the predictive distribution over uncertain input posterior
