@@ -48,7 +48,7 @@ python run.py loadForPred_rd
 ```
 
 ### **Examples for 1D functions**
-All the codes related to the 1D-function examples are located in the folder `1Dfunction`. Run the experiments with:
+All the codes related to the 1D-function examples are located in the folder `1Dfunction`. Enter the directory and run the experiments with:
 ```
 python run.py
 ```
